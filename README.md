@@ -4,7 +4,7 @@ User Interface for eTutor task administration-
 
 ## Development
 
-See [CONTRIBUTING.md](https://github.com/martin-temp/task-administration-ui/blob/main/CONTRIBUTING.md) for details.
+See [CONTRIBUTING.md](https://github.com/eTutor-plus-plus/task-administration-ui/blob/main/CONTRIBUTING.md) for details.
 
 Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
 
