@@ -1,0 +1,82 @@
+<h1 [transloco]="baseTranslationKey + 'title'"></h1>
+
+<p-confirmPopup/>
+
+<p-table [value]="tableData.content" [tableStyle]="{'min-width': '30rem'}" [lazy]="true" (onLazyLoad)="loadTableData($event)" dataKey="id" [loading]="loading"
+         [paginator]="true" [rows]="10" [rowsPerPageOptions]="[10, 25, 50, 100]" [showCurrentPageReport]="true" [totalRecords]="tableData.totalElements"
+         [currentPageReportTemplate]="'common.paginator' | transloco" [sortMode]="'multiple'" [multiSortMeta]="defaultSort">
+  <ng-template pTemplate="caption">
+    <div class="flex align-items-center justify-content-between">
+      <p-button [label]="'common.new' | transloco" icon="pi pi-plus" (onClick)="create()"/>
+      <p-button [label]="'common.refresh' | transloco" icon="pi pi-refresh" (onClick)="reload()" severity="secondary"/>
+    </div>
+  </ng-template>
+
+  <ng-template pTemplate="header">
+    <tr>
+      <th pSortableColumn="username" class="col-username">
+        {{ baseTranslationKey + 'fields.username' | transloco }}
+        <p-sortIcon field="username"/>
+      </th>
+      <th pSortableColumn="firstName" class="col-firstName">
+        {{ baseTranslationKey + 'fields.firstName' | transloco }}
+        <p-sortIcon field="firstName"/>
+      </th>
+      <th pSortableColumn="lastName" class="col-lastName">
+        {{ baseTranslationKey + 'fields.lastName' | transloco }}
+        <p-sortIcon field="lastName"/>
+      </th>
+      <th class="col-email">
+        {{ baseTranslationKey + 'fields.email' | transloco }}
+      </th>
+      <th class="col-enabled">
+        {{ baseTranslationKey + 'fields.enabled' | transloco }}
+      </th>
+      <th class="col-actions"></th>
+    </tr>
+    <tr>
+      <th>
+        <p-columnFilter type="text" field="username" [showMenu]="false" matchMode="contains" [placeholder]="'common.search' | transloco"/>
+      </th>
+      <th>
+        <p-columnFilter type="text" field="firstName" [showMenu]="false" matchMode="contains" [placeholder]="'common.search' | transloco"/>
+      </th>
+      <th>
+        <p-columnFilter type="text" field="lastName" [showMenu]="false" matchMode="contains" [placeholder]="'common.search' | transloco"/>
+      </th>
+      <th>
+        <p-columnFilter type="text" field="email" [showMenu]="false" matchMode="contains" [placeholder]="'common.search' | transloco"/>
+      </th>
+      <th>
+        <p-columnFilter type="boolean" field="enabled" [showMenu]="false"/>
+      </th>
+      <th></th>
+    </tr>
+  </ng-template>
+
+  <ng-template pTemplate="body" let-entity>
+    <tr>
+      <td>{{ entity.username }}</td>
+      <td>{{ entity.firstName }}</td>
+      <td>{{ entity.lastName }}</td>
+      <td>{{ entity.email }}</td>
+      <td>
+        <p-tag [severity]="entity.enabled && entity.activated ? 'success' : (entity.activated ? 'danger' : 'warning')">
+          {{ (entity.enabled ? this.baseTranslationKey + 'enabled' : this.baseTranslationKey + 'disabled') | transloco }}
+        </p-tag>
+      </td>
+      <td>
+        <span class="p-buttonset">
+          @if (isFullAdmin) {
+            <p-button (onClick)="changePassword(entity)" icon="pi pi-lock" [pTooltip]="this.baseTranslationKey + 'changePassword' | transloco"
+                      tooltipPosition="top" [showDelay]="1000" severity="help" size="small"/>
+          }
+          <p-button (onClick)="edit(entity)" icon="pi pi-pencil" [pTooltip]="'common.edit' | transloco" tooltipPosition="top" [showDelay]="1000"
+                    severity="warning" size="small"/>
+          <p-button (onClick)="delete(entity, $event)" icon="pi pi-trash" [pTooltip]="'common.delete' | transloco" tooltipPosition="top" [showDelay]="1000"
+                    severity="danger" size="small"/>
+        </span>
+      </td>
+    </tr>
+  </ng-template>
+</p-table>

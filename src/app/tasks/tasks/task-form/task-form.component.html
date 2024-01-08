@@ -1,0 +1,142 @@
+<div class="flex justify-content-between align-items-center">
+  <h1 [transloco]="baseTranslationKey + (originalEntity ? 'edit' : 'create')"></h1>
+  <div>
+    <p-button [label]="'primeng.cancel' | transloco" class="w-auto" (onClick)="cancel()" severity="secondary" [outlined]="true" [disabled]="loading"
+              styleClass="mr-2"/>
+    <p-button [label]="(originalEntity ? 'common.save' : 'common.create') | transloco" [disabled]="form.invalid" [loading]="loading"
+              (onClick)="submit()"></p-button>
+  </div>
+</div>
+
+<form [formGroup]="form">
+  <div class="surface-card p-4 shadow-2 border-round p-fluid mb-4">
+    <div class="grid formgrid p-fluid">
+      <div class="field mb-4 col-12 md:col-6">
+        <label for="title" [transloco]="this.baseTranslationKey + 'fields.title'"></label>
+        <input id="title" type="text" pInputText formControlName="title" autocomplete="off" autofocus>
+        @if (form.controls.title.dirty || form.controls.title.touched) {
+          <small class="block mt-1 p-error">
+            {{ getError(form.controls.title, this.baseTranslationKey + 'fields.title') }}
+          </small>
+        }
+      </div>
+
+      <div class="field mb-4 col-12 md:col-6">
+        <label for="organizationalUnitId" [transloco]="this.baseTranslationKey + 'fields.organizationalUnitId'"></label>
+        <p-dropdown inputId="organizationalUnitId" formControlName="organizationalUnitId" [options]="organizationalUnits" optionValue="id"
+                    optionLabel="name" [readonly]="!!originalEntity" [filter]="true" filterBy="name"/>
+        @if (form.controls.organizationalUnitId.dirty || form.controls.organizationalUnitId.touched) {
+          <small class="block mt-1 p-error">
+            {{ getError(form.controls.organizationalUnitId, this.baseTranslationKey + 'fields.organizationalUnitId') }}
+          </small>
+        }
+      </div>
+
+      <div class="field mb-4 col-12 md:col-6">
+        <label for="taskType" [transloco]="this.baseTranslationKey + 'fields.taskType'"></label>
+        <p-dropdown inputId="taskType" formControlName="taskType" [options]="types" optionValue="value"
+                    optionLabel="text" [readonly]="!!originalEntity" [filter]="true" filterBy="text"/>
+        @if (form.controls.taskType.dirty || form.controls.taskType.touched) {
+          <small class="block mt-1 p-error">
+            {{ getError(form.controls.taskType, this.baseTranslationKey + 'fields.taskType') }}
+          </small>
+        }
+      </div>
+
+      <div class="field mb-4 col-12 md:col-6">
+        @if (supportedTaskGroupTypes.length > 0) {
+          <label for="taskGroupId" [transloco]="this.baseTranslationKey + 'fields.taskGroupId'"></label>
+          <p-dropdown inputId="taskGroupId" formControlName="taskGroupId" [options]="taskGroups" optionValue="id"
+                      optionLabel="name" [readonly]="!!originalEntity" [showClear]="true" [filter]="true" filterBy="name"/>
+          @if (form.controls.taskGroupId.dirty || form.controls.taskGroupId.touched) {
+            <small class="block mt-1 p-error">
+              {{ getError(form.controls.taskGroupId, this.baseTranslationKey + 'fields.taskGroupId') }}
+            </small>
+          }
+        }
+      </div>
+
+      <div class="field mb-4 col-12 md:col-6">
+        <label for="descriptionDe" [transloco]="this.baseTranslationKey + 'fields.descriptionDe'"></label>
+        <p-editor formControlName="descriptionDe" id="descriptionDe" [style]="{ height: '200px' }" [modules]="quillModules"/>
+        @if (form.controls.descriptionDe.dirty || form.controls.descriptionDe.touched) {
+          <small class="block mt-1 p-error">
+            {{ getError(form.controls.descriptionDe, this.baseTranslationKey + 'fields.descriptionDe') }}
+          </small>
+        }
+      </div>
+
+      <div class="field mb-4 col-12 md:col-6">
+        <label for="descriptionEn" [transloco]="this.baseTranslationKey + 'fields.descriptionEn'"></label>
+        <p-editor formControlName="descriptionEn" id="descriptionEn" [style]="{ height: '200px' }" [modules]="quillModules"/>
+        @if (form.controls.descriptionEn.dirty || form.controls.descriptionEn.touched) {
+          <small class="block mt-1 p-error">
+            {{ getError(form.controls.descriptionEn, this.baseTranslationKey + 'fields.descriptionEn') }}
+          </small>
+        }
+      </div>
+
+      <div class="field mb-4 col-12 md:col-4">
+        <label for="maxPoints" [transloco]="this.baseTranslationKey + 'fields.maxPoints'"></label>
+        <p-inputNumber inputId="maxPoints" formControlName="maxPoints" [min]="0" [maxFractionDigits]="2"/>
+        @if (form.controls.maxPoints.dirty || form.controls.maxPoints.touched) {
+          <small class="block mt-1 p-error">
+            {{ getError(form.controls.maxPoints, this.baseTranslationKey + 'fields.maxPoints') }}
+          </small>
+        }
+      </div>
+
+      <div class="field mb-4 col-12 md:col-4">
+        <label for="difficulty" [transloco]="this.baseTranslationKey + 'fields.difficulty'"></label>
+        <p-dropdown inputId="difficulty" formControlName="difficulty" [options]="difficulties" optionValue="value" optionDisabled="disabled"
+                    optionLabel="text"/>
+        @if (form.controls.difficulty.dirty || form.controls.difficulty.touched) {
+          <small class="block mt-1 p-error">
+            {{ getError(form.controls.difficulty, this.baseTranslationKey + 'fields.difficulty') }}
+          </small>
+        }
+      </div>
+
+      <div class="field mb-4 col-12 md:col-4">
+        <label for="status" [transloco]="this.baseTranslationKey + 'fields.status'"></label>
+        <p-dropdown inputId="status" formControlName="status" [options]="statuses" optionValue="value" optionDisabled="disabled" optionLabel="text"/>
+        @if (form.controls.status.dirty || form.controls.status.touched) {
+          <small class="block mt-1 p-error">
+            {{ getError(form.controls.status, this.baseTranslationKey + 'fields.status') }}
+          </small>
+        }
+      </div>
+    </div>
+  </div>
+
+  @if (componentForm) {
+    <ng-container *ngComponentOutlet="componentForm; inputs: {formGroup: form.controls.additionalData, formData: additionalData, parentForm: form}"/>
+  }
+
+<!-- TODO <div class="surface-card p-4 shadow-2 border-round p-fluid mb-4">-->
+<!--    <div class="flex justify-content-between mb-4">-->
+<!--      <p class="font-bold" [transloco]="baseTranslationKey + 'fields.taskCategoryIds'"></p>-->
+<!--      <p-button [label]="this.baseTranslationKey + 'addTaskCategory' | transloco" (onClick)="addTaskCategory()" severity="help" [disabled]="loading" class="w-auto" size="small"/>-->
+<!--    </div>-->
+
+<!--    <div formArrayName="taskCategoryIds">-->
+<!--      @for (f of form.controls.taskCategoryIds.controls; track $index) {-->
+<!--        <div class="grid formgrid">-->
+<!--          <div class="field col-11">-->
+<!--            <p-treeSelect [formControl]="f" containerStyleClass="w-full" appendTo="body" [options]="taskCategories" [filter]="true" />-->
+<!--          </div>-->
+<!--          <div class="field col-1">-->
+<!--            <p-button icon="pi pi-trash" severity="danger" (onClick)="removeTaskCategory($index)"/>-->
+<!--          </div>-->
+<!--        </div>-->
+<!--      }-->
+<!--    </div>-->
+<!--  </div>-->
+</form>
+
+<dke-audit-information [data]="originalEntity"/>
+@if (originalEntity && (originalEntity.approvedBy || originalEntity.approvedDate)) {
+  <p class="text-color-secondary text-xs">
+    {{ baseTranslationKey + 'approved' | transloco }}: {{ originalEntity.approvedBy }}, {{ originalEntity.approvedDate | date:'medium' }}
+  </p>
+}

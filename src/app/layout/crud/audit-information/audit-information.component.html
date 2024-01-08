@@ -1,0 +1,11 @@
+@if (data && (data.createdBy || data.createdDate)) {
+  <p class="text-color-secondary text-xs mb-0">
+    {{ 'common.created' | transloco }}: {{ data.createdBy }}, {{ data.createdDate | date:'medium' }}
+  </p>
+}
+
+@if (data && (data.lastModifiedBy || data.lastModifiedDate)) {
+  <p class="text-color-secondary text-xs">
+    {{ 'common.modified' | transloco }}: {{ data.lastModifiedBy }}, {{ data.lastModifiedDate | date:'medium' }}
+  </p>
+}

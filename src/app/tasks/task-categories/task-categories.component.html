@@ -1,0 +1,87 @@
+<h1 [transloco]="baseTranslationKey + 'title'"></h1>
+
+<p-confirmPopup/>
+
+<p-table [value]="tableData.content" [tableStyle]="{'min-width': '30rem'}" [lazy]="true" (onLazyLoad)="loadTableData($event)" dataKey="id" [loading]="loading"
+         [paginator]="true" [rows]="10" [rowsPerPageOptions]="[10, 25, 50, 100]" [showCurrentPageReport]="true" [totalRecords]="tableData.totalElements"
+         [currentPageReportTemplate]="'common.paginator' | transloco" [sortMode]="'multiple'" [multiSortMeta]="defaultSort"
+         [ngClass]="{'with-ou': showOrganizationalUnit}">
+  <ng-template pTemplate="caption">
+    <div class="flex align-items-center justify-content-between">
+      @if (canCreate()) {
+        <p-button [label]="'common.new' | transloco" icon="pi pi-plus" (onClick)="create()"/>
+      } @else {
+        <div></div>
+      }
+      <p-button [label]="'common.refresh' | transloco" icon="pi pi-refresh" (onClick)="reload()" severity="secondary"/>
+    </div>
+  </ng-template>
+
+  <ng-template pTemplate="header">
+    <tr>
+      <th class="col-id">
+        {{ baseTranslationKey + 'fields.id' | transloco }}
+      </th>
+      @if (showOrganizationalUnit) {
+        <th pSortableColumn="organizationalUnit.name" class="col-organizationalUnitId">
+          {{ baseTranslationKey + 'fields.organizationalUnitId' | transloco }}
+          <p-sortIcon field="organizationalUnit.name"/>
+        </th>
+      }
+      <th pSortableColumn="parent.id" class="col-parentId">
+        {{ baseTranslationKey + 'fields.parentId' | transloco }}
+        <p-sortIcon field="parent.id"/>
+      </th>
+      <th pSortableColumn="name" class="col-name">
+        {{ baseTranslationKey + 'fields.name' | transloco }}
+        <p-sortIcon field="name"/>
+      </th>
+      <th class="col-actions"></th>
+    </tr>
+    <tr>
+      <th></th>
+      @if (showOrganizationalUnit) {
+        <th>
+          <p-columnFilter field="organizationalUnit" matchMode="equals" [showMenu]="false" [showClearButton]="true">
+            <ng-template pTemplate="filter" let-value let-filter="filterCallback">
+              <p-dropdown [options]="organizationalUnits" optionValue="id" optionLabel="name" [ngModel]="value" appendTo="body" [showClear]="false"
+                          (onChange)="filter($event.value)"/>
+            </ng-template>
+          </p-columnFilter>
+        </th>
+      }
+      <th>
+        <p-columnFilter type="number" field="parent" [showMenu]="false" matchMode="contains" [placeholder]="'common.search' | transloco">
+          <ng-template pTemplate="filter" let-value let-filter="filterCallback">
+            <p-inputNumber [ngModel]="value" (ngModelChange)="filter($event)" />
+          </ng-template>
+        </p-columnFilter>
+      </th>
+      <th>
+        <p-columnFilter type="text" field="name" [showMenu]="false" matchMode="contains" [placeholder]="'common.search' | transloco"/>
+      </th>
+      <th></th>
+    </tr>
+  </ng-template>
+
+  <ng-template pTemplate="body" let-entity>
+    <tr>
+      <td>{{ entity.id }}</td>
+      @if (showOrganizationalUnit) {
+        <td>{{ getOUName(entity.organizationalUnitId) }}</td>
+      }
+      <td>{{ entity.parentId }}</td>
+      <td>{{ entity.name }}</td>
+      <td>
+        <span class="p-buttonset">
+          <p-button (onClick)="edit(entity)" icon="pi pi-pencil" [pTooltip]="'common.edit' | transloco" tooltipPosition="top" [showDelay]="1000"
+                    severity="warning" size="small"/>
+          @if (canDelete(entity)) {
+            <p-button (onClick)="delete(entity, $event)" icon="pi pi-trash" [pTooltip]="'common.delete' | transloco" tooltipPosition="top" [showDelay]="1000"
+                      severity="danger" size="small"/>
+          }
+        </span>
+      </td>
+    </tr>
+  </ng-template>
+</p-table>

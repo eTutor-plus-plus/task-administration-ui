@@ -1,0 +1,24 @@
+<div class="h-screen w-screen align-items-center flex justify-content-center lg:px-8 md:px-6 px-4 py-8 surface-ground">
+  <div class="surface-card shadow-2 border-round w-full lg:w-9 overflow-hidden">
+    <div class="grid h-full">
+      <div class="col-12 lg:col-5 bg-black-alpha-90 p-6 text-white">
+        <img [src]="'logo.hoch' | transloco" alt="Logo" class="w-full hidden lg:block mb-6">
+        <img [src]="'logo.quer' | transloco" alt="Logo" class="w-full block lg:hidden max-h-3rem mb-6">
+        <h1 class="mb-4 text-center text-2xl overflow-hidden" transloco="appName"></h1>
+
+        <div class="flex justify-content-between mt-3 lg:mt-7">
+          <a [href]="impressUrl + '?lang=' + currentLanguage" class="no-underline text-white cursor-pointer font-bold" [transloco]="'impress'"
+             target="_blank"></a>
+          @if (showLanguageToggle) {
+            <a class="no-underline text-white cursor-pointer font-bold"
+               [transloco]="currentLanguage === 'de' ? 'language.english' : 'language.german'"
+               (click)="toggleLanguage()"></a>
+          }
+        </div>
+      </div>
+      <div class="col-12 lg:col-7 p-6">
+        <ng-content></ng-content>
+      </div>
+    </div>
+  </div>
+</div>

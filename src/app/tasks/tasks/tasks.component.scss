@@ -1,0 +1,52 @@
+.col-actions {
+  min-width: 6rem;
+  width: 6rem;
+  max-width: 6rem;
+}
+
+.with-ou {
+  .col-organizationalUnitId {
+    width: 15%;
+  }
+
+  .col-taskType {
+    width: 15%;
+  }
+
+  .col-name {
+    width: 17%;
+  }
+
+  .col-status {
+    width: 15%;
+  }
+
+  .col-status {
+    width: 15%;
+  }
+
+  .col-taskGroupId {
+    width: 17%;
+  }
+}
+
+
+.col-taskType {
+  width: 18%;
+}
+
+.col-name {
+  width: 21%;
+}
+
+.col-status {
+  width: 18%;
+}
+
+.col-status {
+  width: 18%;
+}
+
+.col-taskGroupId {
+  width: 21%;
+}

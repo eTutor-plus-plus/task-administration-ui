@@ -1,0 +1,45 @@
+<p-messages/>
+
+<form [formGroup]="form" (ngSubmit)="submit()">
+  <div class="grid formgrid p-fluid">
+    <div class="field mb-4 col-12">
+      <label for="taskType" [transloco]="this.baseTranslationKey + 'fields.taskType'"></label>
+      <input id="taskType" type="text" pInputText formControlName="taskType" autocomplete="off" autofocus>
+      @if (form.controls.taskType.dirty || form.controls.taskType.touched) {
+        <small class="block mt-1 p-error">
+          {{ getError(form.controls.taskType, this.baseTranslationKey + 'fields.taskType') }}
+        </small>
+      }
+    </div>
+
+    <div class="field mb-4 col-12">
+      <label for="url" [transloco]="this.baseTranslationKey + 'fields.url'"></label>
+      <input id="url" type="text" pInputText formControlName="url" autocomplete="off">
+      @if (form.controls.url.dirty || form.controls.url.touched) {
+        <small class="block mt-1 p-error">
+          {{ getError(form.controls.url, this.baseTranslationKey + 'fields.url') }}
+        </small>
+      }
+    </div>
+
+    <div class="field mb-4 col-12">
+      <label for="apiKey" [transloco]="this.baseTranslationKey + 'fields.apiKey'"></label>
+      <input id="apiKey" type="password" pInputText formControlName="apiKey" autocomplete="off">
+      @if (form.controls.apiKey.dirty || form.controls.apiKey.touched) {
+        <small class="block mt-1 p-error">
+          {{ getError(form.controls.apiKey, this.baseTranslationKey + 'fields.apiKey') }}
+        </small>
+      }
+    </div>
+  </div>
+
+  <dke-audit-information [data]="originalEntity"/>
+
+  <div class="surface-border border-top-1 opacity-50 mb-4"></div>
+
+  <div class="flex justify-content-between">
+    <p-button [label]="'primeng.cancel' | transloco" class="w-auto" (onClick)="cancel()" severity="secondary" [outlined]="true" [disabled]="loading"/>
+    <button pButton [label]="(!originalEntity ? 'common.create' : 'common.save') | transloco" [disabled]="form.invalid" class="w-auto" type="submit"
+            [loading]="loading"></button>
+  </div>
+</form>

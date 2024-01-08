@@ -1,0 +1,31 @@
+.with-ou {
+  .col-parentId {
+    width: 30%;
+  }
+
+  .col-name {
+    width: 30%;
+  }
+
+  .col-organizationalUnitId {
+    width: 30%;
+  }
+}
+
+.col-id {
+  width: 10%;
+}
+
+.col-parentId {
+  width: 25%;
+}
+
+.col-name {
+  width: 50%;
+}
+
+.col-actions {
+  min-width: 6rem;
+  width: 6rem;
+  max-width: 6rem;
+}

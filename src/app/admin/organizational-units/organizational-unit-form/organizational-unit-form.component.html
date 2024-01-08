@@ -1,0 +1,25 @@
+<p-messages/>
+
+<form [formGroup]="form" (ngSubmit)="submit()">
+  <div class="grid formgrid p-fluid">
+    <div class="field mb-4 col-12">
+      <label for="name" [transloco]="this.baseTranslationKey + 'fields.name'"></label>
+      <input id="name" type="text" pInputText formControlName="name" autocomplete="off" autofocus>
+      @if (form.controls.name.dirty || form.controls.name.touched) {
+        <small class="block mt-1 p-error">
+          {{ getError(form.controls.name, this.baseTranslationKey + 'fields.name') }}
+        </small>
+      }
+    </div>
+  </div>
+
+  <dke-audit-information [data]="originalEntity"/>
+
+  <div class="surface-border border-top-1 opacity-50 mb-4"></div>
+
+  <div class="flex justify-content-between">
+    <p-button [label]="'primeng.cancel' | transloco" class="w-auto" (onClick)="cancel()" severity="secondary" [outlined]="true" [disabled]="loading"/>
+    <button pButton [label]="(!originalEntity ? 'common.create' : 'common.save') | transloco" [disabled]="form.invalid" class="w-auto" type="submit"
+            [loading]="loading"></button>
+  </div>
+</form>

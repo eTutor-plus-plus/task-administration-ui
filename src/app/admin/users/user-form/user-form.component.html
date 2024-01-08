@@ -1,0 +1,120 @@
+<p-messages/>
+
+<form [formGroup]="form" (ngSubmit)="submit()">
+  <div class="grid formgrid p-fluid">
+    <div class="field mb-4 col-12 md:col-6"> <!-- TOOD: create custom component for form fields -->
+      <label for="username" [transloco]="this.baseTranslationKey + 'fields.username'"></label>
+      <input id="username" type="text" pInputText formControlName="username" autocomplete="off" autofocus>
+      @if (form.controls.username.dirty || form.controls.username.touched) {
+        <small class="block mt-1 p-error">
+          {{ getError(form.controls.username, this.baseTranslationKey + 'fields.username') }}
+        </small>
+      }
+    </div>
+    <div class="field mb-4 col-12 md:col-6">
+      <label for="email" [transloco]="this.baseTranslationKey + 'fields.email'"></label>
+      <input id="email" type="email" pInputText formControlName="email" autocomplete="off">
+      @if (form.controls.email.dirty || form.controls.email.touched) {
+        <small class="block mt-1 p-error">
+          {{ getError(form.controls.email, this.baseTranslationKey + 'fields.email') }}
+        </small>
+      }
+    </div>
+
+    <div class="field mb-4 col-12 md:col-6">
+      <label for="firstName" [transloco]="this.baseTranslationKey + 'fields.firstName'"></label>
+      <input id="firstName" type="text" pInputText formControlName="firstName" autocomplete="off">
+      @if (form.controls.firstName.dirty || form.controls.firstName.touched) {
+        <small class="block mt-1 p-error">
+          {{ getError(form.controls.firstName, this.baseTranslationKey + 'fields.firstName') }}
+        </small>
+      }
+    </div>
+    <div class="field mb-4 col-12 md:col-6">
+      <label for="lastName" [transloco]="this.baseTranslationKey + 'fields.lastName'"></label>
+      <input id="lastName" type="text" pInputText formControlName="lastName" autocomplete="off">
+      @if (form.controls.lastName.dirty || form.controls.lastName.touched) {
+        <small class="block mt-1 p-error">
+          {{ getError(form.controls.lastName, this.baseTranslationKey + 'fields.lastName') }}
+        </small>
+      }
+    </div>
+
+    <div class="field mb-4 col-12 md:col-6">
+      <label for="enabled" [transloco]="this.baseTranslationKey + 'fields.enabled'"></label>
+      <p-checkbox inputId="enabled" formControlName="enabled" class="block" [binary]="true"/>
+    </div>
+    <div class="field mb-4 col-12 md:col-6">
+      @if (isFullAdmin) {
+        <label for="fullAdmin" [transloco]="this.baseTranslationKey + 'fields.fullAdmin'"></label>
+        <p-checkbox inputId="fullAdmin" formControlName="fullAdmin" class="block" [binary]="true"/>
+      }
+    </div>
+
+    @if (originalEntity && isFullAdmin) {
+      <div class="field mb-4 col-12 md:col-6">
+        <label for="lockoutEnd" [transloco]="this.baseTranslationKey + 'fields.lockoutEnd'"></label>
+        <p-calendar formControlName="lockoutEnd" inputId="lockoutEnd" [showTime]="true" [showIcon]="true" [showButtonBar]="true" appendTo="body"/>
+        <small class="block mt-1 p-text-secondary" [transloco]="this.baseTranslationKey + 'failedLoginCount'"
+               [translocoParams]="{value: originalEntity.failedLoginCount}"></small>
+        @if (form.controls.lockoutEnd.dirty || form.controls.lockoutEnd.touched) {
+          <small class="block mt-1 p-error">
+            {{ getError(form.controls.lockoutEnd, this.baseTranslationKey + 'fields.lockoutEnd') }}
+          </small>
+        }
+      </div>
+      <div class="field mb-4 col-12 md:col-6">
+        <label for="activated" [transloco]="this.baseTranslationKey + 'fields.activated'"></label>
+        <p-calendar formControlName="activated" inputId="activated" [showTime]="true" [showIcon]="true" [showButtonBar]="true" appendTo="body"/>
+        @if (form.controls.activated.dirty || form.controls.activated.touched) {
+          <small class="block mt-1 p-error">
+            {{ getError(form.controls.activated, this.baseTranslationKey + 'fields.activated') }}
+          </small>
+        }
+      </div>
+    }
+  </div>
+
+  @if (form.controls.organizationalUnits.controls.length > 0) {
+    <div class="surface-border border-top-1 opacity-50 mb-4"></div>
+  }
+
+  <div formArrayName="organizationalUnits" class="mb-4">
+    @if (form.controls.organizationalUnits.controls.length > 0) {
+      <div class="grid formgrid">
+        <div class="mb-4 col-7 font-bold" [transloco]="this.baseTranslationKey + 'fields.organizationalUnit'"></div>
+        <div class="mb-4 col-4 font-bold" [transloco]="this.baseTranslationKey + 'fields.role'"></div>
+        <div class="mb-4 col-1 font-bold"></div>
+      </div>
+    }
+
+    @for (f of form.controls.organizationalUnits.controls; track $index) {
+      <div class="grid formgrid" [formGroup]="f">
+        <div class="field col-7">
+          <p-dropdown [options]="organizationalUnitsData[$index]" optionLabel="name" optionValue="id" optionDisabled="disabled"
+                      formControlName="organizationalUnit" styleClass="w-full" appendTo="body"/>
+        </div>
+        <div class="field col-4">
+          <p-dropdown [options]="roles" optionLabel="label" optionValue="value" formControlName="role" styleClass="w-full" appendTo="body"/>
+        </div>
+        <div class="field col-1">
+          <p-button icon="pi pi-trash" severity="danger" (onClick)="removeOrganizationalUnit($index)"/>
+        </div>
+      </div>
+    }
+  </div>
+
+  <dke-audit-information [data]="originalEntity"/>
+
+  <div class="surface-border border-top-1 opacity-50 mb-4"></div>
+
+  <div class="flex justify-content-between">
+    <div>
+      <p-button [label]="'primeng.cancel' | transloco" class="w-auto" (onClick)="cancel()" severity="secondary" [outlined]="true" [disabled]="loading"/>
+      <p-button [label]="this.baseTranslationKey + 'addOU' | transloco" class="w-auto ml-2" (onClick)="addOrganizationalUnit()" severity="help"
+                [disabled]="loading"/>
+    </div>
+    <button pButton [label]="(!originalEntity ? 'common.create' : 'common.save') | transloco" [disabled]="form.invalid" class="w-auto" type="submit"
+            [loading]="loading"></button>
+  </div>
+</form>

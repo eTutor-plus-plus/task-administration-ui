@@ -1,0 +1,57 @@
+# Releases the App
+name: Release App
+
+# Run on merged pull request
+on:
+  pull_request:
+    types:
+      - closed
+
+# Sets permissions of the GITHUB_TOKEN
+permissions:
+  contents: write
+
+# Allow only one concurrent deployment, skipping runs queued between the run in-progress and latest queued.
+# However, do NOT cancel in-progress runs as we want to allow these production deployments to complete.
+concurrency:
+  group: '${{ github.workflow }} @ ${{ github.event.pull_request.head.label || github.head_ref || github.ref }}'
+  cancel-in-progress: false
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    if: github.event.pull_request.merged == true && github.event.pull_request.base.ref == 'main' && startsWith(github.event.pull_request.title, 'chore(publish):')
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Use Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20.x'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build
+        run: npm run build-prod
+
+      - name: Zip
+        run: zip -r release.zip dist/task-administration-ui/browser/
+
+      - name: Split PR title
+        env:
+          MSG: ${{ github.event.pull_request.title }}
+        id: split
+        run: echo "VERSION=${MSG##*v}" >> "$GITHUB_OUTPUT"
+
+      - name: Release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: release.zip
+          tag_name: "v${{ steps.split.outputs.VERSION }}"
+          prerelease: ${{ contains(github.event.pull_request.title, '-') }}
+          generate_release_notes: true
+          draft: true
+          fail_on_unmatched_files: false

@@ -1,0 +1,49 @@
+<p-messages/>
+
+<form [formGroup]="form" (ngSubmit)="submit()">
+  <div class="grid formgrid p-fluid">
+    <div class="field mb-4 col-12">
+      <label for="organizationalUnitId" [transloco]="this.baseTranslationKey + 'fields.organizationalUnitId'"></label>
+      <p-dropdown inputId="organizationalUnitId" formControlName="organizationalUnitId" [options]="organizationalUnitDropdowns" optionValue="id"
+                  optionLabel="name" [readonly]="readonly"/>
+      @if (form.controls.organizationalUnitId.dirty || form.controls.organizationalUnitId.touched) {
+        <small class="block mt-1 p-error">
+          {{ getError(form.controls.organizationalUnitId, this.baseTranslationKey + 'fields.organizationalUnitId') }}
+        </small>
+      }
+    </div>
+
+    <div class="field mb-4 col-12">
+      <label for="parentId" [transloco]="this.baseTranslationKey + 'fields.parentId'"></label>
+      <p-dropdown inputId="parentId" formControlName="parentId" [options]="parentDropdowns" optionValue="id"
+                  optionLabel="name" [readonly]="readonly" [showClear]="!readonly"/>
+      @if (form.controls.parentId.dirty || form.controls.parentId.touched) {
+        <small class="block mt-1 p-error">
+          {{ getError(form.controls.parentId, this.baseTranslationKey + 'fields.parentId') }}
+        </small>
+      }
+    </div>
+
+    <div class="field mb-4 col-12">
+      <label for="name" [transloco]="this.baseTranslationKey + 'fields.name'"></label>
+      <input id="name" type="text" pInputText formControlName="name" autocomplete="off" [readonly]="readonly">
+      @if (form.controls.name.dirty || form.controls.name.touched) {
+        <small class="block mt-1 p-error">
+          {{ getError(form.controls.name, this.baseTranslationKey + 'fields.name') }}
+        </small>
+      }
+    </div>
+  </div>
+
+  <dke-audit-information [data]="originalEntity"/>
+
+  <div class="surface-border border-top-1 opacity-50 mb-4"></div>
+
+  <div class="flex justify-content-between">
+    <p-button [label]="'primeng.cancel' | transloco" class="w-auto" (onClick)="cancel()" severity="secondary" [outlined]="true" [disabled]="loading"/>
+    @if (!readonly) {
+      <button pButton [label]="(!originalEntity ? 'common.create' : 'common.save') | transloco" [disabled]="form.invalid" class="w-auto" type="submit"
+              [loading]="loading"></button>
+    }
+  </div>
+</form>

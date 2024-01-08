@@ -1,0 +1,14 @@
+{
+  "taskGroupTypes": {
+    "none": {
+      "title": "No Type"
+    },
+    "binary-search": {
+      "title": "Binary Search",
+      "fields": {
+        "minNumber": "Minimum Value",
+        "maxNumber": "Maximum Value"
+      }
+    }
+  }
+}

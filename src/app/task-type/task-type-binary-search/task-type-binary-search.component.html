@@ -1,0 +1,13 @@
+<div class="surface-card p-4 shadow-2 border-round p-fluid mb-4" [formGroup]="form">
+  <div class="grid formgrid p-fluid">
+    <div class="field mb-4 col-12 md:col-6">
+      <label for="solution" transloco="taskTypes.binary-search.fields.solution"></label>
+      <p-inputNumber inputId="solution" formControlName="solution" [maxFractionDigits]="0" />
+      @if (form.controls.solution?.dirty || form.controls.solution?.touched) {
+        <small class="block mt-1 p-error">
+          {{ getError(form.controls.solution, 'taskTypes.binary-search.fields.solution') }}
+        </small>
+      }
+    </div>
+  </div>
+</div>

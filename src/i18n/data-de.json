@@ -1,0 +1,180 @@
+{
+  "organizationalUnits": {
+    "title": "Organisationseinheiten",
+    "fields": {
+      "name": "Name"
+    },
+    "errors": {
+      "load": "Die Organisationseinheiten konnten nicht geladen werden.",
+      "delete": "Die Organisationseinheit '{{name}}' konnte nicht gelöscht werden.",
+      "create": "Die Organisationseinheit '{{name}}' konnte nicht erstellt werden.",
+      "update": "Die Änderungen der Organisationseinheit '{{name}}' konnten nicht gespeichert werden."
+    },
+    "success": {
+      "delete": "Die Organisationseinheit '{{name}}' wurde erfolgreich gelöscht.",
+      "create": "Die Organisationseinheit '{{name}}' wurde erfolgreich erstellt.",
+      "update": "Die Änderungen der Organisationseinheit '{{name}}' wurden erfolgreich gespeichert."
+    },
+    "create": "Organisationseinheit erstellen",
+    "edit": "Organisationseinheit bearbeiten"
+  },
+  "users": {
+    "title": "Benutzer",
+    "fields": {
+      "username": "Benutzername",
+      "firstName": "Vorname",
+      "lastName": "Nachname",
+      "email": "E-Mail",
+      "enabled": "Aktiv",
+      "fullAdmin": "System-Administrator",
+      "failedLoginCount": "Anzahl fehlgeschlagener Anmeldeversuche",
+      "lockoutEnd": "Ende der Sperre",
+      "activated": "Aktivierungsdatum",
+      "organizationalUnit": "Organisationseinheit",
+      "role": "Rolle",
+      "password": "Passwort"
+    },
+    "errors": {
+      "load": "Die Benutzer konnten nicht geladen werden.",
+      "delete": "Der Benutzer '{{username}}' konnte nicht gelöscht werden.",
+      "create": "Der Benutzer '{{username}}' konnte nicht erstellt werden.",
+      "update": "Die Änderungen des Benutzers '{{username}}' konnten nicht gespeichert werden."
+    },
+    "success": {
+      "delete": "Der Benutzer '{{username}}' wurde erfolgreich gelöscht.",
+      "create": "Der Benutzer '{{username}}' wurde erfolgreich erstellt.",
+      "update": "Die Änderungen des Benutzers '{{username}}' wurden erfolgreich gespeichert."
+    },
+    "create": "Benutzer erstellen",
+    "edit": "Benutzer bearbeiten",
+    "changePassword": "Passwort ändern",
+    "enabled": "aktiviert",
+    "disabled": "deaktiviert",
+    "addOU": "Organisationseinheit hinzufügen",
+    "failedLoginCount": "Anzahl fehlgeschlagener Anmeldeversuche: {{value}}"
+  },
+  "roles": {
+    "ADMIN": "Administrator/in",
+    "INSTRUCTOR": "LVA-Leiter/in",
+    "TUTOR": "Tutor/in"
+  },
+  "taskApps": {
+    "title": "Aufgaben-Apps",
+    "fields": {
+      "taskType": "Aufgabenart",
+      "url": "URL",
+      "apiKey": "API Key"
+    },
+    "errors": {
+      "load": "Die Aufgaben-Apps konnten nicht geladen werden.",
+      "delete": "Die Aufgaben-App '{{name}}' konnte nicht gelöscht werden.",
+      "create": "Die Aufgaben-App '{{name}}' konnte nicht erstellt werden.",
+      "update": "Die Änderungen der Aufgaben-App '{{name}}' konnten nicht gespeichert werden."
+    },
+    "success": {
+      "delete": "Die Aufgaben-App '{{name}}' wurde erfolgreich gelöscht.",
+      "create": "Die Aufgaben-App '{{name}}' wurde erfolgreich erstellt.",
+      "update": "Die Änderungen der Aufgaben-App '{{name}}' wurden erfolgreich gespeichert."
+    },
+    "create": "Aufgaben-App erstellen",
+    "edit": "Aufgaben-App bearbeiten"
+  },
+  "taskCategories": {
+    "title": "Aufgaben-Kategorien",
+    "fields": {
+      "id": "ID",
+      "name": "Name",
+      "parentId": "Übergeordnete Kategorie",
+      "organizationalUnitId": "Organisationseinheit"
+    },
+    "errors": {
+      "load": "Die Aufgaben-Kategorien konnten nicht geladen werden.",
+      "delete": "Die Aufgaben-Kategorie '{{name}}' konnte nicht gelöscht werden.",
+      "create": "Die Aufgaben-Kategorie '{{name}}' konnte nicht erstellt werden.",
+      "update": "Die Änderungen der Aufgaben-Kategorie '{{name}}' konnten nicht gespeichert werden."
+    },
+    "success": {
+      "delete": "Die Aufgaben-Kategorie '{{name}}' wurde erfolgreich gelöscht.",
+      "create": "Die Aufgaben-Kategorie '{{name}}' wurde erfolgreich erstellt.",
+      "update": "Die Änderungen der Aufgaben-Kategorie '{{name}}' wurden erfolgreich gespeichert."
+    },
+    "create": "Aufgaben-Kategorie erstellen",
+    "edit": "Aufgaben-Kategorie bearbeiten"
+  },
+  "taskGroups": {
+    "title": "Aufgaben-Gruppen",
+    "fields": {
+      "id": "ID",
+      "name": "Name",
+      "descriptionDe": "Beschreibung Deutsch",
+      "descriptionEn": "Beschreibung Englisch",
+      "taskGroupType": "Aufgabenart",
+      "status": "Status",
+      "organizationalUnitId": "Organisationseinheit",
+      "approvedBy": "Genehmigt von",
+      "approvedDate": "Genehmigt"
+    },
+    "errors": {
+      "load": "Die Aufgaben-Gruppen konnten nicht geladen werden.",
+      "loadSingle": "Die Aufgaben-Gruppe konnte nicht geladen werden.",
+      "delete": "Die Aufgaben-Gruppe '{{name}}' konnte nicht gelöscht werden.",
+      "create": "Die Aufgaben-Gruppe '{{name}}' konnte nicht erstellt werden.",
+      "update": "Die Änderungen der Aufgaben-Gruppe '{{name}}' konnten nicht gespeichert werden."
+    },
+    "success": {
+      "delete": "Die Aufgaben-Gruppe '{{name}}' wurde erfolgreich gelöscht.",
+      "create": "Die Aufgaben-Gruppe '{{name}}' wurde erfolgreich erstellt.",
+      "update": "Die Änderungen der Aufgaben-Gruppe '{{name}}' wurden erfolgreich gespeichert."
+    },
+    "create": "Aufgaben-Gruppe erstellen",
+    "edit": "Aufgaben-Gruppe bearbeiten",
+    "approved": "Freigegeben"
+  },
+  "tasks": {
+    "title": "Aufgaben",
+    "fields": {
+      "title": "Name",
+      "descriptionDe": "Beschreibung Deutsch",
+      "descriptionEn": "Beschreibung Englisch",
+      "taskType": "Aufgabenart",
+      "status": "Status",
+      "organizationalUnitId": "Organisationseinheit",
+      "approvedBy": "Genehmigt von",
+      "approvedDate": "Genehmigt",
+      "difficulty": "Schwierigkeit",
+      "maxPoints": "Max. Punkte",
+      "taskGroupId": "Aufgabengruppe",
+      "taskCategoryIds": "Aufgabenkategorien"
+    },
+    "errors": {
+      "load": "Die Aufgaben konnten nicht geladen werden.",
+      "loadSingle": "Die Aufgaben konnte nicht geladen werden.",
+      "delete": "Die Aufgaben '{{name}}' konnte nicht gelöscht werden.",
+      "create": "Die Aufgaben '{{name}}' konnte nicht erstellt werden.",
+      "update": "Die Änderungen der Aufgaben '{{name}}' konnten nicht gespeichert werden."
+    },
+    "success": {
+      "delete": "Die Aufgaben '{{name}}' wurde erfolgreich gelöscht.",
+      "create": "Die Aufgaben '{{name}}' wurde erfolgreich erstellt.",
+      "update": "Die Änderungen der Aufgaben '{{name}}' wurden erfolgreich gespeichert."
+    },
+    "create": "Aufgaben erstellen",
+    "edit": "Aufgaben bearbeiten",
+    "approved": "Freigegeben",
+    "addTaskCategory": "Aufgabenkategorie hinzufügen"
+  },
+  "taskStatus": {
+    "DRAFT": "Entwurf",
+    "READY_FOR_APPROVAL": "Bereit für Freigabe",
+    "APPROVED": "Freigegeben",
+    "DRAFT_class": "primary",
+    "READY_FOR_APPROVAL_class": "info",
+    "APPROVED_class": "success"
+  },
+  "difficulty": {
+    "1": "Leicht",
+    "2": "Mittel",
+    "3": "Schwer",
+    "4": "Sehr schwer"
+  }
+}

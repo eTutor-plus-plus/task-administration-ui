@@ -1,0 +1,89 @@
+<h1 transloco="auth.account.title"></h1>
+<div class="grid">
+  <div class="col-12 lg:col-6">
+    <p-card>
+      <table>
+        <tr>
+          <th transloco="auth.account.username"></th>
+          <td>{{ user?.userName }}</td>
+        </tr>
+        <tr>
+          <th transloco="auth.account.firstName"></th>
+          <td>{{ user?.firstName }}</td>
+        </tr>
+        <tr>
+          <th transloco="auth.account.lastName"></th>
+          <td>{{ user?.lastName }}</td>
+        </tr>
+        <tr>
+          <th transloco="auth.account.email"></th>
+          <td>{{ user?.email }}</td>
+        </tr>
+        <tr>
+          <th transloco="auth.account.isFullAdmin"></th>
+          <td>{{ (user?.isFullAdmin ? 'common.yes' : 'common.no') | transloco }}</td>
+        </tr>
+        <tr>
+          <th transloco="auth.account.ous"></th>
+          <td>
+            <table class="ou-table">
+              @for (item of user?.roles; track item.organizationalUnit) {
+                <tr>
+                  <th>{{ getOUName(item.organizationalUnit) }}</th>
+                  <td>{{ ('roles.' + item.role) | transloco }}</td>
+                </tr>
+              } @empty {
+                {{ 'auth.account.no-ous' | transloco }}
+              }
+            </table>
+          </td>
+        </tr>
+      </table>
+    </p-card>
+  </div>
+  <div class="col-12 lg:col-6">
+    <p-card>
+      <h3 class="mt-0" transloco="auth.change.title"></h3>
+      <p-messages />
+      <form [formGroup]="form" (ngSubmit)="submit()">
+        <div class="field p-fluid mb-3">
+          <label for="currentPassword" transloco="auth.change.currentPassword"></label>
+          <input id="currentPassword" type="password" pInputText formControlName="currentPassword" autocomplete="current-password" autofocus>
+          @if (form.controls.currentPassword.dirty) {
+            <small class="block mt-1 p-error">
+              {{ getErrorMessage('currentPassword') }}
+            </small>
+          }
+        </div>
+
+        <div class="field p-fluid mb-3">
+          <label for="password" transloco="auth.change.password"></label>
+          <input id="password" type="password" pInputText formControlName="password" autocomplete="new-password">
+          @if (form.controls.password.dirty) {
+            <small class="block mt-1 p-error">
+              {{ getErrorMessage('password') }}
+            </small>
+          }
+        </div>
+
+        <div class="field p-fluid mb-3">
+          <label for="passwordConfirmation" transloco="auth.change.passwordConfirmation"></label>
+          <input id="passwordConfirmation" type="password" pInputText formControlName="passwordConfirmation" autocomplete="off">
+          @if (form.controls.passwordConfirmation.dirty) {
+            <small class="block mt-1 p-error">
+              {{ getErrorMessage('passwordConfirmation') }}
+            </small>
+          }
+          @if (form.controls.passwordConfirmation.dirty && form.hasError('equals')) {
+            <small class="block mt-1 p-error">
+              {{ 'auth.activate.messages.password_error' }}
+            </small>
+          }
+        </div>
+
+        <button pButton [label]="'auth.change.submit' | transloco" class="w-full"
+                [disabled]="form.invalid" [loading]="loading" type="submit"></button>
+      </form>
+    </p-card>
+  </div>
+</div>

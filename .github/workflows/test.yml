@@ -1,0 +1,52 @@
+# Executes the unit tests
+name: Test Library
+
+# Run manually or on pull request
+on:
+  workflow_dispatch:
+  pull_request:
+    branches:
+      - main
+    types:
+      - opened
+
+# Allow actions to read the repository contents and pull requests
+permissions:
+  contents: read
+  pull-requests: write
+  checks: write
+  statuses: write
+  actions: write
+
+# Allow only one concurrent test run, skipping runs queued between the run in-progress and latest queued.
+concurrency:
+  group: '${{ github.workflow }} @ ${{ github.event.pull_request.head.label || github.head_ref || github.ref }}'
+  cancel-in-progress: true
+
+# Executes the unit tests
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Use Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20.x'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Test
+        run: npm run test-ci
+
+      - name: Test Report
+        uses: dorny/test-reporter@v1
+        if: success() || failure()    # run this step even if previous step failed
+        with:
+          name: JUnit Tests
+          path: reports/jest-junit.xml
+          reporter: jest-junit

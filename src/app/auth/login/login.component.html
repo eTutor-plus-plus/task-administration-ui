@@ -1,0 +1,34 @@
+<dke-simple-layout>
+  <h3 transloco="auth.login.title"></h3>
+
+  <p-messages [closable]="false"/>
+
+  <form [formGroup]="form" (ngSubmit)="login()">
+    <div class="field p-fluid mb-3">
+      <label for="username" transloco="auth.login.username"></label>
+      <input id="username" type="text" pInputText formControlName="username" autocomplete="username" [autofocus]="!form.value.username" tabindex="1">
+      @if (form.controls.username.dirty) {
+        <small class="block mt-1 p-error">
+          {{ getErrorMessage('username') }}
+        </small>
+      }
+    </div>
+
+    <div class="field p-fluid mb-3">
+      <div class="flex align-items-center justify-content-between mb-2">
+        <label for="password" transloco="auth.login.password"></label>
+        <a class="block text-right font-light no-underline text-color-secondary"
+           transloco="auth.login.forgot-password" routerLink="/auth/forgotPassword"></a>
+      </div>
+      <input id="password" type="password" pInputText formControlName="password" autocomplete="current-password" [autofocus]="form.value.username" tabindex="2">
+      @if (form.controls.password.dirty) {
+        <small class="block mt-1 p-error">
+          {{ getErrorMessage('password') }}
+        </small>
+      }
+    </div>
+
+    <button pButton [label]="'auth.login.login' | transloco" class="w-full"
+            [disabled]="form.invalid" [loading]="loading" type="submit"></button>
+  </form>
+</dke-simple-layout>

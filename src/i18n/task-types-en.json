@@ -1,0 +1,13 @@
+{
+  "taskTypes": {
+    "none": {
+      "title": "No Type"
+    },
+    "binary-search": {
+      "title": "Binary Search",
+      "fields": {
+        "solution": "Solution"
+      }
+    }
+  }
+}

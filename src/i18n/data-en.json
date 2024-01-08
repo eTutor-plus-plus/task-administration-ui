@@ -1,0 +1,180 @@
+{
+  "organizationalUnits": {
+    "title": "Organizational Units",
+    "fields": {
+      "name": "Name"
+    },
+    "errors": {
+      "load": "The organizational units could not be loaded.",
+      "delete": "The organizational unit '{{name}}' could not be deleted.",
+      "create": "The organizational unit '{{name}}' could not be created.",
+      "update": "The organizational unit '{{name}}' could not be updated."
+    },
+    "success": {
+      "delete": "The organizational unit '{{name}}' was successfully deleted.",
+      "create": "The organizational unit '{{name}}' was successfully created.",
+      "update": "The organizational unit '{{name}}' was successfully updated."
+    },
+    "create": "Create Organizational Unit",
+    "edit": "Edit Organizational Unit"
+  },
+  "users": {
+    "title": "Users",
+    "fields": {
+      "username": "Username",
+      "firstName": "First Name",
+      "lastName": "Last Name",
+      "email": "Email",
+      "enabled": "Enabled",
+      "fullAdmin": "System-Administrator",
+      "failedLoginCount": "Failed Login Count",
+      "lockoutEnd": "End of Lockout",
+      "activated": "Activation Date",
+      "organizationalUnit": "Organizational Unit",
+      "role": "Role",
+      "password": "Password"
+    },
+    "errors": {
+      "load": "The users could not be loaded.",
+      "delete": "The user '{{username}}' could not be deleted.",
+      "create": "The user '{{username}}' could not be created.",
+      "update": "The user '{{username}}' could not be updated."
+    },
+    "success": {
+      "delete": "The user '{{username}}' was successfully deleted.",
+      "create": "The user '{{username}}' was successfully created.",
+      "update": "The user '{{username}}' was successfully updated."
+    },
+    "create": "Create User",
+    "edit": "Edit User",
+    "changePassword": "Change Password",
+    "enabled": "enabled",
+    "disabled": "disabled",
+    "addOU": "Add Organizational Unit",
+    "failedLoginCount": "Failed Login Count: {{value}}"
+  },
+  "roles": {
+    "admin": "Administrator",
+    "instructor": "Course Instructor",
+    "tutor": "Tutor"
+  },
+  "taskApps": {
+    "title": "Task Apps",
+    "fields": {
+      "taskType": "Task Type",
+      "url": "URL",
+      "apiKey": "API Key"
+    },
+    "errors": {
+      "load": "The task apps could not be loaded.",
+      "delete": "The task app '{{name}}' could not be deleted.",
+      "create": "The task app '{{name}}' could not be created.",
+      "update": "The task app '{{name}}' could not be updated."
+    },
+    "success": {
+      "delete": "The task app '{{name}}' was successfully deleted.",
+      "create": "The task app '{{name}}' was successfully created.",
+      "update": "The task app '{{name}}' was successfully updated."
+    },
+    "create": "Create Task App",
+    "edit": "Edit Task App"
+  },
+  "taskCategories": {
+    "title": "Task Categories",
+    "fields": {
+      "id": "ID",
+      "name": "Name",
+      "parentId": "Parent Category",
+      "organizationalUnitId": "Organizational Unit"
+    },
+    "errors": {
+      "load": "The task categories could not be loaded.",
+      "delete": "The task category '{{name}}' could not be deleted.",
+      "create": "The task category '{{name}}' could not be created.",
+      "update": "The task category '{{name}}' could not be updated."
+    },
+    "success": {
+      "delete": "The task category '{{name}}' was successfully deleted.",
+      "create": "The task category '{{name}}' was successfully created.",
+      "update": "The task category '{{name}}' was successfully updated."
+    },
+    "create": "Create Task Category",
+    "edit": "Edit Task Category"
+  },
+  "taskGroups": {
+    "title": "Task Groups",
+    "fields": {
+      "id": "ID",
+      "name": "Name",
+      "descriptionDe": "Description German",
+      "descriptionEn": "Description English",
+      "taskGroupType": "Task Type",
+      "status": "Status",
+      "organizationalUnitId": "Organizational Unit",
+      "approvedBy": "Approved by",
+      "approvedDate": "Approved at"
+    },
+    "errors": {
+      "load": "The task groups could not be loaded.",
+      "loadSingle": "The task group could not be loaded.",
+      "delete": "The task group '{{name}}' could not be deleted.",
+      "create": "The task group '{{name}}' could not be created.",
+      "update": "The task group '{{name}}' could not be updated."
+    },
+    "success": {
+      "delete": "The task group '{{name}}' was successfully deleted.",
+      "create": "The task group '{{name}}' was successfully created.",
+      "update": "The task group '{{name}}' was successfully updated."
+    },
+    "create": "Create Task Group",
+    "edit": "Edit Task Group",
+    "approved": "Approved"
+  },
+  "tasks": {
+    "title": "Tasks",
+    "fields": {
+      "title": "Name",
+      "descriptionDe": "Description German",
+      "descriptionEn": "Description English",
+      "taskType": "Task Type",
+      "status": "Status",
+      "organizationalUnitId": "Organizational Unit",
+      "approvedBy": "Approved by",
+      "approvedDate": "Approved at",
+      "difficulty": "Difficulty",
+      "maxPoints": "Max. Points",
+      "taskGroupId": "Task Group",
+      "taskCategoryIds": "Task Categories"
+    },
+    "errors": {
+      "load": "The tasks could not be loaded.",
+      "loadSingle": "The task could not be loaded.",
+      "delete": "The task '{{name}}' could not be deleted.",
+      "create": "The task '{{name}}' could not be created.",
+      "update": "The task '{{name}}' could not be updated."
+    },
+    "success": {
+      "delete": "The task '{{name}}' was successfully deleted.",
+      "create": "The task '{{name}}' was successfully created.",
+      "update": "The task '{{name}}' was successfully updated."
+    },
+    "create": "Create Task",
+    "edit": "Edit Task",
+    "approved": "Approved",
+    "addTaskCategory": "Add Task Category"
+  },
+  "taskStatus": {
+    "DRAFT": "Draft",
+    "READY_FOR_APPROVAL": "Ready for Approval",
+    "APPROVED": "Approved",
+    "DRAFT_class": "primary",
+    "READY_FOR_APPROVAL_class": "info",
+    "APPROVED_class": "success"
+  },
+  "difficulty": {
+    "1": "Easy",
+    "2": "Medium",
+    "3": "Hard",
+    "4": "Very Hard"
+  }
+}

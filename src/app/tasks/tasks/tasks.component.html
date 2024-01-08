@@ -1,0 +1,113 @@
+<h1 [transloco]="baseTranslationKey + 'title'"></h1>
+
+<p-confirmPopup/>
+
+<p-table [value]="tableData.content" [tableStyle]="{'min-width': '30rem'}" [lazy]="true" (onLazyLoad)="loadTableData($event)" dataKey="id" [loading]="loading"
+         [paginator]="true" [rows]="10" [rowsPerPageOptions]="[10, 25, 50, 100]" [showCurrentPageReport]="true" [totalRecords]="tableData.totalElements"
+         [currentPageReportTemplate]="'common.paginator' | transloco" [sortMode]="'multiple'" [multiSortMeta]="defaultSort"
+         [ngClass]="{'with-ou': showOrganizationalUnit}">
+  <ng-template pTemplate="caption">
+    <div class="flex align-items-center justify-content-between">
+      @if (canCreate()) {
+        <p-button [label]="'common.new' | transloco" icon="pi pi-plus" (onClick)="create()"/>
+      } @else {
+        <div></div>
+      }
+      <p-button [label]="'common.refresh' | transloco" icon="pi pi-refresh" (onClick)="reload()" severity="secondary"/>
+    </div>
+  </ng-template>
+
+  <ng-template pTemplate="header">
+    <tr>
+      @if (showOrganizationalUnit) {
+        <th pSortableColumn="organizationalUnit.name" class="col-organizationalUnitId">
+          {{ baseTranslationKey + 'fields.organizationalUnitId' | transloco }}
+          <p-sortIcon field="organizationalUnit.name"/>
+        </th>
+      }
+      <th pSortableColumn="taskGroup.name" class="col-taskGroupId">
+        {{ baseTranslationKey + 'fields.taskGroupId' | transloco }}
+        <p-sortIcon field="taskGroupId"/>
+      </th>
+      <th pSortableColumn="taskType" class="col-taskType">
+        {{ baseTranslationKey + 'fields.taskType' | transloco }}
+        <p-sortIcon field="taskType"/>
+      </th>
+      <th pSortableColumn="title" class="col-title">
+        {{ baseTranslationKey + 'fields.title' | transloco }}
+        <p-sortIcon field="title"/>
+      </th>
+      <th pSortableColumn="status" class="col-status">
+        {{ baseTranslationKey + 'fields.status' | transloco }}
+        <p-sortIcon field="status"/>
+      </th>
+      <th class="col-actions"></th>
+    </tr>
+    <tr>
+      @if (showOrganizationalUnit) {
+        <th>
+          <p-columnFilter field="organizationalUnit" matchMode="equals" [showMenu]="false" [showClearButton]="true">
+            <ng-template pTemplate="filter" let-value let-filter="filterCallback">
+              <p-dropdown [options]="organizationalUnits" optionValue="id" optionLabel="name" [ngModel]="value" appendTo="body" [showClear]="false"
+                          (onChange)="filter($event.value)"/>
+            </ng-template>
+          </p-columnFilter>
+        </th>
+      }
+      <th>
+        <p-columnFilter field="taskGroup" matchMode="equals" [showMenu]="false" [showClearButton]="true">
+          <ng-template pTemplate="filter" let-value let-filter="filterCallback">
+            <p-dropdown [options]="taskGroups" optionValue="id" optionLabel="name" [ngModel]="value" appendTo="body" [showClear]="false"
+                        (onChange)="filter($event.value)"/>
+          </ng-template>
+        </p-columnFilter>
+      </th>
+      <th>
+        <p-columnFilter field="taskGroupType" matchMode="equals" [showMenu]="false" [showClearButton]="true">
+          <ng-template pTemplate="filter" let-value let-filter="filterCallback">
+            <p-dropdown [options]="types" optionValue="value" optionLabel="text" [ngModel]="value" appendTo="body" [showClear]="false"
+                        (onChange)="filter($event.value)"/>
+          </ng-template>
+        </p-columnFilter>
+      </th>
+      <th>
+        <p-columnFilter type="text" field="name" [showMenu]="false" matchMode="contains" [placeholder]="'common.search' | transloco"/>
+      </th>
+      <th>
+        <p-columnFilter field="status" matchMode="equals" [showMenu]="false" [showClearButton]="true">
+          <ng-template pTemplate="filter" let-value let-filter="filterCallback">
+            <p-dropdown [options]="statuses" optionValue="value" optionLabel="text" [ngModel]="value" appendTo="body" [showClear]="false"
+                        (onChange)="filter($event.value)"/>
+          </ng-template>
+        </p-columnFilter>
+      </th>
+      <th></th>
+    </tr>
+  </ng-template>
+
+  <ng-template pTemplate="body" let-entity>
+    <tr>
+      @if (showOrganizationalUnit) {
+        <td>{{ getOUName(entity.organizationalUnitId) }}</td>
+      }
+      <td>{{ getTaskGroupName(entity.taskGroupId) }}</td>
+      <td>{{ 'taskTypes.' + entity.taskType + '.title' | transloco }}</td>
+      <td>{{ entity.title }}</td>
+      <td>
+        <p-tag [severity]="('taskStatus.' + entity.status + '_class') | transloco">
+          {{ ('taskStatus.' + entity.status) | transloco }}
+        </p-tag>
+      </td>
+      <td>
+        <span class="p-buttonset">
+          <p-button (onClick)="edit(entity)" icon="pi pi-pencil" [pTooltip]="'common.edit' | transloco" tooltipPosition="top" [showDelay]="1000"
+                    severity="warning" size="small"/>
+          @if (canDelete(entity)) {
+            <p-button (onClick)="delete(entity, $event)" icon="pi pi-trash" [pTooltip]="'common.delete' | transloco" tooltipPosition="top" [showDelay]="1000"
+                      severity="danger" size="small"/>
+          }
+        </span>
+      </td>
+    </tr>
+  </ng-template>
+</p-table>
