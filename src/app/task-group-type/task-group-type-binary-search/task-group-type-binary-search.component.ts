@@ -4,6 +4,9 @@ import { TranslocoDirective } from '@ngneat/transloco';
 import { InputNumberModule } from 'primeng/inputnumber';
 
 import { TaskGroupTypeFormComponent } from '../task-group-type-form.component';
+import { BinarySearchService } from '../../api';
+import { InputGroupModule } from 'primeng/inputgroup';
+import { ButtonModule } from 'primeng/button';
 
 /**
  * Task Group Type Form: Binary Search
@@ -14,7 +17,9 @@ import { TaskGroupTypeFormComponent } from '../task-group-type-form.component';
   imports: [
     ReactiveFormsModule,
     InputNumberModule,
-    TranslocoDirective
+    TranslocoDirective,
+    InputGroupModule,
+    ButtonModule
   ],
   templateUrl: './task-group-type-binary-search.component.html',
   styleUrl: './task-group-type-binary-search.component.scss'
@@ -24,7 +29,7 @@ export class TaskGroupTypeBinarySearchComponent extends TaskGroupTypeFormCompone
   /**
    * Creates a new instance of class TaskGroupTypeBinarySearchComponent.
    */
-  constructor() {
+  constructor(private readonly binSearchService: BinarySearchService) {
     super();
   }
 
@@ -45,6 +50,16 @@ export class TaskGroupTypeBinarySearchComponent extends TaskGroupTypeFormCompone
     });
   }
 
+  /**
+   * Loads random numbers.
+   */
+  async loadNumbers(): Promise<void> {
+    const minMax = await this.binSearchService.loadNewRandomNumbers();
+    this.form.patchValue({
+      minNumber: minMax.min,
+      maxNumber: minMax.max
+    });
+  }
 }
 
 interface TaskGroupTypeForm {
