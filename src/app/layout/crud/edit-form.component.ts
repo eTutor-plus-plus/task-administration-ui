@@ -97,7 +97,7 @@ export abstract class EditFormComponent<TDto extends object, TService extends Ap
         detail: this.translationService.translate(this.baseTranslationKey + 'success.create', this.getMessageParams(result, 'successCreate')),
         key: 'global'
       });
-      this.onSuccess('create');
+      this.onSuccess(this.getId(result), 'create');
     } catch (err) {
       let detail = '';
       if (err instanceof HttpErrorResponse) {
@@ -132,7 +132,7 @@ export abstract class EditFormComponent<TDto extends object, TService extends Ap
         detail: this.translationService.translate(this.baseTranslationKey + 'success.update', this.getMessageParams(this.form.value as any, 'successUpdate')),
         key: 'global'
       });
-      this.onSuccess('update');
+      this.onSuccess(this.getId(this.originalEntity), 'update');
     } catch (err) {
       let msg = this.translationService.translate(this.baseTranslationKey + 'errors.update', this.getMessageParams(this.form.value as any, 'errorUpdate'));
 
@@ -166,9 +166,10 @@ export abstract class EditFormComponent<TDto extends object, TService extends Ap
   /**
    * Called when the operation was successful.
    *
+   * @param id The identifier of the entity.
    * @param operation The type of the operation.
    */
-  onSuccess(operation: 'create' | 'update'): void | Promise<void> {
+  onSuccess(id: number | string, operation: 'create' | 'update'): void | Promise<void> {
   }
 
   /**

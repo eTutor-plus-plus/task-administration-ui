@@ -229,8 +229,8 @@ export class TaskFormComponent extends EditFormComponent<TaskDto, TaskService, T
     return {name: entity.title};
   }
 
-  override async onSuccess(operation: 'create' | 'update'): Promise<void> {
-    await this.router.navigate(['tasks']);
+  override async onSuccess(id: number, operation: 'create' | 'update'): Promise<void> {
+    await this.loadTask(id);
   }
 
   override modifyValueBeforeSend(data: Partial<{ [K in keyof TaskForm]: any }>, type: 'create' | 'update'): any {

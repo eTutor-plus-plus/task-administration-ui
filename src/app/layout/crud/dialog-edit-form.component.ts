@@ -48,9 +48,10 @@ export abstract class DialogEditFormComponent<TDto extends object, TService exte
   /**
    * Closes the dialog after saving changes.
    *
+   * @param id The identifier of the entity.
    * @param operation The type of the operation.
    */
-  override onSuccess(operation: 'create' | 'update'): void | Promise<void> {
+  override onSuccess(id: number | string, operation: 'create' | 'update'): void | Promise<void> {
     this.dialogRef.close(true);
   }
 }

@@ -187,8 +187,8 @@ export class TaskGroupFormComponent extends EditFormComponent<TaskGroupDto, Task
     return {name: entity.name};
   }
 
-  override async onSuccess(operation: 'create' | 'update'): Promise<void> {
-    await this.router.navigate(['taskGroups']);
+  override async onSuccess(id: number | string, operation: 'create' | 'update'): Promise<void> {
+    await this.loadTaskGroup(id);
   }
 
   //#endregion
