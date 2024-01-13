@@ -191,7 +191,15 @@ export class TaskGroupFormComponent extends EditFormComponent<TaskGroupDto, Task
     await this.loadTaskGroup(id);
   }
 
-  //#endregion
+  override modifyValueBeforeSend(data: Partial<{ [K in keyof TaskGroupForm]: any }>, type: "create" | "update"): any {
+    return {
+      ...data,
+      descriptionDe: data.descriptionDe ?? '',
+      descriptionEn: data.descriptionEn ?? ''
+    };
+  }
+
+//#endregion
 
   private async loadTaskGroup(id: string | number): Promise<void> {
     try {

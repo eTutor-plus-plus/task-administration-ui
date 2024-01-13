@@ -236,6 +236,8 @@ export class TaskFormComponent extends EditFormComponent<TaskDto, TaskService, T
   override modifyValueBeforeSend(data: Partial<{ [K in keyof TaskForm]: any }>, type: 'create' | 'update'): any {
     return {
       ...data,
+      descriptionDe: data.descriptionDe ?? '',
+      descriptionEn: data.descriptionEn ?? '',
       taskCategoryIds: data.taskCategoryIds ? data.taskCategoryIds.map((x: TreeNode) => x.data) : []
     };
   }
