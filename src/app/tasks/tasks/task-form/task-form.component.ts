@@ -139,7 +139,7 @@ export class TaskFormComponent extends EditFormComponent<TaskDto, TaskService, T
       taskType: new FormControl<string | null>('none', [Validators.required, Validators.maxLength(100)]),
       status: new FormControl<StatusEnum | null>('DRAFT', [Validators.required]),
       taskGroupId: new FormControl<number | null>(null, []),
-      taskCategoryIds: new FormArray<FormControl<number | null>>([]),
+      taskCategoryIds: new FormArray<FormControl<TreeNode | null>>([]),
       additionalData: new FormGroup<any>({})
     }), 'tasks.');
     this.readonly = false;
@@ -256,10 +256,10 @@ export class TaskFormComponent extends EditFormComponent<TaskDto, TaskService, T
       }
 
       for (let taskCategoryId of this.originalEntity?.taskCategoryIds ?? []) {
-        this.form.controls.taskCategoryIds.controls.push(new FormControl<number | null>(null, []));
+        this.form.controls.taskCategoryIds.controls.push(new FormControl<TreeNode | null>(null, []));
       }
 
-      this.form.patchValue(this.originalEntity);
+      this.form.patchValue({...this.originalEntity, taskCategoryIds: []});
       this.setStatusDisablesAndReadonly();
       this.changeDetectorRef.detectChanges(); // required to prevent error
     } catch (err) {
@@ -424,11 +424,33 @@ export class TaskFormComponent extends EditFormComponent<TaskDto, TaskService, T
       };
     });
 
-    if (this.originalEntity) {
-      for (let i = 0; i < (this.originalEntity?.taskCategoryIds?.length ?? 0); i++) {
+    // Patch form value
+    const recursiveSearch = (node: TreeNode, id: number): TreeNode | null => {
+      if (node.data === id)
+        return node;
+      for (const child of node.children ?? []) {
+        const result = recursiveSearch(child, id);
+        if (result)
+          return result;
+      }
+      return null;
+    };
+    if (this.originalEntity && this.originalEntity.taskCategoryIds) {
+      for (let i = 0; i < (this.originalEntity.taskCategoryIds.length ?? 0); i++) {
         this.addTaskCategory();
       }
-      this.form.patchValue({taskCategoryIds: this.originalEntity.taskCategoryIds});
+      const nodes: TreeNode[] = (this.originalEntity.taskCategoryIds.flatMap(x => {
+        const result: TreeNode[] = [];
+        for (const node of this.taskCategories) {
+          const tmp = recursiveSearch(node, x);
+          if (tmp)
+            result.push(tmp);
+        }
+        return result;
+      })
+        .filter(x => !!x)
+        .map(x => x!)) ?? [];
+      this.form.patchValue({taskCategoryIds: nodes});
     }
   }
 
@@ -461,7 +483,7 @@ export class TaskFormComponent extends EditFormComponent<TaskDto, TaskService, T
    * Adds a new task category row to the form.
    */
   addTaskCategory(): void {
-    this.form.controls.taskCategoryIds.push(new FormControl<number | null>(null, []));
+    this.form.controls.taskCategoryIds.push(new FormControl<TreeNode | null>(null, []));
   }
 
   /**
