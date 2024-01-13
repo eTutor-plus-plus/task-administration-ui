@@ -132,6 +132,41 @@
     "title": "Page Not Found",
     "message": "Sorry, we couldn't find the page."
   },
+  "health": {
+    "select": "Please select an entry to display the details.",
+    "health": {
+      "title": "Health",
+      "icon": "pi-heart"
+    },
+    "info": {
+      "title": "Application Information",
+      "icon": "pi-info-circle"
+    },
+    "env": {
+      "title": "Environment",
+      "icon": "pi-desktop"
+    },
+    "flyway": {
+      "title": "DB-Migrations",
+      "icon": "pi-database"
+    },
+    "logfile": {
+      "title": "Log File",
+      "icon": "pi-file"
+    },
+    "metrics": {
+      "title": "Metrics",
+      "icon": "pi-chart-line"
+    },
+    "scheduledtasks": {
+      "title": "Scheduled Tasks",
+      "icon": "pi-calendar"
+    },
+    "httpexchanges": {
+      "title": "HTTP-Exchanges",
+      "icon": "pi-globe"
+    }
+  },
   "primeng": {
     "startsWith": "Starts with",
     "contains": "Contains",

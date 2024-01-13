@@ -26,7 +26,7 @@ export class SystemHealthService {
     return new Promise((resolve, reject) => this.http.get<{
         '_links': Record<string, Link>
       }>(`${this.apiUrl}/actuator`, {headers: new HttpHeaders().set('Accept', this.contentType)}).subscribe({
-        next: value => resolve(Object.keys(value._links)),
+        next: value => resolve(Object.keys(value._links).filter(x => x !== 'self' && !x.includes('-'))),
         error: err => {
           console.error('[SystemHealthService] Failed loading actuator endpoints', err);
           reject(err);
@@ -94,9 +94,9 @@ export class SystemHealthService {
     if (from && to) headers = headers.set('Range', `bytes=${from}-${to}`);
 
     console.info('[SystemHealthService] Loading log file');
-    return new Promise((resolve, reject) => this.http.get<string>(`${this.apiUrl}/actuator/scheduledtasks`, {
+    return new Promise((resolve, reject) => this.http.get(`${this.apiUrl}/actuator/logfile`, {
       headers: headers,
-      observe: 'body'
+      responseType: 'text'
     }).subscribe({
       next: value => resolve(value),
       error: err => {

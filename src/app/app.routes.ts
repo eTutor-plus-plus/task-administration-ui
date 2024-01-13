@@ -18,6 +18,22 @@ export const routes: Routes = [
 
       // Admin
       {
+        path: 'health',
+        loadComponent: () => import('./admin/system-health/system-health.component').then(c => c.SystemHealthComponent),
+        canActivate: [roleGuard(['full_admin'])],
+        children: [
+          {
+            path: '',
+            pathMatch: 'full',
+            loadComponent: () => import('./admin/system-health/system-health-default/system-health-default.component').then(c => c.SystemHealthDefaultComponent)
+          },
+          {
+            path: 'logfile',
+            loadComponent: () => import('./admin/system-health/system-health-log-file/system-health-log-file.component').then(c => c.SystemHealthLogFileComponent)
+          }
+        ]
+      },
+      {
         path: 'organizationalUnits',
         loadComponent: () => import('./admin/organizational-units/organizational-units.component').then(c => c.OrganizationalUnitsComponent),
         canActivate: [roleGuard(['full_admin'])]

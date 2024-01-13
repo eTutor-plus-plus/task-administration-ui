@@ -132,6 +132,41 @@
     "title": "Seite nicht gefunden",
     "message": "Entschuldigung, wir konnten die Seite nicht finden."
   },
+  "health": {
+    "select": "Bitte wählen Sie einen Eintrag aus der Liste aus.",
+    "health": {
+      "title": "Zustand",
+      "icon": "pi-heart"
+    },
+    "info": {
+      "title": "Anwendungsinformationen",
+      "icon": "pi-info-circle"
+    },
+    "env": {
+      "title": "Konfiguration",
+      "icon": "pi-desktop"
+    },
+    "flyway": {
+      "title": "DB-Migrationen",
+      "icon": "pi-database"
+    },
+    "logfile": {
+      "title": "Log-Datei",
+      "icon": "pi-file"
+    },
+    "metrics": {
+      "title": "Metriken",
+      "icon": "pi-chart-line"
+    },
+    "scheduledtasks": {
+      "title": "Geplante Aufgaben",
+      "icon": "pi-calendar"
+    },
+    "httpexchanges": {
+      "title": "HTTP-Anfragen",
+      "icon": "pi-globe"
+    }
+  },
   "primeng": {
     "startsWith": "Beginnt mit",
     "contains": "Enthält",
