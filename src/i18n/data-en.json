@@ -144,7 +144,8 @@
       "difficulty": "Difficulty",
       "maxPoints": "Max. Points",
       "taskGroupId": "Task Group",
-      "taskCategoryIds": "Task Categories"
+      "taskCategoryIds": "Task Categories",
+      "submitTest": "Test Task"
     },
     "errors": {
       "load": "The tasks could not be loaded.",
@@ -162,6 +163,23 @@
     "edit": "Edit Task",
     "approved": "Approved",
     "addTaskCategory": "Add Task Category"
+  },
+  "submission": {
+    "fields": {
+      "language": "Language",
+      "mode": "Evaluation Mode",
+      "feedbackLevel": "Feedback Level",
+      "submission": "Submission",
+      "result": "Result"
+    },
+    "submit": "Submit",
+    "error": "The submission could not be sent."
+  },
+  "feedbackLevel": {
+    "0": "No Feedback",
+    "1": "Little Feedback",
+    "2": "Some Feedback",
+    "3": "Much Feedback"
   },
   "taskStatus": {
     "DRAFT": "Draft",

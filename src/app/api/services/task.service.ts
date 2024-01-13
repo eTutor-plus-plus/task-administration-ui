@@ -48,6 +48,28 @@ export class TaskService extends ApiService<TaskDto, ModifyTaskDto, number, Task
     return params;
   }
 
+  /**
+   * Submits a task.
+   *
+   * @param submission The submission.
+   * @return The grading result.
+   */
+  async submit(submission: {
+    mode: string;
+    feedbackLevel: number;
+    language: string;
+    submission: string;
+    taskId: number;
+  }): Promise<any> {
+    console.info(`[${this.serviceName}] Submitting task`);
+    return new Promise((resolve, reject) => this.http.post<any>(this.apiUrl + '/submit', submission, {observe: 'body'}).subscribe({
+      next: value => resolve(value),
+      error: err => {
+        console.error(`[${this.serviceName}] Failed submitting task`, err);
+        reject(err);
+      }
+    }));
+  }
 }
 
 /**

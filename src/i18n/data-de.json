@@ -161,7 +161,25 @@
     "create": "Aufgaben erstellen",
     "edit": "Aufgaben bearbeiten",
     "approved": "Freigegeben",
-    "addTaskCategory": "Aufgabenkategorie hinzufügen"
+    "addTaskCategory": "Aufgabenkategorie hinzufügen",
+    "submitTest": "Aufgabe testen"
+  },
+  "submission": {
+    "fields": {
+      "language": "Sprache",
+      "mode": "Auswertungsmodus",
+      "feedbackLevel": "Feedback-Level",
+      "submission": "Abgabe",
+      "result": "Ergebnis"
+    },
+    "submit": "Abgeben",
+    "error": "Die Abgabe konnte nicht gesendet werden."
+  },
+  "feedbackLevel": {
+    "0": "Kein Feedback",
+    "1": "Wenig Feedback",
+    "2": "Etwas Feedback",
+    "3": "Viel Feedback"
   },
   "taskStatus": {
     "DRAFT": "Entwurf",

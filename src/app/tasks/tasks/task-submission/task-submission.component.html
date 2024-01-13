@@ -1,0 +1,35 @@
+<form [formGroup]="form" (ngSubmit)="submit()">
+  <div class="grid formgrid p-fluid">
+    <div class="field mb-4 col-12 md:col-6 lg:col-4">
+      <label for="language" [transloco]="'submission.fields.language'"></label>
+      <p-dropdown inputId="language" [options]="languages" formControlName="language" [disabled]="loading"/>
+    </div>
+    <div class="field mb-4 col-12 md:col-6 lg:col-4">
+      <label for="mode" [transloco]="'submission.fields.mode'"></label>
+      <p-dropdown inputId="mode" [options]="modes" formControlName="mode" [disabled]="loading"/>
+    </div>
+    <div class="field mb-4 col-12 md:col-6 lg:col-4">
+      <label for="feedbackLevel" [transloco]="'submission.fields.feedbackLevel'"></label>
+      <p-dropdown inputId="feedbackLevel" [options]="feedbackLevels" formControlName="feedbackLevel" [disabled]="loading"/>
+    </div>
+  </div>
+
+  <div class="field mb-4">
+    <label for="submission" [transloco]="'submission.fields.submission'"></label>
+    <ngx-monaco-editor id="submission" formControlName="submission" [options]="editorOptions"/>
+  </div>
+</form>
+
+@if (gradingResult) {
+  <div class="surface-border border-top-1 opacity-50 mb-4"></div>
+  <div class="field mb-4 flex-grow-1">
+    <label for="result" [transloco]="'submission.fields.result'"></label>
+    <ngx-monaco-editor id="result" [options]="resultEditorOptions" [(ngModel)]="gradingResult"/>
+  </div>
+}
+<div class="surface-border border-top-1 opacity-50 mb-4"></div>
+
+<div class="flex justify-content-between">
+  <p-button [label]="'primeng.cancel' | transloco" class="w-auto" (onClick)="cancel()" severity="secondary" [outlined]="true" [disabled]="loading"/>
+  <button pButton [label]="'submission.submit' | transloco" [disabled]="form.invalid" class="w-auto" (click)="submit()" [loading]="loading"></button>
+</div>

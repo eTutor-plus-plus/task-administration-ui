@@ -9,9 +9,13 @@ export class TaskTypeRegistry {
   private constructor() {
   }
 
-  private static readonly taskTypes: { name: string, supportedTaskGroupTypes: string[], component?: Type<any> }[] = [
+  private static readonly taskTypes: { name: string, supportedTaskGroupTypes: string[], component?: Type<any>, submissionTemplate?: string }[] = [
     {name: 'none', supportedTaskGroupTypes: []},
-    {name: 'binary-search', supportedTaskGroupTypes: ['binary-search'], component: TaskTypeBinarySearchComponent}
+    {
+      name: 'binary-search', supportedTaskGroupTypes: ['binary-search'], component: TaskTypeBinarySearchComponent, submissionTemplate: `{
+  "input": "0"
+}`
+    }
   ];
 
   /**
@@ -28,6 +32,15 @@ export class TaskTypeRegistry {
    */
   static getComponent(name: string | null): Type<any> | undefined {
     return this.taskTypes.find(x => x.name === name)?.component;
+  }
+
+  /**
+   * Gets the submission template for the specified type name.
+   *
+   * @param name The type name.
+   */
+  static getSubmissionTemplate(name: string | null): string | undefined {
+    return this.taskTypes.find(x => x.name === name)?.submissionTemplate;
   }
 
   /**

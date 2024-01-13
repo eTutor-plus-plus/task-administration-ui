@@ -13,6 +13,7 @@ import { EditorModule } from 'primeng/editor';
 import { TreeSelectModule } from 'primeng/treeselect';
 import { TreeNode } from 'primeng/api';
 import { InputNumberModule } from 'primeng/inputnumber';
+import { DialogService } from 'primeng/dynamicdialog';
 
 import { AuditInformationComponent, EditFormComponent } from '../../../layout';
 import { AuthService, Role } from '../../../auth';
@@ -27,6 +28,7 @@ import {
   TaskService
 } from '../../../api';
 import { TaskForm, TaskTypeRegistry } from '../../../task-type';
+import { TaskSubmissionComponent } from '../task-submission/task-submission.component';
 
 /**
  * Task Form
@@ -49,6 +51,7 @@ import { TaskForm, TaskTypeRegistry } from '../../../task-type';
     InputNumberModule,
     TreeSelectModule
   ],
+  providers: [DialogService],
   templateUrl: './task-form.component.html',
   styleUrl: './task-form.component.scss'
 })
@@ -128,6 +131,7 @@ export class TaskFormComponent extends EditFormComponent<TaskDto, TaskService, T
               private readonly authService: AuthService,
               private readonly route: ActivatedRoute,
               private readonly router: Router,
+              private readonly dialogService: DialogService,
               private readonly changeDetectorRef: ChangeDetectorRef) {
     super(entityService, new FormGroup<TaskForm>({
       organizationalUnitId: new FormControl<number | null>(null, [Validators.required]),
@@ -242,7 +246,7 @@ export class TaskFormComponent extends EditFormComponent<TaskDto, TaskService, T
     };
   }
 
-//#endregion
+  //#endregion
 
   //#region --- Load data ---
 
@@ -474,4 +478,25 @@ export class TaskFormComponent extends EditFormComponent<TaskDto, TaskService, T
     this.form.controls.taskCategoryIds.removeAt(index);
   }
 
+  /**
+   * Opens the dialog to test the task.
+   */
+  testTask(): void {
+    if (!this.originalEntity)
+      return;
+
+    this.dialogService.open(TaskSubmissionComponent, {
+      header: this.translationService.translate(this.baseTranslationKey + 'submitTest'),
+      width: '90%',
+      maximizable: true,
+      style: {
+        minWidth: '500px',
+        minHeight: '500px'
+      },
+      data: {
+        taskId: this.originalEntity.id,
+        taskType: this.originalEntity.taskType
+      }
+    });
+  }
 }
