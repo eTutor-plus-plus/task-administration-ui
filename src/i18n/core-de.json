@@ -29,6 +29,7 @@
       "login": "Anmelden",
       "expired": "Ihre Sitzung ist abgelaufen. Bitte melden Sie sich erneut an.",
       "messages": {
+        "unavailable": "Der eTutor-Server ist nicht erreichbar.",
         "bad_credentials": "Ungültige Zugangsdaten",
         "no_connection": "Der eTutor-Server ist nicht erreichbar.",
         "login_failed": "Anmeldung fehlgeschlagen",

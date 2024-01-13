@@ -5,6 +5,7 @@ import { Subscription } from 'rxjs';
 import { DateTime } from 'luxon';
 
 import { environment } from '../../../environments/environment';
+import { SystemHealthService } from '../../api';
 
 /**
  * Layout-component: Footer
@@ -33,12 +34,23 @@ export class FooterComponent implements OnInit, OnDestroy {
    */
   readonly versionDate: string;
 
+  /**
+   * The version string.
+   */
+  serverVersion?: string;
+
+  /**
+   * The version date.
+   */
+  serverVersionDate?: string;
+
   private sub?: Subscription;
 
   /**
    * Creates a new instance of class FooterComponent.
    */
-  constructor(private readonly translationService: TranslocoService) {
+  constructor(private readonly translationService: TranslocoService,
+              private readonly healthService: SystemHealthService) {
     this.impressUrl = environment.impressUrl + '?lang=' + translationService.getActiveLang();
     this.version = `${environment.version}-${environment.git.branch}#${environment.git.shortSha}`;
     this.versionDate = DateTime.fromISO(environment.git.commitDate).toFormat('dd.MM.yyyy HH:mm:ss');
@@ -50,6 +62,10 @@ export class FooterComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.sub = this.translationService.langChanges$
       .subscribe(lang => this.impressUrl = environment.impressUrl + '?lang=' + lang);
+    this.healthService.loadAppInfo().then(info => {
+      this.serverVersion = info.build?.version + '#' + info.git?.commit.id['describe-short'];
+      this.serverVersionDate = info.git?.commit.time ? DateTime.fromISO(info.git.commit.time).toFormat('dd.MM.yyyy HH:mm:ss') : '';
+    });
   }
 
   /**

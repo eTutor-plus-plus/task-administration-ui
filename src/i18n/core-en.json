@@ -29,6 +29,7 @@
       "login": "Sign in",
       "expired": "Your session has expired. Please sign in again.",
       "messages": {
+        "unavailable": "The eTutor-Server is currently not available.",
         "bad_credentials": "Bad credentials",
         "no_connection": "The eTutor-Server does not answer.",
         "login_failed": "Sign in failed",

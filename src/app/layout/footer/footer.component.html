@@ -1,4 +1,9 @@
 <div class="flex justify-content-between text-color-secondary text-sm">
-  <p [title]="versionDate">{{ version }}</p>
+  <p>
+    <span [title]="versionDate">{{ version }}</span>
+    @if (serverVersion) {
+      <span [title]="serverVersionDate"> / {{ serverVersion }}</span>
+    }
+  </p>
   <p><a [href]="impressUrl" class="text-color-secondary no-underline hover:underline" target="_blank">{{ 'impress' | transloco }}</a></p>
 </div>
