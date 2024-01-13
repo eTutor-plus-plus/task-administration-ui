@@ -4,7 +4,7 @@
       <label for="minNumber" transloco="taskGroupTypes.binary-search.fields.minNumber"></label>
       <p-inputGroup>
         <p-inputNumber inputId="minNumber" formControlName="minNumber" [maxFractionDigits]="0" />
-        <p-button icon="pi pi-refresh" severity="secondary" (onClick)="loadNumbers()" />
+        <p-button icon="pi pi-refresh" severity="secondary" (onClick)="loadNumbers()" [loading]="loading" />
       </p-inputGroup>
       @if (form.controls.minNumber?.dirty || form.controls.minNumber?.touched) {
         <small class="block mt-1 p-error">

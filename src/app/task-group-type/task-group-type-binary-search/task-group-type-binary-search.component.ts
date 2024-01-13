@@ -54,11 +54,17 @@ export class TaskGroupTypeBinarySearchComponent extends TaskGroupTypeFormCompone
    * Loads random numbers.
    */
   async loadNumbers(): Promise<void> {
-    const minMax = await this.binSearchService.loadNewRandomNumbers();
-    this.form.patchValue({
-      minNumber: minMax.min,
-      maxNumber: minMax.max
-    });
+    try {
+      this.startLoading();
+      const minMax = await this.binSearchService.loadNewRandomNumbers();
+      this.form.patchValue({
+        minNumber: minMax.min,
+        maxNumber: minMax.max
+      });
+    } catch (err) {
+    } finally {
+      this.finishLoading();
+    }
   }
 }
 

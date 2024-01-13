@@ -151,7 +151,7 @@ export class TaskCategoriesComponent extends TableDialogOverviewComponent<TaskCa
   }
 
   private async loadOrganizationalUnits(): Promise<void> {
-    this.loading = true;
+    this.startLoading();
     try {
       const result = await this.organizationalUnitService.load(0, 999999, [{field: 'name', order: 1}]);
       this.organizationalUnits = result.content;
@@ -164,7 +164,7 @@ export class TaskCategoriesComponent extends TableDialogOverviewComponent<TaskCa
         key: 'global'
       });
     } finally {
-      this.loading = false;
+      this.finishLoading();
     }
   }
 

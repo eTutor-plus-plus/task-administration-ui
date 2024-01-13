@@ -166,6 +166,7 @@ export class TaskGroupsComponent extends TableOverviewComponent<TaskGroupDto, Ta
 
   private async loadOrganizationalUnits(): Promise<void> {
     try {
+      this.startLoading();
       const result = await this.organizationalUnitService.load(0, 999999, [{field: 'name', order: 1}]);
       this.organizationalUnits = result.content;
     } catch (err) {
@@ -176,6 +177,8 @@ export class TaskGroupsComponent extends TableOverviewComponent<TaskGroupDto, Ta
         life: 10000,
         key: 'global'
       });
+    } finally {
+      this.finishLoading();
     }
   }
 }

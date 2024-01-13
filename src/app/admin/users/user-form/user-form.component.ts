@@ -159,7 +159,7 @@ export class UserFormComponent extends DialogEditFormComponent<UserDto, UserServ
   }
 
   private async loadOrganizationalUnits(): Promise<void> {
-    this.loading = true;
+    this.startLoading();
     try {
       const organizationalUnits = await this.organizationalUnitService.load(0, 999999, [{field: 'name', order: 1}]);
       const user = this.authService.user;
@@ -196,7 +196,7 @@ export class UserFormComponent extends DialogEditFormComponent<UserDto, UserServ
         key: 'global'
       });
     } finally {
-      this.loading = false;
+      this.finishLoading();
     }
   }
 

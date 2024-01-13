@@ -116,6 +116,7 @@ export class TaskCategoryFormComponent extends DialogEditFormComponent<TaskCateg
 
   private async loadOrganizationalUnits(): Promise<void> {
     try {
+      this.startLoading();
       if (this.readonly && this.originalEntity) {
         const result = await this.ouService.get(this.originalEntity.organizationalUnitId);
         this.organizationalUnitDropdowns = [result];
@@ -138,11 +139,14 @@ export class TaskCategoryFormComponent extends DialogEditFormComponent<TaskCateg
         life: 10000,
         key: 'global'
       });
+    } finally {
+      this.finishLoading();
     }
   }
 
   private async loadTaskCategories(): Promise<void> {
     try {
+      this.startLoading();
       if (this.readonly && this.originalEntity) {
         if (this.originalEntity.parentId) {
           const result = await this.entityService.get(this.originalEntity.parentId);
@@ -164,6 +168,8 @@ export class TaskCategoryFormComponent extends DialogEditFormComponent<TaskCateg
         life: 10000,
         key: 'global'
       });
+    } finally {
+      this.finishLoading();
     }
   }
 

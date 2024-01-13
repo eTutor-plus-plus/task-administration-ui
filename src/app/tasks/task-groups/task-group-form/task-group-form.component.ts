@@ -195,6 +195,7 @@ export class TaskGroupFormComponent extends EditFormComponent<TaskGroupDto, Task
 
   private async loadTaskGroup(id: string | number): Promise<void> {
     try {
+      this.startLoading();
       const data = await this.entityService.get(+id);
       this.originalEntity = data.dto;
       this.additionalData = data.additionalData;
@@ -218,11 +219,14 @@ export class TaskGroupFormComponent extends EditFormComponent<TaskGroupDto, Task
         key: 'global'
       });
       await this.cancel();
+    } finally {
+      this.finishLoading();
     }
   }
 
   private async loadOrganizationalUnits(): Promise<void> {
     try {
+      this.startLoading();
       this.allOrganizationalUnits = (await this.organizationalUnitService.load(0, 999999, [{field: 'name', order: 1}])).content;
       this.setOrganizationalUnits();
     } catch (err) {
@@ -233,6 +237,8 @@ export class TaskGroupFormComponent extends EditFormComponent<TaskGroupDto, Task
         life: 10000,
         key: 'global'
       });
+    } finally {
+      this.finishLoading();
     }
   }
 

@@ -246,6 +246,7 @@ export class TaskFormComponent extends EditFormComponent<TaskDto, TaskService, T
 
   private async loadTask(id: string | number): Promise<void> {
     try {
+      this.startLoading();
       const data = await this.entityService.get(+id);
       this.originalEntity = data.dto;
       this.additionalData = data.additionalData;
@@ -278,11 +279,14 @@ export class TaskFormComponent extends EditFormComponent<TaskDto, TaskService, T
         key: 'global'
       });
       await this.cancel();
+    } finally {
+      this.finishLoading();
     }
   }
 
   private async loadOrganizationalUnits(): Promise<void> {
     try {
+      this.startLoading();
       this.allOrganizationalUnits = (await this.organizationalUnitService.load(0, 999999, [{field: 'name', order: 1}])).content;
       this.setOrganizationalUnits();
     } catch (err) {
@@ -293,11 +297,14 @@ export class TaskFormComponent extends EditFormComponent<TaskDto, TaskService, T
         life: 10000,
         key: 'global'
       });
+    } finally {
+      this.finishLoading();
     }
   }
 
   private async loadTaskGroups(): Promise<void> {
     try {
+      this.startLoading();
       this.allTaskGroups = (await this.taskGroupService.load(0, 999999, [{field: 'name', order: 1}])).content;
     } catch (err) {
       console.error('[TaskFormComponent] Could not load task groups', err);
@@ -307,11 +314,14 @@ export class TaskFormComponent extends EditFormComponent<TaskDto, TaskService, T
         life: 10000,
         key: 'global'
       });
+    } finally {
+      this.finishLoading();
     }
   }
 
   private async loadTaskCategories(): Promise<void> {
     try {
+      this.startLoading();
       this.allTaskCategories = (await this.taskCategoriesService.load(0, 999999, [{field: 'name', order: 1}])).content;
     } catch (err) {
       console.error('[TaskFormComponent] Could not load task categories', err);
@@ -321,6 +331,8 @@ export class TaskFormComponent extends EditFormComponent<TaskDto, TaskService, T
         life: 10000,
         key: 'global'
       });
+    } finally {
+      this.finishLoading();
     }
   }
 

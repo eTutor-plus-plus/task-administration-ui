@@ -17,11 +17,6 @@ export abstract class TableOverviewComponent<TDto extends object, TService exten
   tableData: PageResult<TDto> = EMPTY_PAGE;
 
   /**
-   * Returns whether data are loading.
-   */
-  loading: boolean = false;
-
-  /**
    * The default sorting.
    */
   defaultSort: SortMeta[];
@@ -56,6 +51,8 @@ export abstract class TableOverviewComponent<TDto extends object, TService exten
    */
   readonly baseTranslationKey: string;
 
+  private loadingCounter: number;
+
   /**
    * Creates a new instance of class TableOverviewComponent.
    *
@@ -70,6 +67,7 @@ export abstract class TableOverviewComponent<TDto extends object, TService exten
     this.messageService = inject(MessageService);
     this.confirmationService = inject(ConfirmationService);
     this.translationService = inject(TranslocoService);
+    this.loadingCounter = 0;
   }
 
   /**
@@ -216,4 +214,45 @@ export abstract class TableOverviewComponent<TDto extends object, TService exten
    * @param type The message type.
    */
   abstract getMessageParams(entity: TDto, type: 'success' | 'error'): Record<string, unknown>;
+
+  //#region --- Loading ---
+
+  /**
+   * Returns whether data is currently loading.
+   */
+  get loading(): boolean {
+    return this.loadingCounter > 0;
+  }
+
+  /**
+   * Sets whether data is currently loading.
+   *
+   * @param value Whether data is currently loading.
+   */
+  protected set loading(value: boolean) {
+    if (value)
+      this.startLoading();
+    else
+      this.finishLoading();
+  }
+
+  /**
+   * Call this method when you start loading data.
+   */
+  protected startLoading(): void {
+    if (this.loadingCounter < 0)
+      this.loadingCounter = 0;
+    this.loadingCounter++;
+  }
+
+  /**
+   * Call this method when you finish loading data (or an error occurred).
+   */
+  protected finishLoading(): void {
+    this.loadingCounter--;
+    if (this.loadingCounter < 0)
+      this.loadingCounter = 0;
+  }
+
+  //#endregion
 }
