@@ -42,9 +42,7 @@ export class TaskSubmissionComponent implements OnInit {
    * The editor options.
    */
   readonly editorOptions: editor.IStandaloneEditorConstructionOptions = {
-    language: 'json',
-    minimap: {enabled: false},
-    automaticLayout: true
+    language: 'json'
   };
 
   /**
@@ -52,8 +50,6 @@ export class TaskSubmissionComponent implements OnInit {
    */
   readonly resultEditorOptions: editor.IStandaloneEditorConstructionOptions = {
     language: 'json',
-    minimap: {enabled: false},
-    automaticLayout: true,
     readOnly: true
   };
 
@@ -140,7 +136,7 @@ export class TaskSubmissionComponent implements OnInit {
         feedbackLevel: this.form.value.feedbackLevel!,
         submission: JSON.parse(this.form.value.submission ?? '{}')
       });
-      this.gradingResult = JSON.stringify(result, null, 2);
+      this.gradingResult = JSON.stringify(JSON.parse(result), null, 2);
     } catch (err) {
       console.error('[TaskSubmissionComponent] Could not send submission', err);
       this.gradingResult = JSON.stringify(err, null, 2);
