@@ -14,6 +14,7 @@ export function registerLogLanguage(): void {
     mimetypes: ['text/log', 'text/plain']
   });
   monaco.languages.setMonarchTokensProvider('dke-log', {
+    tokenPostfix: '.dke-log',
     tokenizer: {
       root: [
         ['/ERROR/', 'error'],
@@ -28,11 +29,11 @@ export function registerLogLanguage(): void {
     base: 'vs',
     inherit: true,
     rules: [
-      {token: 'error', foreground: '#d53333', fontStyle: 'bold'},
-      {token: 'warn', foreground: '#d5cd33', fontStyle: 'bold'},
-      {token: 'info', foreground: '#427346', fontStyle: 'bold'},
-      {token: 'debug', foreground: '#3f3c3c', fontStyle: 'bold'},
-      {token: 'trace', foreground: '#8c8989', fontStyle: 'bold'}
+      {token: 'error.dke-log', foreground: '#d53333', fontStyle: 'bold'},
+      {token: 'warn.dke-log', foreground: '#d5cd33', fontStyle: 'bold'},
+      {token: 'info.dke-log', foreground: '#427346', fontStyle: 'bold'},
+      {token: 'debug.dke-log', foreground: '#3f3c3c', fontStyle: 'bold'},
+      {token: 'trace.dke-log', foreground: '#8c8989', fontStyle: 'bold'}
     ],
     colors: {}
   });

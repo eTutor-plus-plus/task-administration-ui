@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { TranslocoPipe } from '@ngneat/transloco';
 
@@ -26,7 +26,7 @@ import { SystemHealthService } from '../../../api';
   templateUrl: './system-health-log-file.component.html',
   styleUrl: './system-health-log-file.component.scss'
 })
-export class SystemHealthLogFileComponent implements OnInit, AfterViewInit {
+export class SystemHealthLogFileComponent implements OnInit {
 
   /**
    * The loading state.
@@ -57,10 +57,6 @@ export class SystemHealthLogFileComponent implements OnInit, AfterViewInit {
     this.logFile = '';
   }
 
-  ngAfterViewInit(): void {
-    console.warn((window as any).monaco?.languages.getLanguages());
-  }
-
   /**
    * Initializes the component.
    */
@@ -73,5 +69,9 @@ export class SystemHealthLogFileComponent implements OnInit, AfterViewInit {
         this.messageService.add({severity: 'error', summary: 'Error', detail: err.message});
       })
       .finally(() => this.loading = false);
+  }
+
+  editorInitialized(editor: any) {
+    console.log(editor);
   }
 }
