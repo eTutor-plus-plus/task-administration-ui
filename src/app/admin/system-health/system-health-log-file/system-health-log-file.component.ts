@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { TranslocoPipe } from '@ngneat/transloco';
+import { TranslocoPipe, TranslocoService } from '@ngneat/transloco';
+import { distinctUntilChanged, Subscription } from 'rxjs';
 
 import { MessageService } from 'primeng/api';
 import { BlockUIModule } from 'primeng/blockui';
@@ -9,6 +10,7 @@ import { PanelModule } from 'primeng/panel';
 import { MonacoEditorModule } from 'ngx-monaco-editor-v2';
 
 import { SystemHealthService } from '../../../api';
+import { HealthSelectionService } from '../health-selection.service';
 
 /**
  * Displays the log file.
@@ -26,7 +28,7 @@ import { SystemHealthService } from '../../../api';
   templateUrl: './system-health-log-file.component.html',
   styleUrl: './system-health-log-file.component.scss'
 })
-export class SystemHealthLogFileComponent implements OnInit {
+export class SystemHealthLogFileComponent implements OnInit, OnDestroy {
 
   /**
    * The loading state.
@@ -48,11 +50,15 @@ export class SystemHealthLogFileComponent implements OnInit {
     readOnly: true
   };
 
+  private changeSub?: Subscription;
+
   /**
    * Creates a new instance of class SystemHealthLogFileComponent.
    */
   constructor(private readonly healthService: SystemHealthService,
-              private readonly messageService: MessageService) {
+              private readonly healthSelectionService: HealthSelectionService,
+              private readonly messageService: MessageService,
+              private readonly translationService: TranslocoService) {
     this.loading = false;
     this.logFile = '';
   }
@@ -61,17 +67,21 @@ export class SystemHealthLogFileComponent implements OnInit {
    * Initializes the component.
    */
   ngOnInit(): void {
-    this.logFile = 'INFO';
-    this.loading = true;
-    this.healthService.loadLogFile()
-      .then(content => this.logFile = content)
-      .catch(err => {
-        this.messageService.add({severity: 'error', summary: 'Error', detail: err.message});
-      })
-      .finally(() => this.loading = false);
+    this.changeSub = this.healthSelectionService.selectedAppChanged.pipe(distinctUntilChanged()).subscribe(app => {
+      this.loading = true;
+      this.healthService.loadLogFile(app)
+        .then(content => this.logFile = content)
+        .catch(err => {
+          this.messageService.add({severity: 'error', summary: this.translationService.translate('health.load-error'), detail: err.message, key: 'global'});
+        })
+        .finally(() => this.loading = false);
+    });
   }
 
-  editorInitialized(editor: any) {
-    console.log(editor);
+  /**
+   * Cleans up the component.
+   */
+  ngOnDestroy(): void {
+    this.changeSub?.unsubscribe();
   }
 }

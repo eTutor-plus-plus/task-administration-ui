@@ -134,9 +134,60 @@
   },
   "health": {
     "select": "Bitte wählen Sie einen Eintrag aus der Liste aus.",
+    "load-error": "Die Daten konnten nicht geladen werden.",
     "health": {
       "title": "Zustand",
-      "icon": "pi-heart"
+      "icon": "pi-heart",
+      "status": "Status",
+      "readinessState": "Bereitschaft",
+      "db": "Datenbank",
+      "diskSpace": "Festplattenspeicher",
+      "livenessState": "Liveness",
+      "ping": "Ping",
+      "icons": {
+        "readinessState": "pi-arrow-right-arrow-left",
+        "db": "pi-database",
+        "diskSpace": "pi-server",
+        "livenessState": "pi-verified",
+        "ping": "pi-wifi"
+      },
+      "backgroundClass": {
+        "UP": "bg-green-100",
+        "DOWN": "bg-red-100",
+        "OUT_OF_SERVICE": "bg-yellow-100",
+        "UNKNOWN": "bg-black-alpha-10",
+        "null": "bg-blue-100"
+      },
+      "foregroundClass": {
+        "UP": "text-green-500",
+        "DOWN": "text-red-500",
+        "OUT_OF_SERVICE": "text-yellow-500",
+        "UNKNOWN": "text-black-alpha-80",
+        "null": "text-blue-500"
+      },
+      "statusIcon": {
+        "UP": "pi-check",
+        "DOWN": "pi-times",
+        "OUT_OF_SERVICE": "pi-exclamation-circle",
+        "UNKNOWN": "pi-question-circle",
+        "null": "pi-spin pi-spinner"
+      },
+      "details": {
+        "button": "Details",
+        "name": "Name",
+        "value": "Wert",
+        "db": {
+          "database": "Datenbank",
+          "validationQuery": "Validierungsabfrage"
+        },
+        "diskSpace": {
+          "total": "Gesamt",
+          "free": "Frei",
+          "threshold": "Schwelle",
+          "path": "Pfad",
+          "exists": "Existiert"
+        }
+      }
     },
     "info": {
       "title": "Anwendungsinformationen",

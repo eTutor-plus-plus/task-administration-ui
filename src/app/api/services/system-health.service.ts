@@ -20,12 +20,19 @@ export class SystemHealthService {
 
   /**
    * Loads the available system health endpoints.
+   *
+   * @param taskType The task type to load the endpoints for.
    */
-  loadAvailableEndpoints(): Promise<string[]> {
-    console.info('[SystemHealthService] Loading actuator endpoints');
+  loadAvailableEndpoints(taskType?: string): Promise<string[]> {
+    console.info('[SystemHealthService] Loading actuator endpoints for ' + taskType);
+    let url = this.apiUrl;
+    if (taskType && taskType !== '')
+      url += '/api/forward/' + encodeURIComponent(taskType);
+    url += '/actuator';
+
     return new Promise((resolve, reject) => this.http.get<{
         '_links': Record<string, Link>
-      }>(`${this.apiUrl}/actuator`, {headers: new HttpHeaders().set('Accept', this.contentType)}).subscribe({
+      }>(url, {headers: new HttpHeaders().set('Accept', this.contentType)}).subscribe({
         next: value => resolve(Object.keys(value._links).filter(x => x !== 'self' && !x.includes('-'))),
         error: err => {
           console.error('[SystemHealthService] Failed loading actuator endpoints', err);
@@ -36,16 +43,67 @@ export class SystemHealthService {
   }
 
   /**
-   * Loads the environment variables.
+   * Loads the health information.
+   *
+   * @param taskType The task type to load the health info for.
    */
-  loadEnvironment(): Promise<Environment> {
-    console.info('[SystemHealthService] Loading environment');
-    return new Promise((resolve, reject) => this.http.get<Environment>(`${this.apiUrl}/actuator/env`, {
+  loadHealth(taskType?: string): Promise<Health> {
+    console.info('[SystemHealthService] Loading health info for ' + taskType);
+    let url = this.apiUrl;
+    if (taskType && taskType !== '')
+      url += '/api/forward/' + encodeURIComponent(taskType);
+    url += '/actuator/health';
+
+    return new Promise((resolve, reject) => this.http.get<Health>(url, {headers: new HttpHeaders().set('Accept', this.contentType)}).subscribe({
+        next: value => resolve(value),
+        error: err => {
+          console.error('[SystemHealthService] Failed loading health info for' + taskType, err);
+          reject(err);
+        }
+      })
+    );
+  }
+
+  /**
+   * Loads the app information.
+   *
+   * @param taskType The task type to load the app info for.
+   */
+  loadAppInfo(taskType?: string): Promise<AppInfo> {
+    console.info('[SystemHealthService] Loading app info for ' + taskType);
+    let url = this.apiUrl;
+    if (taskType && taskType !== '')
+      url += '/api/forward/' + encodeURIComponent(taskType);
+    url += '/actuator/info';
+
+    return new Promise((resolve, reject) => this.http.get<AppInfo>(url, {headers: new HttpHeaders().set('Accept', this.contentType)}).subscribe({
+        next: value => resolve(value),
+        error: err => {
+          console.error('[SystemHealthService] Failed loading app info for ' + taskType, err);
+          reject(err);
+        }
+      })
+    );
+  }
+
+  /**
+   * Loads the environment variables.
+   *
+   * @param taskType The task type to load the environment for.
+   */
+  loadEnvironment(taskType?: string): Promise<Environment> {
+    console.info('[SystemHealthService] Loading environment for ' + taskType);
+    let url = this.apiUrl;
+    if (taskType && taskType !== '')
+      url += '/api/forward/' + encodeURIComponent(taskType);
+    url += '/actuator/env';
+
+    return new Promise((resolve, reject) => this.http.get<Environment>(url, {
       headers: new HttpHeaders().set('Accept', this.contentType)
     }).subscribe({
       next: value => resolve(value),
       error: err => {
-        console.error('[SystemHealthService] Failed loading environment', err);
+        console.error('[SystemHealthService] Failed loading environment for ' + taskType, err);
         reject(err);
       }
     }));
@@ -53,15 +111,22 @@ export class SystemHealthService {
 
   /**
    * Loads the flyway information.
+   *
+   * @param taskType The task type to load the flyway info for.
    */
-  loadFlyway(): Promise<FlywayContexts> {
-    console.info('[SystemHealthService] Loading flyway');
-    return new Promise((resolve, reject) => this.http.get<FlywayContexts>(`${this.apiUrl}/actuator/flyway`, {
+  loadFlyway(taskType?: string): Promise<FlywayContexts> {
+    console.info('[SystemHealthService] Loading flyway for ' + taskType);
+    let url = this.apiUrl;
+    if (taskType && taskType !== '')
+      url += '/api/forward/' + encodeURIComponent(taskType);
+    url += '/actuator/flyway';
+
+    return new Promise((resolve, reject) => this.http.get<FlywayContexts>(url, {
       headers: new HttpHeaders().set('Accept', this.contentType)
     }).subscribe({
       next: value => resolve(value),
       error: err => {
-        console.error('[SystemHealthService] Failed loading flyway', err);
+        console.error('[SystemHealthService] Failed loading flyway for ' + taskType, err);
         reject(err);
       }
     }));
@@ -69,15 +134,22 @@ export class SystemHealthService {
 
   /**
    * Loads the scheduled tasks.
+   *
+   * @param taskType The task type to load the scheduled tasks for.
    */
-  loadScheduledTasks(): Promise<ScheduledTasks> {
-    console.info('[SystemHealthService] Loading scheduled tasks');
-    return new Promise((resolve, reject) => this.http.get<ScheduledTasks>(`${this.apiUrl}/actuator/scheduledtasks`, {
+  loadScheduledTasks(taskType?: string): Promise<ScheduledTasks> {
+    console.info('[SystemHealthService] Loading scheduled tasks for ' + taskType);
+    let url = this.apiUrl;
+    if (taskType && taskType !== '')
+      url += '/api/forward/' + encodeURIComponent(taskType);
+    url += '/actuator/scheduledtasks';
+
+    return new Promise((resolve, reject) => this.http.get<ScheduledTasks>(url, {
       headers: new HttpHeaders().set('Accept', this.contentType)
     }).subscribe({
       next: value => resolve(value),
       error: err => {
-        console.error('[SystemHealthService] Failed loading scheduled tasks', err);
+        console.error('[SystemHealthService] Failed loading scheduled tasks for ' + taskType, err);
         reject(err);
       }
     }));
@@ -86,21 +158,26 @@ export class SystemHealthService {
   /**
    * Loads the log file.
    *
+   * @param taskType The task type to load the log file for.
    * @param from The start position of the log file.
    * @param to The end position of the log file.
    */
-  loadLogFile(from?: number, to?: number): Promise<string> {
+  loadLogFile(taskType?: string, from?: number, to?: number): Promise<string> {
     let headers = new HttpHeaders().set('Accept', 'text/plain');
     if (from && to) headers = headers.set('Range', `bytes=${from}-${to}`);
+    let url = this.apiUrl;
+    if (taskType && taskType !== '')
+      url += '/api/forward/' + encodeURIComponent(taskType);
+    url += '/actuator/logfile';
 
-    console.info('[SystemHealthService] Loading log file');
-    return new Promise((resolve, reject) => this.http.get(`${this.apiUrl}/actuator/logfile`, {
+    console.info('[SystemHealthService] Loading log file for ' + taskType);
+    return new Promise((resolve, reject) => this.http.get(url, {
       headers: headers,
       responseType: 'text'
     }).subscribe({
       next: value => resolve(value),
       error: err => {
-        console.error('[SystemHealthService] Failed loading log file', err);
+        console.error('[SystemHealthService] Failed loading log file for ' + taskType, err);
         reject(err);
       }
     }));
@@ -108,15 +185,22 @@ export class SystemHealthService {
 
   /**
    * Loads the metrics.
+   *
+   * @param taskType The task type to load the metrics for.
    */
-  loadMetrics(): Promise<string[]> {
-    console.info('[SystemHealthService] Loading metrics');
+  loadMetrics(taskType?: string): Promise<string[]> {
+    console.info('[SystemHealthService] Loading metrics for ' + taskType);
+    let url = this.apiUrl;
+    if (taskType && taskType !== '')
+      url += '/api/forward/' + encodeURIComponent(taskType);
+    url += '/actuator/metrics';
+
     return new Promise((resolve, reject) => this.http.get<{
         names: string[]
-      }>(`${this.apiUrl}/actuator/metrics`, {headers: new HttpHeaders().set('Accept', this.contentType)}).subscribe({
+      }>(url, {headers: new HttpHeaders().set('Accept', this.contentType)}).subscribe({
         next: value => resolve(value.names),
         error: err => {
-          console.error('[SystemHealthService] Failed loading metrics', err);
+          console.error('[SystemHealthService] Failed loading metrics for ' + taskType, err);
           reject(err);
         }
       })
@@ -127,43 +211,19 @@ export class SystemHealthService {
    * Loads a metric.
    *
    * @param name The name of the metric to load.
+   * @param taskType The task type to load the metric for.
    */
-  loadMetric(name: string): Promise<Metric> {
-    console.info('[SystemHealthService] Loading metric ' + name);
-    return new Promise((resolve, reject) => this.http.get<Metric>(`${this.apiUrl}/actuator/metrics/` + encodeURIComponent(name), {headers: new HttpHeaders().set('Accept', this.contentType)}).subscribe({
-        next: value => resolve(value),
-        error: err => {
-          console.error('[SystemHealthService] Failed loading metric ' + name, err);
-          reject(err);
-        }
-      })
-    );
-  }
+  loadMetric(name: string, taskType?: string): Promise<Metric> {
+    console.info('[SystemHealthService] Loading metric ' + name + ' for ' + taskType);
+    let url = this.apiUrl;
+    if (taskType && taskType !== '')
+      url += '/api/forward/' + encodeURIComponent(taskType);
+    url += '/actuator/metrics/' + encodeURIComponent(name);
 
-  /**
-   * Loads the app information.
-   */
-  loadAppInfo(): Promise<AppInfo> {
-    console.info('[SystemHealthService] Loading app info');
-    return new Promise((resolve, reject) => this.http.get<AppInfo>(`${this.apiUrl}/actuator/info`, {headers: new HttpHeaders().set('Accept', this.contentType)}).subscribe({
+    return new Promise((resolve, reject) => this.http.get<Metric>(url, {headers: new HttpHeaders().set('Accept', this.contentType)}).subscribe({
         next: value => resolve(value),
         error: err => {
-          console.error('[SystemHealthService] Failed loading app info', err);
-          reject(err);
-        }
-      })
-    );
-  }
-
-  /**
-   * Loads the health information.
-   */
-  loadHealth(): Promise<Health> {
-    console.info('[SystemHealthService] Loading health info');
-    return new Promise((resolve, reject) => this.http.get<Health>(`${this.apiUrl}/actuator/health`, {headers: new HttpHeaders().set('Accept', this.contentType)}).subscribe({
-        next: value => resolve(value),
-        error: err => {
-          console.error('[SystemHealthService] Failed loading health info', err);
+          console.error('[SystemHealthService] Failed loading metric ' + name + ' for ' + taskType, err);
           reject(err);
         }
       })

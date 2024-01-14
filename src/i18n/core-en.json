@@ -134,9 +134,60 @@
   },
   "health": {
     "select": "Please select an entry to display the details.",
+    "load-error": "The data could not be loaded.",
     "health": {
       "title": "Health",
-      "icon": "pi-heart"
+      "icon": "pi-heart",
+      "status": "Status",
+      "readinessState": "Readiness",
+      "db": "Database",
+      "diskSpace": "Disk Space",
+      "livenessState": "Liveness",
+      "ping": "Ping",
+      "icons": {
+        "readinessState": "pi-arrow-right-arrow-left",
+        "db": "pi-database",
+        "diskSpace": "pi-server",
+        "livenessState": "pi-verified",
+        "ping": "pi-wifi"
+      },
+      "backgroundClass": {
+        "UP": "bg-green-100",
+        "DOWN": "bg-red-100",
+        "OUT_OF_SERVICE": "bg-yellow-100",
+        "UNKNOWN": "bg-black-alpha-10",
+        "null": ""
+      },
+      "foregroundClass": {
+        "UP": "text-green-500",
+        "DOWN": "text-red-500",
+        "OUT_OF_SERVICE": "text-yellow-500",
+        "UNKNOWN": "text-black-alpha-80",
+        "null": ""
+      },
+      "statusIcon": {
+        "UP": "pi-check",
+        "DOWN": "pi-times",
+        "OUT_OF_SERVICE": "pi-exclamation-circle",
+        "UNKNOWN": "pi-question-circle",
+        "null": "pi-spin pi-spinner"
+      },
+      "details": {
+        "button": "Details",
+        "name": "Name",
+        "value": "Value",
+        "db": {
+          "database": "Database",
+          "validationQuery": "Validation Query"
+        },
+        "diskSpace": {
+          "total": "Total",
+          "free": "Free",
+          "threshold": "Threshold",
+          "path": "Path",
+          "exists": "Exists"
+        }
+      }
     },
     "info": {
       "title": "Application Information",

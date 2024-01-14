@@ -19,12 +19,17 @@ export const routes: Routes = [
       // Admin
       {
         path: 'health',
+        pathMatch: 'full',
+        loadComponent: () => import('./admin/system-health/system-health-overview/system-health-overview.component').then(c => c.SystemHealthOverviewComponent),
+        canActivate: [roleGuard(['full_admin', 'admin', 'instructor'])]
+      },
+      {
+        path: 'health',
         loadComponent: () => import('./admin/system-health/system-health.component').then(c => c.SystemHealthComponent),
         canActivate: [roleGuard(['full_admin'])],
         children: [
           {
-            path: '',
-            pathMatch: 'full',
+            path: 'health',
             loadComponent: () => import('./admin/system-health/system-health-default/system-health-default.component').then(c => c.SystemHealthDefaultComponent)
           },
           {

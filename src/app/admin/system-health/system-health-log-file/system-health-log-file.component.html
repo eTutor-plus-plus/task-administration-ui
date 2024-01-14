@@ -1,4 +1,4 @@
 <p-blockUI [blocked]="loading" [target]="content"></p-blockUI>
 <p-panel #content [header]="'health.logfile.title' | transloco" class="h-full block">
-  <ngx-monaco-editor [options]="options" [(ngModel)]="logFile" class="h-full" (onInit)="editorInitialized($event)" />
+  <ngx-monaco-editor [options]="options" [(ngModel)]="logFile" class="h-full" />
 </p-panel>
