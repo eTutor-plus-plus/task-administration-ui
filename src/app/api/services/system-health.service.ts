@@ -1,5 +1,5 @@
 import { Inject, Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { API_URL } from '../../app.config';
 import { AppInfo, Environment, FlywayContexts, Health, Link, Metric, ScheduledTasks } from '../models';
 
@@ -212,15 +212,25 @@ export class SystemHealthService {
    *
    * @param name The name of the metric to load.
    * @param taskType The task type to load the metric for.
+   * @param tagName The tag of the metric to load.
+   * @param tagValue The value of the tag of the metric to load.
    */
-  loadMetric(name: string, taskType?: string): Promise<Metric> {
-    console.info('[SystemHealthService] Loading metric ' + name + ' for ' + taskType);
+  loadMetric(name: string, taskType?: string, tagName?: string, tagValue?: string): Promise<Metric> {
+    // console.debug('[SystemHealthService] Loading metric ' + name + ' for ' + taskType);
     let url = this.apiUrl;
     if (taskType && taskType !== '')
       url += '/api/forward/' + encodeURIComponent(taskType);
     url += '/actuator/metrics/' + encodeURIComponent(name);
 
-    return new Promise((resolve, reject) => this.http.get<Metric>(url, {headers: new HttpHeaders().set('Accept', this.contentType)}).subscribe({
+    let query = new HttpParams();
+    if (tagName && tagValue) {
+      query = query.append('tag', tagName + ':' + tagValue);
+    }
+
+    return new Promise((resolve, reject) => this.http.get<Metric>(url, {
+        headers: new HttpHeaders().set('Accept', this.contentType),
+        params: query
+      }).subscribe({
         next: value => resolve(value),
         error: err => {
           console.error('[SystemHealthService] Failed loading metric ' + name + ' for ' + taskType, err);

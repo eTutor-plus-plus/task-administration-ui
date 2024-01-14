@@ -60,4 +60,5 @@ export class SystemHealthAppInfoComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.changeSub?.unsubscribe();
   }
+
 }
