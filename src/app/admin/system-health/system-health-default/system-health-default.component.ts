@@ -3,7 +3,6 @@ import { NgClass } from '@angular/common';
 import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@ngneat/transloco';
 import { distinctUntilChanged, Subscription } from 'rxjs';
 
-import { MessagesModule } from 'primeng/messages';
 import { MessageService, SharedModule } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
 import { OverlayPanelModule } from 'primeng/overlaypanel';
@@ -19,7 +18,6 @@ import { HealthSelectionService } from '../health-selection.service';
   standalone: true,
   imports: [
     TranslocoDirective,
-    MessagesModule,
     SharedModule,
     NgClass,
     TranslocoPipe,

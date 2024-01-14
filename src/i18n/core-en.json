@@ -191,7 +191,11 @@
     },
     "info": {
       "title": "Application Information",
-      "icon": "pi-info-circle"
+      "icon": "pi-info-circle",
+      "os": "Operating System",
+      "jvm": "Java Virtual Machine",
+      "build": "Build",
+      "git": "GIT"
     },
     "env": {
       "title": "Environment",

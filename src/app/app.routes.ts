@@ -35,6 +35,10 @@ export const routes: Routes = [
           {
             path: 'logfile',
             loadComponent: () => import('./admin/system-health/system-health-log-file/system-health-log-file.component').then(c => c.SystemHealthLogFileComponent)
+          },
+          {
+            path: 'info',
+            loadComponent: () => import('./admin/system-health/system-health-app-info/system-health-app-info.component').then(c => c.SystemHealthAppInfoComponent)
           }
         ]
       },

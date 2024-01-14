@@ -190,8 +190,12 @@
       }
     },
     "info": {
-      "title": "Anwendungsinformationen",
-      "icon": "pi-info-circle"
+      "title": "Anwendungsinformation",
+      "icon": "pi-info-circle",
+      "os": "Betriebssystem",
+      "jvm": "Java Virtual Machine",
+      "build": "Build",
+      "git": "GIT"
     },
     "env": {
       "title": "Konfiguration",
