@@ -160,6 +160,7 @@
     "choose": "Choose",
     "upload": "Upload",
     "cancel": "Cancel",
+    "back": "Back",
     "completed": "Completed",
     "pending": "Pending",
     "fileSizeTypes": [

@@ -255,9 +255,9 @@ export class TaskFormComponent extends EditFormComponent<TaskDto, TaskService, T
         this.form.controls.taskCategoryIds.removeAt(0);
       }
 
-      for (let taskCategoryId of this.originalEntity?.taskCategoryIds ?? []) {
-        this.form.controls.taskCategoryIds.controls.push(new FormControl<TreeNode | null>(null, []));
-      }
+      // for (let taskCategoryId of this.originalEntity?.taskCategoryIds ?? []) {
+      //   this.form.controls.taskCategoryIds.controls.push(new FormControl<TreeNode | null>(null, []));
+      // }
 
       this.form.patchValue({...this.originalEntity, taskCategoryIds: []});
       this.setStatusDisablesAndReadonly();
