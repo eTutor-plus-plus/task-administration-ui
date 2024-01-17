@@ -62,7 +62,10 @@ export class SystemHealthHttpComponent implements OnInit, OnDestroy {
       this.changeDetector.markForCheck();
 
       this.healthService.loadHttpExchanges(app)
-        .then(content => this.http = content)
+        .then(content => {
+          this.http = content;
+          this.http.exchanges = this.http.exchanges.filter(x => !x.request.uri.includes('/actuator'));
+        })
         .catch(err => {
           this.messageService.add({severity: 'error', summary: this.translationService.translate('health.load-error'), detail: err.message, key: 'global'});
         })
