@@ -1,4 +1,4 @@
 /**
  * The possible application roles.
  */
-export type Role = 'tutor' | 'instructor' | 'admin' | 'full_admin';
+export type Role = 'TUTOR' | 'INSTRUCTOR' | 'ADMIN' | 'FULL_ADMIN';

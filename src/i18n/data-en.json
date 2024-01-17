@@ -54,9 +54,9 @@
     "failedLoginCount": "Failed Login Count: {{value}}"
   },
   "roles": {
-    "admin": "Administrator",
-    "instructor": "Course Instructor",
-    "tutor": "Tutor"
+    "ADMIN": "Administrator",
+    "INSTRUCTOR": "Course Instructor",
+    "TUTOR": "Tutor"
   },
   "taskApps": {
     "title": "Task Apps",

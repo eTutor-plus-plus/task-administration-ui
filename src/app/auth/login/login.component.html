@@ -29,6 +29,6 @@
     </div>
 
     <button pButton [label]="'auth.login.login' | transloco" class="w-full"
-            [disabled]="form.invalid" [loading]="loading" type="submit"></button>
+            [disabled]="form.invalid || !appAvailable" [loading]="loading" type="submit"></button>
   </form>
 </dke-simple-layout>

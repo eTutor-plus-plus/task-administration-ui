@@ -1,0 +1,19 @@
+:host {
+  height: 100%;
+  display: block;
+
+  ::ng-deep {
+    .p-panel.p-component {
+      height: 100%;
+
+      & .p-toggleable-content {
+        height: calc(100% - 60px);
+
+        & .p-panel-content {
+          height: 100%;
+        }
+      }
+    }
+  }
+}
+

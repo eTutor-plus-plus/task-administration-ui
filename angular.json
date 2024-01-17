@@ -20,7 +20,8 @@
           "options": {
             "outputPath": "dist/task-administration-ui",
             "index": "src/index.html",
-            "main": "src/main.ts",
+            "browser": "src/main.ts",
+            "aot": true,
             "polyfills": [
               "zone.js"
             ],
@@ -69,7 +70,8 @@
             "development": {
               "optimization": false,
               "extractLicenses": false,
-              "sourceMap": true
+              "sourceMap": true,
+              "namedChunks": true
             }
           },
           "defaultConfiguration": "production"

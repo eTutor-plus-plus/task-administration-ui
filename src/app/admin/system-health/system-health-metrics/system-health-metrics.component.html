@@ -1,0 +1,327 @@
+<!-- JVM -->
+<h2 transloco="health.metrics.jvm"></h2>
+<div class="grid">
+  <!-- Process -->
+  <div class="col-12 md:col-6 lg:col-4 p-2">
+    <p-card [header]="'health.metrics.process' | transloco">
+      <ul class="list-none p-0 m-0">
+        <li class="mb-3">
+          <dke-metric-value [metric]="metrics.get('process.uptime')" translationKey="health.metrics.processUpTime"/>
+        </li>
+        <li class="mb-3">
+          <dke-metric-value [metric]="metrics.get('process.start.time')" translationKey="health.metrics.processStartTime"/>
+        </li>
+        <li class="mb-3">
+          <dke-metric-progress-bar [partMetric]="metrics.get('process.cpu.usage')" translationKey="health.metrics.processCpu"
+                                   progressColorClass="text-blue-500" progressBackgroundColorClass="bg-blue-500"/>
+        </li>
+        <li class="mb-3">
+          <dke-metric-value [metric]="metrics.get('process.files.max')" translationKey="health.metrics.processFileMax"/>
+        </li>
+        <li>
+          <dke-metric-value [metric]="metrics.get('process.files.open')" translationKey="health.metrics.processFileOpen"/>
+        </li>
+      </ul>
+    </p-card>
+  </div>
+
+  <!-- System -->
+  <div class="col-12 md:col-6 lg:col-4 p-2">
+    <p-card [header]="'health.metrics.system' | transloco">
+      <ul class="list-none p-0 m-0">
+        <li class="mb-3">
+          <dke-metric-progress-bar [partMetric]="metrics.get('system.cpu.usage')" translationKey="health.metrics.systemCpu"
+                                   progressColorClass="text-blue-500" progressBackgroundColorClass="bg-blue-500"/>
+        </li>
+        <li class="mb-3">
+          <dke-metric-progress-bar [partMetric]="metrics.get('system.load.average.1m')" translationKey="health.metrics.systemLoad"
+                                   progressColorClass="text-blue-500" progressBackgroundColorClass="bg-blue-500"/>
+        </li>
+        <li class="mb-3">
+          <dke-metric-value [metric]="metrics.get('system.cpu.count')" translationKey="health.metrics.systemCpuCount"/>
+        </li>
+        <li>
+          <dke-metric-progress-bar [partMetric]="metrics.get('disk.free')" [totalMetric]="metrics.get('disk.total')"
+                                   translationKey="health.metrics.diskUsage" [showValues]="true" [invert]="true"
+                                   progressColorClass="text-blue-500" progressBackgroundColorClass="bg-blue-500"/>
+        </li>
+      </ul>
+    </p-card>
+  </div>
+
+  <!-- Threads -->
+  <div class="col-12 md:col-6 lg:col-4 p-2">
+    <p-card [header]="'health.metrics.threads' | transloco">
+      <ul class="list-none p-0 m-0">
+        <li class="mb-3">
+          <dke-metric-value [metric]="metrics.get('jvm.threads.states')" translationKey="health.metrics.threadCount"/>
+        </li>
+        <li class="mb-3">
+          <dke-metric-progress-bar [partMetric]="metrics.get('jvm.threads.states.state.runnable')" [totalMetric]="metrics.get('jvm.threads.states')"
+                                   translationKey="health.metrics.threadRunnable"
+                                   progressColorClass="text-green-700" progressBackgroundColorClass="bg-green-700"/>
+        </li>
+        <li class="mb-3">
+          <dke-metric-progress-bar [partMetric]="metrics.get('jvm.threads.states.state.timed-waiting')" [totalMetric]="metrics.get('jvm.threads.states')"
+                                   translationKey="health.metrics.threadTimed"
+                                   progressColorClass="text-yellow-500" progressBackgroundColorClass="bg-yellow-500"/>
+        </li>
+        <li class="mb-3">
+          <dke-metric-progress-bar [partMetric]="metrics.get('jvm.threads.states.state.waiting')" [totalMetric]="metrics.get('jvm.threads.states')"
+                                   translationKey="health.metrics.threadWaiting"
+                                   progressColorClass="text-yellow-500" progressBackgroundColorClass="bg-yellow-500"/>
+        </li>
+        <li>
+          <dke-metric-progress-bar [partMetric]="metrics.get('jvm.threads.states.state.blocked')" [totalMetric]="metrics.get('jvm.threads.states')"
+                                   translationKey="health.metrics.threadBlocked"
+                                   progressColorClass="text-red-500" progressBackgroundColorClass="bg-red-500"/>
+        </li>
+      </ul>
+    </p-card>
+  </div>
+
+  <!-- Application -->
+  <div class="col-12 md:col-6 lg:col-4 p-2">
+    <p-card [header]="'health.metrics.application' | transloco">
+      <ul class="list-none p-0 m-0">
+        <li class="mb-3">
+          <dke-metric-value [metric]="metrics.get('application.started.time')" translationKey="health.metrics.appStartTime"/>
+        </li>
+        <li>
+          <dke-metric-value [metric]="metrics.get('application.ready.time')" translationKey="health.metrics.appReadyTime"/>
+        </li>
+      </ul>
+    </p-card>
+  </div>
+
+  <!-- Memory -->
+  <div class="col-12 md:col-6 lg:col-4 p-2">
+    <p-card [header]="'health.metrics.memory' | transloco">
+      <ul class="list-none p-0 m-0">
+        <li class="mb-3">
+          <dke-metric-progress-bar [partMetric]="metrics.get('jvm.memory.committed')" [totalMetric]="metrics.get('jvm.memory.max')"
+                                   translationKey="health.metrics.committed" [showValues]="true"/>
+        </li>
+        <li class="mb-3">
+          <dke-metric-progress-bar [partMetric]="metrics.get('jvm.memory.used')" [totalMetric]="metrics.get('jvm.memory.max')"
+                                   translationKey="health.metrics.used" [showValues]="true"/>
+        </li>
+        <li>
+          <dke-metric-progress-bar [partMetric]="metrics.get('jvm.buffer.memory.used')" [totalMetric]="metrics.get('jvm.buffer.total.capacity')"
+                                   translationKey="health.metrics.buffer" [showValues]="true"/>
+        </li>
+      </ul>
+    </p-card>
+
+    <!-- Threads -->
+  </div>
+
+  <!-- GC -->
+  <div class="col-12 md:col-6 lg:col-4 p-2">
+    <p-card [header]="'health.metrics.gc' | transloco">
+      <ul class="list-none p-0 m-0">
+        <li class="mb-3">
+          <dke-metric-value [metric]="metrics.get('jvm.classes.loaded')" translationKey="health.metrics.classesLoaded"/>
+        </li>
+        <li class="mb-3">
+          <dke-metric-value [metric]="metrics.get('jvm.classes.unloaded')" translationKey="health.metrics.classesUnloaded" statistic="COUNT"/>
+        </li>
+        <li class="mb-3">
+          <dke-metric-progress-bar [partMetric]="metrics.get('jvm.gc.live.data.size')" [totalMetric]="metrics.get('jvm.gc.max.data.size')"
+                                   translationKey="health.metrics.gcDataSize" [showValues]="true"
+                                   progressColorClass="text-indigo-500" progressBackgroundColorClass="bg-indigo-500"/>
+        </li>
+        <li class="mb-3">
+          <dke-metric-progress-bar [partMetric]="metrics.get('jvm.gc.memory.promoted')" [totalMetric]="metrics.get('jvm.gc.memory.allocated')"
+                                   translationKey="health.metrics.gcMemorySize" [showValues]="true" statistic="COUNT"
+                                   progressColorClass="text-indigo-500" progressBackgroundColorClass="bg-indigo-500"/>
+        </li>
+        <li>
+          <dke-metric-value [metric]="metrics.get('jvm.gc.overhead')" translationKey="health.metrics.gcOverhead"/>
+        </li>
+      </ul>
+    </p-card>
+  </div>
+</div>
+
+<!-- DB -->
+<h2 transloco="health.metrics.db"></h2>
+<div class="grid">
+  <div class="col-12 md:col-6 lg:col-4 p-2">
+    <p-card [header]="'health.metrics.hikari' | transloco">
+      <ul class="list-none p-0 m-0">
+        <li class="mb-3">
+          <dke-metric-value [metric]="metrics.get('hikaricp.connections')" translationKey="health.metrics.dbConnection"/>
+        </li>
+        <li class="mb-3">
+          <dke-metric-value [metric]="metrics.get('hikaricp.connections.active')" translationKey="health.metrics.dbActive"/>
+        </li>
+        <li class="mb-3">
+          <dke-metric-value [metric]="metrics.get('hikaricp.connections.idle')" translationKey="health.metrics.dbIdle"/>
+        </li>
+        <li class="mb-3">
+          <dke-metric-value [metric]="metrics.get('hikaricp.connections.min')" translationKey="health.metrics.dbMin"/>
+        </li>
+        <li class="mb-3">
+          <dke-metric-value [metric]="metrics.get('hikaricp.connections.max')" translationKey="health.metrics.dbMax"/>
+        </li>
+        <li class="mb-3">
+          <dke-metric-value [metric]="metrics.get('hikaricp.connections.pending')" translationKey="health.metrics.dbMax"/>
+        </li>
+        <li>
+          <dke-metric-value [metric]="metrics.get('hikaricp.connections.timeout')" translationKey="health.metrics.dbTimeout"/>
+        </li>
+      </ul>
+    </p-card>
+  </div>
+
+  <div class="col-12 md:col-6 lg:col-4 p-2">
+    <p-card [header]="'health.metrics.jdbc' | transloco">
+      <ul class="list-none p-0 m-0">
+        <li class="mb-3">
+          <dke-metric-value [metric]="metrics.get('jdbc.connections.active')" translationKey="health.metrics.dbActive"/>
+        </li>
+        <li class="mb-3">
+          <dke-metric-value [metric]="metrics.get('jdbc.connections.idle')" translationKey="health.metrics.dbIdle"/>
+        </li>
+        <li class="mb-3">
+          <dke-metric-value [metric]="metrics.get('jdbc.connections.min')" translationKey="health.metrics.dbMin"/>
+        </li>
+        <li>
+          <dke-metric-value [metric]="metrics.get('jdbc.connections.max')" translationKey="health.metrics.dbMax"/>
+        </li>
+      </ul>
+    </p-card>
+  </div>
+
+  <div class="col-12 md:col-6 lg:col-4 p-2 hidden lg:block"></div>
+
+  <div class="col-12 md:col-6 lg:col-4 p-2">
+    <p-card [header]="'health.metrics.hikariAcquire' | transloco">
+      <ul class="list-none p-0 m-0">
+        <li class="mb-3">
+          <dke-metric-value [metric]="metrics.get('hikaricp.connections.acquire')" statistic="COUNT" translationKey="health.metrics.dbCount"/>
+        </li>
+        <li class="mb-3">
+          <dke-metric-value [metric]="metrics.get('hikaricp.connections.acquire')" statistic="TOTAL_TIME" translationKey="health.metrics.dbTotal"/>
+        </li>
+        <li>
+          <dke-metric-value [metric]="metrics.get('hikaricp.connections.acquire')" statistic="MAX" translationKey="health.metrics.dbMaxTime"/>
+        </li>
+      </ul>
+    </p-card>
+  </div>
+
+  <div class="col-12 md:col-6 lg:col-4 p-2">
+    <p-card [header]="'health.metrics.hikariCreation' | transloco">
+      <ul class="list-none p-0 m-0">
+        <li class="mb-3">
+          <dke-metric-value [metric]="metrics.get('hikaricp.connections.creation')" statistic="COUNT" translationKey="health.metrics.dbCount"/>
+        </li>
+        <li class="mb-3">
+          <dke-metric-value [metric]="metrics.get('hikaricp.connections.creation')" statistic="TOTAL_TIME" translationKey="health.metrics.dbTotal"/>
+        </li>
+        <li>
+          <dke-metric-value [metric]="metrics.get('hikaricp.connections.creation')" statistic="MAX" translationKey="health.metrics.dbMaxTime"/>
+        </li>
+      </ul>
+    </p-card>
+  </div>
+
+  <div class="col-12 md:col-6 lg:col-4 p-2">
+    <p-card [header]="'health.metrics.hikariUsage' | transloco">
+      <ul class="list-none p-0 m-0">
+        <li class="mb-3">
+          <dke-metric-value [metric]="metrics.get('hikaricp.connections.usage')" statistic="COUNT" translationKey="health.metrics.dbCount"/>
+        </li>
+        <li class="mb-3">
+          <dke-metric-value [metric]="metrics.get('hikaricp.connections.usage')" statistic="TOTAL_TIME" translationKey="health.metrics.dbTotal"/>
+        </li>
+        <li>
+          <dke-metric-value [metric]="metrics.get('hikaricp.connections.usage')" statistic="MAX" translationKey="health.metrics.dbMaxTime"/>
+        </li>
+      </ul>
+    </p-card>
+  </div>
+
+  <!-- TODO: spring.data.repository.invocations (see TAGS!!) -->
+</div>
+
+<!-- Executor -->
+<h2 transloco="health.metrics.executor"></h2>
+<div class="grid">
+  <div class="col-12 md:col-6 lg:col-4 p-2">
+    <p-card [header]="'health.metrics.executor' | transloco">
+      <ul class="list-none p-0 m-0">
+        <li class="mb-3">
+          <dke-metric-value [metric]="metrics.get('executor.active')" translationKey="health.metrics.executorActive"/>
+        </li>
+        <li class="mb-3">
+          <dke-metric-value [metric]="metrics.get('executor.queued')" translationKey="health.metrics.executorQueued"/>
+        </li>
+        <li class="mb-3">
+          <dke-metric-value [metric]="metrics.get('executor.queue.remaining')" translationKey="health.metrics.executorQueueRemaining"/>
+        </li>
+        <li>
+          <dke-metric-value [metric]="metrics.get('executor.completed')" translationKey="health.metrics.executorCompleted"/>
+        </li>
+      </ul>
+    </p-card>
+  </div>
+
+  <div class="col-12 md:col-6 lg:col-4 p-2">
+    <p-card [header]="'health.metrics.pool' | transloco">
+      <ul class="list-none p-0 m-0">
+        <li class="mb-3">
+          <dke-metric-value [metric]="metrics.get('executor.pool.core')" translationKey="health.metrics.executorPoolCore"/>
+        </li>
+        <li class="mb-3">
+          <dke-metric-value [metric]="metrics.get('executor.pool.size')" translationKey="health.metrics.executorPoolSize"/>
+        </li>
+        <li>
+          <dke-metric-value [metric]="metrics.get('executor.pool.max')" translationKey="health.metrics.executorPoolMax"/>
+        </li>
+      </ul>
+    </p-card>
+  </div>
+</div>
+
+<!-- SERVER -->
+<h2 transloco="health.metrics.server"></h2>
+<p-table [value]="httpStatusMetrics">
+  <ng-template pTemplate="header">
+    <tr>
+      <th transloco="health.metrics.httpCode"></th>
+      <th transloco="health.metrics.httpCount"></th>
+      <th transloco="health.metrics.httpAvg"></th>
+      <th transloco="health.metrics.httpMax"></th>
+    </tr>
+  </ng-template>
+  <ng-template pTemplate="body" let-metric>
+    <tr>
+      <td>{{ metric.status }}</td>
+      <td>{{ metric.count }}</td>
+      <td>{{ (metric.sum / metric.count) | number:'1.4-4' }}</td>
+      <td>{{ metric.max | number:'1.4-4' }}</td>
+    </tr>
+  </ng-template>
+</p-table>
+
+<p-table [value]="httpUriMetrics" styleClass="mt-2">
+  <ng-template pTemplate="header">
+    <tr>
+      <th transloco="health.metrics.httpUri"></th>
+      <th transloco="health.metrics.httpCount"></th>
+      <th transloco="health.metrics.httpAvg"></th>
+      <th transloco="health.metrics.httpMax"></th>
+    </tr>
+  </ng-template>
+  <ng-template pTemplate="body" let-metric>
+    <tr>
+      <td>{{ metric.uri }}</td>
+      <td>{{ metric.count }}</td>
+      <td>{{ (metric.sum / metric.count) | number:'1.4-4' }}</td>
+      <td>{{ metric.max | number:'1.4-4' }}</td>
+    </tr>
+  </ng-template>
+</p-table>

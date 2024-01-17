@@ -18,6 +18,7 @@ export class BinarySearchService {
    * Loads two new random numbers.
    */
   loadNewRandomNumbers(): Promise<{ min: number; max: number; }> {
+    console.info(`[BinarySearchService] Loading random numbers`);
     return new Promise((resolve, reject) => this.http.get<{ min: number; max: number; }>(`${this.apiUrl}/api/forward/binary-search/api/taskGroup/random`).subscribe({
         next: value => resolve(value),
         error: err => {

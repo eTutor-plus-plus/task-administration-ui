@@ -21,3 +21,12 @@ export * from './modify-task.dto';
 
 export * from './role.enum';
 export * from './task-status.enum';
+
+export * from './link.model';
+export * from './environment.model';
+export * from './flyway.model';
+export * from './scheduled-tasks.model';
+export * from './metric.model';
+export * from './app-info.model';
+export * from './http-exchange.model';
+export * from './health.model';

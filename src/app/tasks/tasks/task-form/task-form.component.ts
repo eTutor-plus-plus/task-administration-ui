@@ -157,7 +157,7 @@ export class TaskFormComponent extends EditFormComponent<TaskDto, TaskService, T
     this.types = [];
     this.statuses = [];
     this.difficulties = [];
-    this.role = this.authService.user?.maxRole ?? 'tutor';
+    this.role = this.authService.user?.maxRole ?? 'TUTOR';
   }
 
   /**
@@ -167,7 +167,7 @@ export class TaskFormComponent extends EditFormComponent<TaskDto, TaskService, T
     // Listen to user role changes
     this.authService.userChanged.pipe(takeUntil(this.destroy$))
       .subscribe(user => {
-        this.role = user?.maxRole ?? 'tutor';
+        this.role = user?.maxRole ?? 'TUTOR';
         this.setStatusDisablesAndReadonly();
         this.setOrganizationalUnits();
       });
@@ -380,7 +380,7 @@ export class TaskFormComponent extends EditFormComponent<TaskDto, TaskService, T
       return; // should never happen
 
     // check if readonly
-    this.readonly = this.role === 'tutor' && !!this.originalEntity && this.originalEntity.status === 'APPROVED';
+    this.readonly = this.role === 'TUTOR' && !!this.originalEntity && this.originalEntity.status === 'APPROVED';
     if (this.readonly)
       this.form.disable();
     else
@@ -390,7 +390,7 @@ export class TaskFormComponent extends EditFormComponent<TaskDto, TaskService, T
     this.statuses = this.statuses.map(s => {
       return {
         ...s,
-        disabled: s.value === 'APPROVED' && this.role === 'tutor'
+        disabled: s.value === 'APPROVED' && this.role === 'TUTOR'
       };
     });
   }

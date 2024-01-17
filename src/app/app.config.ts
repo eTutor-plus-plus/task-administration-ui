@@ -43,7 +43,13 @@ export const appConfig: ApplicationConfig = {
       },
       loader: TranslationLoaderService
     }),
-    importProvidersFrom(MonacoEditorModule.forRoot(monacoConfig)),
+    importProvidersFrom(MonacoEditorModule.forRoot({
+      defaultOptions: {
+        scrollBeyondLastLine: false,
+        minimap: {enabled: false},
+        automaticLayout: true
+      }
+    })),
     {provide: API_URL, useValue: environment.apiUrl},
     {provide: MessageService},
     {provide: LOCALE_ID, useValue: 'de-AT'}

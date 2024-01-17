@@ -1,0 +1,79 @@
+@if (tasks?.cron && (tasks?.cron?.length ?? 0) > 0) {
+  <p-panel [header]="'health.scheduledtasks.cron' | transloco" styleClass="mb-3 table-panel">
+    <p-table [value]="tasks!.cron!">
+      <ng-template pTemplate="header">
+        <tr>
+          <th transloco="health.scheduledtasks.runnable"></th>
+          <th transloco="health.scheduledtasks.expression"></th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-job>
+        <tr>
+          <td style="line-break:anywhere">{{ job.runnable.target }}</td>
+          <td><code>{{ job.expression }}</code></td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </p-panel>
+}
+
+@if (tasks?.fixedDelay && (tasks?.fixedDelay?.length ?? 0) > 0) {
+  <p-panel [header]="'health.scheduledtasks.fixedDelay' | transloco" styleClass="mb-3 table-panel">
+    <p-table [value]="tasks!.fixedDelay!">
+      <ng-template pTemplate="header">
+        <tr>
+          <th transloco="health.scheduledtasks.runnable"></th>
+          <th transloco="health.scheduledtasks.initialDelay"></th>
+          <th transloco="health.scheduledtasks.interval"></th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-job>
+        <tr>
+          <td style="line-break:anywhere">{{ job.runnable.target }}</td>
+          <td>{{ job.initialDelay }}</td>
+          <td>{{ job.interval }}</td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </p-panel>
+}
+
+@if (tasks?.fixedRate && (tasks?.fixedRate?.length ?? 0) > 0) {
+  <p-panel [header]="'health.scheduledtasks.fixedRate' | transloco" styleClass="mb-3 table-panel">
+    <p-table [value]="tasks!.fixedRate!">
+      <ng-template pTemplate="header">
+        <tr>
+          <th transloco="health.scheduledtasks.runnable"></th>
+          <th transloco="health.scheduledtasks.initialDelay"></th>
+          <th transloco="health.scheduledtasks.interval"></th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-job>
+        <tr>
+          <td style="line-break:anywhere">{{ job.runnable.target }}</td>
+          <td>{{ job.initialDelay }}</td>
+          <td>{{ job.interval }}</td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </p-panel>
+}
+
+@if (tasks?.custom && (tasks?.custom?.length ?? 0) > 0) {
+  <p-panel [header]="'health.scheduledtasks.custom' | transloco" styleClass="mb-3 table-panel">
+    <p-table [value]="tasks!.custom!">
+      <ng-template pTemplate="header">
+        <tr>
+          <th transloco="health.scheduledtasks.runnable"></th>
+          <th transloco="health.scheduledtasks.trigger"></th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-job>
+        <tr>
+          <td style="line-break:anywhere">{{ job.runnable.target }}</td>
+          <td style="line-break:anywhere">{{ job.trigger }}</td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </p-panel>
+}
