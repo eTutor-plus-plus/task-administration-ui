@@ -60,9 +60,9 @@ export class TaskService extends ApiService<TaskDto, ModifyTaskDto, number, Task
     language: string;
     submission: string;
     taskId: number;
-  }): Promise<any> {
+  }): Promise<string> {
     console.info(`[${this.serviceName}] Submitting task`);
-    return new Promise((resolve, reject) => this.http.post<any>(this.apiUrl + '/submit', submission, {observe: 'body'}).subscribe({
+    return new Promise((resolve, reject) => this.http.post(this.apiUrl + '/submit', submission, {responseType: 'text'}).subscribe({
       next: value => resolve(value),
       error: err => {
         console.error(`[${this.serviceName}] Failed submitting task`, err);

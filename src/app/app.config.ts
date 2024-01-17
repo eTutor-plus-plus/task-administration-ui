@@ -11,6 +11,7 @@ import { routes } from './app.routes';
 import { environment } from '../environments/environment';
 import { TranslationLoaderService } from './translation-loader.service';
 import { authInterceptor, langInterceptor } from './auth';
+import { monacoConfig } from './monaco/config';
 
 /**
  * The injection token for the base API URL.

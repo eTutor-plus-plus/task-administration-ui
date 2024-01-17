@@ -16,7 +16,7 @@
       "prefix": "dke",
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-angular:application",
+          "builder": "@angular-devkit/build-angular:browser",
           "options": {
             "outputPath": "dist/task-administration-ui",
             "index": "src/index.html",
@@ -32,14 +32,18 @@
               "src/assets",
               {
                 "glob": "**/*",
-                "input": "node_modules/monaco-editor",
-                "output": "/assets/monaco/"
+                "input": "node_modules/monaco-editor/min",
+                "output": "/assets/monaco/min/"
               }
             ],
             "styles": [
               "src/styles.scss"
             ],
-            "scripts": []
+            "scripts": [],
+            "allowedCommonJsDependencies": [
+              "quill",
+              "quill-html-edit-button"
+            ]
           },
           "configurations": {
             "production": {

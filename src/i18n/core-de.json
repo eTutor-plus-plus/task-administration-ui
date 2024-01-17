@@ -334,6 +334,7 @@
     "choose": "Auswählen",
     "upload": "Hochladen",
     "cancel": "Abbrechen",
+    "back": "Zurück",
     "completed": "Abgeschlossen",
     "pending": "Ausstehend",
     "fileSizeTypes": [
