@@ -1,27 +1,29 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@ngneat/transloco';
+import { TranslocoDirective, TranslocoService } from '@ngneat/transloco';
 import { distinctUntilChanged, Subscription } from 'rxjs';
 
-import { MessageService } from 'primeng/api';
-import { PanelModule } from 'primeng/panel';
+import { MessageService, SharedModule } from 'primeng/api';
 
-import {  ScheduledTasks, SystemHealthService } from '../../../api';
+import { FlywayContexts, FlywayMigration, SystemHealthService } from '../../../api';
 import { HealthSelectionService } from '../health-selection.service';
+import { PanelModule } from 'primeng/panel';
 import { TableModule } from 'primeng/table';
+import { DatePipe } from '@angular/common';
 
 @Component({
-  selector: 'dke-system-health-scheduled-tasks',
+  selector: 'dke-system-health-flyway',
   standalone: true,
   imports: [
     PanelModule,
-    TranslocoPipe,
+    SharedModule,
     TableModule,
-    TranslocoDirective
+    TranslocoDirective,
+    DatePipe
   ],
-  templateUrl: './system-health-scheduled-tasks.component.html',
-  styleUrl: './system-health-scheduled-tasks.component.scss'
+  templateUrl: './system-health-flyway.component.html',
+  styleUrl: './system-health-flyway.component.scss'
 })
-export class SystemHealthScheduledTasksComponent implements OnInit, OnDestroy {
+export class SystemHealthFlywayComponent implements OnInit, OnDestroy {
 
   /**
    * The loading state.
@@ -29,14 +31,14 @@ export class SystemHealthScheduledTasksComponent implements OnInit, OnDestroy {
   loading: boolean;
 
   /**
-   * The scheduled tasks.
+   * The flyway contexts.
    */
-  tasks?: ScheduledTasks;
+  contexts?: FlywayContexts;
 
   private changeSub?: Subscription;
 
   /**
-   * Creates a new instance of class SystemHealthScheduledTasksComponent.
+   * Creates a new instance of class SystemHealthFlywayComponent.
    */
   constructor(private readonly healthService: SystemHealthService,
               private readonly healthSelectionService: HealthSelectionService,
@@ -51,8 +53,8 @@ export class SystemHealthScheduledTasksComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.changeSub = this.healthSelectionService.selectedAppChanged.pipe(distinctUntilChanged()).subscribe(app => {
       this.loading = true;
-      this.healthService.loadScheduledTasks(app)
-        .then(content => this.tasks = content)
+      this.healthService.loadFlyway(app)
+        .then(content => this.contexts = content)
         .catch(err => {
           this.messageService.add({severity: 'error', summary: this.translationService.translate('health.load-error'), detail: err.message, key: 'global'});
         })
@@ -65,6 +67,23 @@ export class SystemHealthScheduledTasksComponent implements OnInit, OnDestroy {
    */
   ngOnDestroy(): void {
     this.changeSub?.unsubscribe();
+  }
+
+  /**
+   * Returns the properties of the specified object.
+   *
+   * @param obj The object.
+   */
+  getProperties(obj: any): string[] {
+    return Object.keys(obj);
+  }
+
+  /**
+   * Returns the context migrations.
+   * @param name The name of the context.
+   */
+  getContextMigrations(name: string): FlywayMigration[] {
+    return this.contexts?.contexts[name]?.flywayBeans?.flyway?.migrations || [];
   }
 
 }

@@ -51,6 +51,10 @@ export const routes: Routes = [
           {
             path: 'scheduledtasks',
             loadComponent: () => import('./admin/system-health/system-health-scheduled-tasks/system-health-scheduled-tasks.component').then(c => c.SystemHealthScheduledTasksComponent)
+          },
+          {
+            path: 'flyway',
+            loadComponent: () => import('./admin/system-health/system-health-flyway/system-health-flyway.component').then(c => c.SystemHealthFlywayComponent)
           }
         ]
       },

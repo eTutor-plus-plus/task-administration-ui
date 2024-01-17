@@ -207,7 +207,11 @@
     },
     "flyway": {
       "title": "DB-Migrationen",
-      "icon": "pi-database"
+      "icon": "pi-database",
+      "script": "Skript",
+      "state": "Status",
+      "installedOn": "Installiert",
+      "executionTime": "Ausführungsdauer"
     },
     "logfile": {
       "title": "Log-Datei",
