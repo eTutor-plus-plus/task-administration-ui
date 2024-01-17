@@ -47,6 +47,10 @@ export const routes: Routes = [
           {
             path: 'env',
             loadComponent: () => import('./admin/system-health/system-health-env/system-health-env.component').then(c => c.SystemHealthEnvComponent)
+          },
+          {
+            path: 'scheduledtasks',
+            loadComponent: () => import('./admin/system-health/system-health-scheduled-tasks/system-health-scheduled-tasks.component').then(c => c.SystemHealthScheduledTasksComponent)
           }
         ]
       },

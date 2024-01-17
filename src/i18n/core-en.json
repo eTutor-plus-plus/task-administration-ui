@@ -268,7 +268,16 @@
     },
     "scheduledtasks": {
       "title": "Scheduled Tasks",
-      "icon": "pi-calendar"
+      "icon": "pi-calendar",
+      "cron": "Cron",
+      "fixedDelay": "Fixed Delay",
+      "fixedRate": "Fixed Rate",
+      "custom": "Custom",
+      "runnable": "Job",
+      "expression": "Expression",
+      "initialDelay": "Initial Delay",
+      "interval": "Interval",
+      "trigger": "Trigger"
     },
     "httpexchanges": {
       "title": "HTTP-Exchanges",

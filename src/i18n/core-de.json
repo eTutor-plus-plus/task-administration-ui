@@ -268,7 +268,11 @@
     },
     "scheduledtasks": {
       "title": "Geplante Aufgaben",
-      "icon": "pi-calendar"
+      "icon": "pi-calendar",
+      "cron": "Cron",
+      "fixedDelay": "Feste Verzögerung",
+      "fixedRate": "Feste Rate",
+      "custom": "Benutzerdefiniert"
     },
     "httpexchanges": {
       "title": "HTTP-Anfragen",
