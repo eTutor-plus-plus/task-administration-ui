@@ -285,7 +285,16 @@
     },
     "httpexchanges": {
       "title": "HTTP-Exchanges",
-      "icon": "pi-globe"
+      "icon": "pi-globe",
+      "timestamp": "Timestamp",
+      "timeTaken": "Time Taken",
+      "method": "Method",
+      "uri": "URI",
+      "status": "Status",
+      "principal": "User",
+      "requestHeaders": "Request Headers",
+      "responseHeaders": "Response Headers",
+      "remoteAddress": "Remote Address"
     }
   },
   "primeng": {

@@ -280,7 +280,16 @@
     },
     "httpexchanges": {
       "title": "HTTP-Anfragen",
-      "icon": "pi-globe"
+      "icon": "pi-globe",
+      "timestamp": "Zeitpunkt",
+      "timeTaken": "Dauer",
+      "method": "Methode",
+      "uri": "URI",
+      "status": "Status",
+      "principal": "Benutzer",
+      "requestHeaders": "Request Header",
+      "responseHeaders": "Response Header",
+      "remoteAddress": "IP-Adresse"
     }
   },
   "primeng": {

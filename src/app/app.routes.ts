@@ -55,6 +55,10 @@ export const routes: Routes = [
           {
             path: 'flyway',
             loadComponent: () => import('./admin/system-health/system-health-flyway/system-health-flyway.component').then(c => c.SystemHealthFlywayComponent)
+          },
+          {
+            path: 'httpexchanges',
+            loadComponent: () => import('./admin/system-health/system-health-http/system-health-http.component').then(c => c.SystemHealthHttpComponent)
           }
         ]
       },

@@ -1,29 +1,34 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import { DatePipe } from '@angular/common';
 import { TranslocoDirective, TranslocoService } from '@ngneat/transloco';
 import { distinctUntilChanged, Subscription } from 'rxjs';
+import { Duration } from 'luxon';
 
 import { MessageService, SharedModule } from 'primeng/api';
-import { PanelModule } from 'primeng/panel';
+import { ButtonModule } from 'primeng/button';
 import { TableModule } from 'primeng/table';
 
-import { FlywayContexts, FlywayMigration, SystemHealthService } from '../../../api';
+import { HttpExchanges, SystemHealthService } from '../../../api';
 import { HealthSelectionService } from '../health-selection.service';
 
+/**
+ * The component for displaying HTTP requests.
+ */
 @Component({
-  selector: 'dke-system-health-flyway',
+  selector: 'dke-system-health-http',
   standalone: true,
   imports: [
-    PanelModule,
+    DatePipe,
     SharedModule,
     TableModule,
     TranslocoDirective,
-    DatePipe
+    ButtonModule
   ],
-  templateUrl: './system-health-flyway.component.html',
-  styleUrl: './system-health-flyway.component.scss'
+  templateUrl: './system-health-http.component.html',
+  styleUrl: './system-health-http.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class SystemHealthFlywayComponent implements OnInit, OnDestroy {
+export class SystemHealthHttpComponent implements OnInit, OnDestroy {
 
   /**
    * The loading state.
@@ -31,19 +36,20 @@ export class SystemHealthFlywayComponent implements OnInit, OnDestroy {
   loading: boolean;
 
   /**
-   * The flyway contexts.
+   * The http requests
    */
-  contexts?: FlywayContexts;
+  http?: HttpExchanges;
 
   private changeSub?: Subscription;
 
   /**
-   * Creates a new instance of class SystemHealthFlywayComponent.
+   * Creates a new instance of class SystemHealthHttpComponent.
    */
   constructor(private readonly healthService: SystemHealthService,
               private readonly healthSelectionService: HealthSelectionService,
               private readonly messageService: MessageService,
-              private readonly translationService: TranslocoService) {
+              private readonly translationService: TranslocoService,
+              private readonly changeDetector: ChangeDetectorRef) {
     this.loading = false;
   }
 
@@ -53,12 +59,17 @@ export class SystemHealthFlywayComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.changeSub = this.healthSelectionService.selectedAppChanged.pipe(distinctUntilChanged()).subscribe(app => {
       this.loading = true;
-      this.healthService.loadFlyway(app)
-        .then(content => this.contexts = content)
+      this.changeDetector.markForCheck();
+
+      this.healthService.loadHttpExchanges(app)
+        .then(content => this.http = content)
         .catch(err => {
           this.messageService.add({severity: 'error', summary: this.translationService.translate('health.load-error'), detail: err.message, key: 'global'});
         })
-        .finally(() => this.loading = false);
+        .finally(() => {
+          this.loading = false;
+          this.changeDetector.markForCheck();
+        });
     });
   }
 
@@ -79,11 +90,14 @@ export class SystemHealthFlywayComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Returns the context migrations.
-   * @param name The name of the context.
+   * Converts the duration string to a human-readable string.
+   *
+   * @param duration The duration string.
    */
-  getContextMigrations(name: string): FlywayMigration[] {
-    return this.contexts?.contexts[name]?.flywayBeans?.flyway?.migrations || [];
+  convertDurationToString(duration: string): string {
+    const dur = Duration.fromISO(duration);
+    if (!dur.isValid)
+      return '--';
+    return dur.normalize().rescale().toHuman({unitDisplay: 'short'});
   }
-
 }

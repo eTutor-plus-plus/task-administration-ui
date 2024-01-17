@@ -1,7 +1,7 @@
 import { Inject, Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { API_URL } from '../../app.config';
-import { AppInfo, Environment, FlywayContexts, Health, Link, Metric, ScheduledTasks } from '../models';
+import { AppInfo, Environment, FlywayContexts, Health, HttpExchanges, Link, Metric, ScheduledTasks } from '../models';
 
 /**
  * Service for accessing the actuator endpoints.
@@ -240,4 +240,25 @@ export class SystemHealthService {
     );
   }
 
+  /**
+   * Loads the metrics.
+   *
+   * @param taskType The task type to load the metrics for.
+   */
+  loadHttpExchanges(taskType?: string): Promise<HttpExchanges> {
+    console.info('[SystemHealthService] Loading HTTP exchanges for ' + taskType);
+    let url = this.apiUrl;
+    if (taskType && taskType !== '')
+      url += '/api/forward/' + encodeURIComponent(taskType);
+    url += '/actuator/httpexchanges';
+
+    return new Promise((resolve, reject) => this.http.get<HttpExchanges>(url, {headers: new HttpHeaders().set('Accept', this.contentType)}).subscribe({
+        next: value => resolve(value),
+        error: err => {
+          console.error('[SystemHealthService] Failed loading HTTP exchanges for ' + taskType, err);
+          reject(err);
+        }
+      })
+    );
+  }
 }
