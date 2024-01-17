@@ -199,7 +199,11 @@
     },
     "env": {
       "title": "Environment",
-      "icon": "pi-desktop"
+      "icon": "pi-desktop",
+      "profiles": "Active Profiles",
+      "property": "Property",
+      "value": "Value",
+      "origin": "Origin"
     },
     "flyway": {
       "title": "DB-Migrations",

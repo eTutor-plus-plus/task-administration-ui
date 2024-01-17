@@ -43,6 +43,10 @@ export const routes: Routes = [
           {
             path: 'metrics',
             loadComponent: () => import('./admin/system-health/system-health-metrics/system-health-metrics.component').then(c => c.SystemHealthMetricsComponent)
+          },
+          {
+            path: 'env',
+            loadComponent: () => import('./admin/system-health/system-health-env/system-health-env.component').then(c => c.SystemHealthEnvComponent)
           }
         ]
       },
