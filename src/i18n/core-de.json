@@ -229,6 +229,7 @@
       "application": "Anwendung",
       "gc": "Speicherbereinigung",
       "threads": "Threads",
+      "executor": "Executor",
       "jdbc": "JDBC",
       "hikari": "Datenbank",
       "hikariAcquire": "Verbinden",
@@ -268,7 +269,19 @@
       "dbTimeout": "Zeitüberschreitung",
       "dbCount": "Anzahl",
       "dbTotal": "Gesamtdauer",
-      "dbMaxTime": "Max. Dauer"
+      "dbMaxTime": "Max. Dauer",
+      "httpCode": "Code",
+      "httpUri": "URI",
+      "httpCount": "Anzahl",
+      "httpAvg": "Durchschnitt (ms)",
+      "httpMax": "Max. (ms)",
+      "executorActive": "Aktiv",
+      "executorQueued": "Eingereiht",
+      "executorQueueRemaining": "Verbleibend",
+      "executorCompleted": "Abgeschlossen",
+      "executorPoolCore": "Threads",
+      "executorPoolMax": "Max.",
+      "executorPoolSize": "Größe"
     },
     "scheduledtasks": {
       "title": "Geplante Aufgaben",

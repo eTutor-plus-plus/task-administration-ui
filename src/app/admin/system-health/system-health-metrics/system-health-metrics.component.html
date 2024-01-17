@@ -247,9 +247,81 @@
   <!-- TODO: spring.data.repository.invocations (see TAGS!!) -->
 </div>
 
+<!-- Executor -->
+<h2 transloco="health.metrics.executor"></h2>
+<div class="grid">
+  <div class="col-12 md:col-6 lg:col-4 p-2">
+    <p-card [header]="'health.metrics.executor' | transloco">
+      <ul class="list-none p-0 m-0">
+        <li class="mb-3">
+          <dke-metric-value [metric]="metrics.get('executor.active')" translationKey="health.metrics.executorActive"/>
+        </li>
+        <li class="mb-3">
+          <dke-metric-value [metric]="metrics.get('executor.queued')" translationKey="health.metrics.executorQueued"/>
+        </li>
+        <li class="mb-3">
+          <dke-metric-value [metric]="metrics.get('executor.queue.remaining')" translationKey="health.metrics.executorQueueRemaining"/>
+        </li>
+        <li>
+          <dke-metric-value [metric]="metrics.get('executor.completed')" translationKey="health.metrics.executorCompleted"/>
+        </li>
+      </ul>
+    </p-card>
+  </div>
+
+  <div class="col-12 md:col-6 lg:col-4 p-2">
+    <p-card [header]="'health.metrics.pool' | transloco">
+      <ul class="list-none p-0 m-0">
+        <li class="mb-3">
+          <dke-metric-value [metric]="metrics.get('executor.pool.core')" translationKey="health.metrics.executorPoolCore"/>
+        </li>
+        <li class="mb-3">
+          <dke-metric-value [metric]="metrics.get('executor.pool.size')" translationKey="health.metrics.executorPoolSize"/>
+        </li>
+        <li>
+          <dke-metric-value [metric]="metrics.get('executor.pool.max')" translationKey="health.metrics.executorPoolMax"/>
+        </li>
+      </ul>
+    </p-card>
+  </div>
+</div>
+
 <!-- SERVER -->
 <h2 transloco="health.metrics.server"></h2>
-<!-- TODO: http.server.requests (see TAGS!!)
- * display by URI and method
- * display by status
- -->
+<p-table [value]="httpStatusMetrics">
+  <ng-template pTemplate="header">
+    <tr>
+      <th transloco="health.metrics.httpCode"></th>
+      <th transloco="health.metrics.httpCount"></th>
+      <th transloco="health.metrics.httpAvg"></th>
+      <th transloco="health.metrics.httpMax"></th>
+    </tr>
+  </ng-template>
+  <ng-template pTemplate="body" let-metric>
+    <tr>
+      <td>{{ metric.status }}</td>
+      <td>{{ metric.count }}</td>
+      <td>{{ (metric.sum / metric.count) | number:'1.4-4' }}</td>
+      <td>{{ metric.max | number:'1.4-4' }}</td>
+    </tr>
+  </ng-template>
+</p-table>
+
+<p-table [value]="httpUriMetrics" styleClass="mt-2">
+  <ng-template pTemplate="header">
+    <tr>
+      <th transloco="health.metrics.httpUri"></th>
+      <th transloco="health.metrics.httpCount"></th>
+      <th transloco="health.metrics.httpAvg"></th>
+      <th transloco="health.metrics.httpMax"></th>
+    </tr>
+  </ng-template>
+  <ng-template pTemplate="body" let-metric>
+    <tr>
+      <td>{{ metric.uri }}</td>
+      <td>{{ metric.count }}</td>
+      <td>{{ (metric.sum / metric.count) | number:'1.4-4' }}</td>
+      <td>{{ metric.max | number:'1.4-4' }}</td>
+    </tr>
+  </ng-template>
+</p-table>

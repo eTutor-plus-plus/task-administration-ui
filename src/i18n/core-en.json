@@ -229,6 +229,7 @@
       "application": "Application",
       "gc": "Garbage Collection",
       "threads": "Threads",
+      "executor": "Executor",
       "jdbc": "JDBC",
       "hikari": "Database",
       "hikariAcquire": "Acquire",
@@ -268,7 +269,19 @@
       "dbTimeout": "Timeout",
       "dbCount": "Count",
       "dbTotal": "Total Time",
-      "dbMaxTime": "Max. Time"
+      "dbMaxTime": "Max. Time",
+      "httpCode": "Code",
+      "httpUri": "URI",
+      "httpCount": "Count",
+      "httpAvg": "Average (ms)",
+      "httpMax": "Max. (ms)",
+      "executorActive": "Active",
+      "executorQueued": "Queued",
+      "executorQueueRemaining": "Queue Remaining",
+      "executorCompleted": "Completed",
+      "executorPoolCore": "Core",
+      "executorPoolMax": "Max.",
+      "executorPoolSize": "Size"
     },
     "scheduledtasks": {
       "title": "Scheduled Tasks",

@@ -1,14 +1,15 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@ngneat/transloco';
+import { DecimalPipe, NgStyle } from '@angular/common';
 import { distinctUntilChanged, Subject, Subscription, takeUntil, timer } from 'rxjs';
 
 import { MessageService } from 'primeng/api';
 import { CardModule } from 'primeng/card';
+import { TableModule } from 'primeng/table';
+import { TooltipModule } from 'primeng/tooltip';
 
 import { Metric, SystemHealthService } from '../../../api';
 import { HealthSelectionService } from '../health-selection.service';
-import { DecimalPipe, NgStyle } from '@angular/common';
-import { TooltipModule } from 'primeng/tooltip';
 import { MetricProgressBarComponent } from './metric-progress-bar/metric-progress-bar.component';
 import { MetricValueComponent } from './metric-value/metric-value.component';
 
@@ -26,7 +27,8 @@ import { MetricValueComponent } from './metric-value/metric-value.component';
     NgStyle,
     TooltipModule,
     MetricProgressBarComponent,
-    MetricValueComponent
+    MetricValueComponent,
+    TableModule
   ],
   templateUrl: './system-health-metrics.component.html',
   styleUrl: './system-health-metrics.component.scss',
@@ -38,6 +40,16 @@ export class SystemHealthMetricsComponent implements OnInit, OnDestroy {
    * The metric map.
    */
   readonly metrics: Map<string, Metric>;
+
+  /**
+   * The http status metrics.
+   */
+  httpStatusMetrics: { status: string, count: number, sum: number, max: number }[];
+
+  /**
+   * The http uri metrics.
+   */
+  httpUriMetrics: { uri: string, count: number, sum: number, max: number }[];
 
   private readonly destroy$ = new Subject<void>();
   private app: string;
@@ -52,6 +64,8 @@ export class SystemHealthMetricsComponent implements OnInit, OnDestroy {
               private readonly translationService: TranslocoService,
               private readonly changeDetector: ChangeDetectorRef) {
     this.metrics = new Map<string, Metric>();
+    this.httpStatusMetrics = [];
+    this.httpUriMetrics = [];
     this.availableMetrics = [];
     this.app = '';
   }
@@ -62,9 +76,9 @@ export class SystemHealthMetricsComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.healthSelectionService.selectedAppChanged.pipe(distinctUntilChanged(), takeUntil(this.destroy$))
       .subscribe(app => this.loadAvailableMetrics(app));
-    // timer(10000, 10000)
-    //   .pipe(takeUntil(this.destroy$))
-    //   .subscribe(() => this.loadMetrics());
+    timer(10000, 10000)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(() => this.loadMetrics());
   }
 
   /**
@@ -110,18 +124,32 @@ export class SystemHealthMetricsComponent implements OnInit, OnDestroy {
         if (metric === 'http.server.requests') {
           for (const tag of details.availableTags) {
             if (tag.tag !== 'uri' && tag.tag !== 'status')
-
               continue;
 
             for (const val of tag.values) {
               const tagDetails = await this.healthService.loadMetric(metric, this.app, tag.tag, val);
-              this.metrics.set(metric + '.' + tag.tag + '.' + val, tagDetails);
+              if (tag.tag === 'status')
+                this.httpStatusMetrics.push({
+                  status: val,
+                  count: tagDetails.measurements.find(x => x.statistic === 'COUNT')?.value ?? 0,
+                  sum: tagDetails.measurements.find(x => x.statistic === 'TOTAL_TIME')?.value ?? 0,
+                  max: tagDetails.measurements.find(x => x.statistic === 'MAX')?.value ?? 0
+                });
+              else if (tag.tag === 'uri' && !val.startsWith('/actuator'))
+                this.httpUriMetrics.push({
+                  uri: val,
+                  count: tagDetails.measurements.find(x => x.statistic === 'COUNT')?.value ?? 0,
+                  sum: tagDetails.measurements.find(x => x.statistic === 'TOTAL_TIME')?.value ?? 0,
+                  max: tagDetails.measurements.find(x => x.statistic === 'MAX')?.value ?? 0
+                });
             }
           }
         }
       } catch (err) {
         // ignore
       }
+      this.httpStatusMetrics = this.httpStatusMetrics.sort((a, b) => a.status.localeCompare(b.status));
+      this.httpUriMetrics = this.httpUriMetrics.sort((a, b) => a.uri.localeCompare(b.uri));
     }
 
     this.changeDetector.markForCheck();
