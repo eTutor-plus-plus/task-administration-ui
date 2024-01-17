@@ -20,7 +20,7 @@
           "options": {
             "outputPath": "dist/task-administration-ui",
             "index": "src/index.html",
-            "browser": "src/main.ts",
+            "main": "src/main.ts",
             "aot": true,
             "polyfills": [
               "zone.js"
