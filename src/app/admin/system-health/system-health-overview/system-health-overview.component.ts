@@ -5,6 +5,7 @@ import { RouterLink } from '@angular/router';
 import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@ngneat/transloco';
 
 import { MessageService } from 'primeng/api';
+import { AuthService } from '../../../auth';
 
 
 /**
@@ -35,13 +36,20 @@ export class SystemHealthOverviewComponent implements OnInit {
   health: Map<string, Health | null>;
 
   /**
+   * Whether the current user is administrator.
+   */
+  isAdmin: boolean;
+
+  /**
    * Creates a new instance of class SystemHealthDefaultComponent.
    */
   constructor(private readonly healthService: SystemHealthService,
               private readonly taskAppService: TaskAppService,
               private readonly messageService: MessageService,
-              private readonly translationService: TranslocoService) {
+              private readonly translationService: TranslocoService,
+              private readonly authService: AuthService) {
     this.health = new Map<string, Health>();
+    this.isAdmin = this.authService.user?.maxRole === 'ADMIN' || this.authService.user?.maxRole === 'FULL_ADMIN';
   }
 
 

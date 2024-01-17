@@ -57,7 +57,9 @@
         <span class="font-medium inline text-base lg:text-xs lg:block w-full text-center multiline" transloco="menu.taskApps"></span>
       </a>
     </li>
+  }
 
+  @if (isInstructorOrHigher()) {
     <li>
       <a routerLink="health" routerLinkActive="text-green" [routerLinkActiveOptions]="{exact: false}"
          class="flex flex-row lg:flex-column align-items-center cursor-pointer py-3 p-2 lg:justify-content-center hover:bg-gray-800 border-round text-gray-300 hover:text-white transition-duration-150 transition-colors">

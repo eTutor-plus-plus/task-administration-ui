@@ -21,12 +21,12 @@ export const routes: Routes = [
         path: 'health',
         pathMatch: 'full',
         loadComponent: () => import('./admin/system-health/system-health-overview/system-health-overview.component').then(c => c.SystemHealthOverviewComponent),
-        canActivate: [roleGuard(['full_admin', 'admin', 'instructor'])]
+        canActivate: [roleGuard(['FULL_ADMIN', 'ADMIN', 'INSTRUCTOR'])]
       },
       {
         path: 'health',
         loadComponent: () => import('./admin/system-health/system-health.component').then(c => c.SystemHealthComponent),
-        canActivate: [roleGuard(['full_admin'])],
+        canActivate: [roleGuard(['FULL_ADMIN'])],
         children: [
           {
             path: 'health',
@@ -65,17 +65,17 @@ export const routes: Routes = [
       {
         path: 'organizationalUnits',
         loadComponent: () => import('./admin/organizational-units/organizational-units.component').then(c => c.OrganizationalUnitsComponent),
-        canActivate: [roleGuard(['full_admin'])]
+        canActivate: [roleGuard(['FULL_ADMIN'])]
       },
       {
         path: 'users',
         loadComponent: () => import('./admin/users/users.component').then(c => c.UsersComponent),
-        canActivate: [roleGuard(['admin', 'full_admin'])]
+        canActivate: [roleGuard(['ADMIN', 'FULL_ADMIN'])]
       },
       {
         path: 'taskApps',
         loadComponent: () => import('./tasks/task-apps/task-apps.component').then(c => c.TaskAppsComponent),
-        canActivate: [roleGuard(['full_admin'])]
+        canActivate: [roleGuard(['FULL_ADMIN'])]
       },
 
       // Tasks

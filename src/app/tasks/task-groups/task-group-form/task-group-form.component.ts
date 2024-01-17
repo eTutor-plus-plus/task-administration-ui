@@ -112,7 +112,7 @@ export class TaskGroupFormComponent extends EditFormComponent<TaskGroupDto, Task
       {value: StatusEnum.READY_FOR_APPROVAL, text: this.translationService.translate('taskStatus.' + StatusEnum.READY_FOR_APPROVAL), disabled: false},
       {value: StatusEnum.APPROVED, text: this.translationService.translate('taskStatus.' + StatusEnum.APPROVED), disabled: false}
     ];
-    this.role = this.authService.user?.maxRole ?? 'tutor';
+    this.role = this.authService.user?.maxRole ?? 'TUTOR';
   }
 
   /**
@@ -122,7 +122,7 @@ export class TaskGroupFormComponent extends EditFormComponent<TaskGroupDto, Task
     // Listen to user role changes
     this.authService.userChanged.pipe(takeUntil(this.destroy$))
       .subscribe(user => {
-        this.role = user?.maxRole ?? 'tutor';
+        this.role = user?.maxRole ?? 'TUTOR';
         this.setStatusDisablesAndReadonly();
         this.setOrganizationalUnits();
       });
@@ -284,7 +284,7 @@ export class TaskGroupFormComponent extends EditFormComponent<TaskGroupDto, Task
       return; // should never happen
 
     // check if readonly
-    this.readonly = this.role === 'tutor' && !!this.originalEntity && this.originalEntity.status === 'APPROVED';
+    this.readonly = this.role === 'TUTOR' && !!this.originalEntity && this.originalEntity.status === 'APPROVED';
     if (this.readonly)
       this.form.disable();
     else
@@ -294,7 +294,7 @@ export class TaskGroupFormComponent extends EditFormComponent<TaskGroupDto, Task
     this.statuses = this.statuses.map(s => {
       return {
         ...s,
-        disabled: s.value === 'APPROVED' && this.role === 'tutor'
+        disabled: s.value === 'APPROVED' && this.role === 'TUTOR'
       };
     });
   }

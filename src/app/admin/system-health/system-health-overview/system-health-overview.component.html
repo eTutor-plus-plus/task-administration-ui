@@ -7,10 +7,13 @@
           <div class="text-900 font-medium text-xl">{{ adminHealth?.status }}</div>
         </div>
         <div class="flex align-items-center justify-content-center bg-green-100 border-round" style="width:2.5rem;height:2.5rem">
-          <i [ngClass]="['pi', 'text-xl', 'health.health.statusIcon.' + adminHealth?.status | transloco, 'health.health.foregroundClass.' + adminHealth?.status | transloco]"></i>
+          <i
+            [ngClass]="['pi', 'text-xl', 'health.health.statusIcon.' + adminHealth?.status | transloco, 'health.health.foregroundClass.' + adminHealth?.status | transloco]"></i>
         </div>
       </div>
-      <a class="text-gray-500 no-underline" [routerLink]="['health']">{{ 'health.health.details.button' | transloco }}</a>
+      @if (isAdmin) {
+        <a class="text-gray-500 no-underline" [routerLink]="['health']">{{ 'health.health.details.button' | transloco }}</a>
+      }
     </div>
   </div>
 
@@ -24,13 +27,16 @@
           </div>
           <div class="flex align-items-center justify-content-center {{ 'health.health.backgroundClass.' + health.get(app)?.status | transloco }} border-round"
                style="width:2.5rem;height:2.5rem">
-            <i [ngClass]="['pi', 'text-xl', 'health.health.statusIcon.' + health.get(app)?.status | transloco, 'health.health.foregroundClass.' + health.get(app)?.status | transloco]"></i>
+            <i
+              [ngClass]="['pi', 'text-xl', 'health.health.statusIcon.' + health.get(app)?.status | transloco, 'health.health.foregroundClass.' + health.get(app)?.status | transloco]"></i>
           </div>
         </div>
-        @if (health.get(app)?.status) {
-          <a class="text-gray-500 no-underline" [routerLink]="['health']" [queryParams]="{type: app}">{{ 'health.health.details.button' | transloco }}</a>
-        } @else {
-          <span>&nbsp;</span>
+        @if (isAdmin) {
+          @if (health.get(app)?.status) {
+            <a class="text-gray-500 no-underline" [routerLink]="['health']" [queryParams]="{type: app}">{{ 'health.health.details.button' | transloco }}</a>
+          } @else {
+            <span>&nbsp;</span>
+          }
         }
       </div>
     </div>
