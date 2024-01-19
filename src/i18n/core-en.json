@@ -29,7 +29,7 @@
       "login": "Sign in",
       "expired": "Your session has expired. Please sign in again.",
       "messages": {
-        "unavailable": "The eTutor-Server is currently not available.",
+        "unavailable": "The eTutor-Server is currently not available. Please try again later.",
         "bad_credentials": "Bad credentials",
         "no_connection": "The eTutor-Server does not answer.",
         "login_failed": "Sign in failed",
@@ -46,7 +46,8 @@
       "messages": {
         "success_summary": "Password requested",
         "success_detail": "If the username exists, you will receive an email with a link to reset your password.",
-        "failed": "The request failed"
+        "failed": "The request failed",
+        "no_connection": "The eTutor-Server does not answer."
       }
     },
     "reset": {
@@ -60,7 +61,8 @@
         "password_error": "The passwords do not match.",
         "success_summary": "Password reset",
         "success_detail": "You can now sign in with your new password.",
-        "failed": "The password could not be reset."
+        "failed": "The password could not be reset.",
+        "no_connection": "The eTutor-Server does not answer."
       }
     },
     "activate": {
@@ -74,7 +76,8 @@
         "password_error": "The passwords do not match.",
         "success_summary": "Account activated",
         "success_detail": "You can now sign in with your password.",
-        "failed": "The account could not be activated."
+        "failed": "The account could not be activated.",
+        "no_connection": "The eTutor-Server does not answer."
       }
     },
     "account": {
