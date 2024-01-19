@@ -156,7 +156,8 @@
       "loadSingle": "The task could not be loaded.",
       "delete": "The task '{{name}}' could not be deleted.",
       "create": "The task '{{name}}' could not be created.",
-      "update": "The task '{{name}}' could not be updated."
+      "update": "The task '{{name}}' could not be updated.",
+      "groupNotApproved": "The associated task group has not yet been approved."
     },
     "success": {
       "delete": "The task '{{name}}' was successfully deleted.",

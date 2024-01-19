@@ -208,6 +208,7 @@ export class TaskGroupFormComponent extends EditFormComponent<TaskGroupDto, Task
       this.originalEntity = data.dto;
       this.additionalData = data.additionalData;
       this.form.patchValue(this.originalEntity);
+      this.form.markAsPristine();
       this.setStatusDisablesAndReadonly();
       this.changeDetectorRef.detectChanges(); // required to prevent error
     } catch (err) {

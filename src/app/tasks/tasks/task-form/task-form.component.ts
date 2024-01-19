@@ -29,6 +29,7 @@ import {
 } from '../../../api';
 import { TaskForm, TaskTypeRegistry } from '../../../task-type';
 import { TaskSubmissionComponent } from '../task-submission/task-submission.component';
+import { TagModule } from 'primeng/tag';
 
 /**
  * Task Form
@@ -49,7 +50,8 @@ import { TaskSubmissionComponent } from '../task-submission/task-submission.comp
     NgComponentOutlet,
     DatePipe,
     InputNumberModule,
-    TreeSelectModule
+    TreeSelectModule,
+    TagModule
   ],
   providers: [DialogService],
   templateUrl: './task-form.component.html',
@@ -266,6 +268,7 @@ export class TaskFormComponent extends EditFormComponent<TaskDto, TaskService, T
       // }
 
       this.form.patchValue({...this.originalEntity, taskCategoryIds: []});
+      this.form.markAsPristine();
       this.setStatusDisablesAndReadonly();
       this.changeDetectorRef.detectChanges(); // required to prevent error
     } catch (err) {
@@ -498,6 +501,13 @@ export class TaskFormComponent extends EditFormComponent<TaskDto, TaskService, T
    */
   removeTaskCategory(index: number): void {
     this.form.controls.taskCategoryIds.removeAt(index);
+  }
+
+  /**
+   * Gets the currently selected task group.
+   */
+  getTaskGroup(): TaskGroupDto | undefined {
+    return this.taskGroups.find(x => x.id === this.form.value.taskGroupId);
   }
 
   /**

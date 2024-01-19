@@ -155,7 +155,8 @@
       "loadSingle": "Die Aufgaben konnte nicht geladen werden.",
       "delete": "Die Aufgaben '{{name}}' konnte nicht gelöscht werden.",
       "create": "Die Aufgaben '{{name}}' konnte nicht erstellt werden.",
-      "update": "Die Änderungen der Aufgaben '{{name}}' konnten nicht gespeichert werden."
+      "update": "Die Änderungen der Aufgaben '{{name}}' konnten nicht gespeichert werden.",
+      "groupNotApproved": "Die zugehörige Aufgabengruppe wurde noch nicht freigegeben."
     },
     "success": {
       "delete": "Die Aufgaben '{{name}}' wurde erfolgreich gelöscht.",

@@ -150,6 +150,7 @@ export class TasksComponent extends TableOverviewComponent<TaskDto, TaskService>
     return tg?.name ?? id.toString();
   }
 
+  //#region --- Parent Overrides ---
   override getMessageParams(entity: TaskDto, type: 'error' | 'success'): Record<string, unknown> {
     return {name: entity.title};
   }
@@ -181,6 +182,7 @@ export class TasksComponent extends TableOverviewComponent<TaskDto, TaskService>
     const ou = user.roles.find(x => x.organizationalUnit == entity.organizationalUnitId);
     return ou ? ou.role !== 'TUTOR' : false;
   }
+  //#endregion
 
   private async loadOrganizationalUnits(): Promise<void> {
     try {
