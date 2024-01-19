@@ -7,7 +7,6 @@ import { TableModule } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
 import { ConfirmPopupModule } from 'primeng/confirmpopup';
 import { InputTextModule } from 'primeng/inputtext';
-import { TagModule } from 'primeng/tag';
 import { TooltipModule } from 'primeng/tooltip';
 
 import { TableDialogOverviewComponent } from '../../layout';
@@ -26,7 +25,6 @@ import { OrganizationalUnitFormComponent } from './organizational-unit-form/orga
     InputTextModule,
     SharedModule,
     TableModule,
-    TagModule,
     TranslocoDirective,
     TranslocoPipe,
     TooltipModule
@@ -57,4 +55,20 @@ export class OrganizationalUnitsComponent extends TableDialogOverviewComponent<O
     return {name: entity.name};
   }
 
+  /**
+   * Initiates synchronization of the organizational unit with Moodle
+   */
+  async sync(ou: OrganizationalUnitDto): Promise<void> {
+    try {
+      await this.entityService.syncWithMoodle(ou.id);
+      this.messageService.add({
+        key: 'global',
+        summary: this.translationService.translate(this.baseTranslationKey + 'success.moodleSync'),
+        severity: 'info'
+      });
+      setTimeout(() => this.reload(), 2000);
+    } catch (err) {
+      // ignore
+    }
+  }
 }

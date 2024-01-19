@@ -106,6 +106,23 @@ export class TaskCategoriesComponent extends TableDialogOverviewComponent<TaskCa
   }
 
   /**
+   * Initiates synchronization of the task category with Moodle
+   */
+  async sync(entity: TaskCategoryDto): Promise<void> {
+    try {
+      await this.entityService.syncWithMoodle(entity.id);
+      this.messageService.add({
+        key: 'global',
+        summary: this.translationService.translate(this.baseTranslationKey + 'success.moodleSync'),
+        severity: 'info'
+      });
+      setTimeout(() => this.reload(), 2000);
+    } catch (err) {
+      // ignore
+    }
+  }
+
+  /**
    * Gets the name of the organizational unit.
    */
   getOUName(id: number): string {

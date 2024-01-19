@@ -24,6 +24,22 @@ export class OrganizationalUnitService extends ApiService<OrganizationalUnitDto,
     return params;
   }
 
+  /**
+   * Initiates synchronization of the organizational unit with Moodle.
+   *
+   * @param id The organizational unit identifier.
+   */
+  syncWithMoodle(id: number): Promise<void> {
+    console.info(`[${this.serviceName}] Sync with moodle ` + id);
+    return new Promise<void>((resolve, reject) => this.http.post(this.apiUrl + '/' + encodeURIComponent(id), null).subscribe({
+      next: () => resolve(),
+      error: err => {
+        console.error(`[${this.serviceName}] Failed sync with moodle ` + id, err);
+        reject(err);
+      }
+    }));
+  }
+
 }
 
 /**

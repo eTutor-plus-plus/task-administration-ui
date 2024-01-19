@@ -5,12 +5,14 @@
       "name": "Name"
     },
     "errors": {
+      "moodleSync": "The organizational unit is not synchronized with Moodle.",
       "load": "The organizational units could not be loaded.",
       "delete": "The organizational unit '{{name}}' could not be deleted.",
       "create": "The organizational unit '{{name}}' could not be created.",
       "update": "The organizational unit '{{name}}' could not be updated."
     },
     "success": {
+      "moodleSync": "The synchronization with Moodle was has been successfully initiated.",
       "delete": "The organizational unit '{{name}}' was successfully deleted.",
       "create": "The organizational unit '{{name}}' was successfully created.",
       "update": "The organizational unit '{{name}}' was successfully updated."
@@ -54,7 +56,7 @@
     "failedLoginCount": "Failed Login Count: {{value}}"
   },
   "roles": {
-    "ADMIN": "Administrator",
+    "ADMIN": "Organizational Unit Administrator",
     "INSTRUCTOR": "Course Instructor",
     "TUTOR": "Tutor"
   },
@@ -88,12 +90,14 @@
       "organizationalUnitId": "Organizational Unit"
     },
     "errors": {
+      "moodleSync": "The task category is not synchronized with Moodle.",
       "load": "The task categories could not be loaded.",
       "delete": "The task category '{{name}}' could not be deleted.",
       "create": "The task category '{{name}}' could not be created.",
       "update": "The task category '{{name}}' could not be updated."
     },
     "success": {
+      "moodleSync": "The synchronization with Moodle was has been successfully initiated.",
       "delete": "The task category '{{name}}' was successfully deleted.",
       "create": "The task category '{{name}}' was successfully created.",
       "update": "The task category '{{name}}' was successfully updated."

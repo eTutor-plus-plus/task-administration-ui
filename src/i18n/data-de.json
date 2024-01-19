@@ -5,12 +5,14 @@
       "name": "Name"
     },
     "errors": {
+      "moodleSync": "Die Organisationseinheit ist nicht mit Moodle synchronisiert.",
       "load": "Die Organisationseinheiten konnten nicht geladen werden.",
       "delete": "Die Organisationseinheit '{{name}}' konnte nicht gelöscht werden.",
       "create": "Die Organisationseinheit '{{name}}' konnte nicht erstellt werden.",
       "update": "Die Änderungen der Organisationseinheit '{{name}}' konnten nicht gespeichert werden."
     },
     "success": {
+      "moodleSync": "Die Synchronisation mit Moodle wurde erfolgreich initiiert.",
       "delete": "Die Organisationseinheit '{{name}}' wurde erfolgreich gelöscht.",
       "create": "Die Organisationseinheit '{{name}}' wurde erfolgreich erstellt.",
       "update": "Die Änderungen der Organisationseinheit '{{name}}' wurden erfolgreich gespeichert."
@@ -54,7 +56,7 @@
     "failedLoginCount": "Anzahl fehlgeschlagener Anmeldeversuche: {{value}}"
   },
   "roles": {
-    "ADMIN": "Administrator/in",
+    "ADMIN": "Organisationseinheit-Administrator/in",
     "INSTRUCTOR": "LVA-Leiter/in",
     "TUTOR": "Tutor/in"
   },
@@ -88,12 +90,14 @@
       "organizationalUnitId": "Organisationseinheit"
     },
     "errors": {
+      "moodleSync": "Die Aufgaben-Kategorie ist nicht mit Moodle synchronisiert.",
       "load": "Die Aufgaben-Kategorien konnten nicht geladen werden.",
       "delete": "Die Aufgaben-Kategorie '{{name}}' konnte nicht gelöscht werden.",
       "create": "Die Aufgaben-Kategorie '{{name}}' konnte nicht erstellt werden.",
       "update": "Die Änderungen der Aufgaben-Kategorie '{{name}}' konnten nicht gespeichert werden."
     },
     "success": {
+      "moodleSync": "Die Synchronisation mit Moodle wurde erfolgreich initiiert.",
       "delete": "Die Aufgaben-Kategorie '{{name}}' wurde erfolgreich gelöscht.",
       "create": "Die Aufgaben-Kategorie '{{name}}' wurde erfolgreich erstellt.",
       "update": "Die Änderungen der Aufgaben-Kategorie '{{name}}' wurden erfolgreich gespeichert."

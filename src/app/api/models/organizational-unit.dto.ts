@@ -10,4 +10,9 @@ export interface OrganizationalUnitDto extends Audited {
    * The name.
    */
   name: string;
+
+  /**
+   * Whether the organizational unit is synced with moodle.
+   */
+  moodleSynced: boolean;
 }
