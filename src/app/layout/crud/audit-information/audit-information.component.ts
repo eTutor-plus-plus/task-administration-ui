@@ -24,4 +24,14 @@ export class AuditInformationComponent {
    */
   constructor() {
   }
+
+  /**
+   * Get identifier of the audited item.
+   */
+  getId(): string | undefined {
+    if (this.data && 'id' in this.data) {
+      return this.data.id + '';
+    }
+    return undefined;
+  }
 }

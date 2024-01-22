@@ -11,6 +11,7 @@ export const routes: Routes = [
     path: '',
     component: LayoutComponent,
     children: [
+      {path: '', pathMatch: 'full', redirectTo: 'tasks'},
       {
         path: 'account',
         loadComponent: () => import('./auth/account/account.component').then(c => c.AccountComponent)

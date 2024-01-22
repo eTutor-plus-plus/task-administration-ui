@@ -1,3 +1,9 @@
+@if (data && getId()) {
+  <p class="text-color-secondary text-xs mb-0">
+    ID: {{ getId() }}
+  </p>
+}
+
 @if (data && (data.createdBy || data.createdDate)) {
   <p class="text-color-secondary text-xs mb-0">
     {{ 'common.created' | transloco }}: {{ data.createdBy }}, {{ data.createdDate | date:'medium' }}
