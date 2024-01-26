@@ -123,7 +123,6 @@ Enhancement suggestions are tracked as [GitHub issues](https://github.com/eTutor
 Following dependencies are required to build and run this project:
 
 * Node.js >= 20
-* Docker and Docker Compose
 * You can use any Web development IDE of your choice.
 
 Run `npm install` to install the required dependencies.
