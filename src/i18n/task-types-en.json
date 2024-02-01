@@ -8,6 +8,13 @@
       "fields": {
         "solution": "Solution"
       }
+    },
+    "xquery": {
+      "title": "XQuery",
+      "fields": {
+        "solution": "Solution",
+        "sorting": "Sorting (XPath)"
+      }
     }
   }
 }

@@ -125,11 +125,14 @@
     "search": "Suchen",
     "yes": "Ja",
     "no": "Nein",
+    "ok": "OK",
+    "cancel": "Abbrechen",
     "paginator": "{first} bis {last} von {totalRecords}",
     "concurrency-error": "Der Eintrag wurde in der Zwischenzeit von jemand anderen bearbeitet. Bitte laden Sie den Eintrag neu und versuchen Sie es dann erneut.",
     "created": "Erstellt",
     "modified": "Zuletzt bearbeitet"
   },
+  "quill-html-edit-hint": "Bearbeiten Sie hier den HTML-Code. Wenn Sie auf \"OK\" klicken, wird der Inhalt des Editors ersetzt. Fügen Sie nach dem Klick auf \"OK\" mindestens ein Leerzeichen ein, ansonsten wird Ihre Änderung nicht korrekt erkannt.",
   "404": {
     "go-back": "Zurück",
     "title": "Seite nicht gefunden",

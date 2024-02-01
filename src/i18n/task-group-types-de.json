@@ -9,6 +9,13 @@
         "minNumber": "Kleinster Wert",
         "maxNumber": "Größter Wert"
       }
+    },
+    "xquery": {
+      "title": "XQuery",
+      "fields": {
+        "diagnoseDocument": "Diagnose XML-Dokument",
+        "submitDocument": "Submit XML-Dokument"
+      }
     }
   }
 }

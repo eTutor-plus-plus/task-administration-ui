@@ -8,6 +8,13 @@
       "fields": {
         "solution": "Gesuchte Zahl"
       }
+    },
+    "xquery": {
+      "title": "XQuery",
+      "fields": {
+        "solution": "Lösung",
+        "sorting": "Sortierung (XPath)"
+      }
     }
   }
 }

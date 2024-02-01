@@ -14,6 +14,8 @@ import { TreeSelectModule } from 'primeng/treeselect';
 import { TreeNode } from 'primeng/api';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { DialogService } from 'primeng/dynamicdialog';
+import { TagModule } from 'primeng/tag';
+import { BlockUIModule } from 'primeng/blockui';
 
 import { AuditInformationComponent, EditFormComponent } from '../../../layout';
 import { AuthService, Role } from '../../../auth';
@@ -29,7 +31,6 @@ import {
 } from '../../../api';
 import { TaskForm, TaskTypeRegistry } from '../../../task-type';
 import { TaskSubmissionComponent } from '../task-submission/task-submission.component';
-import { TagModule } from 'primeng/tag';
 
 /**
  * Task Form
@@ -51,7 +52,8 @@ import { TagModule } from 'primeng/tag';
     DatePipe,
     InputNumberModule,
     TreeSelectModule,
-    TagModule
+    TagModule,
+    BlockUIModule
   ],
   providers: [DialogService],
   templateUrl: './task-form.component.html',
@@ -61,7 +63,13 @@ export class TaskFormComponent extends EditFormComponent<TaskDto, TaskService, T
   /**
    * The quill module configuration.
    */
-  readonly quillModules = {htmlEditButton: {}};
+  readonly quillModules = {
+    htmlEditButton: {
+      okText: this.translationService.translate('common.ok'),
+      cancelText: this.translationService.translate('common.cancel'),
+      msg: this.translationService.translate('quill-html-edit-hint')
+    }
+  };
 
   /**
    * Whether the form should be readonly.
@@ -118,6 +126,11 @@ export class TaskFormComponent extends EditFormComponent<TaskDto, TaskService, T
    */
   supportedTaskGroupTypes: string[];
 
+  /**
+   * Whether the task type supports description generation.
+   */
+  supportsDescriptionGeneration: boolean;
+
   private allTaskCategories: TaskCategoryDto[];
   private allOrganizationalUnits: OrganizationalUnitDto[];
   private allTaskGroups: TaskGroupDto[];
@@ -149,6 +162,7 @@ export class TaskFormComponent extends EditFormComponent<TaskDto, TaskService, T
       additionalData: new FormGroup<any>({})
     }), 'tasks.');
     this.readonly = false;
+    this.supportsDescriptionGeneration = false;
     this.organizationalUnits = [];
     this.allOrganizationalUnits = [];
     this.taskGroups = [];
@@ -466,6 +480,7 @@ export class TaskFormComponent extends EditFormComponent<TaskDto, TaskService, T
   private onTaskTypeChanged(value: string | null): void {
     // Set task group validation
     this.supportedTaskGroupTypes = TaskTypeRegistry.getSupportsTaskGroupTypes(value);
+    this.supportsDescriptionGeneration = TaskTypeRegistry.supportsDescriptionGeneration(value);
     if (this.supportedTaskGroupTypes.length > 0) {
       this.form.controls.taskGroupId.addValidators(Validators.required);
       this.form.updateValueAndValidity();

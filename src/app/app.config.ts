@@ -11,6 +11,7 @@ import { routes } from './app.routes';
 import { environment } from '../environments/environment';
 import { TranslationLoaderService } from './translation-loader.service';
 import { authInterceptor, langInterceptor } from './auth';
+import { customizeMonaco } from './monaco';
 
 /**
  * The injection token for the base API URL.
@@ -47,7 +48,8 @@ export const appConfig: ApplicationConfig = {
         scrollBeyondLastLine: false,
         minimap: {enabled: false},
         automaticLayout: true
-      }
+      },
+      onMonacoLoad: customizeMonaco
     })),
     {provide: API_URL, useValue: environment.apiUrl},
     {provide: MessageService},

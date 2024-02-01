@@ -132,7 +132,8 @@
     },
     "create": "Aufgaben-Gruppe erstellen",
     "edit": "Aufgaben-Gruppe bearbeiten",
-    "approved": "Freigegeben"
+    "approved": "Freigegeben",
+    "descriptionGeneration": "Wenn Sie das Feld leer lassen, wird beim Speichern die Beschreibung automatisch generiert."
   },
   "tasks": {
     "title": "Aufgaben",
@@ -167,7 +168,8 @@
     "edit": "Aufgaben bearbeiten",
     "approved": "Freigegeben",
     "addTaskCategory": "Aufgabenkategorie hinzufügen",
-    "submitTest": "Aufgabe testen"
+    "submitTest": "Aufgabe testen",
+    "descriptionGeneration": "Wenn Sie das Feld leer lassen, wird beim Speichern die Beschreibung automatisch generiert."
   },
   "submission": {
     "fields": {
