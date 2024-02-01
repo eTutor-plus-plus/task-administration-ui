@@ -1,5 +1,6 @@
 import { Type } from '@angular/core';
 import { TaskTypeBinarySearchComponent } from './task-type-binary-search/task-type-binary-search.component';
+import { TaskTypeXqueryComponent } from './task-type-xquery/task-type-xquery.component';
 
 /**
  * Registry for task types.
@@ -14,6 +15,10 @@ export class TaskTypeRegistry {
     {
       name: 'binary-search', supportedTaskGroupTypes: ['binary-search'], component: TaskTypeBinarySearchComponent, submissionTemplate: `{
   "input": "0"
+}`
+    },    {
+      name: 'xquery', supportedTaskGroupTypes: ['xquery'], component: TaskTypeXqueryComponent, submissionTemplate: `{
+  "input": "//book[author='Schrefl, Michael']"
 }`
     }
   ];
