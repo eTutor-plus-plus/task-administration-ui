@@ -58,7 +58,7 @@ export class TaskService extends ApiService<TaskDto, ModifyTaskDto, number, Task
     mode: string;
     feedbackLevel: number;
     language: string;
-    submission: string;
+    submission: any;
     taskId: number;
   }): Promise<string> {
     console.info(`[${this.serviceName}] Submitting task`);

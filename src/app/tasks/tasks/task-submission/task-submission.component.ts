@@ -137,13 +137,13 @@ export class TaskSubmissionComponent implements OnInit {
 
     try {
       this.loading = true;
-      let submission: string;
+      let submission: any;
       if (this.isSimpleInput) {
-        submission = JSON.stringify({
+        submission = {
           input: this.form.value.submission
-        });
+        };
       } else {
-        submission = this.form.value.submission ?? '{}';
+        submission = JSON.parse(this.form.value.submission ?? '{}');
       }
 
       const result = await this.taskService.submit({
