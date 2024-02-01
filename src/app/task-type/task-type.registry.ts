@@ -10,16 +10,22 @@ export class TaskTypeRegistry {
   private constructor() {
   }
 
-  private static readonly taskTypes: { name: string, supportedTaskGroupTypes: string[], component?: Type<any>, submissionTemplate?: string }[] = [
+  private static readonly taskTypes: {
+    name: string,
+    supportedTaskGroupTypes: string[],
+    component?: Type<any>,
+    submissionTemplate?: string,
+    supportsDescriptionGeneration?: boolean
+  }[] = [
     {name: 'none', supportedTaskGroupTypes: []},
     {
       name: 'binary-search', supportedTaskGroupTypes: ['binary-search'], component: TaskTypeBinarySearchComponent, submissionTemplate: `{
   "input": "0"
-}`
-    },    {
+}`, supportsDescriptionGeneration: true
+    }, {
       name: 'xquery', supportedTaskGroupTypes: ['xquery'], component: TaskTypeXqueryComponent, submissionTemplate: `{
   "input": "//book[author='Schrefl, Michael']"
-}`
+}`, supportsDescriptionGeneration: false
     }
   ];
 
@@ -55,5 +61,14 @@ export class TaskTypeRegistry {
    */
   static getSupportsTaskGroupTypes(name: string | null): string[] {
     return this.taskTypes.find(x => x.name === name)?.supportedTaskGroupTypes ?? [];
+  }
+
+  /**
+   * Gets whether the specified type supports description generation.
+   *
+   * @param name The type name.
+   */
+  static supportsDescriptionGeneration(name: string | null): boolean {
+    return this.taskTypes.find(x => x.name === name)?.supportsDescriptionGeneration ?? false;
   }
 }

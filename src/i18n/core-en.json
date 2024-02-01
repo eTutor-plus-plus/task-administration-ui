@@ -124,12 +124,15 @@
     "refresh": "Refresh",
     "yes": "Yes",
     "no": "No",
+    "ok": "OK",
+    "cancel": "Cancel",
     "search": "Search",
     "paginator": "{first} to {last} of {totalRecords}",
     "concurrency-error": "The entry has since been edited by someone else. Please reload and then try again.",
     "created": "Created",
     "modified": "Modified"
   },
+  "quill-html-edit-hint": "Edit the HTML code here. If you click on \"OK\", the content of the editor will be replaced. Insert at least one space after clicking on \"OK\", otherwise your change will not be recognized correctly.",
   "404": {
     "go-back": "Go Back",
     "title": "Page Not Found",

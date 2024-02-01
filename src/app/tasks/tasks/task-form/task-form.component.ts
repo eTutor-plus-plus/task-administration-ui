@@ -61,7 +61,13 @@ export class TaskFormComponent extends EditFormComponent<TaskDto, TaskService, T
   /**
    * The quill module configuration.
    */
-  readonly quillModules = {htmlEditButton: {}};
+  readonly quillModules = {
+    htmlEditButton: {
+      okText: this.translationService.translate('common.ok'),
+      cancelText: this.translationService.translate('common.cancel'),
+      msg: this.translationService.translate('quill-html-edit-hint')
+    }
+  };
 
   /**
    * Whether the form should be readonly.
@@ -118,6 +124,11 @@ export class TaskFormComponent extends EditFormComponent<TaskDto, TaskService, T
    */
   supportedTaskGroupTypes: string[];
 
+  /**
+   * Whether the task type supports description generation.
+   */
+  supportsDescriptionGeneration: boolean;
+
   private allTaskCategories: TaskCategoryDto[];
   private allOrganizationalUnits: OrganizationalUnitDto[];
   private allTaskGroups: TaskGroupDto[];
@@ -149,6 +160,7 @@ export class TaskFormComponent extends EditFormComponent<TaskDto, TaskService, T
       additionalData: new FormGroup<any>({})
     }), 'tasks.');
     this.readonly = false;
+    this.supportsDescriptionGeneration = false;
     this.organizationalUnits = [];
     this.allOrganizationalUnits = [];
     this.taskGroups = [];
@@ -466,6 +478,7 @@ export class TaskFormComponent extends EditFormComponent<TaskDto, TaskService, T
   private onTaskTypeChanged(value: string | null): void {
     // Set task group validation
     this.supportedTaskGroupTypes = TaskTypeRegistry.getSupportsTaskGroupTypes(value);
+    this.supportsDescriptionGeneration = TaskTypeRegistry.supportsDescriptionGeneration(value);
     if (this.supportedTaskGroupTypes.length > 0) {
       this.form.controls.taskGroupId.addValidators(Validators.required);
       this.form.updateValueAndValidity();

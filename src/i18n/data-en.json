@@ -132,7 +132,8 @@
     },
     "create": "Create Task Group",
     "edit": "Edit Task Group",
-    "approved": "Approved"
+    "approved": "Approved",
+    "descriptionGeneration": "If you leave the field empty, the description will be generated automatically when you save."
   },
   "tasks": {
     "title": "Tasks",
@@ -167,7 +168,8 @@
     "create": "Create Task",
     "edit": "Edit Task",
     "approved": "Approved",
-    "addTaskCategory": "Add Task Category"
+    "addTaskCategory": "Add Task Category",
+    "descriptionGeneration": "If you leave the field empty, the description will be generated automatically when you save."
   },
   "submission": {
     "fields": {

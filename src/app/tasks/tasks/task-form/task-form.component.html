@@ -68,6 +68,11 @@
             {{ getError(form.controls.descriptionDe, this.baseTranslationKey + 'fields.descriptionDe') }}
           </small>
         }
+        @if(supportsDescriptionGeneration){
+          <small class="block mt-1 text-color-secondary">
+            {{ baseTranslationKey + 'descriptionGeneration' | transloco }}
+          </small>
+        }
       </div>
 
       <div class="field mb-4 col-12 md:col-6">
@@ -76,6 +81,11 @@
         @if (form.controls.descriptionEn.dirty || form.controls.descriptionEn.touched) {
           <small class="block mt-1 p-error">
             {{ getError(form.controls.descriptionEn, this.baseTranslationKey + 'fields.descriptionEn') }}
+          </small>
+        }
+        @if(supportsDescriptionGeneration){
+          <small class="block mt-1 text-color-secondary">
+            {{ baseTranslationKey + 'descriptionGeneration' | transloco }}
           </small>
         }
       </div>

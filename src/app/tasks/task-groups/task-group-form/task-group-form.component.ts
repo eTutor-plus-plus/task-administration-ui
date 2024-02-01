@@ -43,7 +43,13 @@ export class TaskGroupFormComponent extends EditFormComponent<TaskGroupDto, Task
   /**
    * The quill module configuration.
    */
-  readonly quillModules = {htmlEditButton: {}};
+  readonly quillModules = {
+    htmlEditButton: {
+      okText: this.translationService.translate('common.ok'),
+      cancelText: this.translationService.translate('common.cancel'),
+      msg: this.translationService.translate('quill-html-edit-hint')
+    }
+  };
 
   /**
    * Whether the form should be readonly.
@@ -80,6 +86,11 @@ export class TaskGroupFormComponent extends EditFormComponent<TaskGroupDto, Task
    */
   additionalData?: Record<string, unknown>;
 
+  /**
+   * Whether the task type supports description generation.
+   */
+  supportsDescriptionGeneration: boolean;
+
   private allOrganizationalUnits: OrganizationalUnitDto[];
   private readonly destroy$ = new Subject<void>();
 
@@ -102,6 +113,7 @@ export class TaskGroupFormComponent extends EditFormComponent<TaskGroupDto, Task
       additionalData: new FormGroup<any>({})
     }), 'taskGroups.');
     this.readonly = false;
+    this.supportsDescriptionGeneration = false;
     this.organizationalUnits = [];
     this.allOrganizationalUnits = [];
     this.types = TaskGroupTypeRegistry.getTaskTypes().map(x => {
@@ -140,6 +152,7 @@ export class TaskGroupFormComponent extends EditFormComponent<TaskGroupDto, Task
           this.form.controls.additionalData.removeControl(x);
         }
         this.componentForm = TaskGroupTypeRegistry.getComponent(value);
+        this.supportsDescriptionGeneration = TaskGroupTypeRegistry.supportsDescriptionGeneration(value);
       });
 
     // Load organizational units
@@ -191,7 +204,7 @@ export class TaskGroupFormComponent extends EditFormComponent<TaskGroupDto, Task
     await this.loadTaskGroup(id);
   }
 
-  override modifyValueBeforeSend(data: Partial<{ [K in keyof TaskGroupForm]: any }>, type: "create" | "update"): any {
+  override modifyValueBeforeSend(data: Partial<{ [K in keyof TaskGroupForm]: any }>, type: 'create' | 'update'): any {
     return {
       ...data,
       descriptionDe: data.descriptionDe ?? '',
@@ -199,7 +212,7 @@ export class TaskGroupFormComponent extends EditFormComponent<TaskGroupDto, Task
     };
   }
 
-//#endregion
+  //#endregion
 
   private async loadTaskGroup(id: string | number): Promise<void> {
     try {
