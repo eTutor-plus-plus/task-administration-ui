@@ -74,6 +74,11 @@ export class TaskSubmissionComponent implements OnInit {
   loading: boolean;
 
   /**
+   * Whether the task is a simple input task.
+   */
+  readonly isSimpleInput: boolean;
+
+  /**
    * The grading result.
    */
   gradingResult?: string;
@@ -95,6 +100,9 @@ export class TaskSubmissionComponent implements OnInit {
     this.languages = [];
     this.feedbackLevels = [];
     this.modes = ['RUN', 'DIAGNOSE', 'SUBMIT'];
+    const inputLang = TaskTypeRegistry.getSubmissionInputLanguage(this.dialogConf.data.taskType);
+    this.isSimpleInput = inputLang !== undefined;
+    this.editorOptions.language = inputLang ?? 'json';
   }
 
   /**
@@ -129,12 +137,21 @@ export class TaskSubmissionComponent implements OnInit {
 
     try {
       this.loading = true;
+      let submission: string;
+      if (this.isSimpleInput) {
+        submission = JSON.stringify({
+          input: this.form.value.submission
+        });
+      } else {
+        submission = this.form.value.submission ?? '{}';
+      }
+
       const result = await this.taskService.submit({
         taskId: this.dialogConf.data.taskId,
         language: this.form.value.language!,
         mode: this.form.value.mode!,
         feedbackLevel: this.form.value.feedbackLevel!,
-        submission: JSON.parse(this.form.value.submission ?? '{}')
+        submission: submission
       });
       this.gradingResult = JSON.stringify(JSON.parse(result), null, 2);
     } catch (err) {

@@ -15,17 +15,25 @@ export class TaskTypeRegistry {
     supportedTaskGroupTypes: string[],
     component?: Type<any>,
     submissionTemplate?: string,
-    supportsDescriptionGeneration?: boolean
+    supportsDescriptionGeneration?: boolean,
+    submissionInputLanguage?: string // set the monaco language if the submission data have following format {"input": "<USER INPUT>"}, otherwise leave this undefined
   }[] = [
     {name: 'none', supportedTaskGroupTypes: []},
     {
-      name: 'binary-search', supportedTaskGroupTypes: ['binary-search'], component: TaskTypeBinarySearchComponent, submissionTemplate: `{
-  "input": "0"
-}`, supportsDescriptionGeneration: true
+      name: 'binary-search',
+      supportedTaskGroupTypes: ['binary-search'],
+      component: TaskTypeBinarySearchComponent,
+      submissionTemplate: '0',
+      supportsDescriptionGeneration: true,
+      submissionInputLanguage: 'plaintext'
     }, {
-      name: 'xquery', supportedTaskGroupTypes: ['xquery'], component: TaskTypeXqueryComponent, submissionTemplate: `{
-  "input": "//book[author='Schrefl, Michael']"
-}`, supportsDescriptionGeneration: false
+      name: 'xquery',
+      supportedTaskGroupTypes: ['xquery'],
+      component: TaskTypeXqueryComponent,
+      submissionTemplate: `let $d := doc('etutor.xml')
+return $d`,
+      supportsDescriptionGeneration: false,
+      submissionInputLanguage: 'xquery'
     }
   ];
 
@@ -70,5 +78,14 @@ export class TaskTypeRegistry {
    */
   static supportsDescriptionGeneration(name: string | null): boolean {
     return this.taskTypes.find(x => x.name === name)?.supportsDescriptionGeneration ?? false;
+  }
+
+  /**
+   * Gets the submission input language.
+   *
+   * @param name The type name.
+   */
+  static getSubmissionInputLanguage(name: string | null): string | undefined {
+    return this.taskTypes.find(x => x.name === name)?.submissionInputLanguage;
   }
 }
