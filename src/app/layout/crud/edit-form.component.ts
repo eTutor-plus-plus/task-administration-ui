@@ -110,7 +110,8 @@ export abstract class EditFormComponent<TDto extends object, TService extends Ap
       this.messageService.add({
         severity: 'error',
         detail: this.translationService.translate(this.baseTranslationKey + 'errors.create', this.getMessageParams(this.form.value as any, 'errorCreate')) + ' ' + detail,
-        key: 'global'
+        key: 'global',
+        life: 10000
       });
       this.onError('create', err);
     } finally {
@@ -145,7 +146,7 @@ export abstract class EditFormComponent<TDto extends object, TService extends Ap
           msg += ' ' + err.message;
       }
 
-      this.messageService.add({severity: 'error', detail: msg, key: 'global'});
+      this.messageService.add({severity: 'error', detail: msg, key: 'global', life: 10000});
       this.onError('update', err);
     } finally {
       this.loading = false;
