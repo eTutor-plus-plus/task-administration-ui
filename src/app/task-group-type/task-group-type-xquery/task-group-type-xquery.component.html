@@ -1,0 +1,22 @@
+<div class="surface-card p-4 shadow-2 border-round p-fluid mb-4" [formGroup]="form">
+  <div class="grid formgrid p-fluid">
+    <div class="field mb-4 col-12">
+      <label for="diagnoseDocument" transloco="taskGroupTypes.xquery.fields.diagnoseDocument"></label>
+      <ngx-monaco-editor id="diagnoseDocument" formControlName="diagnoseDocument" [options]="editorOptions"/>
+      @if (form.controls.diagnoseDocument.dirty || form.controls.diagnoseDocument.touched) {
+        <small class="block mt-1 p-error">
+          {{ getError(form.controls.diagnoseDocument, 'taskGroupTypes.xquery.fields.diagnoseDocument') }}
+        </small>
+      }
+    </div>
+    <div class="field mb-4 col-12">
+      <label for="submitDocument" transloco="taskGroupTypes.xquery.fields.submitDocument"></label>
+      <ngx-monaco-editor id="submitDocument" formControlName="submitDocument" [options]="editorOptions"/>
+      @if (form.controls.submitDocument.dirty || form.controls.submitDocument.touched) {
+        <small class="block mt-1 p-error">
+          {{ getError(form.controls.submitDocument, 'taskGroupTypes.xquery.fields.submitDocument') }}
+        </small>
+      }
+    </div>
+  </div>
+</div>

@@ -2,11 +2,11 @@ import { Component } from '@angular/core';
 import { AbstractControl, FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
 import { TranslocoDirective } from '@ngneat/transloco';
 import { InputNumberModule } from 'primeng/inputnumber';
+import { InputGroupModule } from 'primeng/inputgroup';
+import { ButtonModule } from 'primeng/button';
 
 import { TaskGroupTypeFormComponent } from '../task-group-type-form.component';
 import { BinarySearchService } from '../../api';
-import { InputGroupModule } from 'primeng/inputgroup';
-import { ButtonModule } from 'primeng/button';
 
 /**
  * Task Group Type Form: Binary Search

@@ -1,5 +1,6 @@
 import { Type } from '@angular/core';
 import { TaskGroupTypeBinarySearchComponent } from './task-group-type-binary-search/task-group-type-binary-search.component';
+import { TaskGroupTypeXqueryComponent } from './task-group-type-xquery/task-group-type-xquery.component';
 
 /**
  * Registry for task group types.
@@ -11,7 +12,8 @@ export class TaskGroupTypeRegistry {
 
   private static readonly taskTypes: { name: string, component?: Type<any> }[] = [
     {name: 'none'},
-    {name: 'binary-search', component: TaskGroupTypeBinarySearchComponent}
+    {name: 'binary-search', component: TaskGroupTypeBinarySearchComponent},
+    {name: 'xquery', component: TaskGroupTypeXqueryComponent},
   ];
 
   /**
