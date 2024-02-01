@@ -10,6 +10,7 @@ import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
 import { DropdownModule } from 'primeng/dropdown';
 import { EditorModule } from 'primeng/editor';
+import { BlockUIModule } from 'primeng/blockui';
 
 import { AuditInformationComponent, EditFormComponent } from '../../../layout';
 import { AuthService, Role } from '../../../auth';
@@ -33,7 +34,8 @@ import { TaskGroupForm, TaskGroupTypeRegistry } from '../../../task-group-type';
     EditorModule,
     AuditInformationComponent,
     NgComponentOutlet,
-    DatePipe
+    DatePipe,
+    BlockUIModule
   ],
   templateUrl: './task-group-form.component.html',
   styleUrl: './task-group-form.component.scss'

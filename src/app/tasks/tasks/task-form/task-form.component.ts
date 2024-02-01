@@ -14,6 +14,8 @@ import { TreeSelectModule } from 'primeng/treeselect';
 import { TreeNode } from 'primeng/api';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { DialogService } from 'primeng/dynamicdialog';
+import { TagModule } from 'primeng/tag';
+import { BlockUIModule } from 'primeng/blockui';
 
 import { AuditInformationComponent, EditFormComponent } from '../../../layout';
 import { AuthService, Role } from '../../../auth';
@@ -29,7 +31,6 @@ import {
 } from '../../../api';
 import { TaskForm, TaskTypeRegistry } from '../../../task-type';
 import { TaskSubmissionComponent } from '../task-submission/task-submission.component';
-import { TagModule } from 'primeng/tag';
 
 /**
  * Task Form
@@ -51,7 +52,8 @@ import { TagModule } from 'primeng/tag';
     DatePipe,
     InputNumberModule,
     TreeSelectModule,
-    TagModule
+    TagModule,
+    BlockUIModule
   ],
   providers: [DialogService],
   templateUrl: './task-form.component.html',
