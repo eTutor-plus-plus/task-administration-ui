@@ -177,7 +177,11 @@
       "mode": "Auswertungsmodus",
       "feedbackLevel": "Feedback-Level",
       "submission": "Abgabe",
-      "result": "Ergebnis"
+      "result": "Ergebnis",
+      "maxPoints": "Max. Punkte",
+      "points": "Punkte",
+      "generalFeedback": "Allgemeines Feedback",
+      "criteria": "Kriterien"
     },
     "submit": "Abgeben",
     "error": "Die Abgabe konnte nicht gesendet werden."

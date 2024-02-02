@@ -11,6 +11,7 @@ export * from './task.dto';
 
 export * from './task-group-details.dto';
 export * from './task-details.dto';
+export * from './submission.dto';
 
 export * from './modify-user.dto';
 export * from './modify-organizational-unit.dto';

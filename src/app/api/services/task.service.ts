@@ -2,7 +2,7 @@ import { Inject, Injectable } from '@angular/core';
 import { HttpParams } from '@angular/common/http';
 
 import { API_URL } from '../../app.config';
-import { ModifyTaskDto, StatusEnum, TaskDetailsDto, TaskDto } from '../models';
+import { ModifyTaskDto, StatusEnum, SubmissionDto, TaskDetailsDto, TaskDto } from '../models';
 import { ApiService } from './api.service';
 
 /**
@@ -60,9 +60,9 @@ export class TaskService extends ApiService<TaskDto, ModifyTaskDto, number, Task
     language: string;
     submission: any;
     taskId: number;
-  }): Promise<string> {
+  }): Promise<SubmissionDto> {
     console.info(`[${this.serviceName}] Submitting task`);
-    return new Promise((resolve, reject) => this.http.post(this.apiUrl + '/submit', submission, {responseType: 'text'}).subscribe({
+    return new Promise((resolve, reject) => this.http.post<SubmissionDto>(this.apiUrl + '/submit', submission).subscribe({
       next: value => resolve(value),
       error: err => {
         console.error(`[${this.serviceName}] Failed submitting task`, err);

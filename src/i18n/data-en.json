@@ -177,7 +177,11 @@
       "mode": "Evaluation Mode",
       "feedbackLevel": "Feedback Level",
       "submission": "Submission",
-      "result": "Result"
+      "result": "Result",
+      "maxPoints": "Max. Points",
+      "points": "Points",
+      "generalFeedback": "General Feedback",
+      "criteria": "Criteria"
     },
     "submit": "Submit",
     "error": "The submission could not be sent."

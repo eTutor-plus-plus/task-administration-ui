@@ -2,3 +2,38 @@
   height: 100%;
   display: block;
 }
+
+.result-table, .criteria-table {
+  border-collapse: collapse;
+  width: 100%;
+
+  th {
+    text-align: left;
+    padding-top: 0.25rem;
+    padding-bottom: 0.25rem;
+    min-width: 10rem;
+  }
+
+  th, td {
+    padding: 0.25rem;
+    vertical-align: top;
+  }
+}
+
+.result-table tr:nth-child(odd) {
+  background-color: var(--primary-50);
+}
+
+.criteria-table {
+  th {
+    min-width: 7rem;
+  }
+
+  tr:nth-child(even) {
+    background-color: var(--primary-50);
+  }
+
+  tr:nth-child(odd) {
+    background-color: transparent;
+  }
+}

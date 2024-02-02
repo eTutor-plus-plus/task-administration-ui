@@ -10,8 +10,9 @@ import { InputTextModule } from 'primeng/inputtext';
 import { DropdownModule } from 'primeng/dropdown';
 import { ButtonModule } from 'primeng/button';
 
-import { TaskService } from '../../../api';
+import { SubmissionDto, TaskService } from '../../../api';
 import { TaskTypeRegistry } from '../../../task-type';
+import { NgClass } from '@angular/common';
 
 /**
  * Form for submitting a task.
@@ -27,7 +28,8 @@ import { TaskTypeRegistry } from '../../../task-type';
     ButtonModule,
     TranslocoPipe,
     MonacoEditorModule,
-    FormsModule
+    FormsModule,
+    NgClass
   ],
   templateUrl: './task-submission.component.html',
   styleUrl: './task-submission.component.scss'
@@ -81,7 +83,12 @@ export class TaskSubmissionComponent implements OnInit {
   /**
    * The grading result.
    */
-  gradingResult?: string;
+  gradingResult?: SubmissionDto;
+
+  /**
+   * The error result.
+   */
+  errorResult?: string;
 
   /**
    * Creates a new instance of class TaskSubmissionComponent.
@@ -135,6 +142,9 @@ export class TaskSubmissionComponent implements OnInit {
     if (this.form.invalid)
       return;
 
+    this.errorResult = undefined;
+    this.gradingResult = undefined;
+
     try {
       this.loading = true;
       let submission: any;
@@ -146,17 +156,16 @@ export class TaskSubmissionComponent implements OnInit {
         submission = JSON.parse(this.form.value.submission ?? '{}');
       }
 
-      const result = await this.taskService.submit({
+      this.gradingResult = await this.taskService.submit({
         taskId: this.dialogConf.data.taskId,
         language: this.form.value.language!,
         mode: this.form.value.mode!,
         feedbackLevel: this.form.value.feedbackLevel!,
         submission: submission
       });
-      this.gradingResult = JSON.stringify(JSON.parse(result), null, 2);
     } catch (err) {
       console.error('[TaskSubmissionComponent] Could not send submission', err);
-      this.gradingResult = JSON.stringify(err, null, 2);
+      this.errorResult = JSON.stringify(err, null, 2);
     } finally {
       this.loading = false;
     }
