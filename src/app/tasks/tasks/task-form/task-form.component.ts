@@ -273,9 +273,9 @@ export class TaskFormComponent extends EditFormComponent<TaskDto, TaskService, T
       this.originalEntity = data.dto;
       this.additionalData = data.additionalData;
 
-      for (let i = 0; i < this.form.controls.taskCategoryIds.length; i++) {
-        this.form.controls.taskCategoryIds.removeAt(0);
-      }
+      // for (let i = 0; i < this.form.controls.taskCategoryIds.length; i++) {
+      //   this.form.controls.taskCategoryIds.removeAt(0);
+      // }
 
       // for (let taskCategoryId of this.originalEntity?.taskCategoryIds ?? []) {
       //   this.form.controls.taskCategoryIds.controls.push(new FormControl<TreeNode | null>(null, []));
@@ -285,6 +285,7 @@ export class TaskFormComponent extends EditFormComponent<TaskDto, TaskService, T
       this.form.markAsPristine();
       this.setStatusDisablesAndReadonly();
       this.changeDetectorRef.detectChanges(); // required to prevent error
+      this.onOrganizationalUnitChanged(this.originalEntity?.organizationalUnitId);
     } catch (err) {
       console.error('[TaskFormComponent] Could not load task data', err);
       let detail = 'Unknown error';
@@ -387,8 +388,13 @@ export class TaskFormComponent extends EditFormComponent<TaskDto, TaskService, T
     }
 
     this.organizationalUnits = this.allOrganizationalUnits.filter(x => user.isFullAdmin || user.roles.find(r => r.organizationalUnit === x.id));
-    if (this.organizationalUnits.length === 1 && !this.form.value.organizationalUnitId)
-      this.form.patchValue({organizationalUnitId: this.organizationalUnits[0].id});
+
+    //Automated selection: Not implemented yet due to async loading issues of TaskCategories
+
+    // if (this.organizationalUnits.length === 1 && !this.form.value.organizationalUnitId) {
+    //   this.form.patchValue({organizationalUnitId: this.organizationalUnits[0].id});
+    // }
+
   }
 
   private setStatusDisablesAndReadonly(): void {
@@ -414,14 +420,15 @@ export class TaskFormComponent extends EditFormComponent<TaskDto, TaskService, T
 
   private onOrganizationalUnitChanged(value: number | null): void {
     const user = this.authService.user;
-
+    console.log(this.form.value);
     // Task groups
     this.taskGroups = this.allTaskGroups.filter(x => x.organizationalUnitId === value &&
       (user?.isFullAdmin || user?.roles.find(r => r.organizationalUnit === x.organizationalUnitId)) &&
       this.supportedTaskGroupTypes.includes(x.taskGroupType));
 
     // Task categories
-    for (let i = 0; i < this.form.controls.taskCategoryIds.length; i++) {
+    const noTaskCat = this.form.controls.taskCategoryIds.length;
+    for (let i = 0; i < noTaskCat; i++) {
       this.removeTaskCategory(0);
     }
     const tmp = this.allTaskCategories.filter(x => x.organizationalUnitId === value &&
