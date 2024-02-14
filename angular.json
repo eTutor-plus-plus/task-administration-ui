@@ -16,11 +16,12 @@
       "prefix": "dke",
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-angular:application",
+          "builder": "@angular-devkit/build-angular:browser",
           "options": {
             "outputPath": "dist/task-administration-ui",
             "index": "src/index.html",
-            "browser": "src/main.ts",
+            "main": "src/main.ts",
+            "aot": true,
             "polyfills": [
               "zone.js"
             ],
@@ -31,14 +32,18 @@
               "src/assets",
               {
                 "glob": "**/*",
-                "input": "node_modules/monaco-editor",
-                "output": "/assets/monaco/"
+                "input": "node_modules/monaco-editor/min",
+                "output": "/assets/monaco/min/"
               }
             ],
             "styles": [
               "src/styles.scss"
             ],
-            "scripts": []
+            "scripts": [],
+            "allowedCommonJsDependencies": [
+              "quill",
+              "quill-html-edit-button"
+            ]
           },
           "configurations": {
             "production": {
@@ -46,12 +51,12 @@
                 {
                   "type": "initial",
                   "maximumWarning": "500kb",
-                  "maximumError": "2mb"
+                  "maximumError": "10mb"
                 },
                 {
                   "type": "anyComponentStyle",
                   "maximumWarning": "4kb",
-                  "maximumError": "50kb"
+                  "maximumError": "500kb"
                 }
               ],
               "fileReplacements": [
@@ -65,7 +70,8 @@
             "development": {
               "optimization": false,
               "extractLicenses": false,
-              "sourceMap": true
+              "sourceMap": true,
+              "namedChunks": true
             }
           },
           "defaultConfiguration": "production"
@@ -113,6 +119,7 @@
   "cli": {
     "schematicCollections": [
       "@schematics/angular"
-    ]
+    ],
+    "analytics": false
   }
 }

@@ -1,7 +1,9 @@
+<p-blockUI [blocked]="loading" />
+
 <div class="flex justify-content-between align-items-center">
   <h1 [transloco]="baseTranslationKey + (originalEntity ? 'edit' : 'create')"></h1>
   <div>
-    <p-button [label]="'primeng.cancel' | transloco" class="w-auto" (onClick)="cancel()" severity="secondary" [outlined]="true" [disabled]="loading"
+    <p-button [label]="(form.dirty ? 'primeng.cancel' : 'primeng.back') | transloco" class="w-auto" (onClick)="cancel()" severity="secondary" [outlined]="true" [disabled]="loading"
               styleClass="mr-2"/>
     <p-button [label]="(originalEntity ? 'common.save' : 'common.create') | transloco" [disabled]="form.invalid" [loading]="loading"
               (onClick)="submit()"></p-button>
@@ -40,6 +42,11 @@
             {{ getError(form.controls.descriptionDe, this.baseTranslationKey + 'fields.descriptionDe') }}
           </small>
         }
+        @if(supportsDescriptionGeneration){
+          <small class="block mt-1 text-color-secondary">
+            {{ baseTranslationKey + 'descriptionGeneration' | transloco }}
+          </small>
+        }
       </div>
 
       <div class="field mb-4 col-12 md:col-6">
@@ -48,6 +55,11 @@
         @if (form.controls.descriptionEn.dirty || form.controls.descriptionEn.touched) {
           <small class="block mt-1 p-error">
             {{ getError(form.controls.descriptionEn, this.baseTranslationKey + 'fields.descriptionEn') }}
+          </small>
+        }
+        @if(supportsDescriptionGeneration){
+          <small class="block mt-1 text-color-secondary">
+            {{ baseTranslationKey + 'descriptionGeneration' | transloco }}
           </small>
         }
       </div>
@@ -65,7 +77,7 @@
       <div class="field mb-4 col-12 md:col-6">
         <label for="organizationalUnitId" [transloco]="this.baseTranslationKey + 'fields.organizationalUnitId'"></label>
         <p-dropdown inputId="organizationalUnitId" formControlName="organizationalUnitId" [options]="organizationalUnits" optionValue="id"
-                    optionLabel="name" [readonly]="role === 'tutor' && form.value.status !== 'DRAFT'"/>
+                    optionLabel="name" [readonly]="role === 'TUTOR' && form.value.status !== 'DRAFT'"/>
         @if (form.controls.organizationalUnitId.dirty || form.controls.organizationalUnitId.touched) {
           <small class="block mt-1 p-error">
             {{ getError(form.controls.organizationalUnitId, this.baseTranslationKey + 'fields.organizationalUnitId') }}

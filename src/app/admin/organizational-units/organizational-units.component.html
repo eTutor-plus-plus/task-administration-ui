@@ -1,6 +1,6 @@
 <h1 [transloco]="baseTranslationKey + 'title'"></h1>
 
-<p-confirmPopup />
+<p-confirmPopup/>
 
 <p-table [value]="tableData.content" [tableStyle]="{'min-width': '30rem'}" [lazy]="true" (onLazyLoad)="loadTableData($event)" dataKey="id" [loading]="loading"
          [paginator]="true" [rows]="10" [rowsPerPageOptions]="[10, 25, 50, 100]" [showCurrentPageReport]="true" [totalRecords]="tableData.totalElements"
@@ -30,7 +30,14 @@
 
   <ng-template pTemplate="body" let-ou>
     <tr>
-      <td>{{ ou.name }}</td>
+      <td>
+        @if (!ou.moodleSynced) {
+          <p-button size="small" icon="pi pi-exclamation-triangle" severity="danger" [text]="true" (onClick)="sync(ou)"
+                    [pTooltip]="baseTranslationKey + 'errors.moodleSync' | transloco" [showDelay]="1000"/>
+        }
+
+        {{ ou.name }}
+      </td>
       <td>
         <span class="p-buttonset">
           <p-button (onClick)="edit(ou)" icon="pi pi-pencil" [pTooltip]="'common.edit' | transloco" tooltipPosition="top" [showDelay]="1000"

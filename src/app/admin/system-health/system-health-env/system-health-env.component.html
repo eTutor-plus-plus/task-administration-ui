@@ -1,0 +1,26 @@
+<p-panel [header]="'health.env.profiles' | transloco" styleClass="mb-3">
+    @for (profile of environment?.activeProfiles; track profile) {
+      <p-tag [value]="profile" />
+    }
+</p-panel>
+
+@for (source of environment?.propertySources; track source.name) {
+  <p-panel [header]="source.name" styleClass="mb-3 max-w-full table-panel">
+    <p-table [value]="getProperties(source.properties)">
+      <ng-template pTemplate="header">
+        <tr>
+          <th transloco="health.env.property"></th>
+          <th transloco="health.env.property"></th>
+          <th transloco="health.env.origin"></th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-property>
+        <tr>
+          <td>{{ property }}</td>
+          <td style="line-break:anywhere">{{ source.properties[property].value }}</td>
+          <td>{{ source.properties[property].origin }}</td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </p-panel>
+}

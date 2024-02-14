@@ -13,6 +13,9 @@ import { EditorModule } from 'primeng/editor';
 import { TreeSelectModule } from 'primeng/treeselect';
 import { TreeNode } from 'primeng/api';
 import { InputNumberModule } from 'primeng/inputnumber';
+import { DialogService } from 'primeng/dynamicdialog';
+import { TagModule } from 'primeng/tag';
+import { BlockUIModule } from 'primeng/blockui';
 
 import { AuditInformationComponent, EditFormComponent } from '../../../layout';
 import { AuthService, Role } from '../../../auth';
@@ -27,6 +30,7 @@ import {
   TaskService
 } from '../../../api';
 import { TaskForm, TaskTypeRegistry } from '../../../task-type';
+import { TaskSubmissionComponent } from '../task-submission/task-submission.component';
 
 /**
  * Task Form
@@ -47,8 +51,11 @@ import { TaskForm, TaskTypeRegistry } from '../../../task-type';
     NgComponentOutlet,
     DatePipe,
     InputNumberModule,
-    TreeSelectModule
+    TreeSelectModule,
+    TagModule,
+    BlockUIModule
   ],
+  providers: [DialogService],
   templateUrl: './task-form.component.html',
   styleUrl: './task-form.component.scss'
 })
@@ -56,7 +63,13 @@ export class TaskFormComponent extends EditFormComponent<TaskDto, TaskService, T
   /**
    * The quill module configuration.
    */
-  readonly quillModules = {htmlEditButton: {}};
+  readonly quillModules = {
+    htmlEditButton: {
+      okText: this.translationService.translate('common.ok'),
+      cancelText: this.translationService.translate('common.cancel'),
+      msg: this.translationService.translate('quill-html-edit-hint')
+    }
+  };
 
   /**
    * Whether the form should be readonly.
@@ -113,6 +126,11 @@ export class TaskFormComponent extends EditFormComponent<TaskDto, TaskService, T
    */
   supportedTaskGroupTypes: string[];
 
+  /**
+   * Whether the task type supports description generation.
+   */
+  supportsDescriptionGeneration: boolean;
+
   private allTaskCategories: TaskCategoryDto[];
   private allOrganizationalUnits: OrganizationalUnitDto[];
   private allTaskGroups: TaskGroupDto[];
@@ -128,6 +146,7 @@ export class TaskFormComponent extends EditFormComponent<TaskDto, TaskService, T
               private readonly authService: AuthService,
               private readonly route: ActivatedRoute,
               private readonly router: Router,
+              private readonly dialogService: DialogService,
               private readonly changeDetectorRef: ChangeDetectorRef) {
     super(entityService, new FormGroup<TaskForm>({
       organizationalUnitId: new FormControl<number | null>(null, [Validators.required]),
@@ -139,10 +158,11 @@ export class TaskFormComponent extends EditFormComponent<TaskDto, TaskService, T
       taskType: new FormControl<string | null>('none', [Validators.required, Validators.maxLength(100)]),
       status: new FormControl<StatusEnum | null>('DRAFT', [Validators.required]),
       taskGroupId: new FormControl<number | null>(null, []),
-      taskCategoryIds: new FormArray<FormControl<number | null>>([]),
+      taskCategoryIds: new FormArray<FormControl<TreeNode | null>>([]),
       additionalData: new FormGroup<any>({})
     }), 'tasks.');
     this.readonly = false;
+    this.supportsDescriptionGeneration = false;
     this.organizationalUnits = [];
     this.allOrganizationalUnits = [];
     this.taskGroups = [];
@@ -153,7 +173,7 @@ export class TaskFormComponent extends EditFormComponent<TaskDto, TaskService, T
     this.types = [];
     this.statuses = [];
     this.difficulties = [];
-    this.role = this.authService.user?.maxRole ?? 'tutor';
+    this.role = this.authService.user?.maxRole ?? 'TUTOR';
   }
 
   /**
@@ -163,7 +183,7 @@ export class TaskFormComponent extends EditFormComponent<TaskDto, TaskService, T
     // Listen to user role changes
     this.authService.userChanged.pipe(takeUntil(this.destroy$))
       .subscribe(user => {
-        this.role = user?.maxRole ?? 'tutor';
+        this.role = user?.maxRole ?? 'TUTOR';
         this.setStatusDisablesAndReadonly();
         this.setOrganizationalUnits();
       });
@@ -229,38 +249,43 @@ export class TaskFormComponent extends EditFormComponent<TaskDto, TaskService, T
     return {name: entity.title};
   }
 
-  override async onSuccess(operation: 'create' | 'update'): Promise<void> {
-    await this.router.navigate(['tasks']);
+  override async onSuccess(id: number, operation: 'create' | 'update'): Promise<void> {
+    await this.loadTask(id);
   }
 
   override modifyValueBeforeSend(data: Partial<{ [K in keyof TaskForm]: any }>, type: 'create' | 'update'): any {
     return {
       ...data,
+      descriptionDe: data.descriptionDe ?? '',
+      descriptionEn: data.descriptionEn ?? '',
       taskCategoryIds: data.taskCategoryIds ? data.taskCategoryIds.map((x: TreeNode) => x.data) : []
     };
   }
 
-//#endregion
+  //#endregion
 
   //#region --- Load data ---
 
   private async loadTask(id: string | number): Promise<void> {
     try {
+      this.startLoading();
       const data = await this.entityService.get(+id);
       this.originalEntity = data.dto;
       this.additionalData = data.additionalData;
 
-      for (let i = 0; i < this.form.controls.taskCategoryIds.length; i++) {
-        this.form.controls.taskCategoryIds.removeAt(0);
-      }
+      // for (let i = 0; i < this.form.controls.taskCategoryIds.length; i++) {
+      //   this.form.controls.taskCategoryIds.removeAt(0);
+      // }
 
-      for (let taskCategoryId of this.originalEntity?.taskCategoryIds ?? []) {
-        this.form.controls.taskCategoryIds.controls.push(new FormControl<number | null>(null, []));
-      }
+      // for (let taskCategoryId of this.originalEntity?.taskCategoryIds ?? []) {
+      //   this.form.controls.taskCategoryIds.controls.push(new FormControl<TreeNode | null>(null, []));
+      // }
 
-      this.form.patchValue(this.originalEntity);
+      this.form.patchValue({...this.originalEntity, taskCategoryIds: []});
+      this.form.markAsPristine();
       this.setStatusDisablesAndReadonly();
       this.changeDetectorRef.detectChanges(); // required to prevent error
+      this.onOrganizationalUnitChanged(this.originalEntity?.organizationalUnitId);
     } catch (err) {
       console.error('[TaskFormComponent] Could not load task data', err);
       let detail = 'Unknown error';
@@ -278,11 +303,14 @@ export class TaskFormComponent extends EditFormComponent<TaskDto, TaskService, T
         key: 'global'
       });
       await this.cancel();
+    } finally {
+      this.finishLoading();
     }
   }
 
   private async loadOrganizationalUnits(): Promise<void> {
     try {
+      this.startLoading();
       this.allOrganizationalUnits = (await this.organizationalUnitService.load(0, 999999, [{field: 'name', order: 1}])).content;
       this.setOrganizationalUnits();
     } catch (err) {
@@ -293,11 +321,14 @@ export class TaskFormComponent extends EditFormComponent<TaskDto, TaskService, T
         life: 10000,
         key: 'global'
       });
+    } finally {
+      this.finishLoading();
     }
   }
 
   private async loadTaskGroups(): Promise<void> {
     try {
+      this.startLoading();
       this.allTaskGroups = (await this.taskGroupService.load(0, 999999, [{field: 'name', order: 1}])).content;
     } catch (err) {
       console.error('[TaskFormComponent] Could not load task groups', err);
@@ -307,11 +338,14 @@ export class TaskFormComponent extends EditFormComponent<TaskDto, TaskService, T
         life: 10000,
         key: 'global'
       });
+    } finally {
+      this.finishLoading();
     }
   }
 
   private async loadTaskCategories(): Promise<void> {
     try {
+      this.startLoading();
       this.allTaskCategories = (await this.taskCategoriesService.load(0, 999999, [{field: 'name', order: 1}])).content;
     } catch (err) {
       console.error('[TaskFormComponent] Could not load task categories', err);
@@ -321,6 +355,8 @@ export class TaskFormComponent extends EditFormComponent<TaskDto, TaskService, T
         life: 10000,
         key: 'global'
       });
+    } finally {
+      this.finishLoading();
     }
   }
 
@@ -352,8 +388,13 @@ export class TaskFormComponent extends EditFormComponent<TaskDto, TaskService, T
     }
 
     this.organizationalUnits = this.allOrganizationalUnits.filter(x => user.isFullAdmin || user.roles.find(r => r.organizationalUnit === x.id));
-    if (this.organizationalUnits.length === 1 && !this.form.value.organizationalUnitId)
-      this.form.patchValue({organizationalUnitId: this.organizationalUnits[0].id});
+
+    //Automated selection: Not implemented yet due to async loading issues of TaskCategories
+
+    // if (this.organizationalUnits.length === 1 && !this.form.value.organizationalUnitId) {
+    //   this.form.patchValue({organizationalUnitId: this.organizationalUnits[0].id});
+    // }
+
   }
 
   private setStatusDisablesAndReadonly(): void {
@@ -362,7 +403,7 @@ export class TaskFormComponent extends EditFormComponent<TaskDto, TaskService, T
       return; // should never happen
 
     // check if readonly
-    this.readonly = this.role === 'tutor' && !!this.originalEntity && this.originalEntity.status === 'APPROVED';
+    this.readonly = this.role === 'TUTOR' && !!this.originalEntity && this.originalEntity.status === 'APPROVED';
     if (this.readonly)
       this.form.disable();
     else
@@ -372,7 +413,7 @@ export class TaskFormComponent extends EditFormComponent<TaskDto, TaskService, T
     this.statuses = this.statuses.map(s => {
       return {
         ...s,
-        disabled: s.value === 'APPROVED' && this.role === 'tutor'
+        disabled: s.value === 'APPROVED' && this.role === 'TUTOR'
       };
     });
   }
@@ -386,7 +427,8 @@ export class TaskFormComponent extends EditFormComponent<TaskDto, TaskService, T
       this.supportedTaskGroupTypes.includes(x.taskGroupType));
 
     // Task categories
-    for (let i = 0; i < this.form.controls.taskCategoryIds.length; i++) {
+    const noTaskCat = this.form.controls.taskCategoryIds.length;
+    for (let i = 0; i < noTaskCat; i++) {
       this.removeTaskCategory(0);
     }
     const tmp = this.allTaskCategories.filter(x => x.organizationalUnitId === value &&
@@ -412,17 +454,40 @@ export class TaskFormComponent extends EditFormComponent<TaskDto, TaskService, T
       };
     });
 
-    if (this.originalEntity) {
-      for (let i = 0; i < (this.originalEntity?.taskCategoryIds?.length ?? 0); i++) {
+    // Patch form value
+    const recursiveSearch = (node: TreeNode, id: number): TreeNode | null => {
+      if (node.data === id)
+        return node;
+      for (const child of node.children ?? []) {
+        const result = recursiveSearch(child, id);
+        if (result)
+          return result;
+      }
+      return null;
+    };
+    if (this.originalEntity && this.originalEntity.taskCategoryIds) {
+      for (let i = 0; i < (this.originalEntity.taskCategoryIds.length ?? 0); i++) {
         this.addTaskCategory();
       }
-      this.form.patchValue({taskCategoryIds: this.originalEntity.taskCategoryIds});
+      const nodes: TreeNode[] = (this.originalEntity.taskCategoryIds.flatMap(x => {
+        const result: TreeNode[] = [];
+        for (const node of this.taskCategories) {
+          const tmp = recursiveSearch(node, x);
+          if (tmp)
+            result.push(tmp);
+        }
+        return result;
+      })
+        .filter(x => !!x)
+        .map(x => x!)) ?? [];
+      this.form.patchValue({taskCategoryIds: nodes});
     }
   }
 
   private onTaskTypeChanged(value: string | null): void {
     // Set task group validation
     this.supportedTaskGroupTypes = TaskTypeRegistry.getSupportsTaskGroupTypes(value);
+    this.supportsDescriptionGeneration = TaskTypeRegistry.supportsDescriptionGeneration(value);
     if (this.supportedTaskGroupTypes.length > 0) {
       this.form.controls.taskGroupId.addValidators(Validators.required);
       this.form.updateValueAndValidity();
@@ -449,7 +514,7 @@ export class TaskFormComponent extends EditFormComponent<TaskDto, TaskService, T
    * Adds a new task category row to the form.
    */
   addTaskCategory(): void {
-    this.form.controls.taskCategoryIds.push(new FormControl<number | null>(null, []));
+    this.form.controls.taskCategoryIds.push(new FormControl<TreeNode | null>(null, []));
   }
 
   /**
@@ -460,4 +525,32 @@ export class TaskFormComponent extends EditFormComponent<TaskDto, TaskService, T
     this.form.controls.taskCategoryIds.removeAt(index);
   }
 
+  /**
+   * Gets the currently selected task group.
+   */
+  getTaskGroup(): TaskGroupDto | undefined {
+    return this.taskGroups.find(x => x.id === this.form.value.taskGroupId);
+  }
+
+  /**
+   * Opens the dialog to test the task.
+   */
+  testTask(): void {
+    if (!this.originalEntity)
+      return;
+
+    this.dialogService.open(TaskSubmissionComponent, {
+      header: this.translationService.translate(this.baseTranslationKey + 'submitTest'),
+      width: '90%',
+      maximizable: true,
+      style: {
+        minWidth: '500px',
+        minHeight: '500px'
+      },
+      data: {
+        taskId: this.originalEntity.id,
+        taskType: this.originalEntity.taskType
+      }
+    });
+  }
 }

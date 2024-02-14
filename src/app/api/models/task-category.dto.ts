@@ -20,4 +20,9 @@ export interface TaskCategoryDto extends Audited {
    * The id of the organizational unit.
    */
   organizationalUnitId: number;
+
+  /**
+   * Whether the task category is synced with moodle.
+   */
+  moodleSynced: boolean;
 }

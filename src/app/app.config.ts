@@ -11,6 +11,7 @@ import { routes } from './app.routes';
 import { environment } from '../environments/environment';
 import { TranslationLoaderService } from './translation-loader.service';
 import { authInterceptor, langInterceptor } from './auth';
+import { customizeMonaco } from './monaco';
 
 /**
  * The injection token for the base API URL.
@@ -42,7 +43,14 @@ export const appConfig: ApplicationConfig = {
       },
       loader: TranslationLoaderService
     }),
-    importProvidersFrom(MonacoEditorModule.forRoot()),
+    importProvidersFrom(MonacoEditorModule.forRoot({
+      defaultOptions: {
+        scrollBeyondLastLine: false,
+        minimap: {enabled: false},
+        automaticLayout: true
+      },
+      onMonacoLoad: customizeMonaco
+    })),
     {provide: API_URL, useValue: environment.apiUrl},
     {provide: MessageService},
     {provide: LOCALE_ID, useValue: 'de-AT'}

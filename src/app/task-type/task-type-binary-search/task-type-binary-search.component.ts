@@ -1,12 +1,12 @@
 import { Component, OnChanges, OnDestroy, SimpleChanges } from '@angular/core';
 import { FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
+import { TranslocoDirective } from '@ngneat/transloco';
 import { distinctUntilChanged, Subscription } from 'rxjs';
+import { InputNumberModule } from 'primeng/inputnumber';
+import { PaginatorModule } from 'primeng/paginator';
 
 import { TaskTypeFormComponent } from '../task-type-form.component';
 import { TaskGroupService } from '../../api';
-import { InputNumberModule } from 'primeng/inputnumber';
-import { PaginatorModule } from 'primeng/paginator';
-import { TranslocoDirective } from '@ngneat/transloco';
 
 /**
  * Task Type Form: Binary Search

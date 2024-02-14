@@ -2,8 +2,11 @@
   <div class="grid formgrid p-fluid">
     <div class="field mb-4 col-12 md:col-6">
       <label for="minNumber" transloco="taskGroupTypes.binary-search.fields.minNumber"></label>
-      <p-inputNumber inputId="minNumber" formControlName="minNumber" [maxFractionDigits]="0" />
-      @if (form.controls.minNumber?.dirty || form.controls.minNumber?.touched) {
+      <p-inputGroup>
+        <p-inputNumber inputId="minNumber" formControlName="minNumber" [maxFractionDigits]="0" />
+        <p-button icon="pi pi-refresh" severity="secondary" (onClick)="loadNumbers()" [loading]="loading" />
+      </p-inputGroup>
+      @if (form.controls.minNumber.dirty || form.controls.minNumber.touched) {
         <small class="block mt-1 p-error">
           {{ getError(form.controls.minNumber, 'taskGroupTypes.binary-search.fields.minNumber') }}
         </small>
@@ -13,7 +16,7 @@
     <div class="field mb-4 col-12 md:col-6">
       <label for="maxNumber" transloco="taskGroupTypes.binary-search.fields.maxNumber"></label>
       <p-inputNumber inputId="maxNumber" formControlName="maxNumber" [maxFractionDigits]="0" />
-      @if (form.controls.maxNumber?.dirty || form.controls.maxNumber?.touched) {
+      @if (form.controls.maxNumber.dirty || form.controls.maxNumber.touched) {
         <small class="block mt-1 p-error">
           {{ getError(form.controls.maxNumber, 'taskGroupTypes.binary-search.fields.maxNumber') }}
         </small>

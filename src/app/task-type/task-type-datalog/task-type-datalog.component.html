@@ -1,0 +1,34 @@
+<div class="surface-card p-4 shadow-2 border-round p-fluid mb-4" [formGroup]="form">
+  <div class="grid formgrid p-fluid">
+    <div class="field mb-4 col-12">
+      <label for="solution" transloco="taskTypes.datalog.fields.solution"></label>
+      <ngx-monaco-editor id="solution" formControlName="solution" [options]="editorOptions" style="height: 300px;"/>
+      <small transloco="taskTypes.datalog.descriptions.solution" class="text-color-secondary block mt-1"></small>
+      @if (form.controls.solution.dirty || form.controls.solution.touched) {
+        <small class="block mt-1 p-error">
+          {{ getError(form.controls.solution, 'taskTypes.datalog.fields.solution') }}
+        </small>
+      }
+    </div>
+    <div class="field mb-4 col-12">
+      <label for="query" transloco="taskTypes.datalog.fields.query"></label>
+      <ngx-monaco-editor id="query" formControlName="query" [options]="editorOptions" style="height: 50px;"/>
+      <small transloco="taskTypes.datalog.descriptions.query" class="text-color-secondary block mt-1"></small>
+      @if (form.controls.query.dirty || form.controls.query.touched) {
+        <small class="block mt-1 p-error">
+          {{ getError(form.controls.query, 'taskTypes.datalog.fields.query') }}
+        </small>
+      }
+    </div>
+    <div class="field mb-4 col-12">
+      <label for="uncheckedTerms" transloco="taskTypes.datalog.fields.uncheckedTerms"></label>
+      <ngx-monaco-editor id="uncheckedTerms" formControlName="uncheckedTerms" [options]="editorOptions" style="height: 100px;"/>
+      <small transloco="taskTypes.datalog.descriptions.uncheckedTerms" class="text-color-secondary block mt-1"></small>
+      @if (form.controls.uncheckedTerms.dirty || form.controls.uncheckedTerms.touched) {
+        <small class="block mt-1 p-error">
+          {{ getError(form.controls.uncheckedTerms, 'taskTypes.datalog.fields.uncheckedTerms') }}
+        </small>
+      }
+    </div>
+  </div>
+</div>

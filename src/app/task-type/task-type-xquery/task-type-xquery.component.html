@@ -1,0 +1,22 @@
+<div class="surface-card p-4 shadow-2 border-round p-fluid mb-4" [formGroup]="form">
+  <div class="grid formgrid p-fluid">
+    <div class="field mb-4 col-12">
+      <label for="solution" transloco="taskTypes.xquery.fields.solution"></label>
+      <ngx-monaco-editor id="solution" formControlName="solution" [options]="editorOptionsXQ" style="height: 400px;"/>
+      @if (form.controls.solution.dirty || form.controls.solution.touched) {
+        <small class="block mt-1 p-error">
+          {{ getError(form.controls.solution, 'taskTypes.xquery.fields.solution') }}
+        </small>
+      }
+    </div>
+    <div class="field mb-4 col-12">
+      <label for="sorting" transloco="taskTypes.xquery.fields.sorting"></label>
+      <ngx-monaco-editor id="sorting" formControlName="sorting" [options]="editorOptionsXP" style="height: 50px;"/>
+      @if (form.controls.sorting.dirty || form.controls.sorting.touched) {
+        <small class="block mt-1 p-error">
+          {{ getError(form.controls.sorting, 'taskTypes.xquery.fields.sorting') }}
+        </small>
+      }
+    </div>
+  </div>
+</div>

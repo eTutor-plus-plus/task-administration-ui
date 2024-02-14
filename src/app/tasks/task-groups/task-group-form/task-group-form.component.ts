@@ -10,6 +10,7 @@ import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
 import { DropdownModule } from 'primeng/dropdown';
 import { EditorModule } from 'primeng/editor';
+import { BlockUIModule } from 'primeng/blockui';
 
 import { AuditInformationComponent, EditFormComponent } from '../../../layout';
 import { AuthService, Role } from '../../../auth';
@@ -33,7 +34,8 @@ import { TaskGroupForm, TaskGroupTypeRegistry } from '../../../task-group-type';
     EditorModule,
     AuditInformationComponent,
     NgComponentOutlet,
-    DatePipe
+    DatePipe,
+    BlockUIModule
   ],
   templateUrl: './task-group-form.component.html',
   styleUrl: './task-group-form.component.scss'
@@ -43,7 +45,13 @@ export class TaskGroupFormComponent extends EditFormComponent<TaskGroupDto, Task
   /**
    * The quill module configuration.
    */
-  readonly quillModules = {htmlEditButton: {}};
+  readonly quillModules = {
+    htmlEditButton: {
+      okText: this.translationService.translate('common.ok'),
+      cancelText: this.translationService.translate('common.cancel'),
+      msg: this.translationService.translate('quill-html-edit-hint')
+    }
+  };
 
   /**
    * Whether the form should be readonly.
@@ -80,6 +88,11 @@ export class TaskGroupFormComponent extends EditFormComponent<TaskGroupDto, Task
    */
   additionalData?: Record<string, unknown>;
 
+  /**
+   * Whether the task type supports description generation.
+   */
+  supportsDescriptionGeneration: boolean;
+
   private allOrganizationalUnits: OrganizationalUnitDto[];
   private readonly destroy$ = new Subject<void>();
 
@@ -102,6 +115,7 @@ export class TaskGroupFormComponent extends EditFormComponent<TaskGroupDto, Task
       additionalData: new FormGroup<any>({})
     }), 'taskGroups.');
     this.readonly = false;
+    this.supportsDescriptionGeneration = false;
     this.organizationalUnits = [];
     this.allOrganizationalUnits = [];
     this.types = TaskGroupTypeRegistry.getTaskTypes().map(x => {
@@ -112,7 +126,7 @@ export class TaskGroupFormComponent extends EditFormComponent<TaskGroupDto, Task
       {value: StatusEnum.READY_FOR_APPROVAL, text: this.translationService.translate('taskStatus.' + StatusEnum.READY_FOR_APPROVAL), disabled: false},
       {value: StatusEnum.APPROVED, text: this.translationService.translate('taskStatus.' + StatusEnum.APPROVED), disabled: false}
     ];
-    this.role = this.authService.user?.maxRole ?? 'tutor';
+    this.role = this.authService.user?.maxRole ?? 'TUTOR';
   }
 
   /**
@@ -122,7 +136,7 @@ export class TaskGroupFormComponent extends EditFormComponent<TaskGroupDto, Task
     // Listen to user role changes
     this.authService.userChanged.pipe(takeUntil(this.destroy$))
       .subscribe(user => {
-        this.role = user?.maxRole ?? 'tutor';
+        this.role = user?.maxRole ?? 'TUTOR';
         this.setStatusDisablesAndReadonly();
         this.setOrganizationalUnits();
       });
@@ -140,6 +154,7 @@ export class TaskGroupFormComponent extends EditFormComponent<TaskGroupDto, Task
           this.form.controls.additionalData.removeControl(x);
         }
         this.componentForm = TaskGroupTypeRegistry.getComponent(value);
+        this.supportsDescriptionGeneration = TaskGroupTypeRegistry.supportsDescriptionGeneration(value);
       });
 
     // Load organizational units
@@ -187,18 +202,28 @@ export class TaskGroupFormComponent extends EditFormComponent<TaskGroupDto, Task
     return {name: entity.name};
   }
 
-  override async onSuccess(operation: 'create' | 'update'): Promise<void> {
-    await this.router.navigate(['taskGroups']);
+  override async onSuccess(id: number | string, operation: 'create' | 'update'): Promise<void> {
+    await this.loadTaskGroup(id);
+  }
+
+  override modifyValueBeforeSend(data: Partial<{ [K in keyof TaskGroupForm]: any }>, type: 'create' | 'update'): any {
+    return {
+      ...data,
+      descriptionDe: data.descriptionDe ?? '',
+      descriptionEn: data.descriptionEn ?? ''
+    };
   }
 
   //#endregion
 
   private async loadTaskGroup(id: string | number): Promise<void> {
     try {
+      this.startLoading();
       const data = await this.entityService.get(+id);
       this.originalEntity = data.dto;
       this.additionalData = data.additionalData;
       this.form.patchValue(this.originalEntity);
+      this.form.markAsPristine();
       this.setStatusDisablesAndReadonly();
       this.changeDetectorRef.detectChanges(); // required to prevent error
     } catch (err) {
@@ -218,11 +243,14 @@ export class TaskGroupFormComponent extends EditFormComponent<TaskGroupDto, Task
         key: 'global'
       });
       await this.cancel();
+    } finally {
+      this.finishLoading();
     }
   }
 
   private async loadOrganizationalUnits(): Promise<void> {
     try {
+      this.startLoading();
       this.allOrganizationalUnits = (await this.organizationalUnitService.load(0, 999999, [{field: 'name', order: 1}])).content;
       this.setOrganizationalUnits();
     } catch (err) {
@@ -233,6 +261,8 @@ export class TaskGroupFormComponent extends EditFormComponent<TaskGroupDto, Task
         life: 10000,
         key: 'global'
       });
+    } finally {
+      this.finishLoading();
     }
   }
 
@@ -270,7 +300,7 @@ export class TaskGroupFormComponent extends EditFormComponent<TaskGroupDto, Task
       return; // should never happen
 
     // check if readonly
-    this.readonly = this.role === 'tutor' && !!this.originalEntity && this.originalEntity.status === 'APPROVED';
+    this.readonly = this.role === 'TUTOR' && !!this.originalEntity && this.originalEntity.status === 'APPROVED';
     if (this.readonly)
       this.form.disable();
     else
@@ -280,7 +310,7 @@ export class TaskGroupFormComponent extends EditFormComponent<TaskGroupDto, Task
     this.statuses = this.statuses.map(s => {
       return {
         ...s,
-        disabled: s.value === 'APPROVED' && this.role === 'tutor'
+        disabled: s.value === 'APPROVED' && this.role === 'TUTOR'
       };
     });
   }

@@ -1,0 +1,22 @@
+<div class="surface-card p-4 shadow-2 border-round p-fluid mb-4" [formGroup]="form">
+  <div class="grid formgrid p-fluid">
+    <div class="field mb-4 col-12">
+      <label for="diagnoseFacts" transloco="taskGroupTypes.datalog.fields.diagnoseFacts"></label>
+      <ngx-monaco-editor id="diagnoseFacts" formControlName="diagnoseFacts" [options]="editorOptions"/>
+      @if (form.controls.diagnoseFacts.dirty || form.controls.diagnoseFacts.touched) {
+        <small class="block mt-1 p-error">
+          {{ getError(form.controls.diagnoseFacts, 'taskGroupTypes.datalog.fields.diagnoseFacts') }}
+        </small>
+      }
+    </div>
+    <div class="field mb-4 col-12">
+      <label for="submissionFacts" transloco="taskGroupTypes.datalog.fields.submissionFacts"></label>
+      <ngx-monaco-editor id="submissionFacts" formControlName="submissionFacts" [options]="editorOptions"/>
+      @if (form.controls.submissionFacts.dirty || form.controls.submissionFacts.touched) {
+        <small class="block mt-1 p-error">
+          {{ getError(form.controls.submissionFacts, 'taskGroupTypes.datalog.fields.submissionFacts') }}
+        </small>
+      }
+    </div>
+  </div>
+</div>

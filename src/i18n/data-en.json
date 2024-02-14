@@ -5,12 +5,14 @@
       "name": "Name"
     },
     "errors": {
+      "moodleSync": "The organizational unit is not synchronized with Moodle.",
       "load": "The organizational units could not be loaded.",
       "delete": "The organizational unit '{{name}}' could not be deleted.",
       "create": "The organizational unit '{{name}}' could not be created.",
       "update": "The organizational unit '{{name}}' could not be updated."
     },
     "success": {
+      "moodleSync": "The synchronization with Moodle was has been successfully initiated.",
       "delete": "The organizational unit '{{name}}' was successfully deleted.",
       "create": "The organizational unit '{{name}}' was successfully created.",
       "update": "The organizational unit '{{name}}' was successfully updated."
@@ -54,9 +56,9 @@
     "failedLoginCount": "Failed Login Count: {{value}}"
   },
   "roles": {
-    "admin": "Administrator",
-    "instructor": "Course Instructor",
-    "tutor": "Tutor"
+    "ADMIN": "Organizational Unit Administrator",
+    "INSTRUCTOR": "Course Instructor",
+    "TUTOR": "Tutor"
   },
   "taskApps": {
     "title": "Task Apps",
@@ -88,12 +90,14 @@
       "organizationalUnitId": "Organizational Unit"
     },
     "errors": {
+      "moodleSync": "The task category is not synchronized with Moodle.",
       "load": "The task categories could not be loaded.",
       "delete": "The task category '{{name}}' could not be deleted.",
       "create": "The task category '{{name}}' could not be created.",
       "update": "The task category '{{name}}' could not be updated."
     },
     "success": {
+      "moodleSync": "The synchronization with Moodle was has been successfully initiated.",
       "delete": "The task category '{{name}}' was successfully deleted.",
       "create": "The task category '{{name}}' was successfully created.",
       "update": "The task category '{{name}}' was successfully updated."
@@ -128,7 +132,8 @@
     },
     "create": "Create Task Group",
     "edit": "Edit Task Group",
-    "approved": "Approved"
+    "approved": "Approved",
+    "descriptionGeneration": "If you leave the field empty, the description will be generated automatically when you save."
   },
   "tasks": {
     "title": "Tasks",
@@ -144,14 +149,16 @@
       "difficulty": "Difficulty",
       "maxPoints": "Max. Points",
       "taskGroupId": "Task Group",
-      "taskCategoryIds": "Task Categories"
+      "taskCategoryIds": "Task Categories",
+      "submitTest": "Test Task"
     },
     "errors": {
       "load": "The tasks could not be loaded.",
       "loadSingle": "The task could not be loaded.",
       "delete": "The task '{{name}}' could not be deleted.",
       "create": "The task '{{name}}' could not be created.",
-      "update": "The task '{{name}}' could not be updated."
+      "update": "The task '{{name}}' could not be updated.",
+      "groupNotApproved": "The associated task group has not yet been approved."
     },
     "success": {
       "delete": "The task '{{name}}' was successfully deleted.",
@@ -161,7 +168,29 @@
     "create": "Create Task",
     "edit": "Edit Task",
     "approved": "Approved",
-    "addTaskCategory": "Add Task Category"
+    "addTaskCategory": "Add Task Category",
+    "descriptionGeneration": "If you leave the field empty, the description will be generated automatically when you save."
+  },
+  "submission": {
+    "fields": {
+      "language": "Language",
+      "mode": "Evaluation Mode",
+      "feedbackLevel": "Feedback Level",
+      "submission": "Submission",
+      "result": "Result",
+      "maxPoints": "Max. Points",
+      "points": "Points",
+      "generalFeedback": "General Feedback",
+      "criteria": "Criteria"
+    },
+    "submit": "Submit",
+    "error": "The submission could not be sent."
+  },
+  "feedbackLevel": {
+    "0": "No Feedback",
+    "1": "Little Feedback",
+    "2": "Some Feedback",
+    "3": "Much Feedback"
   },
   "taskStatus": {
     "DRAFT": "Draft",

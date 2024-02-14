@@ -1,0 +1,21 @@
+<div class="p-fluid flex flex-column lg:flex-row h-full">
+  <div class="md:w-15rem md:mr-2">
+    <p-dropdown styleClass="mb-2" [options]="apps" [ngModel]="selectedApp" (onChange)="selectApp($event)"></p-dropdown>
+
+    <ul class="list-none m-0 p-0 flex flex-row lg:flex-column justify-content-between lg:justify-content-start mb-5 lg:mb-0">
+      @for (item of availableTabs; track item) {
+        <li>
+          <a class="lg:w-15rem flex align-items-center cursor-pointer p-3 border-round hover:surface-200 transition-duration-150 transition-colors no-underline"
+             [routerLink]="[item]" [routerLinkActive]="'surface-200'">
+            <i class="pi {{ 'health.' + item + '.icon' | transloco }} md:mr-2 text-600" [routerLinkActive]="'text-700'"></i>
+            <span class="font-medium hidden lg:block text-700" [routerLinkActive]="'text-800'" [transloco]="'health.' + item + '.title'"></span>
+          </a>
+        </li>
+      }
+    </ul>
+  </div>
+
+  <div class="flex-auto xl:ml-5 h-full">
+    <router-outlet></router-outlet>
+  </div>
+</div>

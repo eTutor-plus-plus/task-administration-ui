@@ -130,18 +130,18 @@ export class AuthService implements OnDestroy {
   private parseToken(token: AuthTokenModel): void {
     const claims = jose.decodeJwt(token.access_token);
     const fullAdmin = <boolean>claims['full_admin'];
-    let maxRole: Role = 'tutor';
+    let maxRole: Role = 'TUTOR';
     const roles: RoleAssignment[] = <RoleAssignment[]>claims['roles'];
     if (fullAdmin)
-      maxRole = 'full_admin';
+      maxRole = 'FULL_ADMIN';
     else {
       for (let role of roles) {
         switch (role.role) {
-          case 'instructor':
-            maxRole = maxRole != 'admin' ? 'instructor' : maxRole;
+          case 'INSTRUCTOR':
+            maxRole = maxRole != 'ADMIN' ? 'INSTRUCTOR' : maxRole;
             break;
-          case 'admin':
-            maxRole = 'admin';
+          case 'ADMIN':
+            maxRole = 'ADMIN';
             break;
         }
       }

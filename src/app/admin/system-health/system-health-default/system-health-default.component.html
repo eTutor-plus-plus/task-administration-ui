@@ -1,0 +1,58 @@
+<div class="grid">
+  <div class="col-12 lg:col-6 xl:col-4">
+    <div class="surface-card shadow-2 p-3 border-1 border-50 border-round">
+      <div class="flex justify-content-between mb-3">
+        <div>
+          <span class="block text-500 font-medium mb-3" transloco="health.health.status"></span>
+          <div class="text-900 font-medium text-xl">{{ health?.status }}</div>
+        </div>
+        <div class="flex align-items-center justify-content-center bg-green-100 border-round" style="width:2.5rem;height:2.5rem">
+          <i [ngClass]="['pi', 'text-xl', 'pi-heart', 'health.health.foregroundClass.' + health?.status | transloco]"></i>
+        </div>
+      </div>
+      <span>&nbsp;</span>
+    </div>
+  </div>
+
+  @for (component of getProperties(health?.components); track component) {
+    <div class="col-12 lg:col-6 xl:col-4">
+      <div class="surface-card shadow-2 p-3 border-1 border-50 border-round">
+        <div class="flex justify-content-between mb-3">
+          <div>
+            <span class="block text-500 font-medium mb-3" [transloco]="'health.health.' + component"></span>
+            <div class="text-900 font-medium text-xl">{{ (health?.components ?? {})[component].status }}</div>
+          </div>
+          <div
+            class="flex align-items-center justify-content-center {{ 'health.health.backgroundClass.' + (health?.components ?? {})[component].status | transloco }} border-round"
+            style="width:2.5rem;height:2.5rem">
+            <i
+              [ngClass]="['pi', 'text-xl', ('health.health.icons.' + component | transloco), 'health.health.foregroundClass.' + (health?.components ?? {})[component].status | transloco]"></i>
+          </div>
+        </div>
+        @if ((health?.components ?? {})[component].details) {
+          <a class="text-gray-500 cursor-pointer" (click)="op.toggle($event)">{{ 'health.health.details.button' | transloco }}</a>
+          <p-overlayPanel #op>
+            <table>
+              <thead>
+              <tr>
+                <th [transloco]="'health.health.details.name'" class="font-bold border-bottom-2 mb-1"></th>
+                <th [transloco]="'health.health.details.value'" class="font-bold border-bottom-2 mb-1"></th>
+              </tr>
+              </thead>
+              <tbody>
+                @for (detail of getProperties((health?.components ?? {})[component].details); track detail) {
+                  <tr>
+                    <td class="border-bottom-1 border-gray-300 p-2">{{ 'health.health.details.' + component + '.' + detail | transloco }}</td>
+                    <td class="border-bottom-1 border-gray-300 p-2">{{ toReadableValue(component, (health?.components ?? {})[component].details[detail]) }}</td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          </p-overlayPanel>
+        } @else {
+          <span>&nbsp;</span>
+        }
+      </div>
+    </div>
+  }
+</div>

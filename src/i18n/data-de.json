@@ -5,12 +5,14 @@
       "name": "Name"
     },
     "errors": {
+      "moodleSync": "Die Organisationseinheit ist nicht mit Moodle synchronisiert.",
       "load": "Die Organisationseinheiten konnten nicht geladen werden.",
       "delete": "Die Organisationseinheit '{{name}}' konnte nicht gelöscht werden.",
       "create": "Die Organisationseinheit '{{name}}' konnte nicht erstellt werden.",
       "update": "Die Änderungen der Organisationseinheit '{{name}}' konnten nicht gespeichert werden."
     },
     "success": {
+      "moodleSync": "Die Synchronisation mit Moodle wurde erfolgreich initiiert.",
       "delete": "Die Organisationseinheit '{{name}}' wurde erfolgreich gelöscht.",
       "create": "Die Organisationseinheit '{{name}}' wurde erfolgreich erstellt.",
       "update": "Die Änderungen der Organisationseinheit '{{name}}' wurden erfolgreich gespeichert."
@@ -54,7 +56,7 @@
     "failedLoginCount": "Anzahl fehlgeschlagener Anmeldeversuche: {{value}}"
   },
   "roles": {
-    "ADMIN": "Administrator/in",
+    "ADMIN": "Organisationseinheit-Administrator/in",
     "INSTRUCTOR": "LVA-Leiter/in",
     "TUTOR": "Tutor/in"
   },
@@ -88,12 +90,14 @@
       "organizationalUnitId": "Organisationseinheit"
     },
     "errors": {
+      "moodleSync": "Die Aufgaben-Kategorie ist nicht mit Moodle synchronisiert.",
       "load": "Die Aufgaben-Kategorien konnten nicht geladen werden.",
       "delete": "Die Aufgaben-Kategorie '{{name}}' konnte nicht gelöscht werden.",
       "create": "Die Aufgaben-Kategorie '{{name}}' konnte nicht erstellt werden.",
       "update": "Die Änderungen der Aufgaben-Kategorie '{{name}}' konnten nicht gespeichert werden."
     },
     "success": {
+      "moodleSync": "Die Synchronisation mit Moodle wurde erfolgreich initiiert.",
       "delete": "Die Aufgaben-Kategorie '{{name}}' wurde erfolgreich gelöscht.",
       "create": "Die Aufgaben-Kategorie '{{name}}' wurde erfolgreich erstellt.",
       "update": "Die Änderungen der Aufgaben-Kategorie '{{name}}' wurden erfolgreich gespeichert."
@@ -128,7 +132,8 @@
     },
     "create": "Aufgaben-Gruppe erstellen",
     "edit": "Aufgaben-Gruppe bearbeiten",
-    "approved": "Freigegeben"
+    "approved": "Freigegeben",
+    "descriptionGeneration": "Wenn Sie das Feld leer lassen, wird beim Speichern die Beschreibung automatisch generiert."
   },
   "tasks": {
     "title": "Aufgaben",
@@ -151,7 +156,8 @@
       "loadSingle": "Die Aufgaben konnte nicht geladen werden.",
       "delete": "Die Aufgaben '{{name}}' konnte nicht gelöscht werden.",
       "create": "Die Aufgaben '{{name}}' konnte nicht erstellt werden.",
-      "update": "Die Änderungen der Aufgaben '{{name}}' konnten nicht gespeichert werden."
+      "update": "Die Änderungen der Aufgaben '{{name}}' konnten nicht gespeichert werden.",
+      "groupNotApproved": "Die zugehörige Aufgabengruppe wurde noch nicht freigegeben."
     },
     "success": {
       "delete": "Die Aufgaben '{{name}}' wurde erfolgreich gelöscht.",
@@ -161,7 +167,30 @@
     "create": "Aufgaben erstellen",
     "edit": "Aufgaben bearbeiten",
     "approved": "Freigegeben",
-    "addTaskCategory": "Aufgabenkategorie hinzufügen"
+    "addTaskCategory": "Aufgabenkategorie hinzufügen",
+    "submitTest": "Aufgabe testen",
+    "descriptionGeneration": "Wenn Sie das Feld leer lassen, wird beim Speichern die Beschreibung automatisch generiert."
+  },
+  "submission": {
+    "fields": {
+      "language": "Sprache",
+      "mode": "Auswertungsmodus",
+      "feedbackLevel": "Feedback-Level",
+      "submission": "Abgabe",
+      "result": "Ergebnis",
+      "maxPoints": "Max. Punkte",
+      "points": "Punkte",
+      "generalFeedback": "Allgemeines Feedback",
+      "criteria": "Kriterien"
+    },
+    "submit": "Abgeben",
+    "error": "Die Abgabe konnte nicht gesendet werden."
+  },
+  "feedbackLevel": {
+    "0": "Kein Feedback",
+    "1": "Wenig Feedback",
+    "2": "Etwas Feedback",
+    "3": "Viel Feedback"
   },
   "taskStatus": {
     "DRAFT": "Entwurf",

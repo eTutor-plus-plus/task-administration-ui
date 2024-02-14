@@ -1,0 +1,44 @@
+<div class="grid">
+  <div class="col-12 lg:col-6 xl:col-3">
+    <div class="surface-card shadow-2 p-3 border-1 border-50 border-round">
+      <div class="flex justify-content-between mb-3">
+        <div>
+          <span class="block text-500 font-medium mb-3" transloco="appName"></span>
+          <div class="text-900 font-medium text-xl">{{ adminHealth?.status }}</div>
+        </div>
+        <div class="flex align-items-center justify-content-center bg-green-100 border-round" style="width:2.5rem;height:2.5rem">
+          <i
+            [ngClass]="['pi', 'text-xl', 'health.health.statusIcon.' + adminHealth?.status | transloco, 'health.health.foregroundClass.' + adminHealth?.status | transloco]"></i>
+        </div>
+      </div>
+      @if (isAdmin) {
+        <a class="text-gray-500 no-underline" [routerLink]="['health']">{{ 'health.health.details.button' | transloco }}</a>
+      }
+    </div>
+  </div>
+
+  @for (app of health.keys(); track app) {
+    <div class="col-12 lg:col-6 xl:col-3">
+      <div class="surface-card shadow-2 p-3 border-1 border-50 border-round">
+        <div class="flex justify-content-between mb-3">
+          <div>
+            <span class="block text-500 font-medium mb-3" [transloco]="'taskTypes.' + app + '.title'"></span>
+            <div class="text-900 font-medium text-xl">{{ health.get(app)?.status ?? '--' }}</div>
+          </div>
+          <div class="flex align-items-center justify-content-center {{ 'health.health.backgroundClass.' + health.get(app)?.status | transloco }} border-round"
+               style="width:2.5rem;height:2.5rem">
+            <i
+              [ngClass]="['pi', 'text-xl', 'health.health.statusIcon.' + health.get(app)?.status | transloco, 'health.health.foregroundClass.' + health.get(app)?.status | transloco]"></i>
+          </div>
+        </div>
+        @if (isAdmin) {
+          @if (health.get(app)?.status) {
+            <a class="text-gray-500 no-underline" [routerLink]="['health']" [queryParams]="{type: app}">{{ 'health.health.details.button' | transloco }}</a>
+          } @else {
+            <span>&nbsp;</span>
+          }
+        }
+      </div>
+    </div>
+  }
+</div>

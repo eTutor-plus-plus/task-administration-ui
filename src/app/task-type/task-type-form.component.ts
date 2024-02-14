@@ -29,12 +29,14 @@ export abstract class TaskTypeFormComponent<TForm extends { [K in keyof TForm]: 
 
   private _originalData?: unknown;
   private _parentForm?: FormGroup<TaskForm>;
+  private _loadingCounter: number;
 
   /**
    * Creates a new instance of class TaskTypeFormComponent.
    */
   protected constructor() {
     this.translationService = inject(TranslocoService);
+    this._loadingCounter = 0;
   }
 
   /**
@@ -93,4 +95,44 @@ export abstract class TaskTypeFormComponent<TForm extends { [K in keyof TForm]: 
    */
   protected abstract initForm(): void;
 
+  //#region --- Loading ---
+
+  /**
+   * Returns whether data is currently loading.
+   */
+  get loading(): boolean {
+    return this._loadingCounter > 0;
+  }
+
+  /**
+   * Sets whether data is currently loading.
+   *
+   * @param value Whether data is currently loading.
+   */
+  protected set loading(value: boolean) {
+    if (value)
+      this.startLoading();
+    else
+      this.finishLoading();
+  }
+
+  /**
+   * Call this method when you start loading data.
+   */
+  protected startLoading(): void {
+    if (this._loadingCounter < 0)
+      this._loadingCounter = 0;
+    this._loadingCounter++;
+  }
+
+  /**
+   * Call this method when you finish loading data (or an error occurred).
+   */
+  protected finishLoading(): void {
+    this._loadingCounter--;
+    if (this._loadingCounter < 0)
+      this._loadingCounter = 0;
+  }
+
+  //#endregion
 }

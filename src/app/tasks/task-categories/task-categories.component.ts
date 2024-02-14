@@ -80,7 +80,7 @@ export class TaskCategoriesComponent extends TableDialogOverviewComponent<TaskCa
       }
     });
     this.organizationalUnits = [];
-    this.role = authService.user?.maxRole ?? 'tutor';
+    this.role = authService.user?.maxRole ?? 'TUTOR';
     this.showOrganizationalUnit = authService.user?.isFullAdmin || (authService?.user?.roles.length ?? 0) > 1;
   }
 
@@ -90,7 +90,7 @@ export class TaskCategoriesComponent extends TableDialogOverviewComponent<TaskCa
   ngOnInit(): void {
     this.authService.userChanged.pipe(takeUntil(this.destroy$))
       .subscribe(user => {
-        this.role = user?.maxRole ?? 'tutor';
+        this.role = user?.maxRole ?? 'TUTOR';
         this.showOrganizationalUnit = user?.isFullAdmin || (user?.roles.length ?? 0) > 1;
       });
     if (this.showOrganizationalUnit)
@@ -103,6 +103,23 @@ export class TaskCategoriesComponent extends TableDialogOverviewComponent<TaskCa
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
+  }
+
+  /**
+   * Initiates synchronization of the task category with Moodle
+   */
+  async sync(entity: TaskCategoryDto): Promise<void> {
+    try {
+      await this.entityService.syncWithMoodle(entity.id);
+      this.messageService.add({
+        key: 'global',
+        summary: this.translationService.translate(this.baseTranslationKey + 'success.moodleSync'),
+        severity: 'info'
+      });
+      setTimeout(() => this.reload(), 2000);
+    } catch (err) {
+      // ignore
+    }
   }
 
   /**
@@ -125,17 +142,17 @@ export class TaskCategoriesComponent extends TableDialogOverviewComponent<TaskCa
     const user = this.authService.user;
     return {
       readonly: action === 'create' ? false : (!user || (!user.isFullAdmin &&
-        user.roles.filter(x => x.organizationalUnit === entity?.organizationalUnitId && x.role === 'tutor').length > 0)),
+        user.roles.filter(x => x.organizationalUnit === entity?.organizationalUnitId && x.role === 'TUTOR').length > 0)),
       editableUnits: !user ? [] : (
         user.isFullAdmin ?
           this.organizationalUnits.map(x => x.id) :
-          user.roles.filter(x => x.role !== 'tutor').map(x => x.organizationalUnit)
+          user.roles.filter(x => x.role !== 'TUTOR').map(x => x.organizationalUnit)
       )
     };
   }
 
   override canCreate(): boolean {
-    return this.role !== 'tutor';
+    return this.role !== 'TUTOR';
   }
 
   override canDelete(entity: TaskCategoryDto): boolean {
@@ -147,11 +164,11 @@ export class TaskCategoriesComponent extends TableDialogOverviewComponent<TaskCa
       return true;
 
     const ou = user.roles.find(x => x.organizationalUnit == entity.organizationalUnitId);
-    return ou ? ou.role !== 'tutor' : false;
+    return ou ? ou.role !== 'TUTOR' : false;
   }
 
   private async loadOrganizationalUnits(): Promise<void> {
-    this.loading = true;
+    this.startLoading();
     try {
       const result = await this.organizationalUnitService.load(0, 999999, [{field: 'name', order: 1}]);
       this.organizationalUnits = result.content;
@@ -164,7 +181,7 @@ export class TaskCategoriesComponent extends TableDialogOverviewComponent<TaskCa
         key: 'global'
       });
     } finally {
-      this.loading = false;
+      this.finishLoading();
     }
   }
 

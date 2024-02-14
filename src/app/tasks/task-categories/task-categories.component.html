@@ -66,7 +66,13 @@
 
   <ng-template pTemplate="body" let-entity>
     <tr>
-      <td>{{ entity.id }}</td>
+      <td>
+        {{ entity.id }}
+        @if (!entity.moodleSynced) {
+          <p-button size="small" icon="pi pi-exclamation-triangle" severity="danger" [text]="true" (onClick)="sync(entity)"
+                    [pTooltip]="baseTranslationKey + 'errors.moodleSync' | transloco" [showDelay]="1000"/>
+        }
+      </td>
       @if (showOrganizationalUnit) {
         <td>{{ getOUName(entity.organizationalUnitId) }}</td>
       }

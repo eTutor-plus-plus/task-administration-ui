@@ -6,7 +6,7 @@
     "hoch": "assets/images/dke_hoch_de_white.svg"
   },
   "menu": {
-    "ou": "Organisationseinheiten",
+    "ou": "Organisationseinheiten / LVA",
     "users": "Benutzer",
     "taskApps": "Aufgaben-Apps",
     "tasks": "Aufgaben",
@@ -29,6 +29,7 @@
       "login": "Anmelden",
       "expired": "Ihre Sitzung ist abgelaufen. Bitte melden Sie sich erneut an.",
       "messages": {
+        "unavailable": "Der eTutor-Server ist nicht erreichbar. Bitte versuchen Sie es etwas später erneut.",
         "bad_credentials": "Ungültige Zugangsdaten",
         "no_connection": "Der eTutor-Server ist nicht erreichbar.",
         "login_failed": "Anmeldung fehlgeschlagen",
@@ -45,7 +46,8 @@
       "messages": {
         "success_summary": "Passwort angefordert",
         "success_detail": "Sofern der angegebene Benutzername existiert sollten Sie in Kürze eine E-Mail mit einem Link erhalten, um Ihr Passwort zurückzusetzen.",
-        "failed": "Die Anfrage ist fehlgeschlagen."
+        "failed": "Die Anfrage ist fehlgeschlagen.",
+        "no_connection": "Der eTutor-Server ist nicht erreichbar."
       }
     },
     "reset": {
@@ -59,7 +61,8 @@
         "password_error": "Die Passwörter stimmen nicht überein.",
         "success_summary": "Passwort zurückgesetzt",
         "success_detail": "Sie können sich nun mit Ihrem neuen Passwort anmelden.",
-        "failed": "Das Passwort konnte nicht zurückgesetzt werden."
+        "failed": "Das Passwort konnte nicht zurückgesetzt werden.",
+        "no_connection": "Der eTutor-Server ist nicht erreichbar."
       }
     },
     "activate": {
@@ -73,7 +76,8 @@
         "password_error": "Die Passwörter stimmen nicht überein.",
         "success_summary": "Account aktiviert",
         "success_detail": "Sie können sich nun mit Ihrem Passwort anmelden.",
-        "failed": "Der Account konnte nicht aktiviert werden."
+        "failed": "Der Account konnte nicht aktiviert werden.",
+        "no_connection": "Der eTutor-Server ist nicht erreichbar."
       }
     },
     "account": {
@@ -121,15 +125,191 @@
     "search": "Suchen",
     "yes": "Ja",
     "no": "Nein",
+    "ok": "OK",
+    "cancel": "Abbrechen",
     "paginator": "{first} bis {last} von {totalRecords}",
     "concurrency-error": "Der Eintrag wurde in der Zwischenzeit von jemand anderen bearbeitet. Bitte laden Sie den Eintrag neu und versuchen Sie es dann erneut.",
     "created": "Erstellt",
     "modified": "Zuletzt bearbeitet"
   },
+  "quill-html-edit-hint": "Bearbeiten Sie hier den HTML-Code. Wenn Sie auf \"OK\" klicken, wird der Inhalt des Editors ersetzt. Fügen Sie nach dem Klick auf \"OK\" mindestens ein Leerzeichen ein, ansonsten wird Ihre Änderung nicht korrekt erkannt.",
   "404": {
     "go-back": "Zurück",
     "title": "Seite nicht gefunden",
     "message": "Entschuldigung, wir konnten die Seite nicht finden."
+  },
+  "health": {
+    "select": "Bitte wählen Sie einen Eintrag aus der Liste aus.",
+    "load-error": "Die Daten konnten nicht geladen werden.",
+    "health": {
+      "title": "Zustand",
+      "icon": "pi-heart",
+      "status": "Status",
+      "readinessState": "Bereitschaft",
+      "db": "Datenbank",
+      "diskSpace": "Festplattenspeicher",
+      "livenessState": "Liveness",
+      "ping": "Ping",
+      "icons": {
+        "readinessState": "pi-arrow-right-arrow-left",
+        "db": "pi-database",
+        "diskSpace": "pi-server",
+        "livenessState": "pi-verified",
+        "ping": "pi-wifi"
+      },
+      "backgroundClass": {
+        "UP": "bg-green-100",
+        "DOWN": "bg-red-100",
+        "OUT_OF_SERVICE": "bg-yellow-100",
+        "UNKNOWN": "bg-black-alpha-10",
+        "null": "bg-blue-100"
+      },
+      "foregroundClass": {
+        "UP": "text-green-500",
+        "DOWN": "text-red-500",
+        "OUT_OF_SERVICE": "text-yellow-500",
+        "UNKNOWN": "text-black-alpha-80",
+        "null": "text-blue-500"
+      },
+      "statusIcon": {
+        "UP": "pi-check",
+        "DOWN": "pi-times",
+        "OUT_OF_SERVICE": "pi-exclamation-circle",
+        "UNKNOWN": "pi-question-circle",
+        "null": "pi-spin pi-spinner"
+      },
+      "details": {
+        "button": "Details",
+        "name": "Name",
+        "value": "Wert",
+        "db": {
+          "database": "Datenbank",
+          "validationQuery": "Validierungsabfrage"
+        },
+        "diskSpace": {
+          "total": "Gesamt",
+          "free": "Frei",
+          "threshold": "Schwelle",
+          "path": "Pfad",
+          "exists": "Existiert"
+        }
+      }
+    },
+    "info": {
+      "title": "Anwendungsinformation",
+      "icon": "pi-info-circle",
+      "os": "Betriebssystem",
+      "jvm": "Java Virtual Machine",
+      "build": "Build",
+      "git": "GIT"
+    },
+    "env": {
+      "title": "Konfiguration",
+      "icon": "pi-desktop",
+      "profiles": "Aktive Profile",
+      "property": "Eigenschaft",
+      "value": "Wert",
+      "origin": "Herkunft"
+    },
+    "flyway": {
+      "title": "DB-Migrationen",
+      "icon": "pi-database",
+      "script": "Skript",
+      "state": "Status",
+      "installedOn": "Installiert",
+      "executionTime": "Ausführungsdauer"
+    },
+    "logfile": {
+      "title": "Log-Datei",
+      "icon": "pi-file"
+    },
+    "metrics": {
+      "title": "Metriken",
+      "icon": "pi-chart-line",
+      "jvm": "JVM Metriken",
+      "db": "Datenquellen Metriken",
+      "server": "Server Metriken",
+      "memory": "Hauptspeicher",
+      "system": "System",
+      "process": "Prozess",
+      "application": "Anwendung",
+      "gc": "Speicherbereinigung",
+      "threads": "Threads",
+      "executor": "Executor",
+      "jdbc": "JDBC",
+      "hikari": "Datenbank",
+      "hikariAcquire": "Verbinden",
+      "hikariCreation": "Erstellen",
+      "hikariUsage": "Verwendung",
+      "committed": "Zugesichert",
+      "buffer": "Buffer",
+      "used": "Verwendet",
+      "max": "Maximal",
+      "processCpu": "CPU Auslastung",
+      "processUpTime": "Laufzeit",
+      "processStartTime": "Gestartet",
+      "processFileMax": "Max. Dateien",
+      "processFileOpen": "Geöffnete Dateien",
+      "diskUsage": "Festplattennutzung",
+      "systemCpu": "CPU Auslastung",
+      "systemCpuCount": "CPU Anzahl",
+      "systemLoad": "Durchnittliche Systemlast",
+      "appStartTime": "Startdauer",
+      "appReadyTime": "Bereitschaftsdauer",
+      "classesLoaded": "Geladene Klassen",
+      "classesUnloaded": "Entladene Klassen",
+      "gcDataSize": "GC Größe",
+      "gcMemorySize": "GC Speicher Größe",
+      "gcOverhead": "GC Overhead",
+      "threadCount": "Anzahl Threads",
+      "threadRunnable": "Laufend",
+      "threadWaiting": "Wartend",
+      "threadBlocked": "Blockiert",
+      "threadTimed": "Wartezeit",
+      "dbConnection": "DB Verbindungen",
+      "dbActive": "Aktiv",
+      "dbIdle": "Leerlauf",
+      "dbMin": "Min. Verbindungen",
+      "dbMax": "Max. Verbindungen",
+      "dbPending": "Ausstehend",
+      "dbTimeout": "Zeitüberschreitung",
+      "dbCount": "Anzahl",
+      "dbTotal": "Gesamtdauer",
+      "dbMaxTime": "Max. Dauer",
+      "httpCode": "Code",
+      "httpUri": "URI",
+      "httpCount": "Anzahl",
+      "httpAvg": "Durchschnitt (ms)",
+      "httpMax": "Max. (ms)",
+      "executorActive": "Aktiv",
+      "executorQueued": "Eingereiht",
+      "executorQueueRemaining": "Verbleibend",
+      "executorCompleted": "Abgeschlossen",
+      "executorPoolCore": "Threads",
+      "executorPoolMax": "Max.",
+      "executorPoolSize": "Größe"
+    },
+    "scheduledtasks": {
+      "title": "Geplante Aufgaben",
+      "icon": "pi-calendar",
+      "cron": "Cron",
+      "fixedDelay": "Feste Verzögerung",
+      "fixedRate": "Feste Rate",
+      "custom": "Benutzerdefiniert"
+    },
+    "httpexchanges": {
+      "title": "HTTP-Anfragen",
+      "icon": "pi-globe",
+      "timestamp": "Zeitpunkt",
+      "timeTaken": "Dauer",
+      "method": "Methode",
+      "uri": "URI",
+      "status": "Status",
+      "principal": "Benutzer",
+      "requestHeaders": "Request Header",
+      "responseHeaders": "Response Header",
+      "remoteAddress": "IP-Adresse"
+    }
   },
   "primeng": {
     "startsWith": "Beginnt mit",
@@ -160,6 +340,7 @@
     "choose": "Auswählen",
     "upload": "Hochladen",
     "cancel": "Abbrechen",
+    "back": "Zurück",
     "completed": "Abgeschlossen",
     "pending": "Ausstehend",
     "fileSizeTypes": [

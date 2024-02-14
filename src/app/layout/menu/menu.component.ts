@@ -52,20 +52,20 @@ export class MenuComponent implements OnInit, OnDestroy {
    * Returns whether the current user is instructor, admin or full admin.
    */
   isInstructorOrHigher(): boolean {
-    return this.role === 'instructor' || this.isAdmin();
+    return this.role === 'INSTRUCTOR' || this.isAdmin();
   }
 
   /**
    * Returns whether the current user is admin or full admin.
    */
   isAdmin(): boolean {
-    return this.role === 'admin' || this.isFullAdmin();
+    return this.role === 'ADMIN' || this.isFullAdmin();
   }
 
   /**
    * Returns whether the current user is full admin.
    */
   isFullAdmin(): boolean {
-    return this.role === 'full_admin';
+    return this.role === 'FULL_ADMIN';
   }
 }

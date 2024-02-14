@@ -1,0 +1,57 @@
+<p-table [value]="http?.exchanges ?? []" dataKey="timestamp">
+  <ng-template pTemplate="header">
+    <tr>
+      <th transloco="health.httpexchanges.timestamp"></th>
+      <th transloco="health.httpexchanges.timeTaken" class="text-right"></th>
+      <th transloco="health.httpexchanges.method"></th>
+      <th transloco="health.httpexchanges.uri"></th>
+      <th transloco="health.httpexchanges.status"></th>
+      <th style="width: 5rem"></th>
+    </tr>
+  </ng-template>
+  <ng-template pTemplate="body" let-http let-expanded="expanded">
+    <tr>
+      <td>{{ http.timestamp | date:'mediumTime' }}</td>
+      <td class="text-right">{{ convertDurationToString(http.timeTaken) }}</td>
+      <td>{{ http.request.method }}</td>
+      <td class="url">{{ http.request.uri }}</td>
+      <td>{{ http.response.status }}</td>
+      <td>
+        <button type="button" pButton [pRowToggler]="http" class="p-button-text  p-0 p-button-plain"
+                [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></button>
+      </td>
+    </tr>
+  </ng-template>
+  <ng-template pTemplate="rowexpansion" let-http>
+    <tr>
+      <td colspan="6">
+        @if (http.principal) {
+          <p><strong transloco="health.httpexcahnges.principal">{{ http.principal.name }}</strong></p>
+        }
+        @if (http.response.remoteAddress) {
+          <p><strong transloco="health.httpexcahnges.remoteAddress">{{ http.response.remoteAddress }}</strong></p>
+        }
+        <div class="grid">
+          <div class="col-12 md:col-6">
+            <div class="font-bold" transloco="health.httpexchanges.requestHeaders"></div>
+            <dl>
+              @for (header of getProperties(http.request.headers); track header) {
+                <dt class="font-semibold">{{ header }}</dt>
+                <dd>{{ http.request.headers[header] }}</dd>
+              }
+            </dl>
+          </div>
+          <div class="col-12 md:col-6">
+            <div class="font-bold" transloco="health.httpexchanges.responseHeaders"></div>
+            <dl>
+              @for (header of getProperties(http.response.headers); track header) {
+                <dt class="font-semibold">{{ header }}</dt>
+                <dd>{{ http.response.headers[header] }}</dd>
+              }
+            </dl>
+          </div>
+        </div>
+      </td>
+    </tr>
+  </ng-template>
+</p-table>

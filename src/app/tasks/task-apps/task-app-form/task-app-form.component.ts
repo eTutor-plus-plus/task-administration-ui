@@ -11,6 +11,9 @@ import { MessagesModule } from 'primeng/messages';
 
 import { AuditInformationComponent, DialogEditFormComponent } from '../../../layout';
 import { TaskAppDto, TaskAppService } from '../../../api';
+import { TaskTypeRegistry } from '../../../task-type';
+import { TaskGroupTypeRegistry } from '../../../task-group-type';
+import { AutoCompleteCompleteEvent, AutoCompleteModule } from 'primeng/autocomplete';
 
 /**
  * Task App Form
@@ -28,12 +31,19 @@ import { TaskAppDto, TaskAppService } from '../../../api';
     ReactiveFormsModule,
     TranslocoDirective,
     TranslocoPipe,
-    AuditInformationComponent
+    AuditInformationComponent,
+    AutoCompleteModule
   ],
   templateUrl: './task-app-form.component.html',
   styleUrl: './task-app-form.component.scss'
 })
 export class TaskAppFormComponent extends DialogEditFormComponent<TaskAppDto, TaskAppService, TaskAppForm> {
+
+  /**
+   * The list of task type suggestions.
+   */
+  suggestions: string[];
+  private availableTaskTypes: string[];
 
   /**
    * Creates a new instance of class TaskAppFormComponent.
@@ -44,6 +54,8 @@ export class TaskAppFormComponent extends DialogEditFormComponent<TaskAppDto, Ta
       taskType: new FormControl<string | null>(null, [Validators.required, Validators.minLength(2), Validators.maxLength(100)]),
       apiKey: new FormControl<string | null>(null, [Validators.maxLength(255)])
     }), 'taskApps.');
+    this.suggestions = [];
+    this.availableTaskTypes = [...new Set(TaskTypeRegistry.getTaskTypes().concat(TaskGroupTypeRegistry.getTaskTypes()))];
   }
 
   override getId(entity: TaskAppDto): string | number {
@@ -60,6 +72,9 @@ export class TaskAppFormComponent extends DialogEditFormComponent<TaskAppDto, Ta
     return {name: entity.url};
   }
 
+  searchTaskType(event: AutoCompleteCompleteEvent): void {
+    this.suggestions = this.availableTaskTypes.filter(x => x.toLowerCase().includes(event.query.toLowerCase()));
+  }
 }
 
 interface TaskAppForm {

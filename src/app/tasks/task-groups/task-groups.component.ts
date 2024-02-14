@@ -84,7 +84,7 @@ export class TaskGroupsComponent extends TableOverviewComponent<TaskGroupDto, Ta
     super(entityService, [{field: 'organizationalUnit.name', order: 1}, {field: 'taskGroupType', order: 1}, {field: 'name', order: 1}], 'taskGroups.');
     this.organizationalUnits = [];
     this.types = [];
-    this.role = authService.user?.maxRole ?? 'tutor';
+    this.role = authService.user?.maxRole ?? 'TUTOR';
     this.showOrganizationalUnit = authService.user?.isFullAdmin || (authService?.user?.roles.length ?? 0) > 1;
     this.statuses = [
       {value: StatusEnum.DRAFT, text: this.translationService.translate('taskStatus.' + StatusEnum.DRAFT)},
@@ -101,7 +101,7 @@ export class TaskGroupsComponent extends TableOverviewComponent<TaskGroupDto, Ta
   ngOnInit(): void {
     this.authService.userChanged.pipe(takeUntil(this.destroy$))
       .subscribe(user => {
-        this.role = user?.maxRole ?? 'tutor';
+        this.role = user?.maxRole ?? 'TUTOR';
         this.showOrganizationalUnit = user?.isFullAdmin || (user?.roles.length ?? 0) > 1;
       });
     if (this.showOrganizationalUnit)
@@ -149,7 +149,7 @@ export class TaskGroupsComponent extends TableOverviewComponent<TaskGroupDto, Ta
   }
 
   override canCreate(): boolean {
-    return this.role !== 'tutor';
+    return this.role !== 'TUTOR';
   }
 
   override canDelete(entity: TaskGroupDto): boolean {
@@ -161,11 +161,12 @@ export class TaskGroupsComponent extends TableOverviewComponent<TaskGroupDto, Ta
       return true;
 
     const ou = user.roles.find(x => x.organizationalUnit == entity.organizationalUnitId);
-    return ou ? ou.role !== 'tutor' : false;
+    return ou ? ou.role !== 'TUTOR' : false;
   }
 
   private async loadOrganizationalUnits(): Promise<void> {
     try {
+      this.startLoading();
       const result = await this.organizationalUnitService.load(0, 999999, [{field: 'name', order: 1}]);
       this.organizationalUnits = result.content;
     } catch (err) {
@@ -176,6 +177,8 @@ export class TaskGroupsComponent extends TableOverviewComponent<TaskGroupDto, Ta
         life: 10000,
         key: 'global'
       });
+    } finally {
+      this.finishLoading();
     }
   }
 }

@@ -4,7 +4,7 @@
   <div class="grid formgrid p-fluid">
     <div class="field mb-4 col-12">
       <label for="taskType" [transloco]="this.baseTranslationKey + 'fields.taskType'"></label>
-      <input id="taskType" type="text" pInputText formControlName="taskType" autocomplete="off" autofocus>
+      <p-autoComplete id="taskType" formControlName="taskType" [autofocus]="true" [suggestions]="suggestions" (completeMethod)="searchTaskType($event)"/>
       @if (form.controls.taskType.dirty || form.controls.taskType.touched) {
         <small class="block mt-1 p-error">
           {{ getError(form.controls.taskType, this.baseTranslationKey + 'fields.taskType') }}
@@ -24,7 +24,7 @@
 
     <div class="field mb-4 col-12">
       <label for="apiKey" [transloco]="this.baseTranslationKey + 'fields.apiKey'"></label>
-      <input id="apiKey" type="password" pInputText formControlName="apiKey" autocomplete="off">
+      <input id="apiKey" type="text" pInputText formControlName="apiKey" autocomplete="off">
       @if (form.controls.apiKey.dirty || form.controls.apiKey.touched) {
         <small class="block mt-1 p-error">
           {{ getError(form.controls.apiKey, this.baseTranslationKey + 'fields.apiKey') }}

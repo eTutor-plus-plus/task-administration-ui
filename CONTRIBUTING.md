@@ -24,8 +24,6 @@ Please make sure to read the relevant section before making your contribution. I
 
 ## I Have a Question
 
-> If you want to ask a question, we assume that you have read the available [Documentation](https://eTutor-plus-plus.github.io/task-administration-ui/).
-
 Before you ask a question, it is best to search for existing [Issues](https://github.com/eTutor-plus-plus/task-administration-ui/issues) that might help you. In case you have found a suitable
 issue and still need clarification, you can write your question in this issue. It is also advisable to search the internet for answers first.
 
@@ -51,8 +49,7 @@ A good bug report shouldn't leave others needing to chase you up for more inform
 detail in your report. Please complete the following steps in advance to help us fix any potential bug as fast as possible.
 
 - Make sure that you are using the latest version.
-- Determine if your bug is really a bug and not an error on your side e.g. using incompatible environment components/versions (Make sure that you have read
-  the [documentation](https://eTutor-plus-plus.github.io/task-administration-ui/). If you are looking for support, you might want to check [this section](#i-have-a-question)).
+- Determine if your bug is really a bug and not an error on your side e.g. using incompatible environment components/versions. If you are looking for support, you might want to check [this section](#i-have-a-question)).
 - To see if other users have experienced (and potentially already solved) the same issue you are having, check if there is not already a bug report existing for your bug or error
   in the [bug tracker](https://github.com/eTutor-plus-plus/task-administration-ui/issues).
 - Also make sure to search the internet (including Stack Overflow) to see if users outside of the GitHub community have discussed the issue.
@@ -97,7 +94,6 @@ functionality**. Following these guidelines will help maintainers and the commun
 #### Before Submitting an Enhancement
 
 - Make sure that you are using the latest version.
-- Read the [documentation](https://eTutor-plus-plus.github.io/task-administration-ui/) carefully and find out if the functionality is already covered, maybe by an individual configuration.
 - Perform a [search](https://github.com/eTutor-plus-plus/task-administration-ui/issues) to see if the enhancement has already been suggested. If it has, add a comment to the existing issue
   instead of opening a new one.
 - Find out whether your idea fits with the scope and aims of the project. It's up to you to make a strong case to convince the project's developers of the merits of this feature.
@@ -123,7 +119,6 @@ Enhancement suggestions are tracked as [GitHub issues](https://github.com/eTutor
 Following dependencies are required to build and run this project:
 
 * Node.js >= 20
-* Docker and Docker Compose
 * You can use any Web development IDE of your choice.
 
 Run `npm install` to install the required dependencies.

@@ -6,7 +6,7 @@
     "hoch": "assets/images/dke_hoch_en_white.svg"
   },
   "menu": {
-    "ou": "Organizational Units",
+    "ou": "Organizational Units / Course",
     "users": "Users",
     "taskApps": "Task-Apps",
     "tasks": "Tasks",
@@ -29,6 +29,7 @@
       "login": "Sign in",
       "expired": "Your session has expired. Please sign in again.",
       "messages": {
+        "unavailable": "The eTutor-Server is currently not available. Please try again later.",
         "bad_credentials": "Bad credentials",
         "no_connection": "The eTutor-Server does not answer.",
         "login_failed": "Sign in failed",
@@ -45,7 +46,8 @@
       "messages": {
         "success_summary": "Password requested",
         "success_detail": "If the username exists, you will receive an email with a link to reset your password.",
-        "failed": "The request failed"
+        "failed": "The request failed",
+        "no_connection": "The eTutor-Server does not answer."
       }
     },
     "reset": {
@@ -59,7 +61,8 @@
         "password_error": "The passwords do not match.",
         "success_summary": "Password reset",
         "success_detail": "You can now sign in with your new password.",
-        "failed": "The password could not be reset."
+        "failed": "The password could not be reset.",
+        "no_connection": "The eTutor-Server does not answer."
       }
     },
     "activate": {
@@ -73,7 +76,8 @@
         "password_error": "The passwords do not match.",
         "success_summary": "Account activated",
         "success_detail": "You can now sign in with your password.",
-        "failed": "The account could not be activated."
+        "failed": "The account could not be activated.",
+        "no_connection": "The eTutor-Server does not answer."
       }
     },
     "account": {
@@ -120,16 +124,197 @@
     "refresh": "Refresh",
     "yes": "Yes",
     "no": "No",
+    "ok": "OK",
+    "cancel": "Cancel",
     "search": "Search",
     "paginator": "{first} to {last} of {totalRecords}",
     "concurrency-error": "The entry has since been edited by someone else. Please reload and then try again.",
     "created": "Created",
     "modified": "Modified"
   },
+  "quill-html-edit-hint": "Edit the HTML code here. If you click on \"OK\", the content of the editor will be replaced. Insert at least one space after clicking on \"OK\", otherwise your change will not be recognized correctly.",
   "404": {
     "go-back": "Go Back",
     "title": "Page Not Found",
     "message": "Sorry, we couldn't find the page."
+  },
+  "health": {
+    "select": "Please select an entry to display the details.",
+    "load-error": "The data could not be loaded.",
+    "health": {
+      "title": "Health",
+      "icon": "pi-heart",
+      "status": "Status",
+      "readinessState": "Readiness",
+      "db": "Database",
+      "diskSpace": "Disk Space",
+      "livenessState": "Liveness",
+      "ping": "Ping",
+      "icons": {
+        "readinessState": "pi-arrow-right-arrow-left",
+        "db": "pi-database",
+        "diskSpace": "pi-server",
+        "livenessState": "pi-verified",
+        "ping": "pi-wifi"
+      },
+      "backgroundClass": {
+        "UP": "bg-green-100",
+        "DOWN": "bg-red-100",
+        "OUT_OF_SERVICE": "bg-yellow-100",
+        "UNKNOWN": "bg-black-alpha-10",
+        "null": ""
+      },
+      "foregroundClass": {
+        "UP": "text-green-500",
+        "DOWN": "text-red-500",
+        "OUT_OF_SERVICE": "text-yellow-500",
+        "UNKNOWN": "text-black-alpha-80",
+        "null": ""
+      },
+      "statusIcon": {
+        "UP": "pi-check",
+        "DOWN": "pi-times",
+        "OUT_OF_SERVICE": "pi-exclamation-circle",
+        "UNKNOWN": "pi-question-circle",
+        "null": "pi-spin pi-spinner"
+      },
+      "details": {
+        "button": "Details",
+        "name": "Name",
+        "value": "Value",
+        "db": {
+          "database": "Database",
+          "validationQuery": "Validation Query"
+        },
+        "diskSpace": {
+          "total": "Total",
+          "free": "Free",
+          "threshold": "Threshold",
+          "path": "Path",
+          "exists": "Exists"
+        }
+      }
+    },
+    "info": {
+      "title": "Application Information",
+      "icon": "pi-info-circle",
+      "os": "Operating System",
+      "jvm": "Java Virtual Machine",
+      "build": "Build",
+      "git": "GIT"
+    },
+    "env": {
+      "title": "Environment",
+      "icon": "pi-desktop",
+      "profiles": "Active Profiles",
+      "property": "Property",
+      "value": "Value",
+      "origin": "Origin"
+    },
+    "flyway": {
+      "title": "DB-Migrations",
+      "icon": "pi-database",
+      "script": "Script",
+      "state": "State",
+      "installedOn": "Installed",
+      "executionTime": "Execution Time"
+    },
+    "logfile": {
+      "title": "Log File",
+      "icon": "pi-file"
+    },
+    "metrics": {
+      "title": "Metrics",
+      "icon": "pi-chart-line",
+      "jvm": "JVM Metrics",
+      "db": "Data Source Metrics",
+      "server": "Server Metrics",
+      "memory": "Memory",
+      "system": "System",
+      "process": "Process",
+      "application": "Application",
+      "gc": "Garbage Collection",
+      "threads": "Threads",
+      "executor": "Executor",
+      "jdbc": "JDBC",
+      "hikari": "Database",
+      "hikariAcquire": "Acquire",
+      "hikariCreation": "Creation",
+      "hikariUsage": "Usage",
+      "committed": "Committed",
+      "buffer": "Buffer",
+      "used": "Used",
+      "max": "Max",
+      "processCpu": "CPU Load",
+      "processUpTime": "Uptime",
+      "processStartTime": "Started",
+      "processFileMax": "File Handles",
+      "processFileOpen": "File Handles Open",
+      "diskUsage": "Disk Usage",
+      "systemCpu": "CPU Load",
+      "systemCpuCount": "CPU Count",
+      "systemLoad": "Average System Load",
+      "appReadyTime": "Time to Ready",
+      "appStartTime": "Startup Duration",
+      "classesLoaded": "Loaded Classes",
+      "classesUnloaded": "Unloaded Classes",
+      "gcDataSize": "GC Data Size",
+      "gcMemorySize": "GC Memory Size",
+      "gcOverhead": "GC Overhead",
+      "threadCount": "Thread Count",
+      "threadRunnable": "Runnable",
+      "threadWaiting": "Waiting",
+      "threadBlocked": "Blocked",
+      "threadTimed": "Timed",
+      "dbConnection": "DB Connections",
+      "dbActive": "Active",
+      "dbIdle": "Idle",
+      "dbMin": "Min. Connections",
+      "dbMax": "Max. Connections",
+      "dbPending": "Pending",
+      "dbTimeout": "Timeout",
+      "dbCount": "Count",
+      "dbTotal": "Total Time",
+      "dbMaxTime": "Max. Time",
+      "httpCode": "Code",
+      "httpUri": "URI",
+      "httpCount": "Count",
+      "httpAvg": "Average (ms)",
+      "httpMax": "Max. (ms)",
+      "executorActive": "Active",
+      "executorQueued": "Queued",
+      "executorQueueRemaining": "Queue Remaining",
+      "executorCompleted": "Completed",
+      "executorPoolCore": "Core",
+      "executorPoolMax": "Max.",
+      "executorPoolSize": "Size"
+    },
+    "scheduledtasks": {
+      "title": "Scheduled Tasks",
+      "icon": "pi-calendar",
+      "cron": "Cron",
+      "fixedDelay": "Fixed Delay",
+      "fixedRate": "Fixed Rate",
+      "custom": "Custom",
+      "runnable": "Job",
+      "expression": "Expression",
+      "initialDelay": "Initial Delay",
+      "interval": "Interval",
+      "trigger": "Trigger"
+    },
+    "httpexchanges": {
+      "title": "HTTP-Exchanges",
+      "icon": "pi-globe",
+      "timestamp": "Timestamp",
+      "timeTaken": "Time Taken",
+      "method": "Method",
+      "uri": "URI",
+      "status": "Status",
+      "principal": "User",
+      "requestHeaders": "Request Headers",
+      "responseHeaders": "Response Headers",
+      "remoteAddress": "Remote Address"
+    }
   },
   "primeng": {
     "startsWith": "Starts with",
@@ -160,6 +345,7 @@
     "choose": "Choose",
     "upload": "Upload",
     "cancel": "Cancel",
+    "back": "Back",
     "completed": "Completed",
     "pending": "Pending",
     "fileSizeTypes": [

@@ -53,9 +53,9 @@ export class UserFormComponent extends DialogEditFormComponent<UserDto, UserServ
    * The available roles.
    */
   readonly roles: { value: RoleEnum, label: string, disabled: boolean }[] = [
-    {value: 'ADMIN', label: this.translationService.translate('roles.' + 'admin'), disabled: false},
-    {value: 'INSTRUCTOR', label: this.translationService.translate('roles.' + 'instructor'), disabled: false},
-    {value: 'TUTOR', label: this.translationService.translate('roles.' + 'tutor'), disabled: false}
+    {value: 'ADMIN', label: this.translationService.translate('roles.' + 'ADMIN'), disabled: false},
+    {value: 'INSTRUCTOR', label: this.translationService.translate('roles.' + 'INSTRUCTOR'), disabled: false},
+    {value: 'TUTOR', label: this.translationService.translate('roles.' + 'TUTOR'), disabled: false}
   ];
 
   private organizationalUnits: OrganizationalUnitDto[];
@@ -159,7 +159,7 @@ export class UserFormComponent extends DialogEditFormComponent<UserDto, UserServ
   }
 
   private async loadOrganizationalUnits(): Promise<void> {
-    this.loading = true;
+    this.startLoading();
     try {
       const organizationalUnits = await this.organizationalUnitService.load(0, 999999, [{field: 'name', order: 1}]);
       const user = this.authService.user;
@@ -173,7 +173,7 @@ export class UserFormComponent extends DialogEditFormComponent<UserDto, UserServ
         // get OUs where the current user is admin, only there he/she is allowed to add users
         const arr: OrganizationalUnitDto[] = [];
         for (let ou of organizationalUnits.content) {
-          const assignment = user.roles.find(x => x.role === 'admin' && x.organizationalUnit === ou.id);
+          const assignment = user.roles.find(x => x.role === 'ADMIN' && x.organizationalUnit === ou.id);
           if (assignment)
             arr.push(ou);
         }
@@ -196,7 +196,7 @@ export class UserFormComponent extends DialogEditFormComponent<UserDto, UserServ
         key: 'global'
       });
     } finally {
-      this.loading = false;
+      this.finishLoading();
     }
   }
 

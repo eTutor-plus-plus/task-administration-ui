@@ -29,11 +29,6 @@ export abstract class EditFormComponent<TDto extends object, TService extends Ap
   originalEntity: TDto | null;
 
   /**
-   * Returns whether data are loading.
-   */
-  loading: boolean;
-
-  /**
    * The base translation key. Must end with a dot!
    */
   readonly baseTranslationKey: string;
@@ -53,6 +48,8 @@ export abstract class EditFormComponent<TDto extends object, TService extends Ap
    */
   protected readonly entityService: TService;
 
+  private loadingCounter: number;
+
   /**
    * Creates a new instance of class EditFormComponent.
    *
@@ -65,7 +62,7 @@ export abstract class EditFormComponent<TDto extends object, TService extends Ap
     this.form = form;
     this.baseTranslationKey = baseTranslationKey;
     this.originalEntity = null;
-    this.loading = false;
+    this.loadingCounter = 0;
     this.translationService = inject(TranslocoService);
     this.messageService = inject(MessageService);
   }
@@ -100,7 +97,7 @@ export abstract class EditFormComponent<TDto extends object, TService extends Ap
         detail: this.translationService.translate(this.baseTranslationKey + 'success.create', this.getMessageParams(result, 'successCreate')),
         key: 'global'
       });
-      this.onSuccess('create');
+      this.onSuccess(this.getId(result), 'create');
     } catch (err) {
       let detail = '';
       if (err instanceof HttpErrorResponse) {
@@ -112,7 +109,9 @@ export abstract class EditFormComponent<TDto extends object, TService extends Ap
 
       this.messageService.add({
         severity: 'error',
-        detail: this.translationService.translate(this.baseTranslationKey + 'errors.create', this.getMessageParams(this.form.value as any, 'errorCreate')) + ' ' + detail
+        detail: this.translationService.translate(this.baseTranslationKey + 'errors.create', this.getMessageParams(this.form.value as any, 'errorCreate')) + ' ' + detail,
+        key: 'global',
+        life: 10000
       });
       this.onError('create', err);
     } finally {
@@ -134,7 +133,7 @@ export abstract class EditFormComponent<TDto extends object, TService extends Ap
         detail: this.translationService.translate(this.baseTranslationKey + 'success.update', this.getMessageParams(this.form.value as any, 'successUpdate')),
         key: 'global'
       });
-      this.onSuccess('update');
+      this.onSuccess(this.getId(this.originalEntity), 'update');
     } catch (err) {
       let msg = this.translationService.translate(this.baseTranslationKey + 'errors.update', this.getMessageParams(this.form.value as any, 'errorUpdate'));
 
@@ -147,7 +146,7 @@ export abstract class EditFormComponent<TDto extends object, TService extends Ap
           msg += ' ' + err.message;
       }
 
-      this.messageService.add({severity: 'error', detail: msg});
+      this.messageService.add({severity: 'error', detail: msg, key: 'global', life: 10000});
       this.onError('update', err);
     } finally {
       this.loading = false;
@@ -168,9 +167,10 @@ export abstract class EditFormComponent<TDto extends object, TService extends Ap
   /**
    * Called when the operation was successful.
    *
+   * @param id The identifier of the entity.
    * @param operation The type of the operation.
    */
-  onSuccess(operation: 'create' | 'update'): void | Promise<void> {
+  onSuccess(id: number | string, operation: 'create' | 'update'): void | Promise<void> {
   }
 
   /**
@@ -203,4 +203,45 @@ export abstract class EditFormComponent<TDto extends object, TService extends Ap
    * @param type The message type.
    */
   abstract getMessageParams(entity: TDto | { [K in keyof TForm]: any; }, type: 'successCreate' | 'errorCreate' | 'successUpdate' | 'errorUpdate'): Record<string, unknown>;
+
+  //#region --- Loading ---
+
+  /**
+   * Returns whether data is currently loading.
+   */
+  get loading(): boolean {
+    return this.loadingCounter > 0;
+  }
+
+  /**
+   * Sets whether data is currently loading.
+   *
+   * @param value Whether data is currently loading.
+   */
+  protected set loading(value: boolean) {
+    if (value)
+      this.startLoading();
+    else
+      this.finishLoading();
+  }
+
+  /**
+   * Call this method when you start loading data.
+   */
+  protected startLoading(): void {
+    if (this.loadingCounter < 0)
+      this.loadingCounter = 0;
+    this.loadingCounter++;
+  }
+
+  /**
+   * Call this method when you finish loading data (or an error occurred).
+   */
+  protected finishLoading(): void {
+    this.loadingCounter--;
+    if (this.loadingCounter < 0)
+      this.loadingCounter = 0;
+  }
+
+  //#endregion
 }

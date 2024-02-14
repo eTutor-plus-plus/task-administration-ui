@@ -13,3 +13,27 @@ updates:
     commit-message:
       prefix: "chore"
       include: "scope"
+    groups:
+      angular:
+        patterns:
+          - "@angular*"
+        update-types:
+          - "minor"
+          - "patch"
+      prime:
+        patterns:
+          - "prime*"
+        update-types:
+          - "minor"
+          - "patch"
+      jest:
+        patterns:
+          - "jest*"
+        update-types:
+          - "minor"
+          - "patch"
+    ignore:
+      - dependency-name: "@angular*"
+        update-types: [ "version-update:semver-major" ]
+      - dependency-name: "prime*"
+        update-types: [ "version-update:semver-major" ]

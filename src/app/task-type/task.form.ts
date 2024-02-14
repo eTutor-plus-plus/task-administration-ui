@@ -1,4 +1,5 @@
 import { FormArray, FormControl, UntypedFormGroup } from '@angular/forms';
+import { TreeNode } from 'primeng/api';
 import { StatusEnum } from '../api';
 
 /**
@@ -14,6 +15,6 @@ export interface TaskForm {
   taskType: FormControl<string | null>;
   status: FormControl<StatusEnum | null>;
   taskGroupId: FormControl<number | null>;
-  taskCategoryIds: FormArray<FormControl<number | null>>;
+  taskCategoryIds: FormArray<FormControl<TreeNode | null>>;
   additionalData: UntypedFormGroup;
 }

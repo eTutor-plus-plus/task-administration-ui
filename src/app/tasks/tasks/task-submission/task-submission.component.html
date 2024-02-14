@@ -1,0 +1,67 @@
+<form [formGroup]="form" (ngSubmit)="submit()">
+  <div class="grid formgrid p-fluid">
+    <div class="field mb-4 col-12 md:col-6 lg:col-4">
+      <label for="language" [transloco]="'submission.fields.language'"></label>
+      <p-dropdown inputId="language" [options]="languages" formControlName="language"/>
+    </div>
+    <div class="field mb-4 col-12 md:col-6 lg:col-4">
+      <label for="mode" [transloco]="'submission.fields.mode'"></label>
+      <p-dropdown inputId="mode" [options]="modes" formControlName="mode"/>
+    </div>
+    <div class="field mb-4 col-12 md:col-6 lg:col-4">
+      <label for="feedbackLevel" [transloco]="'submission.fields.feedbackLevel'"></label>
+      <p-dropdown inputId="feedbackLevel" [options]="feedbackLevels" formControlName="feedbackLevel"/>
+    </div>
+  </div>
+
+  <div class="field mb-4">
+    <label for="submission" [transloco]="'submission.fields.submission'"></label>
+    <ngx-monaco-editor id="submission" formControlName="submission" [options]="editorOptions"/>
+  </div>
+</form>
+
+@if (gradingResult) {
+  <div class="surface-border border-top-1 opacity-50 mb-4"></div>
+  <table class="result-table mb-3">
+    <tr>
+      <th scope="row" transloco="submission.fields.maxPoints"></th>
+      <td>{{ gradingResult.grading.maxPoints }}</td>
+    </tr>
+    <tr>
+      <th scope="row" transloco="submission.fields.points"></th>
+      <td>{{ gradingResult.grading.points }}</td>
+    </tr>
+    <tr>
+      <th scope="row" transloco="submission.fields.generalFeedback"></th>
+      <td [innerHTML]="gradingResult.grading.generalFeedback"></td>
+    </tr>
+    <tr>
+      <th scope="row" transloco="submission.fields.criteria"></th>
+      <td>
+        <table class="criteria-table">
+          @for (criterion of gradingResult.grading.criteria; track criterion.name) {
+            <tr>
+              <th scope="row">{{ criterion.name }}</th>
+              <td>{{ criterion.points }}</td>
+              <td [innerHTML]="criterion.feedback"></td>
+              <td><i [ngClass]="{
+                'pi pi-check text-green-500': criterion.passed,
+                'pi pi-times text-red-500': !criterion.passed
+              }" class="text-xl"></i></td>
+            </tr>
+          }
+        </table>
+      </td>
+    </tr>
+  </table>
+}
+@if (errorResult) {
+  <div class="surface-border border-top-1 opacity-50 mb-4"></div>
+  <label for="errorResult" [transloco]="'submission.fields.result'"></label>
+  <ngx-monaco-editor id="errorResult" [options]="resultEditorOptions" [(ngModel)]="gradingResult"/>
+}
+
+<div class="flex justify-content-between">
+  <p-button [label]="'primeng.cancel' | transloco" class="w-auto" (onClick)="cancel()" severity="secondary" [outlined]="true" [disabled]="loading"/>
+  <button pButton [label]="'submission.submit' | transloco" [disabled]="form.invalid" class="w-auto" (click)="submit()" [loading]="loading"></button>
+</div>

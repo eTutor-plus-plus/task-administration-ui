@@ -119,7 +119,9 @@ export class ResetPasswordComponent implements OnInit {
     } catch (err) {
       let detail = 'Unknown error';
       if (err instanceof HttpErrorResponse) {
-        if (err.error?.detail)
+        if (err.status === 0)
+          detail = this.translationService.translate('auth.forgot.messages.no_connection');
+        else if (err.error?.detail)
           detail = err.error.detail;
         else
           detail = err.message;

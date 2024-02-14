@@ -91,7 +91,7 @@ export class TasksComponent extends TableOverviewComponent<TaskDto, TaskService>
     this.organizationalUnits = [];
     this.taskGroups = [];
     this.types = [];
-    this.role = authService.user?.maxRole ?? 'tutor';
+    this.role = authService.user?.maxRole ?? 'TUTOR';
     this.showOrganizationalUnit = authService.user?.isFullAdmin || (authService?.user?.roles.length ?? 0) > 1;
     this.statuses = [
       {value: StatusEnum.DRAFT, text: this.translationService.translate('taskStatus.' + StatusEnum.DRAFT)},
@@ -108,7 +108,7 @@ export class TasksComponent extends TableOverviewComponent<TaskDto, TaskService>
   ngOnInit(): void {
     this.authService.userChanged.pipe(takeUntil(this.destroy$))
       .subscribe(user => {
-        this.role = user?.maxRole ?? 'tutor';
+        this.role = user?.maxRole ?? 'TUTOR';
         this.showOrganizationalUnit = user?.isFullAdmin || (user?.roles.length ?? 0) > 1;
       });
     if (this.showOrganizationalUnit)
@@ -150,6 +150,7 @@ export class TasksComponent extends TableOverviewComponent<TaskDto, TaskService>
     return tg?.name ?? id.toString();
   }
 
+  //#region --- Parent Overrides ---
   override getMessageParams(entity: TaskDto, type: 'error' | 'success'): Record<string, unknown> {
     return {name: entity.title};
   }
@@ -167,7 +168,7 @@ export class TasksComponent extends TableOverviewComponent<TaskDto, TaskService>
   }
 
   override canCreate(): boolean {
-    return this.role !== 'tutor';
+    return this.role !== 'TUTOR';
   }
 
   override canDelete(entity: TaskDto): boolean {
@@ -179,8 +180,9 @@ export class TasksComponent extends TableOverviewComponent<TaskDto, TaskService>
       return true;
 
     const ou = user.roles.find(x => x.organizationalUnit == entity.organizationalUnitId);
-    return ou ? ou.role !== 'tutor' : false;
+    return ou ? ou.role !== 'TUTOR' : false;
   }
+  //#endregion
 
   private async loadOrganizationalUnits(): Promise<void> {
     try {

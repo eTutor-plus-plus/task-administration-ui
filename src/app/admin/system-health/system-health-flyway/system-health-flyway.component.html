@@ -1,0 +1,22 @@
+@for (ctx of getProperties(contexts?.contexts); track ctx) {
+  <p-panel [header]="ctx" styleClass="mb-3 max-w-full table-panel">
+    <p-table [value]="getContextMigrations(ctx)">
+      <ng-template pTemplate="header">
+        <tr>
+          <th transloco="health.flyway.script"></th>
+          <th transloco="health.flyway.state"></th>
+          <th transloco="health.flyway.installedOn"></th>
+          <th transloco="health.flyway.executionTime"></th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-migration>
+        <tr>
+          <td>{{ migration.script }}</td>
+          <td>{{ migration.state }}</td>
+          <td>{{ migration.installedOn | date:'medium' }}</td>
+          <td>{{ migration.executionTime }}</td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </p-panel>
+}

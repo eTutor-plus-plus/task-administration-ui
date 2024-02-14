@@ -1,7 +1,6 @@
 import { Directive, inject, Type } from '@angular/core';
-import { DialogService } from 'primeng/dynamicdialog';
+import { DialogService, DynamicDialogConfig } from 'primeng/dynamicdialog';
 import { SortMeta } from 'primeng/api';
-import { DynamicDialogConfig } from 'primeng/dynamicdialog/dynamicdialog-config';
 
 import { ApiService } from '../../api';
 import { TableOverviewComponent } from './table-overview.component';
