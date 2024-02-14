@@ -7,7 +7,6 @@ export function registerXQueryLanguage(): void {
   monaco.languages.register({id: 'xquery'});
   monaco.languages.setLanguageConfiguration('xquery', {
     comments: {
-      lineComment: '(:',
       blockComment: ['(:', ':)']
     },
     brackets: [
@@ -19,8 +18,9 @@ export function registerXQueryLanguage(): void {
       {open: '{', close: '}'},
       {open: '[', close: ']'},
       {open: '(', close: ')'},
-      {open: '\'', close: '\''},
-      {open: '"', close: '"'},
+      {open: '\'', close: '\'', notIn: ['string', 'comment']},
+      {open: '"', close: '"', notIn: ['string', 'comment']},
+      {open: '(:', close: ':)', notIn: ['string']},
     ],
     surroundingPairs: [
       {open: '{', close: '}'},
@@ -28,6 +28,7 @@ export function registerXQueryLanguage(): void {
       {open: '(', close: ')'},
       {open: '\'', close: '\''},
       {open: '"', close: '"'},
+      { open: '(:', close: ':)' },
     ],
     indentationRules: {
       increaseIndentPattern: new RegExp('\\b(?:for|let|where|return|if|else)\\b'),
@@ -77,6 +78,7 @@ export function registerXQueryLanguage(): void {
         [/[A-Z][\w$]*/, 'type.identifier'],
         [/\d*\.\d+([eE][-+]?\d+)?/, 'number.float'],
         [/\d+/, 'number'],
+        { include: '@whitespace' },
 
         // Operators
         [/\$[\w$]*/, 'variable'],
@@ -88,11 +90,27 @@ export function registerXQueryLanguage(): void {
         // Strings
         [/'([^'\\]|\\.)*$/, 'string.invalid'],  // single quote string
         [/"/, 'string', '@string.double'],
+
+        // Comments
+        [/\(:/, 'comment', '@comment']
+      ],
+
+      whitespace: [
+        [/[ \t\r\n]+/, ''],
+        [/\(:.*:\)/, 'comment']
       ],
 
       string: [
         [/'/, 'string', '@pop'],
         [/[^']+/, 'string'],
+      ],
+
+      comment: [
+        [/[^(:]+/, 'comment'],
+        [/:\)/, 'comment', '@pop'],
+        [/:/, 'comment'],
+        [/\(:/, 'comment'],
+        [/[^:]+/, 'comment']
       ],
     },
   });

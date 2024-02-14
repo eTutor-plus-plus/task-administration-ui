@@ -16,6 +16,13 @@
         "diagnoseDocument": "Diagnose XML-Document",
         "submitDocument": "Submit XML-Document"
       }
+    },
+    "datalog": {
+      "title": "Datalog",
+      "fields": {
+        "diagnoseFacts": "Facts (Diagnose)",
+        "submissionFacts": "Facts (Submission)"
+      }
     }
   }
 }

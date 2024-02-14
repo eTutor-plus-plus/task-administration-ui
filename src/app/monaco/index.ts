@@ -1,5 +1,6 @@
 import { registerXQueryLanguage } from './xquery';
 import { registerXPathLanguage } from './xpath';
+import { registerDatalogLanguage } from './datalog';
 
 /**
  * Called on monaco editor initialization.
@@ -8,4 +9,5 @@ import { registerXPathLanguage } from './xpath';
 export function customizeMonaco(): void {
   registerXQueryLanguage();
   registerXPathLanguage();
+  registerDatalogLanguage();
 }
