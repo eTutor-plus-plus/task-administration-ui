@@ -1,0 +1,13 @@
+<div class="surface-card p-4 shadow-2 border-round p-fluid mb-4" [formGroup]="form">
+  <div class="grid formgrid p-fluid">
+    <div class="field mb-4 col-12">
+      <label for="facts" transloco="taskGroupTypes.datalog.fields.facts"></label>
+      <ngx-monaco-editor id="facts" formControlName="facts" [options]="editorOptions"/>
+      @if (form.controls.facts.dirty || form.controls.facts.touched) {
+        <small class="block mt-1 p-error">
+          {{ getError(form.controls.facts, 'taskGroupTypes.datalog.fields.facts') }}
+        </small>
+      }
+    </div>
+  </div>
+</div>

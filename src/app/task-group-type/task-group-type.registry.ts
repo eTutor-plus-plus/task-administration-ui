@@ -1,6 +1,8 @@
 import { Type } from '@angular/core';
 import { TaskGroupTypeBinarySearchComponent } from './task-group-type-binary-search/task-group-type-binary-search.component';
 import { TaskGroupTypeXqueryComponent } from './task-group-type-xquery/task-group-type-xquery.component';
+import { TaskGroupTypeDatalogComponent } from './task-group-type-datalog/task-group-type-datalog.component';
+import { TaskGroupTypeFormComponent } from './task-group-type-form.component';
 
 /**
  * Registry for task group types.
@@ -10,10 +12,11 @@ export class TaskGroupTypeRegistry {
   private constructor() {
   }
 
-  private static readonly taskTypes: { name: string, component?: Type<any>, supportsDescriptionGeneration?: boolean }[] = [
+  private static readonly taskTypes: { name: string, component?: Type<TaskGroupTypeFormComponent<any>>, supportsDescriptionGeneration?: boolean }[] = [
     {name: 'none'},
     {name: 'binary-search', component: TaskGroupTypeBinarySearchComponent, supportsDescriptionGeneration: true},
     {name: 'xquery', component: TaskGroupTypeXqueryComponent, supportsDescriptionGeneration: true},
+    {name: 'datalog', component: TaskGroupTypeDatalogComponent, supportsDescriptionGeneration: true},
   ];
 
   /**

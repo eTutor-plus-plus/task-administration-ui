@@ -420,7 +420,7 @@ export class TaskFormComponent extends EditFormComponent<TaskDto, TaskService, T
 
   private onOrganizationalUnitChanged(value: number | null): void {
     const user = this.authService.user;
-    console.log(this.form.value);
+
     // Task groups
     this.taskGroups = this.allTaskGroups.filter(x => x.organizationalUnitId === value &&
       (user?.isFullAdmin || user?.roles.find(r => r.organizationalUnit === x.organizationalUnitId)) &&
