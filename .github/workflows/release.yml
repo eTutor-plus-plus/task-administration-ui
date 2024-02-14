@@ -38,7 +38,7 @@ jobs:
         run: npm run build-prod
 
       - name: Zip
-        run: zip -r release.zip dist/task-administration-ui/
+        run: zip -r release.zip dist/task-administration-ui/browser/
 
       - name: Split PR title
         env:
