@@ -36,10 +36,12 @@ export class TaskGroupTypeDatalogComponent extends TaskGroupTypeFormComponent<Ta
   }
 
   protected override initForm(): void {
-    this.form.addControl('facts', new FormControl<string | null>(null, [Validators.required, Validators.minLength(4)]));
+    this.form.addControl('diagnoseFacts', new FormControl<string | null>(null, [Validators.required, Validators.minLength(4)]));
+    this.form.addControl('submissionFacts', new FormControl<string | null>(null, [Validators.required, Validators.minLength(4)]));
   }
 }
 
 interface TaskGroupTypeForm {
-  facts: FormControl<string | null>;
+  diagnoseFacts: FormControl<string | null>;
+  submissionFacts: FormControl<string | null>;
 }

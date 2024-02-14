@@ -15,6 +15,19 @@
         "solution": "Lösung",
         "sorting": "Sortierung (XPath)"
       }
+    },
+    "datalog": {
+      "title": "Datalog",
+      "fields": {
+        "solution": "Lösung",
+        "query": "Abfrage",
+        "uncheckedTerms": "Terme"
+      },
+      "descriptions": {
+        "solution": "Hier können die Regeln, welche die Lösung repräsentieren, definiert werden. Hier dürfen keine Query-Deklarationen erfolgen.",
+        "query": "Wenn Sie mehrere Queries bei der Beurteilung berücksichtigen wollen, dann trennen Sie diese mittels Semikolon. Z.B. hatSohn(X,Y)?;hatTochter(X,Y)?",
+        "uncheckedTerms": "Um bestimmte Terme, welche in den Fakten vorkommen, von der Manipulation auszuschließen, definiersen Sie diese hier erneut. Z.B. 'hatKind(peter,_).' ,um den Term 'peter' von der Manipulation auszuschließen, sofern dieser auf Position 1 des Prädikats 'hatKind' vorkommt."
+      }
     }
   }
 }

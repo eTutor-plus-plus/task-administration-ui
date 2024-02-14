@@ -20,7 +20,8 @@
     "datalog": {
       "title": "Datalog",
       "fields": {
-        "facts": "Fakten"
+        "diagnoseFacts": "Fakten (Diagnose)",
+        "submissionFacts": "Fakten (Abgabe)"
       }
     }
   }

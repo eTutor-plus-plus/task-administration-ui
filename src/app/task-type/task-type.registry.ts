@@ -1,6 +1,8 @@
 import { Type } from '@angular/core';
 import { TaskTypeBinarySearchComponent } from './task-type-binary-search/task-type-binary-search.component';
 import { TaskTypeXqueryComponent } from './task-type-xquery/task-type-xquery.component';
+import { TaskTypeFormComponent } from './task-type-form.component';
+import { TaskTypeDatalogComponent } from './task-type-datalog/task-type-datalog.component';
 
 /**
  * Registry for task types.
@@ -13,7 +15,7 @@ export class TaskTypeRegistry {
   private static readonly taskTypes: {
     name: string,
     supportedTaskGroupTypes: string[],
-    component?: Type<any>,
+    component?: Type<TaskTypeFormComponent<any>>,
     submissionTemplate?: string,
     supportsDescriptionGeneration?: boolean,
     submissionInputLanguage?: string // set the monaco language if the submission data have following format {"input": "<USER INPUT>"}, otherwise leave this undefined
@@ -34,6 +36,13 @@ export class TaskTypeRegistry {
 return $d`,
       supportsDescriptionGeneration: false,
       submissionInputLanguage: 'xquery'
+    }, {
+      name: 'datalog',
+      supportedTaskGroupTypes: ['datalog'],
+      component: TaskTypeDatalogComponent,
+      submissionTemplate: '',
+      supportsDescriptionGeneration: false,
+      submissionInputLanguage: 'datalog'
     }
   ];
 

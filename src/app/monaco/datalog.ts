@@ -38,7 +38,7 @@ export function registerDatalogLanguage(): void {
     ],
 
     operators: [
-      ':-', ':~', '-'
+      ':-', ':~', '-', '?'
     ],
 
     brackets: [
