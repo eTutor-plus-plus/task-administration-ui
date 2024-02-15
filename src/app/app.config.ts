@@ -37,7 +37,7 @@ export const appConfig: ApplicationConfig = {
           logMissingKey: isDevMode()
         },
         flatten: {
-          aot: !isDevMode()
+          aot: false
         },
         reRenderOnLangChange: true
       },
