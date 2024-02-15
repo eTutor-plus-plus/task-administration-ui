@@ -37,3 +37,5 @@ updates:
         update-types: [ "version-update:semver-major" ]
       - dependency-name: "prime*"
         update-types: [ "version-update:semver-major" ]
+      - dependency-name: "*"
+        update-types: [ "version-update:semver-patch" ]
