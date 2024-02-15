@@ -61,7 +61,7 @@
   <ngx-monaco-editor id="errorResult" [options]="resultEditorOptions" [(ngModel)]="gradingResult"/>
 }
 
-<div class="flex justify-content-between">
+<div class="flex justify-content-between mt-4">
   <p-button [label]="'primeng.cancel' | transloco" class="w-auto" (onClick)="cancel()" severity="secondary" [outlined]="true" [disabled]="loading"/>
   <button pButton [label]="'submission.submit' | transloco" [disabled]="form.invalid" class="w-auto" (click)="submit()" [loading]="loading"></button>
 </div>
