@@ -13,7 +13,29 @@
       "title": "XQuery",
       "fields": {
         "solution": "Solution",
-        "sorting": "Sorting (XPath)"
+        "sorting": "Sorting (XPath)",
+        "missingNodePenalty": "Missing Node: Penalty",
+        "missingNodeStrategy": "Missing Node: Strategy",
+        "superfluousNodePenalty": "Superfluous Node: Penalty",
+        "superfluousNodeStrategy": "Superfluous Node: Strategy",
+        "displacedNodePenalty": "Displaced Node: Penalty",
+        "displacedNodeStrategy": "Displaced Node: Strategy",
+        "missingAttributePenalty": "Missing Attribute: Penalty",
+        "missingAttributeStrategy": "Missing Attribute: Strategy",
+        "superfluousAttributePenalty": "Superfluous Attribute: Penalty",
+        "superfluousAttributeStrategy": "Superfluous Attribute: Strategy",
+        "incorrectTextPenalty": "Incorrect Text: Penalty",
+        "incorrectTextStrategy": "Incorrect Text: Strategy",
+        "incorrectAttributeValuePenalty": "Incorrect Attribute Value: Penalty",
+        "incorrectAttributeValueStrategy": "Incorrect Attribute Value: Strategy"
+      },
+      "descriptions": {
+        "sorting": "If you want to include sorting in the evaluation, define it here. E.g. '//person'. One per line."
+      },
+      "strategy": {
+        "KO": "K.O. Criterion",
+        "GROUP": "Once per group",
+        "EACH": "Once per element"
       }
     },
     "datalog": {

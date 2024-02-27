@@ -50,7 +50,7 @@ export abstract class TaskTypeFormComponent<TForm extends { [K in keyof TForm]: 
     if (this._originalData)
       this.form.patchValue(this._originalData);
     else
-      this.form.reset();
+      this.form.reset(this.getFormDefaultValues());
   }
 
   /**
@@ -63,7 +63,7 @@ export abstract class TaskTypeFormComponent<TForm extends { [K in keyof TForm]: 
     if (this._originalData)
       this.form.patchValue(this._originalData);
     else
-      this.form.reset();
+      this.form.reset(this.getFormDefaultValues());
   }
 
   /**
@@ -135,4 +135,13 @@ export abstract class TaskTypeFormComponent<TForm extends { [K in keyof TForm]: 
   }
 
   //#endregion
+
+  /**
+   * Returns the default values for the form to use when creating a new entry.
+   *
+   * @return The default values for the form.
+   */
+  protected getFormDefaultValues(): Partial<{ [K in keyof TForm]: any }> | undefined {
+    return undefined;
+  }
 }

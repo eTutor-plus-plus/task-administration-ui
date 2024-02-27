@@ -13,7 +13,29 @@
       "title": "XQuery",
       "fields": {
         "solution": "Lösung",
-        "sorting": "Sortierung (XPath)"
+        "sorting": "Sortierung (XPath)",
+        "missingNodePenalty": "Fehlender Knoten: Punkteabzug",
+        "missingNodeStrategy": "Fehlender Knoten: Strategie",
+        "superfluousNodePenalty": "Überflüssiger Knoten: Punkteabzug",
+        "überflüssigerKnotenStrategie": "Überflüssiger Knoten: Strategie",
+        "displacedNodePenalty": "Verdrängter Knoten: Punkteabzug",
+        "displacedNodeStrategy": "Verdrängter Knoten: Strategie",
+        "missingAttributePenalty": "Fehlendes Attribut: Punkteabzug",
+        "missingAttributeStrategy": "Fehlendes Attribut: Strategie",
+        "superfluousAttributePenalty": "Überflüssiges Attribut: Punkteabzug",
+        "überflüssigesAttributStrategie": "Überflüssiges Attribut: Strategie",
+        "incorrectTextPenalty": "Falscher Text: Punkteabzug",
+        "incorrectTextStrategy": "Falscher Text: Strategie",
+        "incorrectAttributeValuePenalty": "Falscher Attributwert: Punkteabzug",
+        "incorrectAttributeValueStrategy": "Falscher Attributwert: Strategie"
+      },
+      "descriptions": {
+        "sorting": "Geben Sie hier den XPath-Ausdruck an, der die Sortierung der Ergebnisse überprüft, z. B. '//person'. Ein Eintrag pro Zeile."
+      },
+      "strategy": {
+        "KO": "K.O.-Kriterium",
+        "GROUP": "Einmal pro Gruppe",
+        "EACH": "Einmal pro Element"
       }
     },
     "datalog": {
