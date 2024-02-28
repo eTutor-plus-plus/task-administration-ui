@@ -50,10 +50,12 @@
     "create": "Create User",
     "edit": "Edit User",
     "changePassword": "Change Password",
-    "enabled": "enabled",
+    "enabled": "pending",
+    "activated": "activated",
     "disabled": "disabled",
     "addOU": "Add Organizational Unit",
-    "failedLoginCount": "Failed Login Count: {{value}}"
+    "failedLoginCount": "Failed Login Count: {{value}}",
+    "createActivate": "Create and set password"
   },
   "roles": {
     "ADMIN": "Organizational Unit Administrator",

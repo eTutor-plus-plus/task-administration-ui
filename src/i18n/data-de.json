@@ -50,10 +50,12 @@
     "create": "Benutzer erstellen",
     "edit": "Benutzer bearbeiten",
     "changePassword": "Passwort ändern",
-    "enabled": "aktiviert",
+    "enabled": "ausstehend",
+    "activated": "aktiviert",
     "disabled": "deaktiviert",
     "addOU": "Organisationseinheit hinzufügen",
-    "failedLoginCount": "Anzahl fehlgeschlagener Anmeldeversuche: {{value}}"
+    "failedLoginCount": "Anzahl fehlgeschlagener Anmeldeversuche: {{value}}",
+    "createActivate": "Erstellen und Passwort festlegen"
   },
   "roles": {
     "ADMIN": "Organisationseinheit-Administrator/in",

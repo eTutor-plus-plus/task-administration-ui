@@ -54,11 +54,7 @@ export abstract class TableDialogOverviewComponent<TDto extends object, TService
       ...this.dialogConfig,
       data: this.getAdditionalDialogData('create', null)
     });
-    ref.onClose.subscribe(value => {
-      if (!value)
-        return;
-      this.reload();
-    });
+    ref.onClose.subscribe(async value => await this.onDialogClosed('create', value));
   }
 
   /**
@@ -78,11 +74,7 @@ export abstract class TableDialogOverviewComponent<TDto extends object, TService
       },
       ...this.dialogConfig
     });
-    ref.onClose.subscribe(value => {
-      if (!value)
-        return;
-      this.reload();
-    });
+    ref.onClose.subscribe(async value => await this.onDialogClosed('edit', value));
   }
 
   /**
@@ -93,5 +85,17 @@ export abstract class TableDialogOverviewComponent<TDto extends object, TService
    */
   getAdditionalDialogData(action: 'create' | 'edit', entity: TDto | null): Record<string, unknown> {
     return {};
+  }
+
+  /**
+   * Called when the dialog is closed.
+   *
+   * @param action The action.
+   * @param value The value.
+   */
+  protected async onDialogClosed(action: 'create' | 'edit', value: any): Promise<void> {
+    if (!value)
+      return;
+    await this.reload();
   }
 }
