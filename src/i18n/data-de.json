@@ -169,6 +169,7 @@
     "approved": "Freigegeben",
     "addTaskCategory": "Aufgabenkategorie hinzufügen",
     "submitTest": "Aufgabe testen",
+    "clone": "Duplizieren",
     "descriptionGeneration": "Wenn Sie das Feld leer lassen, wird beim Speichern die Beschreibung automatisch generiert."
   },
   "submission": {

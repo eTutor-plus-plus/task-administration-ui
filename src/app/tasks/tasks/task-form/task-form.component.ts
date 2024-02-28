@@ -264,6 +264,67 @@ export class TaskFormComponent extends EditFormComponent<TaskDto, TaskService, T
 
   //#endregion
 
+  //#region --- Additional actions ---
+
+  /**
+   * Opens the dialog to test the task.
+   */
+  testTask(): void {
+    if (!this.originalEntity)
+      return;
+
+    this.dialogService.open(TaskSubmissionComponent, {
+      header: this.translationService.translate(this.baseTranslationKey + 'submitTest'),
+      width: '90%',
+      maximizable: true,
+      style: {
+        minWidth: '500px',
+        minHeight: '500px'
+      },
+      data: {
+        taskId: this.originalEntity.id,
+        taskType: this.originalEntity.taskType
+      }
+    });
+  }
+
+  /**
+   * Clones a task.
+   */
+  async clone(): Promise<void> {
+    try {
+      const value = this.form.value;
+      value.title = value.title + ' (Clone)';
+      const result = await this.entityService.create(this.modifyValueBeforeSend(value as any, 'create'));
+      this.messageService.add({
+        severity: 'success',
+        detail: this.translationService.translate(this.baseTranslationKey + 'success.create', this.getMessageParams(result, 'successCreate')),
+        key: 'global'
+      });
+      await this.onSuccess(this.getId(result) as number, 'create');
+    } catch (err) {
+      let detail = '';
+      if (err instanceof HttpErrorResponse) {
+        if (err.error?.detail)
+          detail = err.error.detail;
+        else
+          detail = err.message;
+      }
+
+      this.messageService.add({
+        severity: 'error',
+        detail: this.translationService.translate(this.baseTranslationKey + 'errors.create', this.getMessageParams(this.form.value as any, 'errorCreate')) + ' ' + detail,
+        key: 'global',
+        life: 10000
+      });
+      this.onError('create', err);
+    } finally {
+      this.loading = false;
+    }
+  }
+
+  //#endregion
+
   //#region --- Load data ---
 
   private async loadTask(id: string | number): Promise<void> {
@@ -532,25 +593,4 @@ export class TaskFormComponent extends EditFormComponent<TaskDto, TaskService, T
     return this.taskGroups.find(x => x.id === this.form.value.taskGroupId);
   }
 
-  /**
-   * Opens the dialog to test the task.
-   */
-  testTask(): void {
-    if (!this.originalEntity)
-      return;
-
-    this.dialogService.open(TaskSubmissionComponent, {
-      header: this.translationService.translate(this.baseTranslationKey + 'submitTest'),
-      width: '90%',
-      maximizable: true,
-      style: {
-        minWidth: '500px',
-        minHeight: '500px'
-      },
-      data: {
-        taskId: this.originalEntity.id,
-        taskType: this.originalEntity.taskType
-      }
-    });
-  }
 }

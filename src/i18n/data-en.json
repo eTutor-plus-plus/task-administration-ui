@@ -170,6 +170,7 @@
     "approved": "Approved",
     "addTaskCategory": "Add Task Category",
     "submitTest": "Test Task",
+    "clone": "Duplicate",
     "descriptionGeneration": "If you leave the field empty, the description will be generated automatically when you save."
   },
   "submission": {

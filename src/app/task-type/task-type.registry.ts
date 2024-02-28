@@ -20,7 +20,6 @@ export class TaskTypeRegistry {
     supportsDescriptionGeneration?: boolean,
     submissionInputLanguage?: string // set the monaco language if the submission data have following format {"input": "<USER INPUT>"}, otherwise leave this undefined
   }[] = [
-    {name: 'none', supportedTaskGroupTypes: []},
     {
       name: 'binary-search',
       supportedTaskGroupTypes: ['binary-search'],
