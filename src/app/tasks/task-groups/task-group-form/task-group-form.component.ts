@@ -93,7 +93,6 @@ export class TaskGroupFormComponent extends EditFormComponent<TaskGroupDto, Task
    */
   supportsDescriptionGeneration: boolean;
 
-  private allOrganizationalUnits: OrganizationalUnitDto[];
   private readonly destroy$ = new Subject<void>();
 
   /**
@@ -117,7 +116,6 @@ export class TaskGroupFormComponent extends EditFormComponent<TaskGroupDto, Task
     this.readonly = false;
     this.supportsDescriptionGeneration = false;
     this.organizationalUnits = [];
-    this.allOrganizationalUnits = [];
     this.types = TaskGroupTypeRegistry.getTaskTypes().map(x => {
       return {value: x, text: this.translationService.translate('taskGroupTypes.' + x + '.title')};
     });
@@ -126,21 +124,13 @@ export class TaskGroupFormComponent extends EditFormComponent<TaskGroupDto, Task
       {value: StatusEnum.READY_FOR_APPROVAL, text: this.translationService.translate('taskStatus.' + StatusEnum.READY_FOR_APPROVAL), disabled: false},
       {value: StatusEnum.APPROVED, text: this.translationService.translate('taskStatus.' + StatusEnum.APPROVED), disabled: false}
     ];
-    this.role = this.authService.user?.maxRole ?? 'TUTOR';
+    this.role = this.authService.user?.maxRole ?? 'TUTOR'; // We assume that the user and its role do not change during lifetime of this component
   }
 
   /**
    * Initializes the form
    */
   ngOnInit(): void {
-    // Listen to user role changes
-    this.authService.userChanged.pipe(takeUntil(this.destroy$))
-      .subscribe(user => {
-        this.role = user?.maxRole ?? 'TUTOR';
-        this.setStatusDisablesAndReadonly();
-        this.setOrganizationalUnits();
-      });
-
     // Listen to language changes
     this.translationService.langChanges$
       .pipe(takeUntil(this.destroy$))
@@ -170,7 +160,8 @@ export class TaskGroupFormComponent extends EditFormComponent<TaskGroupDto, Task
         } else {
           this.originalEntity = null;
         }
-        this.setStatusDisablesAndReadonly();
+        this.setDefaultOrganizationalUnitIfUnset();
+        this.setFormEnabledDisabled();
       });
   }
 
@@ -216,6 +207,11 @@ export class TaskGroupFormComponent extends EditFormComponent<TaskGroupDto, Task
 
   //#endregion
 
+  /**
+   * Loads the task group with the given id.
+   *
+   * @param id The id of the task group.
+   */
   private async loadTaskGroup(id: string | number): Promise<void> {
     try {
       this.startLoading();
@@ -224,7 +220,7 @@ export class TaskGroupFormComponent extends EditFormComponent<TaskGroupDto, Task
       this.additionalData = data.additionalData;
       this.form.patchValue(this.originalEntity);
       this.form.markAsPristine();
-      this.setStatusDisablesAndReadonly();
+      this.setFormEnabledDisabled();
       this.changeDetectorRef.detectChanges(); // required to prevent error
     } catch (err) {
       console.error('[TaskGroupFormComponent] Could not load task group data', err);
@@ -248,11 +244,24 @@ export class TaskGroupFormComponent extends EditFormComponent<TaskGroupDto, Task
     }
   }
 
+  /**
+   * Loads and sets organizational units.
+   */
   private async loadOrganizationalUnits(): Promise<void> {
+    const user = this.authService.user;
+    if (!user) {
+      this.organizationalUnits = [];
+      return;
+    }
+
     try {
       this.startLoading();
-      this.allOrganizationalUnits = (await this.organizationalUnitService.load(0, 999999, [{field: 'name', order: 1}])).content;
-      this.setOrganizationalUnits();
+
+      // Set active organizational units (the user has to be full admin or must have a role in the organizational unit)
+      const allOrganizationalUnits = (await this.organizationalUnitService.load(0, 999999, [{field: 'name', order: 1}])).content;
+      this.organizationalUnits = allOrganizationalUnits // filter is necessary as user is allowed to query all organizational units
+        .filter(x => user.isFullAdmin || user.roles.find(r => r.organizationalUnit === x.id));
+      this.setDefaultOrganizationalUnitIfUnset();
     } catch (err) {
       console.error('[TaskGroupFormComponent] Could not load organizational units', err);
       this.messageService.add({
@@ -266,11 +275,15 @@ export class TaskGroupFormComponent extends EditFormComponent<TaskGroupDto, Task
     }
   }
 
+  /**
+   * Sets the dropdown values based on the current language.
+   */
   private updateDropdownTranslations(): void {
     this.statuses = this.statuses.map(value => {
       return {
         ...value,
-        label: this.translationService.translate('taskStatus.' + value.value)
+        label: this.translationService.translate('taskStatus.' + value.value),
+        disabled: value.value === StatusEnum.APPROVED && this.role === 'TUTOR'
       };
     });
 
@@ -282,37 +295,25 @@ export class TaskGroupFormComponent extends EditFormComponent<TaskGroupDto, Task
     });
   }
 
-  private setOrganizationalUnits(): void {
-    const user = this.authService.user;
-    if (!user) {
-      this.organizationalUnits = [];
-      return;
-    }
-
-    this.organizationalUnits = this.allOrganizationalUnits.filter(x => user.isFullAdmin || user.roles.find(r => r.organizationalUnit === x.id));
-    if (this.organizationalUnits.length === 1 && !this.form.value.organizationalUnitId)
+  /**
+   * Sets the default organizational unit if it is not set and only one organizational unit is available.
+   */
+  private setDefaultOrganizationalUnitIfUnset(): void {
+    if (!this.originalEntity && this.organizationalUnits.length === 1 && !this.form.value.organizationalUnitId) {
       this.form.patchValue({organizationalUnitId: this.organizationalUnits[0].id});
+    }
   }
 
-  private setStatusDisablesAndReadonly(): void {
-    const user = this.authService.user;
-    if (!user)
-      return; // should never happen
-
-    // check if readonly
+  /**
+   * Enables/disables the form based on the current role and status.
+   *
+   * The form is disabled if the user is a tutor and the task is approved.
+   */
+  private setFormEnabledDisabled(): void {
     this.readonly = this.role === 'TUTOR' && !!this.originalEntity && this.originalEntity.status === 'APPROVED';
     if (this.readonly)
       this.form.disable();
     else
       this.form.enable();
-
-    // set status disabled
-    this.statuses = this.statuses.map(s => {
-      return {
-        ...s,
-        disabled: s.value === 'APPROVED' && this.role === 'TUTOR'
-      };
-    });
   }
-
 }
