@@ -1,22 +1,162 @@
-<div class="surface-card p-4 shadow-2 border-round p-fluid mb-4" [formGroup]="form">
-  <div class="grid formgrid p-fluid">
-    <div class="field mb-4 col-12">
-      <label for="solution" transloco="taskTypes.xquery.fields.solution"></label>
-      <ngx-monaco-editor id="solution" formControlName="solution" [options]="editorOptionsXQ" style="height: 400px;"/>
-      @if (form.controls.solution.dirty || form.controls.solution.touched) {
-        <small class="block mt-1 p-error">
-          {{ getError(form.controls.solution, 'taskTypes.xquery.fields.solution') }}
-        </small>
-      }
+<div [formGroup]="form">
+  <div class="surface-card p-4 shadow-2 border-round p-fluid mb-4">
+    <div class="grid formgrid p-fluid">
+      <div class="field mb-4 col-12">
+        <label for="solution" transloco="taskTypes.xquery.fields.solution"></label>
+        <ngx-monaco-editor id="solution" formControlName="solution" [options]="editorOptionsXQ" style="height: 300px;"/>
+        @if (form.controls.solution.dirty || form.controls.solution.touched) {
+          <small class="block mt-1 p-error">
+            {{ getError(form.controls.solution, 'taskTypes.xquery.fields.solution') }}
+          </small>
+        }
+      </div>
+      <div class="field mb-4 col-12">
+        <label for="sorting" transloco="taskTypes.xquery.fields.sorting"></label>
+        <ngx-monaco-editor id="sorting" formControlName="sorting" [options]="editorOptionsXP" style="height: 50px;"/>
+        <small transloco="taskTypes.xquery.descriptions.sorting" class="text-color-secondary block mt-1"></small>
+        @if (form.controls.sorting.dirty || form.controls.sorting.touched) {
+          <small class="block mt-1 p-error">
+            {{ getError(form.controls.sorting, 'taskTypes.xquery.fields.sorting') }}
+          </small>
+        }
+      </div>
     </div>
-    <div class="field mb-4 col-12">
-      <label for="sorting" transloco="taskTypes.xquery.fields.sorting"></label>
-      <ngx-monaco-editor id="sorting" formControlName="sorting" [options]="editorOptionsXP" style="height: 50px;"/>
-      @if (form.controls.sorting.dirty || form.controls.sorting.touched) {
-        <small class="block mt-1 p-error">
-          {{ getError(form.controls.sorting, 'taskTypes.xquery.fields.sorting') }}
-        </small>
-      }
+  </div>
+
+  <div class="surface-card p-4 shadow-2 border-round p-fluid mb-4">
+    <div class="grid formgrid p-fluid">
+      <div class="field mb-4 col-12 md:col-6">
+        <label for="missingNodePenalty" transloco="taskTypes.xquery.fields.missingNodePenalty"></label>
+        <p-inputNumber inputId="missingNodePenalty" formControlName="missingNodePenalty" mode="decimal" [maxFractionDigits]="2" [min]="0"/>
+        @if (form.controls.missingNodePenalty.dirty || form.controls.missingNodePenalty.touched) {
+          <small class="block mt-1 p-error">
+            {{ getError(form.controls.missingNodePenalty, 'taskTypes.xquery.fields.missingNodePenalty') }}
+          </small>
+        }
+      </div>
+      <div class="field mb-4 col-12 md:col-6">
+        <label for="missingNodeStrategy" transloco="taskTypes.xquery.fields.missingNodeStrategy"></label>
+        <p-dropdown inputId="missingNodeStrategy" formControlName="missingNodeStrategy" [options]="strategies" optionValue="value" optionLabel="text"/>
+        @if (form.controls.missingNodeStrategy.dirty || form.controls.missingNodeStrategy.touched) {
+          <small class="block mt-1 p-error">
+            {{ getError(form.controls.missingNodeStrategy, 'taskTypes.xquery.fields.missingNodeStrategy') }}
+          </small>
+        }
+      </div>
+
+      <div class="field mb-4 col-12 md:col-6">
+        <label for="superfluousNodePenalty" transloco="taskTypes.xquery.fields.superfluousNodePenalty"></label>
+        <p-inputNumber inputId="superfluousNodePenalty" formControlName="superfluousNodePenalty" mode="decimal" [maxFractionDigits]="2" [min]="0"/>
+        @if (form.controls.superfluousNodePenalty.dirty || form.controls.superfluousNodePenalty.touched) {
+          <small class="block mt-1 p-error">
+            {{ getError(form.controls.superfluousNodePenalty, 'taskTypes.xquery.fields.superfluousNodePenalty') }}
+          </small>
+        }
+      </div>
+      <div class="field mb-4 col-12 md:col-6">
+        <label for="superfluousNodeStrategy" transloco="taskTypes.xquery.fields.superfluousNodeStrategy"></label>
+        <p-dropdown inputId="superfluousNodeStrategy" formControlName="superfluousNodeStrategy" [options]="strategies" optionValue="value" optionLabel="text"/>
+        @if (form.controls.superfluousNodeStrategy.dirty || form.controls.superfluousNodeStrategy.touched) {
+          <small class="block mt-1 p-error">
+            {{ getError(form.controls.superfluousNodeStrategy, 'taskTypes.xquery.fields.superfluousNodeStrategy') }}
+          </small>
+        }
+      </div>
+
+      <div class="field mb-4 col-12 md:col-6">
+        <label for="displacedNodePenalty" transloco="taskTypes.xquery.fields.displacedNodePenalty"></label>
+        <p-inputNumber inputId="displacedNodePenalty" formControlName="displacedNodePenalty" mode="decimal" [maxFractionDigits]="2" [min]="0"/>
+        @if (form.controls.displacedNodePenalty.dirty || form.controls.displacedNodePenalty.touched) {
+          <small class="block mt-1 p-error">
+            {{ getError(form.controls.displacedNodePenalty, 'taskTypes.xquery.fields.displacedNodePenalty') }}
+          </small>
+        }
+      </div>
+      <div class="field mb-4 col-12 md:col-6">
+        <label for="displacedNodeStrategy" transloco="taskTypes.xquery.fields.displacedNodeStrategy"></label>
+        <p-dropdown inputId="displacedNodeStrategy" formControlName="displacedNodeStrategy" [options]="strategies" optionValue="value" optionLabel="text"/>
+        @if (form.controls.displacedNodeStrategy.dirty || form.controls.displacedNodeStrategy.touched) {
+          <small class="block mt-1 p-error">
+            {{ getError(form.controls.displacedNodeStrategy, 'taskTypes.xquery.fields.displacedNodeStrategy') }}
+          </small>
+        }
+      </div>
+
+      <div class="field mb-4 col-12 md:col-6">
+        <label for="missingAttributePenalty" transloco="taskTypes.xquery.fields.missingAttributePenalty"></label>
+        <p-inputNumber inputId="missingAttributePenalty" formControlName="missingAttributePenalty" mode="decimal" [maxFractionDigits]="2" [min]="0"/>
+        @if (form.controls.missingAttributePenalty.dirty || form.controls.missingAttributePenalty.touched) {
+          <small class="block mt-1 p-error">
+            {{ getError(form.controls.missingAttributePenalty, 'taskTypes.xquery.fields.missingAttributePenalty') }}
+          </small>
+        }
+      </div>
+      <div class="field mb-4 col-12 md:col-6">
+        <label for="missingAttributeStrategy" transloco="taskTypes.xquery.fields.missingAttributeStrategy"></label>
+        <p-dropdown inputId="missingAttributeStrategy" formControlName="missingAttributeStrategy" [options]="strategies" optionValue="value" optionLabel="text"/>
+        @if (form.controls.missingAttributeStrategy.dirty || form.controls.missingAttributeStrategy.touched) {
+          <small class="block mt-1 p-error">
+            {{ getError(form.controls.missingAttributeStrategy, 'taskTypes.xquery.fields.missingAttributeStrategy') }}
+          </small>
+        }
+      </div>
+
+      <div class="field mb-4 col-12 md:col-6">
+        <label for="superfluousAttributePenalty" transloco="taskTypes.xquery.fields.superfluousAttributePenalty"></label>
+        <p-inputNumber inputId="superfluousAttributePenalty" formControlName="superfluousAttributePenalty" mode="decimal" [maxFractionDigits]="2" [min]="0"/>
+        @if (form.controls.superfluousAttributePenalty.dirty || form.controls.superfluousAttributePenalty.touched) {
+          <small class="block mt-1 p-error">
+            {{ getError(form.controls.superfluousAttributePenalty, 'taskTypes.xquery.fields.superfluousAttributePenalty') }}
+          </small>
+        }
+      </div>
+      <div class="field mb-4 col-12 md:col-6">
+        <label for="superfluousAttributeStrategy" transloco="taskTypes.xquery.fields.superfluousAttributeStrategy"></label>
+        <p-dropdown inputId="superfluousAttributeStrategy" formControlName="superfluousAttributeStrategy" [options]="strategies" optionValue="value" optionLabel="text"/>
+        @if (form.controls.superfluousAttributeStrategy.dirty || form.controls.superfluousAttributeStrategy.touched) {
+          <small class="block mt-1 p-error">
+            {{ getError(form.controls.superfluousAttributeStrategy, 'taskTypes.xquery.fields.superfluousAttributeStrategy') }}
+          </small>
+        }
+      </div>
+
+      <div class="field mb-4 col-12 md:col-6">
+        <label for="incorrectTextPenalty" transloco="taskTypes.xquery.fields.incorrectTextPenalty"></label>
+        <p-inputNumber inputId="incorrectTextPenalty" formControlName="incorrectTextPenalty" mode="decimal" [maxFractionDigits]="2" [min]="0"/>
+        @if (form.controls.incorrectTextPenalty.dirty || form.controls.incorrectTextPenalty.touched) {
+          <small class="block mt-1 p-error">
+            {{ getError(form.controls.incorrectTextPenalty, 'taskTypes.xquery.fields.incorrectTextPenalty') }}
+          </small>
+        }
+      </div>
+      <div class="field mb-4 col-12 md:col-6">
+        <label for="incorrectTextStrategy" transloco="taskTypes.xquery.fields.incorrectTextStrategy"></label>
+        <p-dropdown inputId="incorrectTextStrategy" formControlName="incorrectTextStrategy" [options]="strategies" optionValue="value" optionLabel="text"/>
+        @if (form.controls.incorrectTextStrategy.dirty || form.controls.incorrectTextStrategy.touched) {
+          <small class="block mt-1 p-error">
+            {{ getError(form.controls.incorrectTextStrategy, 'taskTypes.xquery.fields.incorrectTextStrategy') }}
+          </small>
+        }
+      </div>
+
+      <div class="field mb-4 col-12 md:col-6">
+        <label for="incorrectAttributeValuePenalty" transloco="taskTypes.xquery.fields.incorrectAttributeValuePenalty"></label>
+        <p-inputNumber inputId="incorrectAttributeValuePenalty" formControlName="incorrectAttributeValuePenalty" mode="decimal" [maxFractionDigits]="2" [min]="0"/>
+        @if (form.controls.incorrectAttributeValuePenalty.dirty || form.controls.incorrectAttributeValuePenalty.touched) {
+          <small class="block mt-1 p-error">
+            {{ getError(form.controls.incorrectAttributeValuePenalty, 'taskTypes.xquery.fields.incorrectAttributeValuePenalty') }}
+          </small>
+        }
+      </div>
+      <div class="field mb-4 col-12 md:col-6">
+        <label for="incorrectAttributeValueStrategy" transloco="taskTypes.xquery.fields.incorrectAttributeValueStrategy"></label>
+        <p-dropdown inputId="incorrectAttributeValueStrategy" formControlName="incorrectAttributeValueStrategy" [options]="strategies" optionValue="value" optionLabel="text"/>
+        @if (form.controls.incorrectAttributeValueStrategy.dirty || form.controls.incorrectAttributeValueStrategy.touched) {
+          <small class="block mt-1 p-error">
+            {{ getError(form.controls.incorrectAttributeValueStrategy, 'taskTypes.xquery.fields.incorrectAttributeValueStrategy') }}
+          </small>
+        }
+      </div>
     </div>
   </div>
 </div>

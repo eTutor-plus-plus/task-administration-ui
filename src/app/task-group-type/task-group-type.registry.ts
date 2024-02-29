@@ -13,7 +13,6 @@ export class TaskGroupTypeRegistry {
   }
 
   private static readonly taskTypes: { name: string, component?: Type<TaskGroupTypeFormComponent<any>>, supportsDescriptionGeneration?: boolean }[] = [
-    {name: 'none'},
     {name: 'binary-search', component: TaskGroupTypeBinarySearchComponent, supportsDescriptionGeneration: true},
     {name: 'xquery', component: TaskGroupTypeXqueryComponent, supportsDescriptionGeneration: true},
     {name: 'datalog', component: TaskGroupTypeDatalogComponent, supportsDescriptionGeneration: true},

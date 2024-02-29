@@ -13,7 +13,29 @@
       "title": "XQuery",
       "fields": {
         "solution": "Solution",
-        "sorting": "Sorting (XPath)"
+        "sorting": "Sorting (XPath)",
+        "missingNodePenalty": "Missing Node: Penalty",
+        "missingNodeStrategy": "Missing Node: Strategy",
+        "superfluousNodePenalty": "Superfluous Node: Penalty",
+        "superfluousNodeStrategy": "Superfluous Node: Strategy",
+        "displacedNodePenalty": "Displaced Node: Penalty",
+        "displacedNodeStrategy": "Displaced Node: Strategy",
+        "missingAttributePenalty": "Missing Attribute: Penalty",
+        "missingAttributeStrategy": "Missing Attribute: Strategy",
+        "superfluousAttributePenalty": "Superfluous Attribute: Penalty",
+        "superfluousAttributeStrategy": "Superfluous Attribute: Strategy",
+        "incorrectTextPenalty": "Incorrect Text: Penalty",
+        "incorrectTextStrategy": "Incorrect Text: Strategy",
+        "incorrectAttributeValuePenalty": "Incorrect Attribute Value: Penalty",
+        "incorrectAttributeValueStrategy": "Incorrect Attribute Value: Strategy"
+      },
+      "descriptions": {
+        "sorting": "If you want to include sorting in the evaluation, define it here. E.g. '//person'. One per line."
+      },
+      "strategy": {
+        "KO": "K.O. Criterion",
+        "GROUP": "Once per group",
+        "EACH": "Once per element"
       }
     },
     "datalog": {
@@ -26,7 +48,7 @@
       "descriptions": {
         "solution": "The rules that represent the solution can be defined here. No query declarations may be made here.",
         "query": "If you want to include several queries in the evaluation, separate them using a semicolon. E.g. hasSon(X,Y)?;hasDaughter(X,Y)?",
-        "uncheckedTerms": "To exclude certain terms that occur in the facts from manipulation, define them again here. E.g. 'hasChild(peter,_). to exclude the term 'peter' from the manipulation if it occurs in position 1 of the predicate 'hasChild'."
+        "uncheckedTerms": "To exclude certain terms that occur in the facts from manipulation, define them again here. E.g. 'hasChild(peter,_). to exclude the term 'peter' from the manipulation if it occurs in position 1 of the predicate 'hasChild'. Terms are manipulated during submission to prevent students from simply entering the facts and not the rules."
       }
     }
   }

@@ -18,7 +18,7 @@ import { TagModule } from 'primeng/tag';
 import { BlockUIModule } from 'primeng/blockui';
 
 import { AuditInformationComponent, EditFormComponent } from '../../../layout';
-import { AuthService, Role } from '../../../auth';
+import { ApplicationUser, AuthService, Role } from '../../../auth';
 import {
   OrganizationalUnitDto,
   OrganizationalUnitService,
@@ -132,7 +132,6 @@ export class TaskFormComponent extends EditFormComponent<TaskDto, TaskService, T
   supportsDescriptionGeneration: boolean;
 
   private allTaskCategories: TaskCategoryDto[];
-  private allOrganizationalUnits: OrganizationalUnitDto[];
   private allTaskGroups: TaskGroupDto[];
   private readonly destroy$ = new Subject<void>();
 
@@ -164,7 +163,6 @@ export class TaskFormComponent extends EditFormComponent<TaskDto, TaskService, T
     this.readonly = false;
     this.supportsDescriptionGeneration = false;
     this.organizationalUnits = [];
-    this.allOrganizationalUnits = [];
     this.taskGroups = [];
     this.allTaskGroups = [];
     this.taskCategories = [];
@@ -173,21 +171,13 @@ export class TaskFormComponent extends EditFormComponent<TaskDto, TaskService, T
     this.types = [];
     this.statuses = [];
     this.difficulties = [];
-    this.role = this.authService.user?.maxRole ?? 'TUTOR';
+    this.role = this.authService.user?.maxRole ?? 'TUTOR'; // We assume that the user and its role do not change during lifetime of this component
   }
 
   /**
    * Initializes the form
    */
   ngOnInit(): void {
-    // Listen to user role changes
-    this.authService.userChanged.pipe(takeUntil(this.destroy$))
-      .subscribe(user => {
-        this.role = user?.maxRole ?? 'TUTOR';
-        this.setStatusDisablesAndReadonly();
-        this.setOrganizationalUnits();
-      });
-
     // Listen to language changes
     this.translationService.langChanges$
       .pipe(takeUntil(this.destroy$))
@@ -217,7 +207,8 @@ export class TaskFormComponent extends EditFormComponent<TaskDto, TaskService, T
         } else {
           this.originalEntity = null;
         }
-        this.setStatusDisablesAndReadonly();
+        this.setDefaultOrganizationalUnitIfUnset();
+        this.setFormEnabledDisabled();
       });
   }
 
@@ -264,26 +255,82 @@ export class TaskFormComponent extends EditFormComponent<TaskDto, TaskService, T
 
   //#endregion
 
-  //#region --- Load data ---
+  //#region --- Additional actions ---
 
+  /**
+   * Opens the dialog to test the task.
+   */
+  testTask(): void {
+    if (!this.originalEntity)
+      return;
+
+    this.dialogService.open(TaskSubmissionComponent, {
+      header: this.translationService.translate(this.baseTranslationKey + 'submitTest'),
+      width: '90%',
+      maximizable: true,
+      style: {
+        minWidth: '500px',
+        minHeight: '500px'
+      },
+      data: {
+        taskId: this.originalEntity.id,
+        taskType: this.originalEntity.taskType
+      }
+    });
+  }
+
+  /**
+   * Clones a task.
+   */
+  async clone(): Promise<void> {
+    try {
+      const value = this.form.value;
+      value.title = value.title + ' (Clone)';
+      const result = await this.entityService.create(this.modifyValueBeforeSend(value as any, 'create'));
+      this.messageService.add({
+        severity: 'success',
+        detail: this.translationService.translate(this.baseTranslationKey + 'success.create', this.getMessageParams(result, 'successCreate')),
+        key: 'global'
+      });
+      await this.onSuccess(this.getId(result) as number, 'create');
+    } catch (err) {
+      let detail = '';
+      if (err instanceof HttpErrorResponse) {
+        if (err.error?.detail)
+          detail = err.error.detail;
+        else
+          detail = err.message;
+      }
+
+      this.messageService.add({
+        severity: 'error',
+        detail: this.translationService.translate(this.baseTranslationKey + 'errors.create', this.getMessageParams(this.form.value as any, 'errorCreate')) + ' ' + detail,
+        key: 'global',
+        life: 10000
+      });
+      this.onError('create', err);
+    } finally {
+      this.loading = false;
+    }
+  }
+
+  //#endregion
+
+  //#region --- Load data ---
+  /**
+   * Loads the task with the specified identifier.
+   *
+   * @param id The identifier of the task.
+   */
   private async loadTask(id: string | number): Promise<void> {
     try {
       this.startLoading();
       const data = await this.entityService.get(+id);
       this.originalEntity = data.dto;
       this.additionalData = data.additionalData;
-
-      // for (let i = 0; i < this.form.controls.taskCategoryIds.length; i++) {
-      //   this.form.controls.taskCategoryIds.removeAt(0);
-      // }
-
-      // for (let taskCategoryId of this.originalEntity?.taskCategoryIds ?? []) {
-      //   this.form.controls.taskCategoryIds.controls.push(new FormControl<TreeNode | null>(null, []));
-      // }
-
       this.form.patchValue({...this.originalEntity, taskCategoryIds: []});
       this.form.markAsPristine();
-      this.setStatusDisablesAndReadonly();
+      this.setFormEnabledDisabled();
       this.changeDetectorRef.detectChanges(); // required to prevent error
       this.onOrganizationalUnitChanged(this.originalEntity?.organizationalUnitId);
     } catch (err) {
@@ -308,11 +355,25 @@ export class TaskFormComponent extends EditFormComponent<TaskDto, TaskService, T
     }
   }
 
+  /**
+   * Loads and sets organizational units.
+   */
   private async loadOrganizationalUnits(): Promise<void> {
+    const user = this.authService.user;
+    if (!user) {
+      this.organizationalUnits = [];
+      this.taskGroups = [];
+      return;
+    }
+
     try {
       this.startLoading();
-      this.allOrganizationalUnits = (await this.organizationalUnitService.load(0, 999999, [{field: 'name', order: 1}])).content;
-      this.setOrganizationalUnits();
+
+      // Set active organizational units (the user has to be full admin or must have a role in the organizational unit)
+      const allOrganizationalUnits = (await this.organizationalUnitService.load(0, 999999, [{field: 'name', order: 1}])).content;
+      this.organizationalUnits = allOrganizationalUnits // filter is necessary as user is allowed to query all organizational units
+        .filter(x => user.isFullAdmin || user.roles.find(r => r.organizationalUnit === x.id));
+      this.setDefaultOrganizationalUnitIfUnset();
     } catch (err) {
       console.error('[TaskFormComponent] Could not load organizational units', err);
       this.messageService.add({
@@ -326,6 +387,9 @@ export class TaskFormComponent extends EditFormComponent<TaskDto, TaskService, T
     }
   }
 
+  /**
+   * Loads all task groups.
+   */
   private async loadTaskGroups(): Promise<void> {
     try {
       this.startLoading();
@@ -343,6 +407,9 @@ export class TaskFormComponent extends EditFormComponent<TaskDto, TaskService, T
     }
   }
 
+  /**
+   * Loads all task categories.
+   */
   private async loadTaskCategories(): Promise<void> {
     try {
       this.startLoading();
@@ -362,152 +429,11 @@ export class TaskFormComponent extends EditFormComponent<TaskDto, TaskService, T
 
   //#endregion
 
-  private updateDropdownTranslations(): void {
-    this.types = TaskTypeRegistry.getTaskTypes().map(x => {
-      return {value: x, text: this.translationService.translate('taskTypes.' + x + '.title')};
-    });
-    this.statuses = [
-      {value: StatusEnum.DRAFT, text: this.translationService.translate('taskStatus.' + StatusEnum.DRAFT), disabled: false},
-      {value: StatusEnum.READY_FOR_APPROVAL, text: this.translationService.translate('taskStatus.' + StatusEnum.READY_FOR_APPROVAL), disabled: false},
-      {value: StatusEnum.APPROVED, text: this.translationService.translate('taskStatus.' + StatusEnum.APPROVED), disabled: false}
-    ];
-    this.difficulties = [
-      {value: 1, text: this.translationService.translate('difficulty.1')},
-      {value: 2, text: this.translationService.translate('difficulty.2')},
-      {value: 3, text: this.translationService.translate('difficulty.3')},
-      {value: 4, text: this.translationService.translate('difficulty.4')}
-    ];
-  }
-
-  private setOrganizationalUnits(): void {
-    const user = this.authService.user;
-    if (!user) {
-      this.organizationalUnits = [];
-      this.taskGroups = [];
-      return;
-    }
-
-    this.organizationalUnits = this.allOrganizationalUnits.filter(x => user.isFullAdmin || user.roles.find(r => r.organizationalUnit === x.id));
-
-    //Automated selection: Not implemented yet due to async loading issues of TaskCategories
-
-    // if (this.organizationalUnits.length === 1 && !this.form.value.organizationalUnitId) {
-    //   this.form.patchValue({organizationalUnitId: this.organizationalUnits[0].id});
-    // }
-
-  }
-
-  private setStatusDisablesAndReadonly(): void {
-    const user = this.authService.user;
-    if (!user)
-      return; // should never happen
-
-    // check if readonly
-    this.readonly = this.role === 'TUTOR' && !!this.originalEntity && this.originalEntity.status === 'APPROVED';
-    if (this.readonly)
-      this.form.disable();
-    else
-      this.form.enable();
-
-    // set status disabled
-    this.statuses = this.statuses.map(s => {
-      return {
-        ...s,
-        disabled: s.value === 'APPROVED' && this.role === 'TUTOR'
-      };
-    });
-  }
-
-  private onOrganizationalUnitChanged(value: number | null): void {
-    const user = this.authService.user;
-
-    // Task groups
-    this.taskGroups = this.allTaskGroups.filter(x => x.organizationalUnitId === value &&
-      (user?.isFullAdmin || user?.roles.find(r => r.organizationalUnit === x.organizationalUnitId)) &&
-      this.supportedTaskGroupTypes.includes(x.taskGroupType));
-
-    // Task categories
-    const noTaskCat = this.form.controls.taskCategoryIds.length;
-    for (let i = 0; i < noTaskCat; i++) {
-      this.removeTaskCategory(0);
-    }
-    const tmp = this.allTaskCategories.filter(x => x.organizationalUnitId === value &&
-      (user?.isFullAdmin || user?.roles.find(r => r.organizationalUnit === x.organizationalUnitId)));
-
-    const func = (parentId: number): TreeNode[] => {
-      return tmp.filter(x => x.parentId === parentId).map(x => {
-        return {
-          data: x.id,
-          label: x.name,
-          key: x.id + '',
-          children: func(x.id)
-        };
-      });
-    };
-
-    this.taskCategories = tmp.filter(x => !x.parentId).map(x => {
-      return {
-        data: x.id,
-        label: x.name,
-        key: x.id + '',
-        children: func(x.id)
-      };
-    });
-
-    // Patch form value
-    const recursiveSearch = (node: TreeNode, id: number): TreeNode | null => {
-      if (node.data === id)
-        return node;
-      for (const child of node.children ?? []) {
-        const result = recursiveSearch(child, id);
-        if (result)
-          return result;
-      }
-      return null;
-    };
-    if (this.originalEntity && this.originalEntity.taskCategoryIds) {
-      for (let i = 0; i < (this.originalEntity.taskCategoryIds.length ?? 0); i++) {
-        this.addTaskCategory();
-      }
-      const nodes: TreeNode[] = (this.originalEntity.taskCategoryIds.flatMap(x => {
-        const result: TreeNode[] = [];
-        for (const node of this.taskCategories) {
-          const tmp = recursiveSearch(node, x);
-          if (tmp)
-            result.push(tmp);
-        }
-        return result;
-      })
-        .filter(x => !!x)
-        .map(x => x!)) ?? [];
-      this.form.patchValue({taskCategoryIds: nodes});
-    }
-  }
-
-  private onTaskTypeChanged(value: string | null): void {
-    // Set task group validation
-    this.supportedTaskGroupTypes = TaskTypeRegistry.getSupportsTaskGroupTypes(value);
-    this.supportsDescriptionGeneration = TaskTypeRegistry.supportsDescriptionGeneration(value);
-    if (this.supportedTaskGroupTypes.length > 0) {
-      this.form.controls.taskGroupId.addValidators(Validators.required);
-      this.form.updateValueAndValidity();
-    } else {
-      this.form.controls.taskGroupId.removeValidators(Validators.required);
-      this.form.controls.taskGroupId.setValue(null);
-      this.form.updateValueAndValidity();
-    }
-
-    // Set supported task groups
-    const user = this.authService.user;
-    this.taskGroups = this.allTaskGroups.filter(x => x.organizationalUnitId === this.form.value.organizationalUnitId &&
-      (user?.isFullAdmin || user?.roles.find(r => r.organizationalUnit === x.organizationalUnitId)) &&
-      this.supportedTaskGroupTypes.includes(x.taskGroupType));
-
-    // Set task type form
-    for (const x in this.form.controls.additionalData.controls) {
-      this.form.controls.additionalData.removeControl(x);
-    }
-    this.componentForm = TaskTypeRegistry.getComponent(value);
+  /**
+   * Gets the currently selected task group.
+   */
+  getTaskGroup(): TaskGroupDto | undefined {
+    return this.taskGroups.find(x => x.id === this.form.value.taskGroupId);
   }
 
   /**
@@ -526,31 +452,178 @@ export class TaskFormComponent extends EditFormComponent<TaskDto, TaskService, T
   }
 
   /**
-   * Gets the currently selected task group.
+   * Sets the dropdown values based on the current language.
    */
-  getTaskGroup(): TaskGroupDto | undefined {
-    return this.taskGroups.find(x => x.id === this.form.value.taskGroupId);
+  private updateDropdownTranslations(): void {
+    this.types = TaskTypeRegistry.getTaskTypes().map(x => {
+      return {value: x, text: this.translationService.translate('taskTypes.' + x + '.title')};
+    });
+    this.statuses = [
+      {value: StatusEnum.DRAFT, text: this.translationService.translate('taskStatus.' + StatusEnum.DRAFT), disabled: false},
+      {value: StatusEnum.READY_FOR_APPROVAL, text: this.translationService.translate('taskStatus.' + StatusEnum.READY_FOR_APPROVAL), disabled: false},
+      {value: StatusEnum.APPROVED, text: this.translationService.translate('taskStatus.' + StatusEnum.APPROVED), disabled: this.role === 'TUTOR'}
+    ];
+    this.difficulties = [
+      {value: 1, text: this.translationService.translate('difficulty.1')},
+      {value: 2, text: this.translationService.translate('difficulty.2')},
+      {value: 3, text: this.translationService.translate('difficulty.3')},
+      {value: 4, text: this.translationService.translate('difficulty.4')}
+    ];
   }
 
   /**
-   * Opens the dialog to test the task.
+   * Enables/disables the form based on the current role and status.
+   *
+   * The form is disabled if the user is a tutor and the task is approved.
    */
-  testTask(): void {
-    if (!this.originalEntity)
-      return;
+  private setFormEnabledDisabled(): void {
+    this.readonly = this.role === 'TUTOR' && !!this.originalEntity && this.originalEntity.status === 'APPROVED';
+    if (this.readonly)
+      this.form.disable();
+    else
+      this.form.enable();
+  }
 
-    this.dialogService.open(TaskSubmissionComponent, {
-      header: this.translationService.translate(this.baseTranslationKey + 'submitTest'),
-      width: '90%',
-      maximizable: true,
-      style: {
-        minWidth: '500px',
-        minHeight: '500px'
-      },
-      data: {
-        taskId: this.originalEntity.id,
-        taskType: this.originalEntity.taskType
-      }
+  /**
+   * Updates the form based on the selected task type.
+   *
+   * This method sets the task groups depending on the current user role, the selected organizational unit and the selected task type.
+   * It also sets the additional form components based on the selected task type.
+   *
+   * @param value The selected task type.
+   */
+  private onTaskTypeChanged(value: string | null): void {
+    // Set task group validation
+    this.supportedTaskGroupTypes = TaskTypeRegistry.getSupportsTaskGroupTypes(value);
+    this.supportsDescriptionGeneration = TaskTypeRegistry.supportsDescriptionGeneration(value);
+    if (this.supportedTaskGroupTypes.length > 0) {
+      this.form.controls.taskGroupId.addValidators(Validators.required);
+      this.form.updateValueAndValidity();
+    } else {
+      this.form.controls.taskGroupId.removeValidators(Validators.required);
+      this.form.controls.taskGroupId.setValue(null);
+      this.form.updateValueAndValidity();
+    }
+
+    // Set supported task groups
+    this.setTaskGroups(this.authService.user, this.form.value.organizationalUnitId);
+
+    // Set task type form
+    for (const x in this.form.controls.additionalData.controls) {
+      this.form.controls.additionalData.removeControl(x);
+    }
+    this.componentForm = TaskTypeRegistry.getComponent(value);
+    this.form.updateValueAndValidity();
+  }
+
+  /**
+   * Sets the default organizational unit if it is not set and only one organizational unit is available.
+   */
+  private setDefaultOrganizationalUnitIfUnset(): void {
+    if (!this.originalEntity && this.organizationalUnits.length === 1 && !this.form.value.organizationalUnitId) {
+      this.form.patchValue({organizationalUnitId: this.organizationalUnits[0].id});
+    }
+  }
+
+  /**
+   * Sets the task groups based on the organizational unit and the user role.
+   *
+   * @param user The current user.
+   * @param orgUnitId The selected organizational unit identifier.
+   */
+  private setTaskGroups(user: ApplicationUser | null, orgUnitId: number | null | undefined): void {
+    if (!user || !orgUnitId) {
+      this.taskGroups = [];
+      return;
+    }
+
+    this.taskGroups = this.allTaskGroups.filter(x => x.organizationalUnitId === orgUnitId &&
+      (user?.isFullAdmin || user?.roles.find(r => r.organizationalUnit === x.organizationalUnitId)) &&
+      this.supportedTaskGroupTypes.includes(x.taskGroupType));
+  }
+
+  /**
+   * Updates the task groups and task categories based on the selected organizational unit und current user role.
+   *
+   * @param value The selected organizational unit identifier.
+   */
+  private onOrganizationalUnitChanged(value: number | null): void {
+    const user = this.authService.user;
+
+    // Set task groups
+    this.setTaskGroups(user, value);
+
+    // Remove existing task category form fields
+    const len = this.form.controls.taskCategoryIds.length;
+    for (let i = 0; i < len; i++) {
+      this.removeTaskCategory(0);
+    }
+
+    // Find selectable task categories depending on OU and user
+    const selectableCategories = this.allTaskCategories.filter(x => x.organizationalUnitId === value &&
+      (user?.isFullAdmin || user?.roles.find(r => r.organizationalUnit === x.organizationalUnitId)));
+
+    /**
+     * Recursively gets the child nodes of the specified parent identifier.
+     *
+     * @param parentId The parent identifier.
+     */
+    const getChildNodes = (parentId: number): TreeNode[] => {
+      return selectableCategories.filter(x => x.parentId === parentId).map(x => {
+        return {
+          data: x.id,
+          label: x.name,
+          key: x.id + '',
+          children: getChildNodes(x.id)
+        };
+      });
+    };
+
+    // Build tree
+    this.taskCategories = selectableCategories.filter(x => !x.parentId).map(x => {
+      return {
+        data: x.id,
+        label: x.name,
+        key: x.id + '',
+        children: getChildNodes(x.id)
+      };
     });
+
+    /**
+     * Recursively searches for the specified identifier in the tree.
+     *
+     * @param node The current node.
+     * @param id The identifier to search for.
+     */
+    const recursiveSearch = (node: TreeNode, id: number): TreeNode | null => {
+      if (node.data === id)
+        return node;
+      for (const child of node.children ?? []) {
+        const result = recursiveSearch(child, id);
+        if (result)
+          return result;
+      }
+      return null;
+    };
+
+    // Patch form value (if original entity is set)
+    if (this.originalEntity && this.originalEntity.taskCategoryIds) {
+      // Add form control for each task category
+      for (let i = 0; i < (this.originalEntity.taskCategoryIds.length ?? 0); i++) {
+        this.addTaskCategory();
+      }
+
+      // Patch form with nodes instead of task category ids
+      const nodes: TreeNode[] = (this.originalEntity.taskCategoryIds.flatMap(x => {
+        const result: TreeNode[] = [];
+        for (const node of this.taskCategories) {
+          const tmp = recursiveSearch(node, x);
+          if (tmp)
+            result.push(tmp);
+        }
+        return result;
+      }).filter(x => !!x).map(x => x!)) ?? [];
+      this.form.patchValue({taskCategoryIds: nodes});
+    }
   }
 }

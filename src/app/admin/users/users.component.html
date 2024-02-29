@@ -61,8 +61,8 @@
       <td>{{ entity.lastName }}</td>
       <td>{{ entity.email }}</td>
       <td>
-        <p-tag [severity]="entity.enabled && entity.activated ? 'success' : (entity.activated ? 'danger' : 'warning')">
-          {{ (entity.enabled ? this.baseTranslationKey + 'enabled' : this.baseTranslationKey + 'disabled') | transloco }}
+        <p-tag [severity]="entity.enabled && entity.activated ? 'success' : (entity.enabled ? 'warning' : 'danger')">
+          {{ (this.baseTranslationKey + (entity.enabled && entity.activated ? 'activated' : (entity.enabled ? 'enabled' : 'disabled'))) | transloco }}
         </p-tag>
       </td>
       <td>

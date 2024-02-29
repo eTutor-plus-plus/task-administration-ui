@@ -114,7 +114,13 @@
       <p-button [label]="this.baseTranslationKey + 'addOU' | transloco" class="w-auto ml-2" (onClick)="addOrganizationalUnit()" severity="help"
                 [disabled]="loading"/>
     </div>
-    <button pButton [label]="(!originalEntity ? 'common.create' : 'common.save') | transloco" [disabled]="form.invalid" class="w-auto" type="submit"
-            [loading]="loading"></button>
+    <div>
+      @if (!originalEntity) {
+        <button pButton [label]="(this.baseTranslationKey + 'createActivate') | transloco" [disabled]="form.invalid" class="w-auto mr-2" type="button"
+                [loading]="loading" (click)="createAndActivate()"></button>
+      }
+      <button pButton [label]="(!originalEntity ? 'common.create' : 'common.save') | transloco" [disabled]="form.invalid"
+              class="w-auto" type="submit" [loading]="loading"></button>
+    </div>
   </div>
 </form>

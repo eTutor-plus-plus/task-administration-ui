@@ -58,6 +58,7 @@ export class UserFormComponent extends DialogEditFormComponent<UserDto, UserServ
     {value: 'TUTOR', label: this.translationService.translate('roles.' + 'TUTOR'), disabled: false}
   ];
 
+  private activate: boolean;
   private organizationalUnits: OrganizationalUnitDto[];
   private readonly destroy$ = new Subject<void>();
 
@@ -81,6 +82,7 @@ export class UserFormComponent extends DialogEditFormComponent<UserDto, UserServ
     this.organizationalUnits = [];
     this.organizationalUnitsData = [];
     this.isFullAdmin = false;
+    this.activate = false;
   }
 
   /**
@@ -144,6 +146,14 @@ export class UserFormComponent extends DialogEditFormComponent<UserDto, UserServ
     this.updateAvailableUnits();
   }
 
+  /**
+   * Submits the form and sets the activate flag to activate the user on creation.
+   */
+  createAndActivate(): Promise<void> {
+    this.activate = true;
+    return this.submit();
+  }
+
   override getId(entity: UserDto): string | number {
     return entity.id;
   }
@@ -156,6 +166,17 @@ export class UserFormComponent extends DialogEditFormComponent<UserDto, UserServ
     username: any;
   }, type: 'successCreate' | 'errorCreate' | 'successUpdate' | 'errorUpdate'): Record<string, unknown> {
     return {username: entity.username};
+  }
+
+  override modifyValueBeforeSend(data: Partial<{ [K in keyof UserForm]: any }>, type: 'create' | 'update'): any {
+    if (this.activate && type === 'create')
+      data = {...data, activated: DateTime.now().toISO()};
+
+    return super.modifyValueBeforeSend(data, type);
+  }
+
+  override onSuccess(id: number | string, operation: 'create' | 'update'): void | Promise<void> {
+    this.dialogRef.close(this.activate ? id : true);
   }
 
   private async loadOrganizationalUnits(): Promise<void> {

@@ -69,6 +69,29 @@ export class UsersComponent extends TableDialogOverviewComponent<UserDto, UserSe
     return {username: entity.username};
   }
 
+  protected override async onDialogClosed(action: 'create' | 'edit', value: any): Promise<void> {
+    await super.onDialogClosed(action, value);
+    if (value === true)
+      return;
+
+    const entity: UserDto = {
+      id: value,
+      username: '',
+      firstName: '',
+      lastName: '',
+      email: '',
+      organizationalUnits: [],
+      enabled: true,
+      fullAdmin: false,
+      failedLoginCount: 0,
+      createdBy: null,
+      createdDate: null,
+      lastModifiedBy: null,
+      lastModifiedDate: null
+    };
+    this.changePassword(entity);
+  }
+
   /**
    * Opens a form to change the users' password.
    *
