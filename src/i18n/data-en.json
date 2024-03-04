@@ -160,7 +160,8 @@
       "delete": "The task '{{name}}' could not be deleted.",
       "create": "The task '{{name}}' could not be created.",
       "update": "The task '{{name}}' could not be updated.",
-      "groupNotApproved": "The associated task group has not yet been approved."
+      "groupNotApproved": "The associated task group has not yet been approved.",
+      "moodleSync": "The task is not available in Moodle"
     },
     "success": {
       "delete": "The task '{{name}}' was successfully deleted.",

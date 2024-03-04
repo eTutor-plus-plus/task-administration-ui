@@ -17,7 +17,7 @@ import { DropdownModule } from 'primeng/dropdown';
 
 import { AuthService, Role } from '../../auth';
 import { TableOverviewComponent } from '../../layout';
-import { OrganizationalUnitDto, OrganizationalUnitService, StatusEnum, TaskDto, TaskGroupDto, TaskGroupService, TaskService } from '../../api';
+import { OrganizationalUnitDto, OrganizationalUnitService, StatusEnum, TaskCategoryDto, TaskDto, TaskGroupDto, TaskGroupService, TaskService } from '../../api';
 
 /**
  * Page: Tasks Overview
@@ -211,6 +211,20 @@ export class TasksComponent extends TableOverviewComponent<TaskDto, TaskService>
         life: 10000,
         key: 'global'
       });
+    }
+  }
+
+  async sync(entity: TaskDto): Promise<void> {
+    try {
+      await this.entityService.syncWithMoodle(entity.id);
+      this.messageService.add({
+        key: 'global',
+        summary: this.translationService.translate(this.baseTranslationKey + 'success.moodleSync'),
+        severity: 'info'
+      });
+      setTimeout(() => this.reload(), 2000);
+    } catch (err) {
+      // ignore
     }
   }
 }
