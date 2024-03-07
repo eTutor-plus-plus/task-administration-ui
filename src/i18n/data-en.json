@@ -164,6 +164,7 @@
       "moodleSync": "The task is not available in Moodle"
     },
     "success": {
+      "moodleSync": "The synchronization with Moodle was has been successfully initiated.",
       "delete": "The task '{{name}}' was successfully deleted.",
       "create": "The task '{{name}}' was successfully created.",
       "update": "The task '{{name}}' was successfully updated."
