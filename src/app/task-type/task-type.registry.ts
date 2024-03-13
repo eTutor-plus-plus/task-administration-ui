@@ -3,6 +3,7 @@ import { TaskTypeBinarySearchComponent } from './task-type-binary-search/task-ty
 import { TaskTypeXqueryComponent } from './task-type-xquery/task-type-xquery.component';
 import { TaskTypeFormComponent } from './task-type-form.component';
 import { TaskTypeDatalogComponent } from './task-type-datalog/task-type-datalog.component';
+import { TaskTypeDroolsComponent } from './task-type-drools/task-type-drools.component';
 
 /**
  * Registry for task types.
@@ -42,6 +43,14 @@ return $d`,
       submissionTemplate: '',
       supportsDescriptionGeneration: false,
       submissionInputLanguage: 'datalog'
+    },
+    {
+      name: 'drools',
+      supportedTaskGroupTypes: [],
+      component: TaskTypeDroolsComponent,
+      submissionTemplate: '',
+      supportsDescriptionGeneration: false,
+      submissionInputLanguage: 'drools'
     }
   ];
 
