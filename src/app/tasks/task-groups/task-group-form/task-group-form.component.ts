@@ -118,7 +118,7 @@ export class TaskGroupFormComponent extends EditFormComponent<TaskGroupDto, Task
     this.organizationalUnits = [];
     this.types = TaskGroupTypeRegistry.getTaskTypes().map(x => {
       return {value: x, text: this.translationService.translate('taskGroupTypes.' + x + '.title')};
-    });
+    }).sort((a, b) => a.text.localeCompare(b.text));
     this.statuses = [
       {value: StatusEnum.DRAFT, text: this.translationService.translate('taskStatus.' + StatusEnum.DRAFT), disabled: false},
       {value: StatusEnum.READY_FOR_APPROVAL, text: this.translationService.translate('taskStatus.' + StatusEnum.READY_FOR_APPROVAL), disabled: false},

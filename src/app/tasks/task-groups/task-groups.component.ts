@@ -113,7 +113,7 @@ export class TaskGroupsComponent extends TableOverviewComponent<TaskGroupDto, Ta
           text: this.translationService.translate('taskGroupTypes.' + x + '.title'),
           value: x
         };
-      })); // ignore errors
+      }).sort((a, b) => a.text.localeCompare(b.text))); // ignore errors
   }
 
   /**

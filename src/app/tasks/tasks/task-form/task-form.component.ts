@@ -457,7 +457,7 @@ export class TaskFormComponent extends EditFormComponent<TaskDto, TaskService, T
   private updateDropdownTranslations(): void {
     this.types = TaskTypeRegistry.getTaskTypes().map(x => {
       return {value: x, text: this.translationService.translate('taskTypes.' + x + '.title')};
-    });
+    }).sort((a, b) => a.text.localeCompare(b.text));
     this.statuses = [
       {value: StatusEnum.DRAFT, text: this.translationService.translate('taskStatus.' + StatusEnum.DRAFT), disabled: false},
       {value: StatusEnum.READY_FOR_APPROVAL, text: this.translationService.translate('taskStatus.' + StatusEnum.READY_FOR_APPROVAL), disabled: false},

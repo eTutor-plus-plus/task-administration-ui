@@ -17,7 +17,7 @@ import { DropdownModule } from 'primeng/dropdown';
 
 import { AuthService, Role } from '../../auth';
 import { TableOverviewComponent } from '../../layout';
-import { OrganizationalUnitDto, OrganizationalUnitService, StatusEnum, TaskCategoryDto, TaskDto, TaskGroupDto, TaskGroupService, TaskService } from '../../api';
+import { OrganizationalUnitDto, OrganizationalUnitService, StatusEnum, TaskDto, TaskGroupDto, TaskGroupService, TaskService } from '../../api';
 
 /**
  * Page: Tasks Overview
@@ -121,7 +121,7 @@ export class TasksComponent extends TableOverviewComponent<TaskDto, TaskService>
           text: this.translationService.translate('taskTypes.' + x + '.title'),
           value: x
         };
-      })); // ignore errors
+      }).sort((a, b) => a.text.localeCompare(b.text))); // ignore errors
   }
 
   /**
