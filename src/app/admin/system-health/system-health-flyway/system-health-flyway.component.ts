@@ -75,6 +75,8 @@ export class SystemHealthFlywayComponent implements OnInit, OnDestroy {
    * @param obj The object.
    */
   getProperties(obj: any): string[] {
+    if (!obj)
+      return [];
     return Object.keys(obj);
   }
 

@@ -281,6 +281,7 @@
       "httpCount": "Count",
       "httpAvg": "Average (ms)",
       "httpMax": "Max. (ms)",
+      "pool": "Pool",
       "executorActive": "Active",
       "executorQueued": "Queued",
       "executorQueueRemaining": "Queue Remaining",
