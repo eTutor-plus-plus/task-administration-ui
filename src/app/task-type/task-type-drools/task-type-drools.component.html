@@ -3,7 +3,7 @@
     <div class="grid formgrid p-fluid">
       <div class="field mb-4 col-12">
         <label for="droolsSolution" transloco="taskTypes.drools.fields.droolsSolution"></label>
-        <ngx-monaco-editor id="droolsSolution" formControlName="droolsSolution" [options]="editorOptions" style="height: 300px;"/>
+        <ngx-monaco-editor id="droolsSolution" formControlName="droolsSolution" [options]="droolsEditorOptions" style="height: 300px;"/>
         @if (form.controls.droolsSolution.dirty || form.controls.droolsSolution.touched) {
           <small class="block mt-1 p-error">
             {{ getError(form.controls.droolsSolution, 'taskTypes.xquery.fields.droolsSolution') }}
@@ -13,7 +13,7 @@
 
       <div class="field mb-4 col-12">
         <label for="droolsObjects" transloco="taskTypes.drools.fields.droolsObjects"></label>
-        <ngx-monaco-editor id="droolsObjects" formControlName="droolsObjects" [options]="editorOptions" style="height: 50px;"/>
+        <ngx-monaco-editor id="droolsObjects" formControlName="droolsObjects" [options]="csvEditorOptions" style="height: 200px;"/>
         @if (form.controls.droolsObjects.dirty || form.controls.droolsObjects.touched) {
           <small class="block mt-1 p-error">
             {{ getError(form.controls.droolsObjects, 'taskTypes.drools.fields.droolsObjects') }}
@@ -49,13 +49,14 @@
     <div formArrayName="droolsClasses">
       <div *ngFor="let droolsClass of droolsClasses.controls; let i = index" [formGroupName]="i">
         <div class="grid formgrid p-fluid">
-          <div class="field col-2 mb-4">
+          <div class="field col-3 mb-4">
             <input type="text" pInputText formControlName="classname" placeholder="Class Name">
           </div>
           <div class="field col-8 mb-4">
-            <input type="text" pInputText formControlName="classBody" placeholder="Class Body">
+            <ngx-monaco-editor formControlName="classBody" [options]="javaEditorOptions" style="height: 150px;"/>
+<!--            <input type="text" pInputText formControlName="classBody" placeholder="Class Body">-->
           </div>
-          <div class="field col-2 mb-4">
+          <div class="field col-1 mb-4">
             <p-button icon="pi pi-trash" severity="danger" (onClick)="removeDroolsClass(i)"></p-button>
           </div>
         </div>

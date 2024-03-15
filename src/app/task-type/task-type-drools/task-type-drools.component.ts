@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { MonacoEditorModule } from 'ngx-monaco-editor-v2';
 import { PaginatorModule } from 'primeng/paginator';
-import { FormArray, FormControl, FormGroup, ReactiveFormsModule} from '@angular/forms';
+import { FormArray, FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { TranslocoDirective, TranslocoPipe } from '@ngneat/transloco';
 import { ButtonModule } from 'primeng/button';
 import { TreeSelectModule } from 'primeng/treeselect';
@@ -30,28 +30,34 @@ import { NgForOf } from '@angular/common';
 
 
 export class TaskTypeDroolsComponent extends TaskTypeFormComponent<TaskTypeForm> {
-  readonly editorOptions: editor.IStandaloneEditorConstructionOptions = {
+  readonly droolsEditorOptions: editor.IStandaloneEditorConstructionOptions = {
+    language: 'drools'
+  };
+  readonly csvEditorOptions: editor.IStandaloneEditorConstructionOptions = {
+    language: 'csv'
+  };
+  readonly javaEditorOptions: editor.IStandaloneEditorConstructionOptions = {
     language: 'java'
   };
 
-  droolsClasses = new FormArray<FormGroup<{classname: FormControl<string|null>, classBody: FormControl<string|null>}>>([]);
+  droolsClasses = new FormArray<FormGroup<{ classname: FormControl<string | null>, classBody: FormControl<string | null> }>>([]);
+
+  constructor() {
+    super();
+  }
+
   protected override initForm(): void {
     this.form.addControl('droolsSolution', new FormControl<string | null>(null));
     this.form.addControl('droolsObjects', new FormControl<string | null>(null));
     this.form.addControl('droolsValidationClassname', new FormControl<string | null>(null));
     this.form.addControl('droolsErrorWeighting', new FormControl<number | null>(null));
-    this.form.addControl("droolsClasses", this.droolsClasses);
+    this.form.addControl('droolsClasses', this.droolsClasses);
   }
 
-
-
-  constructor() {
-    super();
-
-  }
   get itemsControls() {
     return this.droolsClasses.controls as FormGroup[];
   }
+
   addDroolsClass() {
     const itemsForm = new FormGroup({
       classname: new FormControl(''),
@@ -65,10 +71,9 @@ export class TaskTypeDroolsComponent extends TaskTypeFormComponent<TaskTypeForm>
   }
 }
 
-
 interface TaskTypeForm {
   droolsSolution: FormControl<string | null>;
-  droolsClasses: FormArray<FormGroup<{classname: FormControl<string|null>, classBody: FormControl<string|null>}>>;
+  droolsClasses: FormArray<FormGroup<{ classname: FormControl<string | null>, classBody: FormControl<string | null> }>>;
   droolsObjects: FormControl<string | null>;
   droolsValidationClassname: FormControl<string | null>;
   droolsErrorWeighting: FormControl<number | null>;

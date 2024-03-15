@@ -7,7 +7,7 @@ export function registerDatalogLanguage(): void {
   monaco.languages.register({id: 'datalog'});
   monaco.languages.setLanguageConfiguration('datalog', {
     comments: {
-      lineComment: '//'
+      lineComment: '%'
     },
     brackets: [
       ['{', '}'],
