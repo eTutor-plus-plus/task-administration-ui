@@ -43,11 +43,11 @@
             <tr>
               <th scope="row">{{ criterion.name }}</th>
               <td>{{ criterion.points }}</td>
-              <td [innerHTML]="criterion.feedback"></td>
+              <td [innerHTML]="trustHtml(criterion.feedback)"></td>
               <td><i [ngClass]="{
-                'pi pi-check text-green-500': criterion.passed,
-                'pi pi-times text-red-500': !criterion.passed
-              }" class="text-xl"></i></td>
+                'pi-check text-green-500': criterion.passed,
+                'pi-times text-red-500': !criterion.passed
+              }" class="pi text-xl"></i></td>
             </tr>
           }
         </table>
