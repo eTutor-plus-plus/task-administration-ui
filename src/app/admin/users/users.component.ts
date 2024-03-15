@@ -17,6 +17,7 @@ import { UserDto, UserService } from '../../api';
 import { AuthService } from '../../auth';
 import { UserFormComponent } from './user-form/user-form.component';
 import { ChangePasswordFormComponent } from './change-password-form/change-password-form.component';
+import { isNaN } from 'lodash-es';
 
 /**
  * Page: Users Overview
@@ -71,7 +72,7 @@ export class UsersComponent extends TableDialogOverviewComponent<UserDto, UserSe
 
   protected override async onDialogClosed(action: 'create' | 'edit', value: any): Promise<void> {
     await super.onDialogClosed(action, value);
-    if (value === true)
+    if (typeof value !== 'number')
       return;
 
     const entity: UserDto = {
