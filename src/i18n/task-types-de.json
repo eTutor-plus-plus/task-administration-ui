@@ -17,13 +17,13 @@
         "missingNodePenalty": "Fehlender Knoten: Punkteabzug",
         "missingNodeStrategy": "Fehlender Knoten: Strategie",
         "superfluousNodePenalty": "Überflüssiger Knoten: Punkteabzug",
-        "überflüssigerKnotenStrategie": "Überflüssiger Knoten: Strategie",
+        "superfluousNodeStrategy": "Überflüssiger Knoten: Strategie",
         "displacedNodePenalty": "Verdrängter Knoten: Punkteabzug",
         "displacedNodeStrategy": "Verdrängter Knoten: Strategie",
         "missingAttributePenalty": "Fehlendes Attribut: Punkteabzug",
         "missingAttributeStrategy": "Fehlendes Attribut: Strategie",
         "superfluousAttributePenalty": "Überflüssiges Attribut: Punkteabzug",
-        "überflüssigesAttributStrategie": "Überflüssiges Attribut: Strategie",
+        "superfluousAttributeStrategy": "Überflüssiges Attribut: Strategie",
         "incorrectTextPenalty": "Falscher Text: Punkteabzug",
         "incorrectTextStrategy": "Falscher Text: Strategie",
         "incorrectAttributeValuePenalty": "Falscher Attributwert: Punkteabzug",
@@ -43,12 +43,23 @@
       "fields": {
         "solution": "Lösung",
         "query": "Abfrage",
-        "uncheckedTerms": "Terme"
+        "uncheckedTerms": "Terme",
+        "missingPredicatePenalty": "Fehlendes Prädikat: Punkteabzug",
+        "missingPredicateStrategy": "Fehlendes Prädikat: Strategie",
+        "missingFactPenalty": "Fehlender Fakt: Punkteabzug",
+        "missingFactStrategy": "Fehlender Fakt: Strategie",
+        "superfluousFactPenalty": "Überflüssiger Fakt: Punkteabzug",
+        "superfluousFactStrategy": "Überflüssiger Fakt: Strategie"
       },
       "descriptions": {
         "solution": "Hier können die Regeln, welche die Lösung repräsentieren, definiert werden. Hier dürfen keine Query-Deklarationen erfolgen.",
         "query": "Wenn Sie mehrere Queries bei der Beurteilung berücksichtigen wollen, dann trennen Sie diese mittels Semikolon. Z.B. hatSohn(X,Y)?;hatTochter(X,Y)?",
         "uncheckedTerms": "Um bestimmte Terme, welche in den Fakten vorkommen, von der Manipulation auszuschließen, definieren Sie diese hier erneut. Z.B. 'hatKind(peter,_).' ,um den Term 'peter' von der Manipulation auszuschließen, sofern dieser auf Position 1 des Prädikats 'hatKind' vorkommt. Bei der Überprüfung werden Terme manipuliert, um zu verhindern, dass Studierende einfach die Fakten und keine Regeln eingeben."
+      },
+      "strategy": {
+        "KO": "K.O.-Kriterium",
+        "GROUP": "Einmal pro Gruppe",
+        "EACH": "Einmal pro Element"
       }
     },
     "drools": {

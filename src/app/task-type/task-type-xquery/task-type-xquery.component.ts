@@ -1,15 +1,14 @@
 import { Component, DestroyRef, OnInit } from '@angular/core';
 import { FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
 import { TranslocoDirective } from '@ngneat/transloco';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { InputNumberModule } from 'primeng/inputnumber';
+import { DropdownModule } from 'primeng/dropdown';
 import { editor } from 'monaco-editor';
 import { MonacoEditorModule } from 'ngx-monaco-editor-v2';
 
 import { TaskTypeFormComponent } from '../task-type-form.component';
 import { GradingStrategy } from './grading-strategy.enum';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { StatusEnum } from '../../api';
-import { DropdownModule } from 'primeng/dropdown';
 
 /**
  * Task Type Form: XQuery
