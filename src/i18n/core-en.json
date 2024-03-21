@@ -34,7 +34,8 @@
         "no_connection": "The eTutor-Server does not answer.",
         "login_failed": "Sign in failed",
         "login_success_summary": "Sign in successful",
-        "login_success_detail": "You will be redirected shortly ..."
+        "login_success_detail": "You will be redirected shortly ...",
+        "please_wait": "The connection to the Server is being established. Please wait ..."
       }
     },
     "forgot": {

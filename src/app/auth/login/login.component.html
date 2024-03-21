@@ -33,5 +33,7 @@
       <button pButton [label]="'auth.login.login' | transloco" class="w-full"
               [disabled]="form.invalid || !appAvailable" [loading]="loading" type="submit"></button>
     </form>
+  } @else {
+    <p-message severity="info" [text]="'auth.login.messages.please_wait' | transloco"/>
   }
 </dke-simple-layout>
