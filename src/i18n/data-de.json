@@ -67,7 +67,10 @@
     "fields": {
       "taskType": "Aufgabenart",
       "url": "URL",
-      "apiKey": "API Key"
+      "apiKey": "API Key",
+      "taskPrefix": "Aufgaben-URL Präfix",
+      "taskGroupPrefix": "Aufgabengruppen-URL Präfix",
+      "submissionPrefix": "Abgabe-URL Präfix"
     },
     "errors": {
       "load": "Die Aufgaben-Apps konnten nicht geladen werden.",
@@ -80,6 +83,7 @@
       "create": "Die Aufgaben-App '{{name}}' wurde erfolgreich erstellt.",
       "update": "Die Änderungen der Aufgaben-App '{{name}}' wurden erfolgreich gespeichert."
     },
+    "urlHint": "Konfigurieren Sie die Präfix-URLs nur, wenn die Aufgaben-App mehr als eine Aufgabenart unterstützt. Andernfalls lassen Sie die Felder leer.",
     "create": "Aufgaben-App erstellen",
     "edit": "Aufgaben-App bearbeiten"
   },

@@ -31,6 +31,40 @@
         </small>
       }
     </div>
+
+    <div class="field mb-4 col-6">
+      <label for="taskPrefix" [transloco]="this.baseTranslationKey + 'fields.taskPrefix'"></label>
+      <input id="taskPrefix" type="text" pInputText formControlName="taskPrefix" autocomplete="off">
+      @if (form.controls.taskPrefix.dirty || form.controls.taskPrefix.touched) {
+        <small class="block mt-1 p-error">
+          {{ getError(form.controls.taskPrefix, this.baseTranslationKey + 'fields.taskPrefix') }}
+        </small>
+      }
+    </div>
+
+    <div class="field mb-4 col-6">
+      <label for="taskGroupPrefix" [transloco]="this.baseTranslationKey + 'fields.taskGroupPrefix'"></label>
+      <input id="taskGroupPrefix" type="text" pInputText formControlName="taskGroupPrefix" autocomplete="off">
+      @if (form.controls.taskGroupPrefix.dirty || form.controls.taskGroupPrefix.touched) {
+        <small class="block mt-1 p-error">
+          {{ getError(form.controls.taskGroupPrefix, this.baseTranslationKey + 'fields.taskGroupPrefix') }}
+        </small>
+      }
+    </div>
+
+    <div class="field mb-4 col-6">
+      <label for="submissionPrefix" [transloco]="this.baseTranslationKey + 'fields.submissionPrefix'"></label>
+      <input id="submissionPrefix" type="text" pInputText formControlName="submissionPrefix" autocomplete="off">
+      @if (form.controls.submissionPrefix.dirty || form.controls.submissionPrefix.touched) {
+        <small class="block mt-1 p-error">
+          {{ getError(form.controls.submissionPrefix, this.baseTranslationKey + 'fields.submissionPrefix') }}
+        </small>
+      }
+    </div>
+
+    <div class="col-6">
+      <div class="mt-2 text-color-secondary">{{ this.baseTranslationKey + 'urlHint' | transloco }}</div>
+    </div>
   </div>
 
   <dke-audit-information [data]="originalEntity"/>

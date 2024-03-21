@@ -67,7 +67,10 @@
     "fields": {
       "taskType": "Task Type",
       "url": "URL",
-      "apiKey": "API Key"
+      "apiKey": "API Key",
+      "taskPrefix": "Task URL Prefix",
+      "taskGroupPrefix": "Task Group URL Prefix",
+      "submissionPrefix": "Submission URL Prefix"
     },
     "errors": {
       "load": "The task apps could not be loaded.",
@@ -80,6 +83,7 @@
       "create": "The task app '{{name}}' was successfully created.",
       "update": "The task app '{{name}}' was successfully updated."
     },
+    "urlHint": "Only configure the prefix URLs if the task app supports more than one task type. Otherwise, leave the fields empty.",
     "create": "Create Task App",
     "edit": "Edit Task App"
   },
