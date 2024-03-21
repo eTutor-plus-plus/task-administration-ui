@@ -1,4 +1,4 @@
-<p-blockUI [blocked]="loading" />
+<p-blockUI [blocked]="loading"/>
 <div class="flex justify-content-between align-items-center">
   <h1 [transloco]="baseTranslationKey + (originalEntity ? 'edit' : 'create')"></h1>
   <div>
@@ -71,7 +71,7 @@
             {{ getError(form.controls.descriptionDe, this.baseTranslationKey + 'fields.descriptionDe') }}
           </small>
         }
-        @if(supportsDescriptionGeneration){
+        @if (supportsDescriptionGeneration) {
           <small class="block mt-1 text-color-secondary">
             {{ baseTranslationKey + 'descriptionGeneration' | transloco }}
           </small>
@@ -86,7 +86,7 @@
             {{ getError(form.controls.descriptionEn, this.baseTranslationKey + 'fields.descriptionEn') }}
           </small>
         }
-        @if(supportsDescriptionGeneration){
+        @if (supportsDescriptionGeneration) {
           <small class="block mt-1 text-color-secondary">
             {{ baseTranslationKey + 'descriptionGeneration' | transloco }}
           </small>
@@ -122,8 +122,10 @@
             {{ getError(form.controls.status, this.baseTranslationKey + 'fields.status') }}
           </small>
         }
-        @if (form.controls.status.value === 'APPROVED' && getTaskGroup()?.status !== 'APPROVED') {
-          <p-tag severity="warning" styleClass="mt-1" [value]="'tasks.errors.groupNotApproved' | transloco"></p-tag>
+        @if (supportedTaskGroupTypes.length > 1) {
+          @if (form.controls.status.value === 'APPROVED' && getTaskGroup()?.status !== 'APPROVED') {
+            <p-tag severity="warning" styleClass="mt-1" [value]="'tasks.errors.groupNotApproved' | transloco"></p-tag>
+          }
         }
       </div>
     </div>

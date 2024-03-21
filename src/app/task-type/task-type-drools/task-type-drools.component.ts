@@ -40,22 +40,22 @@ export class TaskTypeDroolsComponent extends TaskTypeFormComponent<TaskTypeForm>
     language: 'java'
   };
 
-  droolsClasses = new FormArray<FormGroup<{ classname: FormControl<string | null>, classBody: FormControl<string | null> }>>([]);
+  classes = new FormArray<FormGroup<{ classname: FormControl<string | null>, classBody: FormControl<string | null> }>>([]);
 
   constructor() {
     super();
   }
 
   protected override initForm(): void {
-    this.form.addControl('droolsSolution', new FormControl<string | null>(null));
-    this.form.addControl('droolsObjects', new FormControl<string | null>(null));
-    this.form.addControl('droolsValidationClassname', new FormControl<string | null>(null));
-    this.form.addControl('droolsErrorWeighting', new FormControl<number | null>(null));
-    this.form.addControl('droolsClasses', this.droolsClasses);
+    this.form.addControl('solution', new FormControl<string | null>(null));
+    this.form.addControl('objects', new FormControl<string | null>(null));
+    this.form.addControl('validationClassname', new FormControl<string | null>(null));
+    this.form.addControl('errorWeighting', new FormControl<number | null>(null));
+    this.form.addControl('classes', this.classes);
   }
 
   get itemsControls() {
-    return this.droolsClasses.controls as FormGroup[];
+    return this.classes.controls as FormGroup[];
   }
 
   addDroolsClass() {
@@ -63,18 +63,18 @@ export class TaskTypeDroolsComponent extends TaskTypeFormComponent<TaskTypeForm>
       classname: new FormControl(''),
       classBody: new FormControl('')
     });
-    this.droolsClasses.push(itemsForm);
+    this.classes.push(itemsForm);
   }
 
   removeDroolsClass(index: number) {
-    this.droolsClasses.removeAt(index);
+    this.classes.removeAt(index);
   }
 }
 
 interface TaskTypeForm {
-  droolsSolution: FormControl<string | null>;
-  droolsClasses: FormArray<FormGroup<{ classname: FormControl<string | null>, classBody: FormControl<string | null> }>>;
-  droolsObjects: FormControl<string | null>;
-  droolsValidationClassname: FormControl<string | null>;
-  droolsErrorWeighting: FormControl<number | null>;
+  solution: FormControl<string | null>;
+  classes: FormArray<FormGroup<{ classname: FormControl<string | null>, classBody: FormControl<string | null> }>>;
+  objects: FormControl<string | null>;
+  validationClassname: FormControl<string | null>;
+  errorWeighting: FormControl<number | null>;
 }
