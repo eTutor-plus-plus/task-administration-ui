@@ -62,6 +62,16 @@
         "EACH": "Einmal pro Element"
       }
     },
+    "asp": {
+      "title": "Answer Set Programming",
+      "fields": {
+        "solution": "Lösung",
+        "maxN": "Max. Integer"
+      },
+      "descriptions": {
+        "solution": "Hier können die Regeln, welche die Lösung repräsentieren, definiert werden. Hier dürfen keine Query-Deklarationen erfolgen."
+      }
+    },
     "drools": {
       "title": "Drools",
       "fields": {
