@@ -73,5 +73,11 @@
     "suiteNameTemplate": "{filepath}",
     "classNameTemplate": "{classname}",
     "titleTemplate": "{title}"
+  },
+  "commit-and-tag-version": {
+    "skip": {
+      "tag": true,
+      "changelog": true
+    }
   }
 }
