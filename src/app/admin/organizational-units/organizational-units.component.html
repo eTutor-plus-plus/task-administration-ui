@@ -30,20 +30,17 @@
 
   <ng-template pTemplate="body" let-ou>
     <tr>
-      <td>
-        @if (!ou.moodleSynced) {
-          <p-button size="small" icon="pi pi-exclamation-triangle" severity="danger" [text]="true" (onClick)="sync(ou)"
-                    [pTooltip]="baseTranslationKey + 'errors.moodleSync' | transloco" [showDelay]="1000"/>
-        }
-
-        {{ ou.name }}
-      </td>
+      <td>{{ ou.name }}</td>
       <td>
         <span class="p-buttonset">
           <p-button (onClick)="edit(ou)" icon="pi pi-pencil" [pTooltip]="'common.edit' | transloco" tooltipPosition="top" [showDelay]="1000"
                     severity="warning" size="small"/>
           <p-button (onClick)="delete(ou, $event)" icon="pi pi-trash" [pTooltip]="'common.delete' | transloco" tooltipPosition="top" [showDelay]="1000"
                     severity="danger" size="small"/>
+          @if (!ou.moodleSynced) {
+            <p-button size="small" icon="pi pi-exclamation-triangle" severity="danger" [text]="true" (onClick)="sync(ou)"
+                      [pTooltip]="baseTranslationKey + 'errors.moodleSync' | transloco" [showDelay]="1000"/>
+          }
         </span>
       </td>
     </tr>

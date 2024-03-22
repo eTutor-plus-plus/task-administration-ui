@@ -151,12 +151,16 @@
       "diskSpace": "Disk Space",
       "livenessState": "Liveness",
       "ping": "Ping",
+      "dlv": "Datalog DLV",
+      "xq": "XQuery",
       "icons": {
         "readinessState": "pi-arrow-right-arrow-left",
         "db": "pi-database",
         "diskSpace": "pi-server",
         "livenessState": "pi-verified",
-        "ping": "pi-wifi"
+        "ping": "pi-wifi",
+        "dlv": "pi-info-circle",
+        "xq": "pi-code"
       },
       "backgroundClass": {
         "UP": "bg-green-100",
@@ -193,6 +197,14 @@
           "threshold": "Threshold",
           "path": "Path",
           "exists": "Exists"
+        },
+        "dlv": {
+          "version": "Version",
+          "output": "Output",
+          "exitCode": "Exit-Code"
+        },
+        "xq": {
+          "version": "Version"
         }
       }
     },

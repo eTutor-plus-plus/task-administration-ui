@@ -12,7 +12,7 @@
       "update": "Die Änderungen der Organisationseinheit '{{name}}' konnten nicht gespeichert werden."
     },
     "success": {
-      "moodleSync": "Die Synchronisation mit Moodle wurde erfolgreich initiiert.",
+      "moodleSync": "Die Synchronisation mit Moodle wurde initiiert. Bitte aktualisieren Sie die Tabelle nach ein paar Sekunden.",
       "delete": "Die Organisationseinheit '{{name}}' wurde erfolgreich gelöscht.",
       "create": "Die Organisationseinheit '{{name}}' wurde erfolgreich erstellt.",
       "update": "Die Änderungen der Organisationseinheit '{{name}}' wurden erfolgreich gespeichert."
@@ -103,7 +103,7 @@
       "update": "Die Änderungen der Aufgaben-Kategorie '{{name}}' konnten nicht gespeichert werden."
     },
     "success": {
-      "moodleSync": "Die Synchronisation mit Moodle wurde erfolgreich initiiert.",
+      "moodleSync": "Die Synchronisation mit Moodle wurde initiiert. Bitte aktualisieren Sie die Tabelle nach ein paar Sekunden.",
       "delete": "Die Aufgaben-Kategorie '{{name}}' wurde erfolgreich gelöscht.",
       "create": "Die Aufgaben-Kategorie '{{name}}' wurde erfolgreich erstellt.",
       "update": "Die Änderungen der Aufgaben-Kategorie '{{name}}' wurden erfolgreich gespeichert."
@@ -167,7 +167,7 @@
       "moodleSync": "Diese Aufgabe ist nicht vollständig in Moodle verfügbar."
     },
     "success": {
-      "moodleSync": "Die Synchronisation mit Moodle wurde erfolgreich initiiert.",
+      "moodleSync": "Die Synchronisation mit Moodle wurde initiiert. Bitte aktualisieren Sie die Tabelle nach ein paar Sekunden.",
       "delete": "Die Aufgaben '{{name}}' wurde erfolgreich gelöscht.",
       "create": "Die Aufgaben '{{name}}' wurde erfolgreich erstellt.",
       "update": "Die Änderungen der Aufgaben '{{name}}' wurden erfolgreich gespeichert."
