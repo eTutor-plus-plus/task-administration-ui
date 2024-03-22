@@ -171,7 +171,7 @@ export class TaskFormComponent extends EditFormComponent<TaskDto, TaskService, T
     this.types = [];
     this.statuses = [];
     this.difficulties = [];
-    this.role = this.authService.user?.maxRole ?? 'TUTOR'; // We assume that the user and its role do not change during lifetime of this component
+    this.role = this.authService.user?.maxRole ?? 'TUTOR';
   }
 
   /**
@@ -206,6 +206,7 @@ export class TaskFormComponent extends EditFormComponent<TaskDto, TaskService, T
           await this.loadTask(id);
         } else {
           this.originalEntity = null;
+          this.role = this.authService.user?.maxRole ?? 'TUTOR';
         }
         this.setDefaultOrganizationalUnitIfUnset();
         this.setFormEnabledDisabled();
@@ -330,6 +331,7 @@ export class TaskFormComponent extends EditFormComponent<TaskDto, TaskService, T
       this.additionalData = data.additionalData;
       this.form.patchValue({...this.originalEntity, taskCategoryIds: []});
       this.form.markAsPristine();
+      this.role = this.authService.user?.roles.find(x => x.organizationalUnit == data.dto.organizationalUnitId)?.role ?? 'TUTOR';
       this.setFormEnabledDisabled();
       this.changeDetectorRef.detectChanges(); // required to prevent error
       this.onOrganizationalUnitChanged(this.originalEntity?.organizationalUnitId);

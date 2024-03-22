@@ -146,7 +146,7 @@
       "title": "Zustand",
       "icon": "pi-heart",
       "status": "Status",
-      "readinessState": "Bereitschaft",
+      "readinessState": "Readiness",
       "db": "Datenbank",
       "diskSpace": "Festplattenspeicher",
       "livenessState": "Liveness",

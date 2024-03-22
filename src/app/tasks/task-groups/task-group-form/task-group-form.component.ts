@@ -124,7 +124,7 @@ export class TaskGroupFormComponent extends EditFormComponent<TaskGroupDto, Task
       {value: StatusEnum.READY_FOR_APPROVAL, text: this.translationService.translate('taskStatus.' + StatusEnum.READY_FOR_APPROVAL), disabled: false},
       {value: StatusEnum.APPROVED, text: this.translationService.translate('taskStatus.' + StatusEnum.APPROVED), disabled: false}
     ];
-    this.role = this.authService.user?.maxRole ?? 'TUTOR'; // We assume that the user and its role do not change during lifetime of this component
+    this.role = this.authService.user?.maxRole ?? 'TUTOR';
   }
 
   /**
@@ -159,6 +159,7 @@ export class TaskGroupFormComponent extends EditFormComponent<TaskGroupDto, Task
           await this.loadTaskGroup(id);
         } else {
           this.originalEntity = null;
+          this.role = this.authService.user?.maxRole ?? 'TUTOR';
         }
         this.setDefaultOrganizationalUnitIfUnset();
         this.setFormEnabledDisabled();
@@ -220,6 +221,7 @@ export class TaskGroupFormComponent extends EditFormComponent<TaskGroupDto, Task
       this.additionalData = data.additionalData;
       this.form.patchValue(this.originalEntity);
       this.form.markAsPristine();
+      this.role = this.authService.user?.roles.find(x => x.organizationalUnit == data.dto.organizationalUnitId)?.role ?? 'TUTOR';
       this.setFormEnabledDisabled();
       this.changeDetectorRef.detectChanges(); // required to prevent error
     } catch (err) {

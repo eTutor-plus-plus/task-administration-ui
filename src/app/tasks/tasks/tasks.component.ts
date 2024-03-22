@@ -167,10 +167,6 @@ export class TasksComponent extends TableOverviewComponent<TaskDto, TaskService>
     await this.router.navigate(['edit', entity.id], {relativeTo: this.route});
   }
 
-  override canCreate(): boolean {
-    return this.role !== 'TUTOR';
-  }
-
   override canDelete(entity: TaskDto): boolean {
     const user = this.authService.user;
     if (!user)
@@ -179,9 +175,22 @@ export class TasksComponent extends TableOverviewComponent<TaskDto, TaskService>
     if (user.isFullAdmin)
       return true;
 
-    const ou = user.roles.find(x => x.organizationalUnit == entity.organizationalUnitId);
-    return ou ? ou.role !== 'TUTOR' : false;
+    const role = user.roles.find(x => x.organizationalUnit == entity.organizationalUnitId)?.role;
+    return role ? role !== 'TUTOR' || entity.status !== 'APPROVED' : false;
   }
+
+  canSync(entity: TaskDto): boolean {
+    const user = this.authService.user;
+    if (!user)
+      return false;
+
+    if (user.isFullAdmin)
+      return true;
+
+    const role = user.roles.find(x => x.organizationalUnit == entity.organizationalUnitId)?.role;
+    return role ? role !== 'TUTOR' : false;
+  }
+
   //#endregion
 
   private async loadOrganizationalUnits(): Promise<void> {
