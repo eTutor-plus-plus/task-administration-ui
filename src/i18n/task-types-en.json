@@ -43,12 +43,44 @@
       "fields": {
         "solution": "Solution",
         "query": "Query",
-        "uncheckedTerms": "Terms"
+        "uncheckedTerms": "Terms",
+        "missingPredicatePenalty": "Missing Predicate: Penalty",
+        "missingPredicateStrategy": "Missing Predicate: Strategy",
+        "missingFactPenalty": "Missing Fact: Penalty",
+        "missingFactStrategy": "Missing Fact: Strategy",
+        "superfluousFactPenalty": "Superfluous Fact: Penalty",
+        "superfluousFactStrategy": "Superfluous Fact: Strategy"
       },
       "descriptions": {
         "solution": "The rules that represent the solution can be defined here. No query declarations may be made here.",
         "query": "If you want to include several queries in the evaluation, separate them using a semicolon. E.g. hasSon(X,Y)?;hasDaughter(X,Y)?",
         "uncheckedTerms": "To exclude certain terms that occur in the facts from manipulation, define them again here. E.g. 'hasChild(peter,_). to exclude the term 'peter' from the manipulation if it occurs in position 1 of the predicate 'hasChild'. Terms are manipulated during submission to prevent students from simply entering the facts and not the rules."
+      },
+      "strategy": {
+        "KO": "K.O. Criterion",
+        "GROUP": "Once per group",
+        "EACH": "Once per element"
+      }
+    },
+    "asp": {
+      "title": "Answer Set Programming",
+      "fields": {
+        "solution": "Solution",
+        "maxN": "Maximum Integer"
+      },
+      "descriptions": {
+        "solution": "The rules that represent the solution can be defined here. No query declarations may be made here."
+      }
+    },
+    "drools": {
+      "title": "Drools",
+      "fields": {
+        "droolsSolution": "Solution",
+        "droolsObjects": "Objects",
+        "droolsClasses": "Classes",
+        "droolsValidationClassname": "Validation Classname",
+        "droolsErrorWeighting": "Error Weighting",
+        "droolsAddClass": "Add Class"
       }
     }
   }

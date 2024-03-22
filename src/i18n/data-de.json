@@ -12,7 +12,7 @@
       "update": "Die Änderungen der Organisationseinheit '{{name}}' konnten nicht gespeichert werden."
     },
     "success": {
-      "moodleSync": "Die Synchronisation mit Moodle wurde erfolgreich initiiert.",
+      "moodleSync": "Die Synchronisation mit Moodle wurde initiiert. Bitte aktualisieren Sie die Tabelle nach ein paar Sekunden.",
       "delete": "Die Organisationseinheit '{{name}}' wurde erfolgreich gelöscht.",
       "create": "Die Organisationseinheit '{{name}}' wurde erfolgreich erstellt.",
       "update": "Die Änderungen der Organisationseinheit '{{name}}' wurden erfolgreich gespeichert."
@@ -67,7 +67,10 @@
     "fields": {
       "taskType": "Aufgabenart",
       "url": "URL",
-      "apiKey": "API Key"
+      "apiKey": "API Key",
+      "taskPrefix": "Aufgaben-URL Präfix",
+      "taskGroupPrefix": "Aufgabengruppen-URL Präfix",
+      "submissionPrefix": "Abgabe-URL Präfix"
     },
     "errors": {
       "load": "Die Aufgaben-Apps konnten nicht geladen werden.",
@@ -80,6 +83,7 @@
       "create": "Die Aufgaben-App '{{name}}' wurde erfolgreich erstellt.",
       "update": "Die Änderungen der Aufgaben-App '{{name}}' wurden erfolgreich gespeichert."
     },
+    "urlHint": "Konfigurieren Sie die Präfix-URLs nur, wenn die Aufgaben-App mehr als eine Aufgabenart unterstützt. Andernfalls lassen Sie die Felder leer.",
     "create": "Aufgaben-App erstellen",
     "edit": "Aufgaben-App bearbeiten"
   },
@@ -99,7 +103,7 @@
       "update": "Die Änderungen der Aufgaben-Kategorie '{{name}}' konnten nicht gespeichert werden."
     },
     "success": {
-      "moodleSync": "Die Synchronisation mit Moodle wurde erfolgreich initiiert.",
+      "moodleSync": "Die Synchronisation mit Moodle wurde initiiert. Bitte aktualisieren Sie die Tabelle nach ein paar Sekunden.",
       "delete": "Die Aufgaben-Kategorie '{{name}}' wurde erfolgreich gelöscht.",
       "create": "Die Aufgaben-Kategorie '{{name}}' wurde erfolgreich erstellt.",
       "update": "Die Änderungen der Aufgaben-Kategorie '{{name}}' wurden erfolgreich gespeichert."
@@ -159,9 +163,11 @@
       "delete": "Die Aufgaben '{{name}}' konnte nicht gelöscht werden.",
       "create": "Die Aufgaben '{{name}}' konnte nicht erstellt werden.",
       "update": "Die Änderungen der Aufgaben '{{name}}' konnten nicht gespeichert werden.",
-      "groupNotApproved": "Die zugehörige Aufgabengruppe wurde noch nicht freigegeben."
+      "groupNotApproved": "Die zugehörige Aufgabengruppe wurde noch nicht freigegeben.",
+      "moodleSync": "Diese Aufgabe ist nicht vollständig in Moodle verfügbar."
     },
     "success": {
+      "moodleSync": "Die Synchronisation mit Moodle wurde initiiert. Bitte aktualisieren Sie die Tabelle nach ein paar Sekunden.",
       "delete": "Die Aufgaben '{{name}}' wurde erfolgreich gelöscht.",
       "create": "Die Aufgaben '{{name}}' wurde erfolgreich erstellt.",
       "update": "Die Änderungen der Aufgaben '{{name}}' wurden erfolgreich gespeichert."

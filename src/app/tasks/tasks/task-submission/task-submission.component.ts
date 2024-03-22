@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { NgClass } from '@angular/common';
+import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@ngneat/transloco';
 
 import { MonacoEditorModule } from 'ngx-monaco-editor-v2';
@@ -12,7 +14,6 @@ import { ButtonModule } from 'primeng/button';
 
 import { SubmissionDto, TaskService } from '../../../api';
 import { TaskTypeRegistry } from '../../../task-type';
-import { NgClass } from '@angular/common';
 
 /**
  * Form for submitting a task.
@@ -96,7 +97,8 @@ export class TaskSubmissionComponent implements OnInit {
   constructor(private readonly dialogConf: DynamicDialogConfig,
               private readonly dialogRef: DynamicDialogRef,
               private readonly taskService: TaskService,
-              private readonly translateService: TranslocoService) {
+              private readonly translateService: TranslocoService,
+              private readonly sanitizer: DomSanitizer) {
     this.form = new FormGroup({
       language: new FormControl<string | null>(this.translateService.getActiveLang(), [Validators.required]),
       mode: new FormControl<string | null>('DIAGNOSE', [Validators.required]),
@@ -169,6 +171,15 @@ export class TaskSubmissionComponent implements OnInit {
     } finally {
       this.loading = false;
     }
+  }
+
+  /**
+   * Trusts the given HTML-code.
+   *
+   * @param html The HTML-code to trust.
+   */
+  trustHtml(html: string): SafeHtml {
+    return this.sanitizer.bypassSecurityTrustHtml(html);
   }
 }
 

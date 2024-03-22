@@ -121,7 +121,7 @@ export class TasksComponent extends TableOverviewComponent<TaskDto, TaskService>
           text: this.translationService.translate('taskTypes.' + x + '.title'),
           value: x
         };
-      })); // ignore errors
+      }).sort((a, b) => a.text.localeCompare(b.text))); // ignore errors
   }
 
   /**
@@ -167,10 +167,6 @@ export class TasksComponent extends TableOverviewComponent<TaskDto, TaskService>
     await this.router.navigate(['edit', entity.id], {relativeTo: this.route});
   }
 
-  override canCreate(): boolean {
-    return this.role !== 'TUTOR';
-  }
-
   override canDelete(entity: TaskDto): boolean {
     const user = this.authService.user;
     if (!user)
@@ -179,9 +175,22 @@ export class TasksComponent extends TableOverviewComponent<TaskDto, TaskService>
     if (user.isFullAdmin)
       return true;
 
-    const ou = user.roles.find(x => x.organizationalUnit == entity.organizationalUnitId);
-    return ou ? ou.role !== 'TUTOR' : false;
+    const role = user.roles.find(x => x.organizationalUnit == entity.organizationalUnitId)?.role;
+    return role ? role !== 'TUTOR' || entity.status !== 'APPROVED' : false;
   }
+
+  canSync(entity: TaskDto): boolean {
+    const user = this.authService.user;
+    if (!user)
+      return false;
+
+    if (user.isFullAdmin)
+      return true;
+
+    const role = user.roles.find(x => x.organizationalUnit == entity.organizationalUnitId)?.role;
+    return role ? role !== 'TUTOR' : false;
+  }
+
   //#endregion
 
   private async loadOrganizationalUnits(): Promise<void> {
@@ -211,6 +220,20 @@ export class TasksComponent extends TableOverviewComponent<TaskDto, TaskService>
         life: 10000,
         key: 'global'
       });
+    }
+  }
+
+  async sync(entity: TaskDto): Promise<void> {
+    try {
+      await this.entityService.syncWithMoodle(entity.id);
+      this.messageService.add({
+        key: 'global',
+        summary: this.translationService.translate(this.baseTranslationKey + 'success.moodleSync'),
+        severity: 'info'
+      });
+      setTimeout(() => this.reload(), 2000);
+    } catch (err) {
+      // ignore
     }
   }
 }

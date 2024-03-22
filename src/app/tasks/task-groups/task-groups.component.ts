@@ -113,7 +113,7 @@ export class TaskGroupsComponent extends TableOverviewComponent<TaskGroupDto, Ta
           text: this.translationService.translate('taskGroupTypes.' + x + '.title'),
           value: x
         };
-      })); // ignore errors
+      }).sort((a, b) => a.text.localeCompare(b.text))); // ignore errors
   }
 
   /**
@@ -148,10 +148,6 @@ export class TaskGroupsComponent extends TableOverviewComponent<TaskGroupDto, Ta
     await this.router.navigate(['edit', entity.id], {relativeTo: this.route});
   }
 
-  override canCreate(): boolean {
-    return this.role !== 'TUTOR';
-  }
-
   override canDelete(entity: TaskGroupDto): boolean {
     const user = this.authService.user;
     if (!user)
@@ -160,8 +156,8 @@ export class TaskGroupsComponent extends TableOverviewComponent<TaskGroupDto, Ta
     if (user.isFullAdmin)
       return true;
 
-    const ou = user.roles.find(x => x.organizationalUnit == entity.organizationalUnitId);
-    return ou ? ou.role !== 'TUTOR' : false;
+    const role = user.roles.find(x => x.organizationalUnit == entity.organizationalUnitId)?.role;
+    return role ? role !== 'TUTOR' || entity.status !== 'APPROVED' : false;
   }
 
   private async loadOrganizationalUnits(): Promise<void> {

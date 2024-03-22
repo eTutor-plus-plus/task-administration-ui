@@ -1,12 +1,15 @@
-<p-blockUI [blocked]="loading" />
+<p-blockUI [blocked]="loading"/>
 
 <div class="flex justify-content-between align-items-center">
   <h1 [transloco]="baseTranslationKey + (originalEntity ? 'edit' : 'create')"></h1>
   <div>
-    <p-button [label]="(form.dirty ? 'primeng.cancel' : 'primeng.back') | transloco" class="w-auto" (onClick)="cancel()" severity="secondary" [outlined]="true" [disabled]="loading"
+    <p-button [label]="(form.dirty ? 'primeng.cancel' : 'primeng.back') | transloco" class="w-auto" (onClick)="cancel()" severity="secondary" [outlined]="true"
+              [disabled]="loading"
               styleClass="mr-2"/>
-    <p-button [label]="(originalEntity ? 'common.save' : 'common.create') | transloco" [disabled]="form.invalid" [loading]="loading"
-              (onClick)="submit()"></p-button>
+    @if (role !== 'TUTOR' || !originalEntity || originalEntity.status !== 'APPROVED') {
+      <p-button [label]="(originalEntity ? 'common.save' : 'common.create') | transloco" [disabled]="form.invalid" [loading]="loading"
+                (onClick)="submit()"></p-button>
+    }
   </div>
 </div>
 
@@ -26,7 +29,7 @@
       <div class="field mb-4 col-12 md:col-6">
         <label for="taskGroupType" [transloco]="this.baseTranslationKey + 'fields.taskGroupType'"></label>
         <p-dropdown inputId="taskGroupType" formControlName="taskGroupType" [options]="types" optionValue="value"
-                    optionLabel="text" [readonly]="!!originalEntity"/>
+                    optionLabel="text" [readonly]="!!originalEntity" [filter]="true" [filterFields]="['text']"/>
         @if (form.controls.taskGroupType.dirty || form.controls.taskGroupType.touched) {
           <small class="block mt-1 p-error">
             {{ getError(form.controls.taskGroupType, this.baseTranslationKey + 'fields.taskGroupType') }}
@@ -42,7 +45,7 @@
             {{ getError(form.controls.descriptionDe, this.baseTranslationKey + 'fields.descriptionDe') }}
           </small>
         }
-        @if(supportsDescriptionGeneration){
+        @if (supportsDescriptionGeneration) {
           <small class="block mt-1 text-color-secondary">
             {{ baseTranslationKey + 'descriptionGeneration' | transloco }}
           </small>
@@ -57,7 +60,7 @@
             {{ getError(form.controls.descriptionEn, this.baseTranslationKey + 'fields.descriptionEn') }}
           </small>
         }
-        @if(supportsDescriptionGeneration){
+        @if (supportsDescriptionGeneration) {
           <small class="block mt-1 text-color-secondary">
             {{ baseTranslationKey + 'descriptionGeneration' | transloco }}
           </small>
@@ -77,7 +80,7 @@
       <div class="field mb-4 col-12 md:col-6">
         <label for="organizationalUnitId" [transloco]="this.baseTranslationKey + 'fields.organizationalUnitId'"></label>
         <p-dropdown inputId="organizationalUnitId" formControlName="organizationalUnitId" [options]="organizationalUnits" optionValue="id"
-                    optionLabel="name" [readonly]="role === 'TUTOR' && form.value.status !== 'DRAFT'"/>
+                    optionLabel="name" [readonly]="role === 'TUTOR' && form.value.status !== 'DRAFT'" [filter]="true" [filterFields]="['name']"/>
         @if (form.controls.organizationalUnitId.dirty || form.controls.organizationalUnitId.touched) {
           <small class="block mt-1 p-error">
             {{ getError(form.controls.organizationalUnitId, this.baseTranslationKey + 'fields.organizationalUnitId') }}

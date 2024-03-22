@@ -70,7 +70,21 @@ export class TaskService extends ApiService<TaskDto, ModifyTaskDto, number, Task
       }
     }));
   }
+
+  syncWithMoodle(id: number): Promise<void> {
+    console.info(`[${this.serviceName}] Sync with moodle ` + id);
+    return new Promise<void>((resolve, reject) => this.http.post(this.apiUrl + '/' + encodeURIComponent(id), null).subscribe({
+      next: () => resolve(),
+      error: err => {
+        console.error(`[${this.serviceName}] Failed sync with moodle ` + id, err);
+        reject(err);
+      }
+    }));
+  }
+
 }
+
+
 
 /**
  * The filter properties for tasks.

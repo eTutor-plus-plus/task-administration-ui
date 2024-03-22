@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@ngneat/transloco';
 import { DecimalPipe, NgStyle } from '@angular/common';
-import { distinctUntilChanged, Subject, Subscription, takeUntil, timer } from 'rxjs';
+import { distinctUntilChanged, Subject, takeUntil, timer } from 'rxjs';
 
 import { MessageService } from 'primeng/api';
 import { CardModule } from 'primeng/card';
@@ -108,6 +108,9 @@ export class SystemHealthMetricsComponent implements OnInit, OnDestroy {
   }
 
   private async loadMetrics(): Promise<void> {
+    this.httpUriMetrics = [];
+    this.httpStatusMetrics = [];
+
     for (const metric of this.availableMetrics) {
       try {
         const details = await this.healthService.loadMetric(metric, this.app);

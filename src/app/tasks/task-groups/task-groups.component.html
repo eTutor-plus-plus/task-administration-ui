@@ -8,11 +8,7 @@
          [ngClass]="{'with-ou': showOrganizationalUnit}">
   <ng-template pTemplate="caption">
     <div class="flex align-items-center justify-content-between">
-      @if (canCreate()) {
-        <p-button [label]="'common.new' | transloco" icon="pi pi-plus" (onClick)="create()"/>
-      } @else {
-        <div></div>
-      }
+      <p-button [label]="'common.new' | transloco" icon="pi pi-plus" (onClick)="create()"/>
       <p-button [label]="'common.refresh' | transloco" icon="pi pi-refresh" (onClick)="reload()" severity="secondary"/>
     </div>
   </ng-template>

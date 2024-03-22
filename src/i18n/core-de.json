@@ -34,7 +34,8 @@
         "no_connection": "Der eTutor-Server ist nicht erreichbar.",
         "login_failed": "Anmeldung fehlgeschlagen",
         "login_success_summary": "Anmeldung erfolgreich",
-        "login_success_detail": "Sie werden in kürze weitergeleitet ..."
+        "login_success_detail": "Sie werden in kürze weitergeleitet ...",
+        "please_wait": "Die Verbindung mit dem Server wird aufgebaut. Bitte warten ..."
       }
     },
     "forgot": {
@@ -145,17 +146,21 @@
       "title": "Zustand",
       "icon": "pi-heart",
       "status": "Status",
-      "readinessState": "Bereitschaft",
+      "readinessState": "Readiness",
       "db": "Datenbank",
       "diskSpace": "Festplattenspeicher",
       "livenessState": "Liveness",
       "ping": "Ping",
+      "dlv": "Datalog DLV",
+      "xq": "XQuery",
       "icons": {
         "readinessState": "pi-arrow-right-arrow-left",
         "db": "pi-database",
         "diskSpace": "pi-server",
         "livenessState": "pi-verified",
-        "ping": "pi-wifi"
+        "ping": "pi-wifi",
+        "dlv": "pi-info-circle",
+        "xq": "pi-code"
       },
       "backgroundClass": {
         "UP": "bg-green-100",
@@ -192,6 +197,14 @@
           "threshold": "Schwelle",
           "path": "Pfad",
           "exists": "Existiert"
+        },
+        "dlv": {
+          "version": "Version",
+          "output": "Ausgabe",
+          "exitCode": "Code"
+        },
+        "xq": {
+          "version": "Version"
         }
       }
     },
@@ -281,6 +294,7 @@
       "httpCount": "Anzahl",
       "httpAvg": "Durchschnitt (ms)",
       "httpMax": "Max. (ms)",
+      "pool": "Pool",
       "executorActive": "Aktiv",
       "executorQueued": "Eingereiht",
       "executorQueueRemaining": "Verbleibend",

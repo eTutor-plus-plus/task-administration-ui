@@ -8,6 +8,7 @@ import { MessageService } from 'primeng/api';
 import { InputTextModule } from 'primeng/inputtext';
 import { ButtonModule } from 'primeng/button';
 import { MessagesModule } from 'primeng/messages';
+import { MessageModule } from 'primeng/message';
 
 import { AuthService } from '../auth.service';
 import { getValidationErrorMessage, SystemHealthService } from '../../api';
@@ -27,7 +28,8 @@ import { SimpleLayoutComponent } from '../../layout';
     ReactiveFormsModule,
     RouterLink,
     MessagesModule,
-    SimpleLayoutComponent
+    SimpleLayoutComponent,
+    MessageModule
   ],
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss'
@@ -69,6 +71,7 @@ export class LoginComponent implements OnInit, AfterViewInit {
    * Check server state.
    */
   ngOnInit(): void {
+    this.loading = true;
     this.healthService.loadHealth()
       .then(() => {
         this.appAvailable = true;
@@ -79,7 +82,8 @@ export class LoginComponent implements OnInit, AfterViewInit {
           severity: 'warn',
           detail: this.translationService.translate('auth.login.messages.unavailable')
         });
-      });
+      })
+      .finally(() => this.loading = false);
   }
 
   /**

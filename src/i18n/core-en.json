@@ -34,7 +34,8 @@
         "no_connection": "The eTutor-Server does not answer.",
         "login_failed": "Sign in failed",
         "login_success_summary": "Sign in successful",
-        "login_success_detail": "You will be redirected shortly ..."
+        "login_success_detail": "You will be redirected shortly ...",
+        "please_wait": "The connection to the Server is being established. Please wait ..."
       }
     },
     "forgot": {
@@ -150,12 +151,16 @@
       "diskSpace": "Disk Space",
       "livenessState": "Liveness",
       "ping": "Ping",
+      "dlv": "Datalog DLV",
+      "xq": "XQuery",
       "icons": {
         "readinessState": "pi-arrow-right-arrow-left",
         "db": "pi-database",
         "diskSpace": "pi-server",
         "livenessState": "pi-verified",
-        "ping": "pi-wifi"
+        "ping": "pi-wifi",
+        "dlv": "pi-info-circle",
+        "xq": "pi-code"
       },
       "backgroundClass": {
         "UP": "bg-green-100",
@@ -192,6 +197,14 @@
           "threshold": "Threshold",
           "path": "Path",
           "exists": "Exists"
+        },
+        "dlv": {
+          "version": "Version",
+          "output": "Output",
+          "exitCode": "Exit-Code"
+        },
+        "xq": {
+          "version": "Version"
         }
       }
     },
@@ -281,6 +294,7 @@
       "httpCount": "Count",
       "httpAvg": "Average (ms)",
       "httpMax": "Max. (ms)",
+      "pool": "Pool",
       "executorActive": "Active",
       "executorQueued": "Queued",
       "executorQueueRemaining": "Queue Remaining",

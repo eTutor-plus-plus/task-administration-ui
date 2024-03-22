@@ -53,7 +53,7 @@
       <th>
         <p-columnFilter type="number" field="parent" [showMenu]="false" matchMode="contains" [placeholder]="'common.search' | transloco">
           <ng-template pTemplate="filter" let-value let-filter="filterCallback">
-            <p-inputNumber [ngModel]="value" (ngModelChange)="filter($event)" />
+            <p-inputNumber [ngModel]="value" (ngModelChange)="filter($event)"/>
           </ng-template>
         </p-columnFilter>
       </th>
@@ -68,10 +68,6 @@
     <tr>
       <td>
         {{ entity.id }}
-        @if (!entity.moodleSynced) {
-          <p-button size="small" icon="pi pi-exclamation-triangle" severity="danger" [text]="true" (onClick)="sync(entity)"
-                    [pTooltip]="baseTranslationKey + 'errors.moodleSync' | transloco" [showDelay]="1000"/>
-        }
       </td>
       @if (showOrganizationalUnit) {
         <td>{{ getOUName(entity.organizationalUnitId) }}</td>
@@ -85,6 +81,10 @@
           @if (canDelete(entity)) {
             <p-button (onClick)="delete(entity, $event)" icon="pi pi-trash" [pTooltip]="'common.delete' | transloco" tooltipPosition="top" [showDelay]="1000"
                       severity="danger" size="small"/>
+          }
+          @if (!entity.moodleSynced && canSync(entity)) {
+            <p-button size="small" icon="pi pi-exclamation-triangle" severity="danger" [text]="true" (onClick)="sync(entity)"
+                      [pTooltip]="baseTranslationKey + 'errors.moodleSync' | transloco" [showDelay]="1000"/>
           }
         </span>
       </td>

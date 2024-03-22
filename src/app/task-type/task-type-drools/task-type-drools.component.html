@@ -1,0 +1,66 @@
+<div [formGroup]="form">
+  <div class="surface-card p-4 shadow-2 border-round p-fluid mb-4">
+    <div class="grid formgrid p-fluid">
+      <div class="field mb-4 col-12">
+        <label for="droolsSolution" transloco="taskTypes.drools.fields.droolsSolution"></label>
+        <ngx-monaco-editor id="droolsSolution" formControlName="droolsSolution" [options]="droolsEditorOptions" style="height: 300px;"/>
+        @if (form.controls.droolsSolution.dirty || form.controls.droolsSolution.touched) {
+          <small class="block mt-1 p-error">
+            {{ getError(form.controls.droolsSolution, 'taskTypes.xquery.fields.droolsSolution') }}
+          </small>
+        }
+      </div>
+
+      <div class="field mb-4 col-12">
+        <label for="droolsObjects" transloco="taskTypes.drools.fields.droolsObjects"></label>
+        <ngx-monaco-editor id="droolsObjects" formControlName="droolsObjects" [options]="csvEditorOptions" style="height: 200px;"/>
+        @if (form.controls.droolsObjects.dirty || form.controls.droolsObjects.touched) {
+          <small class="block mt-1 p-error">
+            {{ getError(form.controls.droolsObjects, 'taskTypes.drools.fields.droolsObjects') }}
+          </small>
+        }
+      </div>
+      <div class="field mb-4 col-12">
+        <label for="droolsErrorWeighting" [transloco]="'taskTypes.drools.fields.droolsErrorWeighting'"></label>
+        <input id="droolsErrorWeighting" type="number" pInputText formControlName="droolsErrorWeighting" autocomplete="off">
+        @if (form.controls.droolsErrorWeighting.dirty || form.controls.droolsErrorWeighting.touched) {
+          <small class="block mt-1 p-error">
+            {{ getError(form.controls.droolsErrorWeighting, 'taksTypes.drools.fields.droolsErrorWeighting') }}
+          </small>
+        }
+      </div>
+      <div class="field mb-4 col-12">
+        <label for="droolsValidationClassname" [transloco]="'taskTypes.drools.fields.droolsValidationClassname'"></label>
+        <input id="droolsValidationClassname" type="text" pInputText formControlName="droolsValidationClassname" autocomplete="off">
+        @if (form.controls.droolsValidationClassname.dirty || form.controls.droolsValidationClassname.touched) {
+          <small class="block mt-1 p-error">
+            {{ getError(form.controls.droolsValidationClassname, 'taskTypes.drools.fields.droolsValidationClassname') }}
+          </small>
+        }
+      </div>
+    </div>
+  </div>
+  <div class="surface-card p-4 shadow-2 border-round p-fluid mb-4">
+    <div class="flex justify-content-between mb-4">
+      <p class="font-bold" transloco="taskTypes.drools.fields.droolsClasses"></p>
+      <p-button [label]="'taskTypes.drools.fields.droolsAddClass' | transloco" (onClick)="addDroolsClass()" severity="help" [disabled]="loading"
+                class="w-auto" size="small"/>
+    </div>
+    <div formArrayName="droolsClasses">
+      <div *ngFor="let droolsClass of droolsClasses.controls; let i = index" [formGroupName]="i">
+        <div class="grid formgrid p-fluid">
+          <div class="field col-3 mb-4">
+            <input type="text" pInputText formControlName="classname" placeholder="Class Name">
+          </div>
+          <div class="field col-8 mb-4">
+            <ngx-monaco-editor formControlName="classBody" [options]="javaEditorOptions" style="height: 150px;"/>
+<!--            <input type="text" pInputText formControlName="classBody" placeholder="Class Body">-->
+          </div>
+          <div class="field col-1 mb-4">
+            <p-button icon="pi pi-trash" severity="danger" (onClick)="removeDroolsClass(i)"></p-button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

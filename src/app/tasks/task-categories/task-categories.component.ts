@@ -167,6 +167,18 @@ export class TaskCategoriesComponent extends TableDialogOverviewComponent<TaskCa
     return ou ? ou.role !== 'TUTOR' : false;
   }
 
+  canSync(entity: TaskCategoryDto): boolean {
+    const user = this.authService.user;
+    if (!user)
+      return false;
+
+    if (user.isFullAdmin)
+      return true;
+
+    const role = user.roles.find(x => x.organizationalUnit == entity.organizationalUnitId)?.role;
+    return role ? role !== 'TUTOR' : false;
+  }
+
   private async loadOrganizationalUnits(): Promise<void> {
     this.startLoading();
     try {
