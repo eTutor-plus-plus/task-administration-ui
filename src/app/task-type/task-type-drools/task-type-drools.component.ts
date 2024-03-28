@@ -47,8 +47,10 @@ export class TaskTypeDroolsComponent extends TaskTypeFormComponent<TaskTypeForm>
   }
 
   override set formData(data: unknown) {
-    super.formData = data;
-    this.setDroolsData(data);
+      super.formData = data;
+      if(data) {
+        this.setDroolsData(data);
+      }
   }
 
   protected override initForm(): void {
