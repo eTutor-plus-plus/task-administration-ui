@@ -9,6 +9,7 @@ import { TaskTypeFormComponent } from '../task-type-form.component';
 import { editor } from 'monaco-editor';
 import { InputTextModule } from 'primeng/inputtext';
 import { NgForOf } from '@angular/common';
+import { CheckboxModule } from 'primeng/checkbox';
 
 @Component({
   selector: 'dke-task-type-drools',
@@ -22,7 +23,8 @@ import { NgForOf } from '@angular/common';
     TranslocoPipe,
     TreeSelectModule,
     InputTextModule,
-    NgForOf
+    NgForOf,
+    CheckboxModule
   ],
   templateUrl: './task-type-drools.component.html',
   styleUrl: './task-type-drools.component.scss'
@@ -59,6 +61,7 @@ export class TaskTypeDroolsComponent extends TaskTypeFormComponent<TaskTypeForm>
     this.form.addControl('validationClassname', new FormControl<string | null>(null));
     this.form.addControl('errorWeighting', new FormControl<number | null>(null));
     this.form.addControl('classes', this.classes);
+    this.form.addControl('isCEP', new FormControl<boolean|null>(null));
   }
 
   get itemsControls() {
@@ -101,4 +104,5 @@ interface TaskTypeForm {
   objects: FormControl<string | null>;
   validationClassname: FormControl<string | null>;
   errorWeighting: FormControl<number | null>;
+  isCEP: FormControl<boolean|null>;
 }

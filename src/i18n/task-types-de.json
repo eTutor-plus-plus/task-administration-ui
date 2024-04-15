@@ -71,7 +71,8 @@
         "droolsErrorWeighting": "Fehlergewichtung",
         "droolsValidationClassname": "Validierungsklasse",
         "droolsAddClass": "Klasse hinzufügen",
-        "droolsClassesName": "Klassen"
+        "droolsClassesName": "Klassen",
+        "droolsIsCEP": "Ist dieser Task ein CEP Task?"
       }
     }
   }
