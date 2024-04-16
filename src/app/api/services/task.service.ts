@@ -34,6 +34,22 @@ export class TaskService extends ApiService<TaskDto, ModifyTaskDto, number, Task
     }));
   }
 
+  /**
+   * Loads the details of all tasks.
+   *
+   * @return List of tasks.
+   */
+  export(): Promise<string> {
+    console.info(`[${this.serviceName}] Exporting task details`);
+    return new Promise<string>((resolve, reject) => this.http.get(this.apiUrl + '/export', {responseType: 'text'}).subscribe({
+      next: value => resolve(value),
+      error: err => {
+        console.error(`[${this.serviceName}] Failed exporting tasks`, err);
+        reject(err);
+      }
+    }));
+  }
+
   protected override setFilterParam(params: HttpParams, filter: TaskFilter): HttpParams {
     if (filter.name)
       params = params.set('nameFilter', filter.name);
