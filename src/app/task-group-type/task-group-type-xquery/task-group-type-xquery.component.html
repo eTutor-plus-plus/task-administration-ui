@@ -8,6 +8,11 @@
           {{ getError(form.controls.diagnoseDocument, 'taskGroupTypes.xquery.fields.diagnoseDocument') }}
         </small>
       }
+      @if (publicUrl) {
+        <small class="block mt-1 p-text-secondary">
+          <a [href]="publicUrl" target="_blank">{{ publicUrl }}</a>
+        </small>
+      }
     </div>
     <div class="field mb-4 col-12">
       <label for="submitDocument" transloco="taskGroupTypes.xquery.fields.submitDocument"></label>
