@@ -8,6 +8,11 @@
           {{ getError(form.controls.diagnoseFacts, 'taskGroupTypes.datalog.fields.diagnoseFacts') }}
         </small>
       }
+      @if (publicUrl) {
+        <small class="block mt-1 p-text-secondary">
+          <a [href]="publicUrl" target="_blank">{{ publicUrl }}</a>
+        </small>
+      }
     </div>
     <div class="field mb-4 col-12">
       <label for="submissionFacts" transloco="taskGroupTypes.datalog.fields.submissionFacts"></label>
