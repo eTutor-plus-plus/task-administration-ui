@@ -91,7 +91,7 @@
   </div>
 
   @if (componentForm) {
-    <ng-container *ngComponentOutlet="componentForm; inputs: {formGroup: form.controls.additionalData, formData: additionalData, parentForm: form}"/>
+    <ng-container *ngComponentOutlet="componentForm; inputs: {formGroup: form.controls.additionalData, formData: additionalData, parentForm: form, taskGroup: originalEntity}"/>
   }
 </form>
 
