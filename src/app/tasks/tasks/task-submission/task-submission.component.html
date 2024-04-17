@@ -58,7 +58,7 @@
 @if (errorResult) {
   <div class="surface-border border-top-1 opacity-50 mb-4"></div>
   <label for="errorResult" [transloco]="'submission.fields.result'"></label>
-  <ngx-monaco-editor id="errorResult" [options]="resultEditorOptions" [(ngModel)]="gradingResult"/>
+  <ngx-monaco-editor id="errorResult" [options]="resultEditorOptions" [(ngModel)]="errorResult"/>
 }
 
 <div class="flex justify-content-between mt-4">
