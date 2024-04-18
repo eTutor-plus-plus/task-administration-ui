@@ -54,7 +54,11 @@
 
       <div class="field mb-4 col-12 md:col-6">
         @if (supportedTaskGroupTypes.length > 0) {
-          <label for="taskGroupId" [transloco]="this.baseTranslationKey + 'fields.taskGroupId'"></label>
+          <label for="taskGroupId">
+            <span [transloco]="this.baseTranslationKey + 'fields.taskGroupId'"></span>
+            <p-button icon="pi pi-info-circle" [rounded]="true" [text]="true" styleClass="info-btn ml-2"
+                      [disabled]="!form.controls.taskGroupId.value" (onClick)="showTaskGroupInformation()"/>
+          </label>
           <p-dropdown inputId="taskGroupId" formControlName="taskGroupId" [options]="taskGroups" optionValue="id"
                       optionLabel="name" [readonly]="!!originalEntity" [showClear]="true" [filter]="true" filterBy="name"/>
           @if (form.controls.taskGroupId.dirty || form.controls.taskGroupId.touched) {
@@ -132,7 +136,8 @@
   </div>
 
   @if (componentForm) {
-    <ng-container *ngComponentOutlet="componentForm; inputs: {formGroup: form.controls.additionalData, formData: additionalData, parentForm: form, task: originalEntity}"/>
+    <ng-container
+      *ngComponentOutlet="componentForm; inputs: {formGroup: form.controls.additionalData, formData: additionalData, parentForm: form, task: originalEntity}"/>
   }
 
   <div class="surface-card p-4 shadow-2 border-round p-fluid mb-4">
@@ -167,3 +172,6 @@
     {{ baseTranslationKey + 'approved' | transloco }}: {{ originalEntity.approvedBy }}, {{ originalEntity.approvedDate | date:'medium' }}
   </p>
 }
+<p-dialog [(visible)]="showTaskGroupDialog" [header]="getTaskGroup()?.name" [modal]="true">
+  <div [innerHtml]="currentLocale === 'de' ? getTaskGroup()?.descriptionDe : getTaskGroup()?.descriptionEn"></div>
+</p-dialog>

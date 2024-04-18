@@ -16,6 +16,7 @@ import { InputNumberModule } from 'primeng/inputnumber';
 import { DialogService } from 'primeng/dynamicdialog';
 import { TagModule } from 'primeng/tag';
 import { BlockUIModule } from 'primeng/blockui';
+import { DialogModule } from 'primeng/dialog';
 
 import { AuditInformationComponent, EditFormComponent } from '../../../layout';
 import { ApplicationUser, AuthService, Role } from '../../../auth';
@@ -53,7 +54,8 @@ import { TaskSubmissionComponent } from '../task-submission/task-submission.comp
     InputNumberModule,
     TreeSelectModule,
     TagModule,
-    BlockUIModule
+    BlockUIModule,
+    DialogModule
   ],
   providers: [DialogService],
   templateUrl: './task-form.component.html',
@@ -131,6 +133,16 @@ export class TaskFormComponent extends EditFormComponent<TaskDto, TaskService, T
    */
   supportsDescriptionGeneration: boolean;
 
+  /**
+   * Whether the task dialog details should be shown.
+   */
+  showTaskGroupDialog: boolean;
+
+  /**
+   * The current locale.
+   */
+  currentLocale: string;
+
   private allTaskCategories: TaskCategoryDto[];
   private allTaskGroups: TaskGroupDto[];
   private readonly destroy$ = new Subject<void>();
@@ -162,6 +174,7 @@ export class TaskFormComponent extends EditFormComponent<TaskDto, TaskService, T
     }), 'tasks.');
     this.readonly = false;
     this.supportsDescriptionGeneration = false;
+    this.showTaskGroupDialog = false;
     this.organizationalUnits = [];
     this.taskGroups = [];
     this.allTaskGroups = [];
@@ -172,6 +185,7 @@ export class TaskFormComponent extends EditFormComponent<TaskDto, TaskService, T
     this.statuses = [];
     this.difficulties = [];
     this.role = this.authService.user?.maxRole ?? 'TUTOR';
+    this.currentLocale = this.translationService.getActiveLang();
   }
 
   /**
@@ -313,6 +327,16 @@ export class TaskFormComponent extends EditFormComponent<TaskDto, TaskService, T
     } finally {
       this.loading = false;
     }
+  }
+
+  /**
+   * Shows the task group information dialog.
+   */
+  showTaskGroupInformation(): void {
+    if (!this.getTaskGroup())
+      return;
+
+    this.showTaskGroupDialog = true;
   }
 
   //#endregion
@@ -457,6 +481,7 @@ export class TaskFormComponent extends EditFormComponent<TaskDto, TaskService, T
    * Sets the dropdown values based on the current language.
    */
   private updateDropdownTranslations(): void {
+    this.currentLocale = this.translationService.getActiveLang();
     this.types = TaskTypeRegistry.getTaskTypes().map(x => {
       return {value: x, text: this.translationService.translate('taskTypes.' + x + '.title')};
     }).sort((a, b) => a.text.localeCompare(b.text));
