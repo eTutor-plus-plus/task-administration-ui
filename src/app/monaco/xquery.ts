@@ -114,4 +114,52 @@ export function registerXQueryLanguage(): void {
       ],
     },
   });
+  monaco.languages.registerCompletionItemProvider('xquery', {
+    provideCompletionItems: () => ({
+      suggestions: [
+        {
+          label: 'if-then-else',
+          kind: monaco.languages.CompletionItemKind.Snippet,
+          insertText: ['if (${1:condition})', 'then ${2:consequent}', 'else ${3:alternative}'].join('\n'),
+          insertTextRules: monaco.languages.CompletionItemInsertTextRule.InsertAsSnippet,
+          range: undefined!
+        },
+        {
+          label: 'every',
+          kind: monaco.languages.CompletionItemKind.Snippet,
+          insertText: ['every $${1:variable} in ${2:sequence}', 'satisfies ${3:expression}'].join('\n'),
+          insertTextRules: monaco.languages.CompletionItemInsertTextRule.InsertAsSnippet,
+          range: undefined!
+        },
+        {
+          label: 'some',
+          kind: monaco.languages.CompletionItemKind.Snippet,
+          insertText: ['some $${1:variable} in ${2:sequence}', 'satisfies ${3:expression}'].join('\n'),
+          insertTextRules: monaco.languages.CompletionItemInsertTextRule.InsertAsSnippet,
+          range: undefined!
+        },
+        {
+          label: 'for',
+          kind: monaco.languages.CompletionItemKind.Snippet,
+          insertText: ['for $${1:variable} in ${2:sequence}', 'return ${3:expression}'].join('\n'),
+          insertTextRules: monaco.languages.CompletionItemInsertTextRule.InsertAsSnippet,
+          range: undefined!
+        },
+        {
+          label: 'variable-declaration',
+          kind: monaco.languages.CompletionItemKind.Snippet,
+          insertText: 'let $${1:variable} := ${2:expression}',
+          insertTextRules: monaco.languages.CompletionItemInsertTextRule.InsertAsSnippet,
+          range: undefined!
+        },
+        {
+          label: 'doc',
+          kind: monaco.languages.CompletionItemKind.Snippet,
+          insertText: "let $${1:variable} := doc('etutor.xml')",
+          insertTextRules: monaco.languages.CompletionItemInsertTextRule.InsertAsSnippet,
+          range: undefined!
+        }
+      ]
+    })
+  });
 }

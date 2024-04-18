@@ -18,10 +18,18 @@
       }
     },
     "datalog": {
-      "title": "Datalog / Answer Set Programming",
+      "title": "Datalog / ASP",
       "fields": {
         "diagnoseFacts": "Fakten (Diagnose)",
         "submissionFacts": "Fakten (Abgabe)"
+      }
+    },
+    "sql": {
+      "title": "SQL / Relationale Algebra",
+      "fields": {
+        "ddlStatements": "CREATE TABLE Statements",
+        "diagnoseDmlStatements": "INSERT INTO Statements (Diagnose)",
+        "submitDmlStatements": "INSERT INTO Statements (Abgabe)"
       }
     }
   }
