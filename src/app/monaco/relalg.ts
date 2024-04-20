@@ -9,11 +9,14 @@ export function registerRelationalAlgebraLanguage(): void {
     brackets: [
       ['[', ']'],
       ['(', ')'],
+      ['{', '}'],
+      ['⊏', '⊐'],
     ],
     autoClosingPairs: [
       {open: '{', close: '}'},
       {open: '[', close: ']'},
       {open: '(', close: ')'},
+      {open: '⊏', close: '⊐'},
       {open: '\'', close: '\'', notIn: ['string']},
       {open: '"', close: '"', notIn: ['string']}
     ],
@@ -21,6 +24,7 @@ export function registerRelationalAlgebraLanguage(): void {
       {open: '{', close: '}'},
       {open: '[', close: ']'},
       {open: '(', close: ')'},
+      {open: '⊏', close: '⊐'},
       {open: '\'', close: '\''},
       {open: '"', close: '"'}
     ]
@@ -41,7 +45,8 @@ export function registerRelationalAlgebraLanguage(): void {
     brackets: [
       {open: '{', close: '}', token: 'delimiter.curly'},
       {open: '[', close: ']', token: 'delimiter.square'},
-      {open: '(', close: ')', token: 'delimiter.parenthesis'}
+      {open: '(', close: ')', token: 'delimiter.parenthesis'},
+      {open: '⊏', close: '⊐', token: 'delimiter.square'}
     ],
 
     // Define the tokens
@@ -64,7 +69,7 @@ export function registerRelationalAlgebraLanguage(): void {
         [/[=<>!]+/, 'operator'],
 
         // Delimiters and brackets
-        [/[{}()[\]]/, '@brackets'],
+        [/[{}()[\]⊏⊐]/, '@brackets'],
 
         // Strings
         [/'([^'\\]|\\.)*$/, 'string.invalid'],  // single quote string
@@ -194,9 +199,9 @@ export function registerRelationalAlgebraLanguage(): void {
           documentation: 'Intersection operator'
         },
         {
-          label: '-',
+          label: '−',
           kind: monaco.languages.CompletionItemKind.Keyword,
-          insertText: '-',
+          insertText: '−',
           range: undefined!,
           documentation: 'Minus operator'
         },
@@ -241,6 +246,13 @@ export function registerRelationalAlgebraLanguage(): void {
           insertText: '⋉',
           range: undefined!,
           documentation: 'Left Semijoin operator'
+        },
+        {
+          label: '⟗',
+          kind: monaco.languages.CompletionItemKind.Keyword,
+          insertText: '⟗',
+          range: undefined!,
+          documentation: 'Full Outer Join operator'
         },
         {
           label: '÷',
