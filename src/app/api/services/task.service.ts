@@ -50,27 +50,13 @@ export class TaskService extends ApiService<TaskDto, ModifyTaskDto, number, Task
     }));
   }
 
-  protected override setFilterParam(params: HttpParams, filter: TaskFilter): HttpParams {
-    if (filter.name)
-      params = params.set('nameFilter', filter.name);
-    if (filter.status)
-      params = params.set('statusFilter', filter.status);
-    if (filter.taskType)
-      params = params.set('taskTypeFilter', filter.taskType);
-    if (filter.organizationalUnit)
-      params = params.set('orgUnitFilter', filter.organizationalUnit);
-    if (filter.taskGroup)
-      params = params.set('taskGroupFilter', filter.taskGroup);
-    return params;
-  }
-
   /**
    * Submits a task.
    *
    * @param submission The submission.
    * @return The grading result.
    */
-  async submit(submission: {
+  submit(submission: {
     mode: string;
     feedbackLevel: number;
     language: string;
@@ -87,6 +73,11 @@ export class TaskService extends ApiService<TaskDto, ModifyTaskDto, number, Task
     }));
   }
 
+  /**
+   * Initiates synchronization of the task with Moodle.
+   *
+   * @param id The task identifier.
+   */
   syncWithMoodle(id: number): Promise<void> {
     console.info(`[${this.serviceName}] Sync with moodle ` + id);
     return new Promise<void>((resolve, reject) => this.http.post(this.apiUrl + '/' + encodeURIComponent(id), null).subscribe({
@@ -98,9 +89,20 @@ export class TaskService extends ApiService<TaskDto, ModifyTaskDto, number, Task
     }));
   }
 
+  protected override setFilterParam(params: HttpParams, filter: TaskFilter): HttpParams {
+    if (filter.name)
+      params = params.set('nameFilter', filter.name);
+    if (filter.status)
+      params = params.set('statusFilter', filter.status);
+    if (filter.taskType)
+      params = params.set('taskTypeFilter', filter.taskType);
+    if (filter.organizationalUnit)
+      params = params.set('orgUnitFilter', filter.organizationalUnit);
+    if (filter.taskGroup)
+      params = params.set('taskGroupFilter', filter.taskGroup);
+    return params;
+  }
 }
-
-
 
 /**
  * The filter properties for tasks.

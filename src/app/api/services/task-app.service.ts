@@ -22,7 +22,7 @@ export class TaskAppService extends ApiService<TaskAppDto, ModifyTaskAppDto, num
     if (filter.url)
       params = params.set('urlFilter', filter.url);
     if (filter.taskType)
-      params = params.set('urlFilter', filter.taskType);
+      params = params.set('taskTypeFilter', filter.taskType);
     return params;
   }
 
