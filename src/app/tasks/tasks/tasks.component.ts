@@ -193,6 +193,30 @@ export class TasksComponent extends TableOverviewComponent<TaskDto, TaskService>
 
   //#endregion
 
+  /**
+   * Downloads all task groups.
+   */
+  async download(): Promise<void> {
+    try {
+      this.startLoading();
+      const result = await this.entityService.export();
+      const a = document.createElement('a');
+      a.href = 'data:text/json;charset=utf-8,' + encodeURIComponent(result);
+      a.download = 'tasks.json';
+      a.click();
+    } catch (err) {
+      console.error('[TasksComponent] Could not download tasks', err);
+      this.messageService.add({
+        severity: 'error',
+        detail: this.translationService.translate(this.baseTranslationKey + 'errors.load'),
+        life: 10000,
+        key: 'global'
+      });
+    } finally {
+      this.finishLoading();
+    }
+  }
+
   private async loadOrganizationalUnits(): Promise<void> {
     try {
       const result = await this.organizationalUnitService.load(0, 999999, [{field: 'name', order: 1}]);

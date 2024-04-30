@@ -82,6 +82,29 @@
         "droolsErrorWeighting": "Error Weighting",
         "droolsAddClass": "Add Class"
       }
+    },
+    "sql": {
+      "title": "SQL",
+      "fields": {
+        "solution": "Solution",
+        "wrongOrderPenalty": "Wrong Sorting: Penalty",
+        "superfluousColumnsPenalty": "Superfluous Column: Penalty"
+      },
+      "descriptions": {
+        "penalty": "A point deduction of -1 means that the submission is awarded 0 points."
+      }
+    },
+    "relalg": {
+      "title": "Relational Algebra",
+      "fields": {
+        "solution": "Solution",
+        "sqlSolution": "SQL-Solution",
+        "wrongOrderPenalty": "Wrong Sorting: Penalty",
+        "superfluousColumnsPenalty": "Superfluous Column: Penalty"
+      },
+      "descriptions": {
+        "penalty": "A point deduction of -1 means that the submission is awarded 0 points."
+      }
     }
   }
 }

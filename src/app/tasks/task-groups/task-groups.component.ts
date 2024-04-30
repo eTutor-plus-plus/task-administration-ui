@@ -132,6 +132,30 @@ export class TaskGroupsComponent extends TableOverviewComponent<TaskGroupDto, Ta
     return ou ? ou.name : id + '';
   }
 
+  /**
+   * Downloads all task groups.
+   */
+  async download(): Promise<void> {
+    try {
+      this.startLoading();
+      const result = await this.entityService.export();
+      const a = document.createElement('a');
+      a.href = 'data:text/json;charset=utf-8,' + encodeURIComponent(result);
+      a.download = 'task-groups.json';
+      a.click();
+    } catch (err) {
+      console.error('[TaskGroupsComponent] Could not download task groups', err);
+      this.messageService.add({
+        severity: 'error',
+        detail: this.translationService.translate(this.baseTranslationKey + 'errors.load'),
+        life: 10000,
+        key: 'global'
+      });
+    } finally {
+      this.finishLoading();
+    }
+  }
+
   override getMessageParams(entity: TaskGroupDto, type: 'error' | 'success'): Record<string, unknown> {
     return {name: entity.name};
   }
@@ -169,7 +193,7 @@ export class TaskGroupsComponent extends TableOverviewComponent<TaskGroupDto, Ta
       console.error('[TaskGroupsComponent] Could not load organizational units', err);
       this.messageService.add({
         severity: 'error',
-        detail: this.translationService.translate('organizationalUnits.errors.load'),
+        detail: this.translationService.translate(this.baseTranslationKey + 'errors.load'),
         life: 10000,
         key: 'global'
       });

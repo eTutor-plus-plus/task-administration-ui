@@ -63,8 +63,13 @@ export class FooterComponent implements OnInit, OnDestroy {
     this.sub = this.translationService.langChanges$
       .subscribe(lang => this.impressUrl = environment.impressUrl + '?lang=' + lang);
     this.healthService.loadAppInfo().then(info => {
-      this.serverVersion = info.build?.version + '#' + info.git?.commit.id['describe-short'];
-      this.serverVersionDate = info.git?.commit.time ? DateTime.fromISO(info.git.commit.time).toFormat('dd.MM.yyyy HH:mm:ss') : '';
+      if (info.build) {
+        this.serverVersion = info.build?.version + '#' + info.git?.commit.id['describe-short'];
+        if (info.git)
+          this.serverVersion += '#' + info.git?.commit.id['describe-short'];
+      }
+      if (info.git)
+        this.serverVersionDate = info.git?.commit.time ? DateTime.fromISO(info.git.commit.time).toFormat('dd.MM.yyyy HH:mm:ss') : '';
     });
   }
 

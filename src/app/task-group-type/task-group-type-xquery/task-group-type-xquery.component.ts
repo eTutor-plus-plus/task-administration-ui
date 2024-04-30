@@ -5,6 +5,8 @@ import { MonacoEditorModule } from 'ngx-monaco-editor-v2';
 import { editor } from 'monaco-editor';
 
 import { TaskGroupTypeFormComponent } from '../task-group-type-form.component';
+import { XqueryService } from './xquery.service';
+import { TaskGroupDto } from '../../api';
 
 /**
  * Task Group Type Form: XQuery
@@ -30,9 +32,14 @@ export class TaskGroupTypeXqueryComponent extends TaskGroupTypeFormComponent<Tas
   };
 
   /**
+   * The public URL to the diagnose-document.
+   */
+  publicUrl?: string;
+
+  /**
    * Creates a new instance of class TaskGroupTypeXqueryComponent.
    */
-  constructor() {
+  constructor(private readonly xqueryService: XqueryService) {
     super();
   }
 
@@ -41,6 +48,18 @@ export class TaskGroupTypeXqueryComponent extends TaskGroupTypeFormComponent<Tas
     this.form.addControl('submitDocument', new FormControl<string | null>(null, [Validators.required, Validators.minLength(4)]));
   }
 
+  protected override onTaskGroupChanged(taskGroup: TaskGroupDto | undefined) {
+    if (!taskGroup) {
+      this.publicUrl = undefined;
+      return;
+    }
+
+    this.startLoading();
+    this.xqueryService.loadDiagnoseDocument(taskGroup.id)
+      .then(url => this.publicUrl = url)
+      .catch(error => this.publicUrl = undefined)
+      .finally(() => this.finishLoading());
+  }
 }
 
 interface TaskGroupTypeForm {

@@ -164,7 +164,7 @@ export class AuthService implements OnDestroy {
 
     const diff = this.tokenExpirationDate * 1000 - new Date().getTime() - 60000; // add 1 minute padding
     console.debug('[AUTH] Refreshing token in ' + diff + ' milliseconds');
-    this.refreshSub = setTimeout(async () => await this.refreshToken(), diff);
+    this.refreshSub = <any>setTimeout(async () => await this.refreshToken(), diff);
   }
 
   /**

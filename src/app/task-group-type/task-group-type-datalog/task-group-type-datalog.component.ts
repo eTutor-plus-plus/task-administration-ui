@@ -5,6 +5,8 @@ import { MonacoEditorModule } from 'ngx-monaco-editor-v2';
 import { editor } from 'monaco-editor';
 
 import { TaskGroupTypeFormComponent } from '../task-group-type-form.component';
+import { DatalogService } from './datalog.service';
+import { TaskGroupDto } from '../../api';
 
 /**
  * Task Group Type Form: Datalog
@@ -29,15 +31,33 @@ export class TaskGroupTypeDatalogComponent extends TaskGroupTypeFormComponent<Ta
   };
 
   /**
+   * The public URL to the diagnose-facts.
+   */
+  publicUrl?: string;
+
+  /**
    * Creates a new instance of class TaskGroupTypeDatalogComponent.
    */
-  constructor() {
+  constructor(private readonly datalogService: DatalogService) {
     super();
   }
 
   protected override initForm(): void {
     this.form.addControl('diagnoseFacts', new FormControl<string | null>(null, [Validators.required, Validators.minLength(4)]));
     this.form.addControl('submissionFacts', new FormControl<string | null>(null, [Validators.required, Validators.minLength(4)]));
+  }
+
+  protected override onTaskGroupChanged(taskGroup: TaskGroupDto | undefined) {
+    if (!taskGroup) {
+      this.publicUrl = undefined;
+      return;
+    }
+
+    this.startLoading();
+    this.datalogService.loadDiagnoseFacts(taskGroup.id)
+      .then(url => this.publicUrl = url)
+      .catch(error => this.publicUrl = undefined)
+      .finally(() => this.finishLoading());
   }
 }
 

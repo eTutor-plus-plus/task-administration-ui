@@ -128,6 +128,7 @@
     "no": "Nein",
     "ok": "OK",
     "cancel": "Abbrechen",
+    "download": "Herunterladen",
     "paginator": "{first} bis {last} von {totalRecords}",
     "concurrency-error": "Der Eintrag wurde in der Zwischenzeit von jemand anderen bearbeitet. Bitte laden Sie den Eintrag neu und versuchen Sie es dann erneut.",
     "created": "Erstellt",

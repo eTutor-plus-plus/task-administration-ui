@@ -1,0 +1,39 @@
+<div [formGroup]="form">
+  <div class="surface-card p-4 shadow-2 border-round p-fluid mb-4">
+    <div class="grid formgrid p-fluid">
+      <div class="field mb-4 col-12">
+        <label for="solution" transloco="taskTypes.sql.fields.solution"></label>
+        <ngx-monaco-editor id="solution" formControlName="solution" [options]="editorOptions" style="height: 250px;"/>
+        @if (form.controls.solution.dirty || form.controls.solution.touched) {
+          <small class="block mt-1 p-error">
+            {{ getError(form.controls.solution, 'taskTypes.sql.fields.solution') }}
+          </small>
+        }
+      </div>
+    </div>
+  </div>
+
+  <div class="surface-card p-4 shadow-2 border-round p-fluid mb-4">
+    <div class="grid formgrid p-fluid">
+      <div class="field mb-4 col-12 md:col-6">
+        <label for="wrongOrderPenalty" transloco="taskTypes.sql.fields.wrongOrderPenalty"></label>
+        <p-inputNumber inputId="wrongOrderPenalty" formControlName="wrongOrderPenalty" mode="decimal" [maxFractionDigits]="2" [min]="-1"/>
+        @if (form.controls.wrongOrderPenalty.dirty || form.controls.wrongOrderPenalty.touched) {
+          <small class="block mt-1 p-error">
+            {{ getError(form.controls.wrongOrderPenalty, 'taskTypes.sql.fields.wrongOrderPenalty') }}
+          </small>
+        }
+      </div>
+      <div class="field mb-4 col-12 md:col-6">
+        <label for="superfluousColumnsPenalty" transloco="taskTypes.sql.fields.superfluousColumnsPenalty"></label>
+        <p-inputNumber inputId="superfluousColumnsPenalty" formControlName="superfluousColumnsPenalty" mode="decimal" [maxFractionDigits]="2" [min]="-1"/>
+        @if (form.controls.superfluousColumnsPenalty.dirty || form.controls.superfluousColumnsPenalty.touched) {
+          <small class="block mt-1 p-error">
+            {{ getError(form.controls.superfluousColumnsPenalty, 'taskTypes.sql.fields.superfluousColumnsPenalty') }}
+          </small>
+        }
+      </div>
+    </div>
+    <small transloco="taskTypes.sql.descriptions.penalty" class="text-color-secondary block mt-1"></small>
+  </div>
+</div>

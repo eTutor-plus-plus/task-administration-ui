@@ -2,7 +2,7 @@ import { Directive, inject, Input } from '@angular/core';
 import { AbstractControl, FormControl, FormGroup, UntypedFormGroup } from '@angular/forms';
 import { TranslocoService } from '@ngneat/transloco';
 
-import { getValidationErrorMessage } from '../api';
+import { getValidationErrorMessage, TaskDto } from '../api';
 import { TaskForm } from './task.form';
 
 /**
@@ -27,6 +27,7 @@ export abstract class TaskTypeFormComponent<TForm extends { [K in keyof TForm]: 
    */
   protected readonly translationService: TranslocoService;
 
+  private _task?: TaskDto | null;
   private _originalData?: unknown;
   private _parentForm?: FormGroup<TaskForm>;
   private _loadingCounter: number;
@@ -64,6 +65,7 @@ export abstract class TaskTypeFormComponent<TForm extends { [K in keyof TForm]: 
       this.form.patchValue(this._originalData);
     else
       this.form.reset(this.getFormDefaultValues());
+    this.onOriginalDataChanged(data);
   }
 
   /**
@@ -71,6 +73,24 @@ export abstract class TaskTypeFormComponent<TForm extends { [K in keyof TForm]: 
    */
   get originalData(): unknown {
     return this._originalData;
+  }
+
+  /**
+   * Sets the current task.
+   *
+   * @param value The task.
+   */
+  @Input({required: true}) set task(value: TaskDto | undefined | null) {
+    this._task = value;
+    this.onTaskChanged(value);
+  }
+
+  /**
+   * The current task.
+   * Do not use this to access type specific data. Use original data instead.
+   */
+  get task(): TaskDto | undefined | null {
+    return this._task;
   }
 
   /**
@@ -94,6 +114,18 @@ export abstract class TaskTypeFormComponent<TForm extends { [K in keyof TForm]: 
    * Hook that can be used to initialize the form group.
    */
   protected abstract initForm(): void;
+
+  /**
+   * Hook that can be used to handle changes of the original data.
+   */
+  protected onOriginalDataChanged(originalData: unknown | undefined): void {
+  }
+
+  /**
+   * Hook that can be used to handle changes of the task.
+   */
+  protected onTaskChanged(taskGroup: TaskDto | undefined | null): void {
+  }
 
   //#region --- Loading ---
 

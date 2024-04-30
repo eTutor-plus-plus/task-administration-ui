@@ -9,7 +9,12 @@
   <ng-template pTemplate="caption">
     <div class="flex align-items-center justify-content-between">
       <p-button [label]="'common.new' | transloco" icon="pi pi-plus" (onClick)="create()"/>
-      <p-button [label]="'common.refresh' | transloco" icon="pi pi-refresh" (onClick)="reload()" severity="secondary"/>
+      <div>
+        @if (role == 'ADMIN' || role == 'FULL_ADMIN') {
+          <p-button [label]="'common.download' | transloco" icon="pi pi-download" (onClick)="download()" severity="info" class="mr-2"/>
+        }
+        <p-button [label]="'common.refresh' | transloco" icon="pi pi-refresh" (onClick)="reload()" severity="secondary"/>
+      </div>
     </div>
   </ng-template>
 
