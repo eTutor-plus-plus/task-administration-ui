@@ -1,0 +1,78 @@
+<div [formGroup]="form">
+  <div class="surface-card p-4 shadow-2 border-round p-fluid mb-4">
+    <div class="grid formgrid p-fluid">
+      <div class="field mb-4 col-12">
+        <label for="solution" transloco="taskTypes.sql-ddl.fields.solution"></label>
+        <ngx-monaco-editor id="solution" formControlName="solution" [options]="editorOptions" style="height: 300px;"/>
+        @if (form.controls.solution.dirty || form.controls.solution.touched) {
+          <small class="block mt-1 p-error">
+            {{ getError(form.controls.solution, 'taskTypes.xquery.fields.droolsSolution') }}
+          </small>
+        }
+      </div>
+
+      <div class="field mb-4 col-12">
+        <label for="insertStatements" transloco="taskTypes.sql-ddl.fields.insertStatements"></label>
+        <ngx-monaco-editor id="insertStatements" formControlName="insertStatements" [options]="editorOptions" style="height: 200px;"/>
+        @if (form.controls.insertStatements.dirty || form.controls.insertStatements.touched) {
+          <small class="block mt-1 p-error">
+            {{ getError(form.controls.insertStatements, 'taskTypes.drools.fields.insertStatement') }}
+          </small>
+        }
+      </div>
+
+      <div class="field mb-4 col-12">
+        <label for="tablePoints" [transloco]="'taskTypes.sql-ddl.fields.tablePoints'"></label>
+        <input id="tablePoints" type="number" pInputText formControlName="tablePoints" autocomplete="off">
+        @if (form.controls.tablePoints.dirty || form.controls.tablePoints.touched) {
+          <small class="block mt-1 p-error">
+            {{ getError(form.controls.tablePoints, 'taksTypes.sql-ddl.fields.tablePoints') }}
+          </small>
+        }
+      </div>
+
+      <div class="field mb-4 col-12">
+        <label for="columnPoints" [transloco]="'taskTypes.sql-ddl.fields.columnPoints'"></label>
+        <input id="columnPoints" type="number" pInputText formControlName="columnPoints" autocomplete="off">
+        @if (form.controls.columnPoints.dirty || form.controls.columnPoints.touched) {
+          <small class="block mt-1 p-error">
+            {{ getError(form.controls.columnPoints, 'taksTypes.sql-ddl.fields.columnPoints') }}
+          </small>
+        }
+      </div>
+      <div class="field mb-4 col-12">
+        <label for="primaryKeyPoints" [transloco]="'taskTypes.sql-ddl.fields.primaryKeyPoints'"></label>
+        <input id="primaryKeyPoints" type="number" pInputText formControlName="primaryKeyPoints" autocomplete="off">
+        @if (form.controls.primaryKeyPoints.dirty || form.controls.primaryKeyPoints.touched) {
+          <small class="block mt-1 p-error">
+            {{ getError(form.controls.primaryKeyPoints, 'taksTypes.sql-ddl.fields.primaryKeyPoints') }}
+          </small>
+        }
+      </div>
+      <div class="field mb-4 col-12">
+        <label for="foreignKeyPoints" [transloco]="'taskTypes.sql-ddl.fields.foreignKeyPoints'"></label>
+        <input id="foreignKeyPoints" type="number" pInputText formControlName="foreignKeyPoints" autocomplete="off">
+        @if (form.controls.foreignKeyPoints.dirty || form.controls.foreignKeyPoints.touched) {
+          <small class="block mt-1 p-error">
+            {{ getError(form.controls.foreignKeyPoints, 'taksTypes.sql-ddl.fields.foreignKeyPoints') }}
+          </small>
+        }
+      </div>
+      <div class="field mb-4 col-12">
+        <label for="constraintPoints" [transloco]="'taskTypes.sql-ddl.fields.constraintPoints'"></label>
+        <input id="constraintPoints" type="number" pInputText formControlName="constraintPoints" autocomplete="off">
+        @if (form.controls.constraintPoints.dirty || form.controls.constraintPoints.touched) {
+          <small class="block mt-1 p-error">
+            {{ getError(form.controls.constraintPoints, 'taksTypes.sql-ddl.fields.constraintPoints') }}
+          </small>
+        }
+      </div>
+
+
+
+    </div>
+  </div>
+  <div>
+
+  </div>
+</div>

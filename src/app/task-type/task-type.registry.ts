@@ -4,6 +4,7 @@ import { TaskTypeXqueryComponent } from './task-type-xquery/task-type-xquery.com
 import { TaskTypeFormComponent } from './task-type-form.component';
 import { TaskTypeDatalogComponent } from './task-type-datalog/task-type-datalog.component';
 import { TaskTypeDroolsComponent } from './task-type-drools/task-type-drools.component';
+import { TaskTypeSqlDdlComponent } from './task-type-sql-ddl/task-type-sql-ddl.component';
 
 /**
  * Registry for task types.
@@ -51,6 +52,14 @@ return $d`,
       submissionTemplate: '',
       supportsDescriptionGeneration: false,
       submissionInputLanguage: 'drools'
+    },
+    {
+      name: 'sql-ddl',
+      supportedTaskGroupTypes: [],
+      component: TaskTypeSqlDdlComponent,
+      submissionTemplate: '',
+      supportsDescriptionGeneration: false,
+      submissionInputLanguage: 'sql'
     }
   ];
 

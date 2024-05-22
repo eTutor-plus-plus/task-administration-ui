@@ -73,6 +73,20 @@
         "droolsAddClass": "Add Class",
         "droolsIsCEP": "Is this a CEP Task?"
       }
+    },
+      "sql-ddl": {
+        "title": "SQL DDL",
+        "fields": {
+          "sqlDDL": "SQL DDL",
+          "solution": "Solution",
+          "insertStatements": "Insert Statement",
+          "tablePoints": "Points for Table",
+          "columnPoints": "Points for Column",
+          "constraintPoints": "Points for Constraint",
+          "primaryKeyPoints": "Points for Primary Key",
+          "foreignKeyPoints": "Points for Foreign Key"
+        }
+      }
     }
   }
-}
+
