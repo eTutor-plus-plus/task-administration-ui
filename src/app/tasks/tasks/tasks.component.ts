@@ -183,6 +183,8 @@ export class TasksComponent extends TableOverviewComponent<TaskDto, TaskService>
     const user = this.authService.user;
     if (!user)
       return false;
+    if (entity.status !== 'APPROVED')
+      return false;
 
     if (user.isFullAdmin)
       return true;

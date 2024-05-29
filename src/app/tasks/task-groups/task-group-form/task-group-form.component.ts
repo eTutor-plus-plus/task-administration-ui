@@ -221,7 +221,9 @@ export class TaskGroupFormComponent extends EditFormComponent<TaskGroupDto, Task
       this.additionalData = data.additionalData;
       this.form.patchValue(this.originalEntity);
       this.form.markAsPristine();
-      this.role = this.authService.user?.roles.find(x => x.organizationalUnit == data.dto.organizationalUnitId)?.role ?? 'TUTOR';
+      this.role = this.authService.user?.isFullAdmin ?
+        'FULL_ADMIN' :
+        this.authService.user?.roles.find(x => x.organizationalUnit == data.dto.organizationalUnitId)?.role ?? 'TUTOR';
       this.setFormEnabledDisabled();
       this.changeDetectorRef.detectChanges(); // required to prevent error
     } catch (err) {
