@@ -82,7 +82,7 @@
       <td>{{ 'taskGroupTypes.' + entity.taskGroupType + '.title' | transloco }}</td>
       <td>{{ entity.name }}</td>
       <td>
-        <p-tag [severity]="('taskStatus.' + entity.status + '_class') | transloco">
+        <p-tag [severity]="convertStringToSeverity(('taskStatus.' + entity.status + '_class') | transloco)">
           {{ ('taskStatus.' + entity.status) | transloco }}
         </p-tag>
       </td>

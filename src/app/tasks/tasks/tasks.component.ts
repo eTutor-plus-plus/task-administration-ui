@@ -260,4 +260,10 @@ export class TasksComponent extends TableOverviewComponent<TaskDto, TaskService>
       // ignore
     }
   }
+
+  convertStringToSeverity(severity: string): 'success' | 'secondary' | 'info' | 'warning' | 'danger' | 'contrast' | undefined {
+    if (severity === '')
+      return undefined;
+    return severity as any;
+  }
 }

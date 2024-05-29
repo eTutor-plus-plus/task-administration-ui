@@ -90,6 +90,7 @@ export class LoginComponent implements OnInit, AfterViewInit {
    * Displays a session expiration message in case of expired session.
    */
   ngAfterViewInit(): void {
+    this.messageService.clear('global');
     if (this.route.snapshot.queryParamMap.has('expired') && this.route.snapshot.queryParamMap.get('expired') == 'true') {
       setTimeout(() => this.messageService.add({
         severity: 'warn',

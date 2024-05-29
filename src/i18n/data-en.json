@@ -206,7 +206,7 @@
     "DRAFT": "Draft",
     "READY_FOR_APPROVAL": "Ready for Approval",
     "APPROVED": "Approved",
-    "DRAFT_class": "primary",
+    "DRAFT_class": "",
     "READY_FOR_APPROVAL_class": "info",
     "APPROVED_class": "success"
   },
