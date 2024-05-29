@@ -64,7 +64,7 @@ export class FooterComponent implements OnInit, OnDestroy {
       .subscribe(lang => this.impressUrl = environment.impressUrl + '?lang=' + lang);
     this.healthService.loadAppInfo().then(info => {
       if (info.build) {
-        this.serverVersion = info.build?.version + '#' + info.git?.commit.id['describe-short'];
+        this.serverVersion = info.build?.version;
         if (info.git)
           this.serverVersion += '#' + info.git?.commit.id['describe-short'];
       }

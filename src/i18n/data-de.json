@@ -205,7 +205,7 @@
     "DRAFT": "Entwurf",
     "READY_FOR_APPROVAL": "Bereit für Freigabe",
     "APPROVED": "Freigegeben",
-    "DRAFT_class": "primary",
+    "DRAFT_class": "",
     "READY_FOR_APPROVAL_class": "info",
     "APPROVED_class": "success"
   },

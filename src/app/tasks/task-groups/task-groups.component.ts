@@ -201,4 +201,10 @@ export class TaskGroupsComponent extends TableOverviewComponent<TaskGroupDto, Ta
       this.finishLoading();
     }
   }
+
+  convertStringToSeverity(severity: string): 'success' | 'secondary' | 'info' | 'warning' | 'danger' | 'contrast' | undefined {
+    if (severity === '')
+      return undefined;
+    return severity as any;
+  }
 }

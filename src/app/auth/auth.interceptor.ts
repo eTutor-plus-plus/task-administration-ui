@@ -25,4 +25,4 @@ export function authInterceptor(req: HttpRequest<unknown>, next: HttpHandlerFn):
   }
 
   return next(req);
-};
+}

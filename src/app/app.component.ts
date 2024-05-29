@@ -29,7 +29,7 @@ export class AppComponent implements OnInit, OnDestroy {
               private readonly translateService: TranslocoService,
               private readonly route: ActivatedRoute) {
     this.primeNgConfig.ripple = false;
-    this.primeNgConfig.inputStyle = 'outlined';
+    this.primeNgConfig.inputStyle.set('outlined');
   }
 
   /**
