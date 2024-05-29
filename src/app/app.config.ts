@@ -10,7 +10,7 @@ import { MessageService } from 'primeng/api';
 import { routes } from './app.routes';
 import { environment } from '../environments/environment';
 import { TranslationLoaderService } from './translation-loader.service';
-import { authInterceptor, langInterceptor } from './auth';
+import { authInterceptor, langInterceptor, unauthorizedInterceptor } from './auth';
 import { customizeMonaco } from './monaco';
 
 /**
@@ -24,7 +24,7 @@ export const API_URL = new InjectionToken<string>('API_URL');
 export const appConfig: ApplicationConfig = {
   providers: [
     provideRouter(routes),
-    provideHttpClient(withInterceptors([authInterceptor, langInterceptor])),
+    provideHttpClient(withInterceptors([authInterceptor, langInterceptor, unauthorizedInterceptor])),
     provideAnimations(),
     provideTransloco({
       config: {
