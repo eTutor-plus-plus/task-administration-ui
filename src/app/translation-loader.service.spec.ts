@@ -13,4 +13,10 @@ describe('TranslationLoaderService', () => {
   it('should be created', () => {
     expect(service).toBeTruthy();
   });
+
+  it('should load the translations', async () => {
+    const translations = await service.getTranslation('en')
+    expect(translations).toBeTruthy();
+  });
+
 });
