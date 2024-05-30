@@ -18,6 +18,7 @@ import { DropdownModule } from 'primeng/dropdown';
 import { AuthService, Role } from '../../auth';
 import { TableOverviewComponent } from '../../layout';
 import { OrganizationalUnitDto, OrganizationalUnitService, StatusEnum, TaskGroupDto, TaskGroupService } from '../../api';
+import { convertStringToSeverity } from '../helpers';
 
 /**
  * Page: Task Groups Overview
@@ -202,9 +203,5 @@ export class TaskGroupsComponent extends TableOverviewComponent<TaskGroupDto, Ta
     }
   }
 
-  convertStringToSeverity(severity: string): 'success' | 'secondary' | 'info' | 'warning' | 'danger' | 'contrast' | undefined {
-    if (severity === '')
-      return undefined;
-    return severity as any;
-  }
+  public readonly convertStringToSeverity = convertStringToSeverity;
 }

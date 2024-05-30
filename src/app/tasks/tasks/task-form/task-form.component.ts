@@ -8,7 +8,7 @@ import { distinctUntilChanged, Subject, takeUntil } from 'rxjs';
 
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
-import { DropdownModule } from 'primeng/dropdown';
+import { DropdownChangeEvent, DropdownModule } from 'primeng/dropdown';
 import { EditorModule } from 'primeng/editor';
 import { TreeSelectModule } from 'primeng/treeselect';
 import { TreeNode } from 'primeng/api';
@@ -32,6 +32,7 @@ import {
 } from '../../../api';
 import { TaskForm, TaskTypeRegistry } from '../../../task-type';
 import { TaskSubmissionComponent } from '../task-submission/task-submission.component';
+import { convertStringToSeverity } from '../../helpers';
 
 /**
  * Task Form
@@ -480,6 +481,23 @@ export class TaskFormComponent extends EditFormComponent<TaskDto, TaskService, T
   }
 
   /**
+   * Called when the selected task group changed.
+   * @param evt The change event.
+   */
+  onTaskGroupChanged(evt: DropdownChangeEvent) {
+    const tg = this.taskGroups.find(x => x.id === evt.value);
+    this.statuses = [
+      {value: StatusEnum.DRAFT, text: this.translationService.translate('taskStatus.' + StatusEnum.DRAFT), disabled: false},
+      {value: StatusEnum.READY_FOR_APPROVAL, text: this.translationService.translate('taskStatus.' + StatusEnum.READY_FOR_APPROVAL), disabled: false},
+      {
+        value: StatusEnum.APPROVED,
+        text: this.translationService.translate('taskStatus.' + StatusEnum.APPROVED),
+        disabled: this.role === 'TUTOR' || (tg !== undefined && tg !== null && tg.status !== 'APPROVED')
+      }
+    ];
+  }
+
+  /**
    * Sets the dropdown values based on the current language.
    */
   private updateDropdownTranslations(): void {
@@ -655,4 +673,6 @@ export class TaskFormComponent extends EditFormComponent<TaskDto, TaskService, T
       this.form.patchValue({taskCategoryIds: nodes});
     }
   }
+
+  public readonly convertStringToSeverity = convertStringToSeverity;
 }
