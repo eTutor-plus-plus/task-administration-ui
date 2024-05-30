@@ -107,8 +107,8 @@
   },
   "validation": {
     "required": "{{field}} must not be empty!",
-    "minlength": "{{field}} must be at least {{length}} characters long.",
-    "maxlength": "{{field}} can be maximum {{length}} characters long.",
+    "minlength": "{{field}} must be at least {{requiredLength}} characters long.",
+    "maxlength": "{{field}} can be maximum {{requiredLength}} characters long.",
     "max": "{{field}} must not be greater than {{max}}.",
     "min": "{{field}} must not be less than {{min}}.",
     "email": "{{field}} is not a valid email address.",
