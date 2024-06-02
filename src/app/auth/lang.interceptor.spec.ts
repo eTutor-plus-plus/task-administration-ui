@@ -1,5 +1,6 @@
 import { TestBed } from '@angular/core/testing';
-import { HttpInterceptorFn, HttpRequest } from '@angular/common/http';
+import { HttpHandlerFn, HttpInterceptorFn, HttpRequest } from '@angular/common/http';
+import { of } from 'rxjs';
 
 import { langInterceptor } from './lang.interceptor';
 import { TranslocoService, TranslocoTestingModule } from '@ngneat/transloco';
@@ -25,31 +26,27 @@ describe('langInterceptor', () => {
     // Arrange
     TestBed.inject(TranslocoService).setActiveLang('en');
     const req = new HttpRequest('GET', apiUrl + '/api/data');
-    const next = (r: any) => {
+    const next: HttpHandlerFn = r => {
+      // Assert
       expect(r.headers.get('Accept-Language')).toBe('en');
-      return {} as any;
+      return of({} as any);
     };
 
     // Act
-    const result = interceptor(req, next);
-
-    // Assert
-    expect(result).toBeDefined();
+    interceptor(req, next).subscribe();
   });
 
   it('should not add the language to the header if the URL does not match', () => {
     // Arrange
     TestBed.inject(TranslocoService).setActiveLang('en');
     const req = new HttpRequest('GET', 'http://example.com/api/data');
-    const next = (r: any) => {
+    const next: HttpHandlerFn = r => {
+      // Assert
       expect(r.headers.get('Accept-Language')).toBe(null);
-      return {} as any;
+      return of({} as any);
     };
 
     // Act
-    const result = interceptor(req, next);
-
-    // Assert
-    expect(result).toBeDefined();
+    interceptor(req, next).subscribe();
   });
 });

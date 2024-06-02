@@ -19,7 +19,7 @@ export const unauthorizedInterceptor: HttpInterceptorFn = (req, next) => {
     error: err => {
       if (err instanceof HttpErrorResponse && err.status === 401) {
         authService.logout();
-        router.navigateByUrl('/auth/login?expired=true');
+        router.navigateByUrl('/auth/login', {state: {expired: true}});
       }
     }
   }));

@@ -1,9 +1,10 @@
 import { TestBed } from '@angular/core/testing';
-import { HttpInterceptorFn, HttpRequest } from '@angular/common/http';
+import { HttpHandlerFn, HttpInterceptorFn, HttpRequest, HttpResponse } from '@angular/common/http';
 
 import { authInterceptor } from './auth.interceptor';
 import { API_URL } from '../app.config';
 import { AuthService } from './auth.service';
+import { of } from 'rxjs';
 
 class MockAuth {
   authenticated = true;
@@ -42,16 +43,14 @@ describe('authInterceptor', () => {
     mock.headerValue = 'some-value';
     mock.authenticated = true;
     const req = new HttpRequest('GET', apiUrl + '/api/data');
-    const next = (r: HttpRequest<unknown>) => {
+    const next: HttpHandlerFn = r => {
+      // Assert
       expect(r.headers.get('Authorization')).toBe(mock.headerValue);
-      return {} as any;
+      return of(new HttpResponse());
     };
 
     // Act
-    const result = interceptor(req, next);
-
-    // Assert
-    expect(result).toBeDefined();
+    interceptor(req, next).subscribe();
   });
 
   it('should not add the authorization token to the header if the URL does not match', () => {
@@ -60,15 +59,13 @@ describe('authInterceptor', () => {
     mock.authenticated = true;
     const req = new HttpRequest('GET', 'http://example.com/api/data');
     const next = (r: HttpRequest<unknown>) => {
+      // Assert
       expect(r.headers.get('Authorization')).toBeNull();
-      return {} as any;
+      return of(new HttpResponse());
     };
 
     // Act
-    const result = interceptor(req, next);
-
-    // Assert
-    expect(result).toBeDefined();
+    interceptor(req, next).subscribe();
   });
 
   it('should not add the authorization token to the header if the user is not authenticated', () => {
@@ -77,15 +74,13 @@ describe('authInterceptor', () => {
     mock.authenticated = false;
     const req = new HttpRequest('GET', apiUrl + '/api/data');
     const next = (r: HttpRequest<unknown>) => {
+      // Assert
       expect(r.headers.get('Authorization')).toBeNull();
-      return {} as any;
+      return of(new HttpResponse());
     };
 
     // Act
-    const result = interceptor(req, next);
-
-    // Assert
-    expect(result).toBeDefined();
+    interceptor(req, next).subscribe();
   });
 
   it('should not add the authorization token to the header if the token is undefined', () => {
@@ -94,15 +89,13 @@ describe('authInterceptor', () => {
     mock.authenticated = true;
     const req = new HttpRequest('GET', apiUrl + '/api/data');
     const next = (r: HttpRequest<unknown>) => {
+      // Assert
       expect(r.headers.get('Authorization')).toBeNull();
-      return {} as any;
+      return of(new HttpResponse());
     };
 
     // Act
-    const result = interceptor(req, next);
-
-    // Assert
-    expect(result).toBeDefined();
+    interceptor(req, next).subscribe();
   });
 
   it('should not add the authorization token to the header if the request is a login request', () => {
@@ -111,15 +104,13 @@ describe('authInterceptor', () => {
     mock.authenticated = true;
     const req = new HttpRequest('GET', apiUrl + '/auth/login');
     const next = (r: HttpRequest<unknown>) => {
+      // Assert
       expect(r.headers.get('Authorization')).toBeNull();
-      return {} as any;
+      return of(new HttpResponse());
     };
 
     // Act
-    const result = interceptor(req, next);
-
-    // Assert
-    expect(result).toBeDefined();
+    interceptor(req, next).subscribe();
   });
 
   it('should add the authorization token to the header if it is a refresh request', () => {
@@ -128,15 +119,13 @@ describe('authInterceptor', () => {
     mock.authenticated = true;
     const req = new HttpRequest('GET', apiUrl + '/auth/refresh');
     const next = (r: HttpRequest<unknown>) => {
+      // Assert
       expect(r.headers.get('Authorization')).toBe(mock.headerValue);
-      return {} as any;
+      return of(new HttpResponse());
     };
 
     // Act
-    const result = interceptor(req, next);
-
-    // Assert
-    expect(result).toBeDefined();
+    interceptor(req, next).subscribe();
   });
 
   it('should add the authorization token to the header if it is a change password request', () => {
@@ -145,14 +134,12 @@ describe('authInterceptor', () => {
     mock.authenticated = true;
     const req = new HttpRequest('GET', apiUrl + '/auth/change-password');
     const next = (r: HttpRequest<unknown>) => {
+      // Assert
       expect(r.headers.get('Authorization')).toBe(mock.headerValue);
-      return {} as any;
+      return of(new HttpResponse());
     };
 
     // Act
-    const result = interceptor(req, next);
-
-    // Assert
-    expect(result).toBeDefined();
+    interceptor(req, next).subscribe();
   });
 });

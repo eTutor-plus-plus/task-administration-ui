@@ -20,3 +20,21 @@ describe('TranslationLoaderService', () => {
   });
 
 });
+
+export const translocoTestConfig = {
+  config: {
+    defaultLang: 'en',
+    fallbackLang: 'en',
+    availableLangs: ['en', 'de'],
+    prodMode: false,
+    missingHandler: {
+      useFallbackTranslation: true,
+      logMissingKey: true
+    },
+    flatten: {
+      aot: false
+    },
+    reRenderOnLangChange: true
+  },
+  loader: TranslationLoaderService
+};
