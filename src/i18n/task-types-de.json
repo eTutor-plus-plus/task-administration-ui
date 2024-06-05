@@ -105,6 +105,12 @@
       },
       "descriptions": {
         "penalty": "Ein Punkteabzug von -1 bedeutet, dass die Abgabe mit 0 Punkten bewertet wird."
+      },
+      "uml": {
+        "title": "uml",
+        "fields": {
+          "umlBlock": "Block"
+        }
       }
     }
   }
