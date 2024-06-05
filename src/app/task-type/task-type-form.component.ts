@@ -41,7 +41,7 @@ export abstract class TaskTypeFormComponent<TForm extends { [K in keyof TForm]: 
   }
 
   /**
-   * Sets the form.
+   * Sets the form group for the additional data
    *
    * @param form The form group that can be used for the customized form.
    */
@@ -61,10 +61,12 @@ export abstract class TaskTypeFormComponent<TForm extends { [K in keyof TForm]: 
    */
   @Input({required: true}) set formData(data: unknown) {
     this._originalData = data;
-    if (this._originalData)
-      this.form.patchValue(this._originalData);
-    else
-      this.form.reset(this.getFormDefaultValues());
+    if (this.form) {
+      if (this._originalData)
+        this.form.patchValue(this._originalData);
+      else
+        this.form.reset(this.getFormDefaultValues());
+    }
     this.onOriginalDataChanged(data);
   }
 
@@ -94,7 +96,7 @@ export abstract class TaskTypeFormComponent<TForm extends { [K in keyof TForm]: 
   }
 
   /**
-   * Returns the parent form.
+   * Returns the parent form with the general task group data.
    * Can be used to modify values of the parent form.
    */
   get parentForm(): FormGroup<TaskForm> | undefined {
@@ -102,7 +104,7 @@ export abstract class TaskTypeFormComponent<TForm extends { [K in keyof TForm]: 
   }
 
   /**
-   * Sets the parent form.
+   * Sets the parent form with the general task group data.
    *
    * @param value The parent form.
    */
@@ -124,7 +126,7 @@ export abstract class TaskTypeFormComponent<TForm extends { [K in keyof TForm]: 
   /**
    * Hook that can be used to handle changes of the task.
    */
-  protected onTaskChanged(taskGroup: TaskDto | undefined | null): void {
+  protected onTaskChanged(task: TaskDto | undefined | null): void {
   }
 
   //#region --- Loading ---
