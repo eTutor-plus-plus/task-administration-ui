@@ -11,9 +11,9 @@ describe('AccountService', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-    imports: [],
-    providers: [{ provide: API_URL, useValue: 'http://localhost' }, provideHttpClient(withInterceptorsFromDi()), provideHttpClientTesting()]
-});
+      imports: [],
+      providers: [{provide: API_URL, useValue: 'http://localhost'}, provideHttpClient(withInterceptorsFromDi()), provideHttpClientTesting()]
+    });
     service = TestBed.inject(AccountService);
     httpTestingController = TestBed.inject(HttpTestingController);
   });
@@ -30,7 +30,7 @@ describe('AccountService', () => {
   describe('requestPasswordReset', () => {
     it('should resolve when requesting password reset', () => {
       // Act
-      service.requestPasswordReset('user').then(() => {
+      const promise = service.requestPasswordReset('user').then(() => {
         // nothing to do here
       }).catch(reason => {
         fail(reason);
@@ -40,12 +40,14 @@ describe('AccountService', () => {
       const req = httpTestingController.expectOne('http://localhost/auth/reset-password?username=user');
       expect(req.request.method).toBe('GET');
       req.flush(null);
+
+      return promise;
     });
 
 
     it('should reject when requesting password reset fails', () => {
       // Act
-      service.requestPasswordReset('user').then(() => {
+      const promise = service.requestPasswordReset('user').then(() => {
         fail('Expected promise to be rejected');
       }).catch(reason => {
         expect(reason).not.toBeNull();
@@ -55,6 +57,8 @@ describe('AccountService', () => {
       const req = httpTestingController.expectOne('http://localhost/auth/reset-password?username=user');
       expect(req.request.method).toBe('GET');
       req.flush('some error', {status: 400, statusText: 'Bad Request'});
+
+      return promise;
     });
   });
 
@@ -65,7 +69,7 @@ describe('AccountService', () => {
       const pwd = 'new-pwd';
 
       // Act
-      service.resetPassword(token, pwd, pwd).then(() => {
+      const promise = service.resetPassword(token, pwd, pwd).then(() => {
         // nothing to do here
       }).catch(reason => {
         fail(reason);
@@ -76,6 +80,8 @@ describe('AccountService', () => {
       expect(req.request.method).toBe('POST');
       expect(req.request.body).toEqual({token, password: pwd, passwordConfirmation: pwd});
       req.flush(null);
+
+      return promise;
     });
 
 
@@ -85,7 +91,7 @@ describe('AccountService', () => {
       const pwd = 'new-pwd';
 
       // Act
-      service.resetPassword(token, pwd, pwd).then(() => {
+      const promise = service.resetPassword(token, pwd, pwd).then(() => {
         fail('Expected promise to be rejected');
       }).catch(reason => {
         expect(reason).not.toBeNull();
@@ -95,6 +101,8 @@ describe('AccountService', () => {
       const req = httpTestingController.expectOne('http://localhost/auth/reset-password');
       expect(req.request.method).toBe('POST');
       req.flush('some error', {status: 400, statusText: 'Bad Request'});
+
+      return promise;
     });
   });
 
@@ -105,7 +113,7 @@ describe('AccountService', () => {
       const pwd = 'new-pwd';
 
       // Act
-      service.activateAccount(token, pwd, pwd).then(() => {
+      const promise = service.activateAccount(token, pwd, pwd).then(() => {
         // nothing to do here
       }).catch(reason => {
         fail(reason);
@@ -116,6 +124,8 @@ describe('AccountService', () => {
       expect(req.request.method).toBe('POST');
       expect(req.request.body).toEqual({token, password: pwd, passwordConfirmation: pwd});
       req.flush(null);
+
+      return promise;
     });
 
 
@@ -125,7 +135,7 @@ describe('AccountService', () => {
       const pwd = 'new-pwd';
 
       // Act
-      service.activateAccount(token, pwd, pwd).then(() => {
+      const promise = service.activateAccount(token, pwd, pwd).then(() => {
         fail('Expected promise to be rejected');
       }).catch(reason => {
         expect(reason).not.toBeNull();
@@ -135,6 +145,8 @@ describe('AccountService', () => {
       const req = httpTestingController.expectOne('http://localhost/auth/activate');
       expect(req.request.method).toBe('POST');
       req.flush('some error', {status: 400, statusText: 'Bad Request'});
+
+      return promise;
     });
   });
 
@@ -145,7 +157,7 @@ describe('AccountService', () => {
       const pwd = 'new-pwd';
 
       // Act
-      service.changePassword(currentPassword, pwd, pwd).then(() => {
+      const promise = service.changePassword(currentPassword, pwd, pwd).then(() => {
         // nothing to do here
       }).catch(reason => {
         fail(reason);
@@ -156,6 +168,8 @@ describe('AccountService', () => {
       expect(req.request.method).toBe('POST');
       expect(req.request.body).toEqual({currentPassword, password: pwd, passwordConfirmation: pwd});
       req.flush(null);
+
+      return promise;
     });
 
     it('should reject when changing password fails', () => {
@@ -164,7 +178,7 @@ describe('AccountService', () => {
       const pwd = 'new-pwd';
 
       // Act
-      service.changePassword(currentPassword, pwd, pwd).then(() => {
+      const promise = service.changePassword(currentPassword, pwd, pwd).then(() => {
         fail('Expected promise to be rejected');
       }).catch(reason => {
         expect(reason).not.toBeNull();
@@ -174,6 +188,8 @@ describe('AccountService', () => {
       const req = httpTestingController.expectOne('http://localhost/auth/change-password');
       expect(req.request.method).toBe('POST');
       req.flush('some error', {status: 400, statusText: 'Bad Request'});
+
+      return promise;
     });
   });
 });

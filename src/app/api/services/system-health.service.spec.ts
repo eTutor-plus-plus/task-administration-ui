@@ -28,12 +28,15 @@ describe('SystemHealthService', () => {
       const expected = ['test1', 'test2'];
 
       // Act
-      service.loadAvailableEndpoints().then((result) => {
+      const promise = service.loadAvailableEndpoints().then((result) => {
         // Assert
         expect(result).toEqual(expected);
       });
       const req = httpTestingController.expectOne('http://localhost/actuator');
       req.flush({'_links': {'self': {}, 'test1': {}, 'test2': {}, 'test-3': {}}});
+      httpTestingController.verify();
+
+      return promise;
     });
 
     it('should load available endpoints from task app', () => {
@@ -42,22 +45,28 @@ describe('SystemHealthService', () => {
       const expected = ['test1', 'test2'];
 
       // Act
-      service.loadAvailableEndpoints(taskType).then((result) => {
+      const promise = service.loadAvailableEndpoints(taskType).then((result) => {
         // Assert
         expect(result).toEqual(expected);
       });
       const req = httpTestingController.expectOne('http://localhost/api/forward/test/actuator');
       req.flush({'_links': {'self': {}, 'test1': {}, 'test2': {}, 'test-3': {}}});
+      httpTestingController.verify();
+
+      return promise;
     });
 
     it('should handle error when loading available endpoints', () => {
       // Act
-      service.loadAvailableEndpoints().catch((error) => {
+      const promise = service.loadAvailableEndpoints().catch((error) => {
         // Assert
         expect(error).toBeTruthy();
       });
       const req = httpTestingController.expectOne('http://localhost/actuator');
       req.flush('some error', {status: 400, statusText: 'Bad Request'});
+      httpTestingController.verify();
+
+      return promise;
     });
   });
 
@@ -67,12 +76,15 @@ describe('SystemHealthService', () => {
       const expected = {status: 'UP'};
 
       // Act
-      service.loadHealth().then((result) => {
+      const promise = service.loadHealth().then((result) => {
         // Assert
         expect(result).toEqual(expected);
       });
       const req = httpTestingController.expectOne('http://localhost/actuator/health');
       req.flush(expected);
+      httpTestingController.verify();
+
+      return promise;
     });
 
     it('should load health information from task app', () => {
@@ -81,22 +93,28 @@ describe('SystemHealthService', () => {
       const expected = {status: 'UP'};
 
       // Act
-      service.loadHealth(taskType).then((result) => {
+      const promise = service.loadHealth(taskType).then((result) => {
         // Assert
         expect(result).toEqual(expected);
       });
       const req = httpTestingController.expectOne('http://localhost/api/forward/test/actuator/health');
       req.flush(expected);
+      httpTestingController.verify();
+
+      return promise;
     });
 
     it('should handle error when loading health information', () => {
       // Act
-      service.loadHealth().catch((error) => {
+      const promise = service.loadHealth().catch((error) => {
         // Assert
         expect(error).toBeTruthy();
       });
       const req = httpTestingController.expectOne('http://localhost/actuator/health');
       req.flush('some error', {status: 400, statusText: 'Bad Request'});
+      httpTestingController.verify();
+
+      return promise;
     });
   });
 
@@ -106,12 +124,15 @@ describe('SystemHealthService', () => {
       const expected = {name: 'test'};
 
       // Act
-      service.loadAppInfo().then((result) => {
+      const promise = service.loadAppInfo().then((result) => {
         // Assert
         expect(result).toEqual(expected);
       });
       const req = httpTestingController.expectOne('http://localhost/actuator/info');
       req.flush(expected);
+      httpTestingController.verify();
+
+      return promise;
     });
 
     it('should load app information from task app', () => {
@@ -120,22 +141,28 @@ describe('SystemHealthService', () => {
       const expected = {name: 'test'};
 
       // Act
-      service.loadAppInfo(taskType).then((result) => {
+      const promise = service.loadAppInfo(taskType).then((result) => {
         // Assert
         expect(result).toEqual(expected);
       });
       const req = httpTestingController.expectOne('http://localhost/api/forward/test/actuator/info');
       req.flush(expected);
+      httpTestingController.verify();
+
+      return promise;
     });
 
     it('should handle error when loading app information', () => {
       // Act
-      service.loadAppInfo().catch((error) => {
+      const promise = service.loadAppInfo().catch((error) => {
         // Assert
         expect(error).toBeTruthy();
       });
       const req = httpTestingController.expectOne('http://localhost/actuator/info');
       req.flush('some error', {status: 400, statusText: 'Bad Request'});
+      httpTestingController.verify();
+
+      return promise;
     });
   });
 
@@ -145,12 +172,15 @@ describe('SystemHealthService', () => {
       const expected = {profiles: ['test']};
 
       // Act
-      service.loadEnvironment().then((result) => {
+      const promise = service.loadEnvironment().then((result) => {
         // Assert
         expect(result).toEqual(expected);
       });
       const req = httpTestingController.expectOne('http://localhost/actuator/env');
       req.flush(expected);
+      httpTestingController.verify();
+
+      return promise;
     });
 
     it('should load environment variables from task app', () => {
@@ -159,61 +189,76 @@ describe('SystemHealthService', () => {
       const expected = {profiles: ['test']};
 
       // Act
-      service.loadEnvironment(taskType).then((result) => {
+      const promise = service.loadEnvironment(taskType).then((result) => {
         // Assert
         expect(result).toEqual(expected);
       });
       const req = httpTestingController.expectOne('http://localhost/api/forward/test/actuator/env');
       req.flush(expected);
+      httpTestingController.verify();
+
+      return promise;
     });
 
     it('should handle error when loading environment variables', () => {
       // Act
-      service.loadEnvironment().catch((error) => {
+      const promise = service.loadEnvironment().catch((error) => {
         // Assert
         expect(error).toBeTruthy();
       });
       const req = httpTestingController.expectOne('http://localhost/actuator/env');
       req.flush('some error', {status: 400, statusText: 'Bad Request'});
+      httpTestingController.verify();
+
+      return promise;
     });
   });
 
   describe('loadMetrics', () => {
     it('should load metrics from task administration', () => {
       // Arrange
-      const expected = {mem: 100};
+      const expected = ['disk.free', 'disk.total'];
 
       // Act
-      service.loadMetrics().then((result) => {
+      const promise = service.loadMetrics().then((result) => {
         // Assert
         expect(result).toEqual(expected);
       });
       const req = httpTestingController.expectOne('http://localhost/actuator/metrics');
-      req.flush(expected);
+      req.flush({names: expected});
+      httpTestingController.verify();
+
+      return promise;
     });
 
     it('should load metrics from task app', () => {
       // Arrange
       const taskType = 'test';
-      const expected = {mem: 100};
+      const expected = ['disk.free', 'disk.total'];
 
       // Act
-      service.loadMetrics(taskType).then((result) => {
+      const promise = service.loadMetrics(taskType).then((result) => {
         // Assert
         expect(result).toEqual(expected);
       });
       const req = httpTestingController.expectOne('http://localhost/api/forward/test/actuator/metrics');
-      req.flush(expected);
+      req.flush({names: expected});
+      httpTestingController.verify();
+
+      return promise;
     });
 
     it('should handle error when loading metrics', () => {
       // Act
-      service.loadMetrics().catch((error) => {
+      const promise = service.loadMetrics().catch((error) => {
         // Assert
         expect(error).toBeTruthy();
       });
       const req = httpTestingController.expectOne('http://localhost/actuator/metrics');
       req.flush('some error', {status: 400, statusText: 'Bad Request'});
+      httpTestingController.verify();
+
+      return promise;
     });
   });
 
@@ -223,12 +268,15 @@ describe('SystemHealthService', () => {
       const expected = {contexts: ['test']};
 
       // Act
-      service.loadFlyway().then((result) => {
+      const promise = service.loadFlyway().then((result) => {
         // Assert
         expect(result).toEqual(expected);
       });
       const req = httpTestingController.expectOne('http://localhost/actuator/flyway');
       req.flush(expected);
+      httpTestingController.verify();
+
+      return promise;
     });
 
     it('should load flyway information from task app', () => {
@@ -237,22 +285,28 @@ describe('SystemHealthService', () => {
       const expected = {contexts: ['test']};
 
       // Act
-      service.loadFlyway(taskType).then((result) => {
+      const promise = service.loadFlyway(taskType).then((result) => {
         // Assert
         expect(result).toEqual(expected);
       });
       const req = httpTestingController.expectOne('http://localhost/api/forward/test/actuator/flyway');
       req.flush(expected);
+      httpTestingController.verify();
+
+      return promise;
     });
 
     it('should handle error when loading flyway information', () => {
       // Act
-      service.loadFlyway().catch((error) => {
+      const promise = service.loadFlyway().catch((error) => {
         // Assert
         expect(error).toBeTruthy();
       });
       const req = httpTestingController.expectOne('http://localhost/actuator/flyway');
       req.flush('some error', {status: 400, statusText: 'Bad Request'});
+      httpTestingController.verify();
+
+      return promise;
     });
   });
 
@@ -262,12 +316,15 @@ describe('SystemHealthService', () => {
       const expected = {tasks: ['test']};
 
       // Act
-      service.loadScheduledTasks().then((result) => {
+      const promise = service.loadScheduledTasks().then((result) => {
         // Assert
         expect(result).toEqual(expected);
       });
       const req = httpTestingController.expectOne('http://localhost/actuator/scheduledtasks');
       req.flush(expected);
+      httpTestingController.verify();
+
+      return promise;
     });
 
     it('should load scheduled tasks from task app', () => {
@@ -276,22 +333,28 @@ describe('SystemHealthService', () => {
       const expected = {tasks: ['test']};
 
       // Act
-      service.loadScheduledTasks(taskType).then((result) => {
+      const promise = service.loadScheduledTasks(taskType).then((result) => {
         // Assert
         expect(result).toEqual(expected);
       });
       const req = httpTestingController.expectOne('http://localhost/api/forward/test/actuator/scheduledtasks');
       req.flush(expected);
+      httpTestingController.verify();
+
+      return promise;
     });
 
     it('should handle error when loading scheduled tasks', () => {
       // Act
-      service.loadScheduledTasks().catch((error) => {
+      const promise = service.loadScheduledTasks().catch((error) => {
         // Assert
         expect(error).toBeTruthy();
       });
       const req = httpTestingController.expectOne('http://localhost/actuator/scheduledtasks');
       req.flush('some error', {status: 400, statusText: 'Bad Request'});
+      httpTestingController.verify();
+
+      return promise;
     });
   });
 
@@ -301,12 +364,15 @@ describe('SystemHealthService', () => {
       const expected = 'test';
 
       // Act
-      service.loadLogFile().then((result) => {
+      const promise = service.loadLogFile().then((result) => {
         // Assert
         expect(result).toEqual(expected);
       });
       const req = httpTestingController.expectOne('http://localhost/actuator/logfile');
       req.flush(expected);
+      httpTestingController.verify();
+
+      return promise;
     });
 
     it('should load log file from task app', () => {
@@ -315,22 +381,28 @@ describe('SystemHealthService', () => {
       const expected = 'test';
 
       // Act
-      service.loadLogFile(taskType).then((result) => {
+      const promise = service.loadLogFile(taskType).then((result) => {
         // Assert
         expect(result).toEqual(expected);
       });
       const req = httpTestingController.expectOne('http://localhost/api/forward/test/actuator/logfile');
       req.flush(expected);
+      httpTestingController.verify();
+
+      return promise;
     });
 
     it('should handle error when loading log file', () => {
       // Act
-      service.loadLogFile().catch((error) => {
+      const promise = service.loadLogFile().catch((error) => {
         // Assert
         expect(error).toBeTruthy();
       });
       const req = httpTestingController.expectOne('http://localhost/actuator/logfile');
       req.flush('some error', {status: 400, statusText: 'Bad Request'});
+      httpTestingController.verify();
+
+      return promise;
     });
   });
 
@@ -340,12 +412,31 @@ describe('SystemHealthService', () => {
       const expected = {mem: 100};
 
       // Act
-      service.loadMetric('mem').then((result) => {
+      const promise = service.loadMetric('mem').then((result) => {
         // Assert
         expect(result).toEqual(expected);
       });
       const req = httpTestingController.expectOne('http://localhost/actuator/metrics/mem');
       req.flush(expected);
+      httpTestingController.verify();
+
+      return promise;
+    });
+
+    it('should load metric with tag from task administration', () => {
+      // Arrange
+      const expected = {mem: 100};
+
+      // Act
+      const promise = service.loadMetric('mem', undefined, 'tagName', 'tagValue').then((result) => {
+        // Assert
+        expect(result).toEqual(expected);
+      });
+      const req = httpTestingController.expectOne('http://localhost/actuator/metrics/mem?tag=tagName:tagValue');
+      req.flush(expected);
+      httpTestingController.verify();
+
+      return promise;
     });
 
     it('should load metric from task app', () => {
@@ -354,22 +445,28 @@ describe('SystemHealthService', () => {
       const expected = {mem: 100};
 
       // Act
-      service.loadMetric('mem', taskType).then((result) => {
+      const promise = service.loadMetric('mem', taskType).then((result) => {
         // Assert
         expect(result).toEqual(expected);
       });
       const req = httpTestingController.expectOne('http://localhost/api/forward/test/actuator/metrics/mem');
       req.flush(expected);
+      httpTestingController.verify();
+
+      return promise;
     });
 
     it('should handle error when loading metric', () => {
       // Act
-      service.loadMetric('mem').catch((error) => {
+      const promise = service.loadMetric('mem').catch((error) => {
         // Assert
         expect(error).toBeTruthy();
       });
       const req = httpTestingController.expectOne('http://localhost/actuator/metrics/mem');
       req.flush('some error', {status: 400, statusText: 'Bad Request'});
+      httpTestingController.verify();
+
+      return promise;
     });
   });
 
@@ -379,12 +476,15 @@ describe('SystemHealthService', () => {
       const expected = {exchanges: ['test']};
 
       // Act
-      service.loadHttpExchanges().then((result) => {
+      const promise = service.loadHttpExchanges().then((result) => {
         // Assert
         expect(result).toEqual(expected);
       });
       const req = httpTestingController.expectOne('http://localhost/actuator/httpexchanges');
       req.flush(expected);
+      httpTestingController.verify();
+
+      return promise;
     });
 
     it('should load http exchanges from task app', () => {
@@ -393,22 +493,28 @@ describe('SystemHealthService', () => {
       const expected = {exchanges: ['test']};
 
       // Act
-      service.loadHttpExchanges(taskType).then((result) => {
+      const promise = service.loadHttpExchanges(taskType).then((result) => {
         // Assert
         expect(result).toEqual(expected);
       });
       const req = httpTestingController.expectOne('http://localhost/api/forward/test/actuator/httpexchanges');
       req.flush(expected);
+      httpTestingController.verify();
+
+      return promise;
     });
 
     it('should handle error when loading http exchanges', () => {
       // Act
-      service.loadHttpExchanges().catch((error) => {
+      const promise = service.loadHttpExchanges().catch((error) => {
         // Assert
         expect(error).toBeTruthy();
       });
       const req = httpTestingController.expectOne('http://localhost/actuator/httpexchanges');
       req.flush('some error', {status: 400, statusText: 'Bad Request'});
+      httpTestingController.verify();
+
+      return promise;
     });
   });
 });

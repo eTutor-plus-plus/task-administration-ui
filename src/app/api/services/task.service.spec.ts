@@ -12,9 +12,9 @@ describe('TaskService', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-    imports: [],
-    providers: [{ provide: API_URL, useValue: 'http://localhost' }, provideHttpClient(withInterceptorsFromDi()), provideHttpClientTesting()]
-});
+      imports: [],
+      providers: [{provide: API_URL, useValue: 'http://localhost'}, provideHttpClient(withInterceptorsFromDi()), provideHttpClientTesting()]
+    });
     service = TestBed.inject(TaskService);
     httpTestingController = TestBed.inject(HttpTestingController);
   });
@@ -103,7 +103,7 @@ describe('TaskService', () => {
       const expected = ['type1', 'type2'];
 
       // Act
-      service.getTypes()
+      const promise = service.getTypes()
         .then(value => expect(value).toEqual(expected))
         .catch(error => fail(error));
 
@@ -111,13 +111,14 @@ describe('TaskService', () => {
       const req = httpTestingController.expectOne('http://localhost/api/task/types');
       expect(req.request.method).toBe('GET');
       req.flush(expected);
-
       httpTestingController.verify();
+
+      return promise;
     });
 
     it('should reject when loading task group types fails', () => {
       // Act
-      service.getTypes()
+      const promise = service.getTypes()
         .then(() => fail('Expected promise to be rejected'))
         .catch(reason => expect(reason).not.toBeNull());
 
@@ -126,6 +127,8 @@ describe('TaskService', () => {
       expect(req.request.method).toBe('GET');
       req.flush('some error', {status: 400, statusText: 'Bad Request'});
       httpTestingController.verify();
+
+      return promise;
     });
   });
 
@@ -135,7 +138,7 @@ describe('TaskService', () => {
       const expected = 'exported data';
 
       // Act
-      service.export()
+      const promise = service.export()
         .then(value => expect(value).toBe(expected))
         .catch(error => fail(error));
 
@@ -143,13 +146,14 @@ describe('TaskService', () => {
       const req = httpTestingController.expectOne('http://localhost/api/task/export');
       expect(req.request.method).toBe('GET');
       req.flush(expected);
-
       httpTestingController.verify();
+
+      return promise;
     });
 
     it('should reject when exporting task groups fails', () => {
       // Act
-      service.export()
+      const promise = service.export()
         .then(() => fail('Expected promise to be rejected'))
         .catch(reason => expect(reason).not.toBeNull());
 
@@ -158,6 +162,8 @@ describe('TaskService', () => {
       expect(req.request.method).toBe('GET');
       req.flush('some error', {status: 400, statusText: 'Bad Request'});
       httpTestingController.verify();
+
+      return promise;
     });
   });
 
@@ -167,7 +173,7 @@ describe('TaskService', () => {
       const id = 1;
 
       // Act
-      service.syncWithMoodle(id).then(() => {
+      const promise = service.syncWithMoodle(id).then(() => {
         // do nothing
       }).catch(reason => {
         fail(reason);
@@ -178,6 +184,8 @@ describe('TaskService', () => {
       expect(req.request.method).toBe('POST');
       req.flush(null);
       httpTestingController.verify();
+
+      return promise;
     });
 
     it('should reject when sync with moodle fails', () => {
@@ -185,7 +193,7 @@ describe('TaskService', () => {
       const id = 1;
 
       // Act
-      service.syncWithMoodle(id).then(() => {
+      const promise = service.syncWithMoodle(id).then(() => {
         fail('Expected promise to be rejected');
       }).catch(reason => {
         expect(reason).not.toBeNull();
@@ -196,6 +204,8 @@ describe('TaskService', () => {
       expect(req.request.method).toBe('POST');
       req.flush(null, {status: 500, statusText: 'Internal Server Error'});
       httpTestingController.verify();
+
+      return promise;
     });
   });
 
@@ -212,7 +222,7 @@ describe('TaskService', () => {
       const expected = {id: 1};
 
       // Act
-      service.submit(submission)
+      const promise = service.submit(submission)
         .then(value => expect(value).toEqual(expected))
         .catch(error => fail(error));
 
@@ -220,8 +230,9 @@ describe('TaskService', () => {
       const req = httpTestingController.expectOne('http://localhost/api/task/submit');
       expect(req.request.method).toBe('POST');
       req.flush(expected);
-
       httpTestingController.verify();
+
+      return promise;
     });
 
     it('should reject when submitting task fails', () => {
@@ -235,7 +246,7 @@ describe('TaskService', () => {
       };
 
       // Act
-      service.submit(submission)
+      const promise = service.submit(submission)
         .then(() => fail('Expected promise to be rejected'))
         .catch(reason => expect(reason).not.toBeNull());
 
@@ -244,6 +255,8 @@ describe('TaskService', () => {
       expect(req.request.method).toBe('POST');
       req.flush('some error', {status: 400, statusText: 'Bad Request'});
       httpTestingController.verify();
+
+      return promise;
     });
   });
 });

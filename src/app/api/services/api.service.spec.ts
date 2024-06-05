@@ -12,9 +12,9 @@ describe('ApiService', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-    imports: [],
-    providers: [{ provide: API_URL, useValue: 'http://localhost' }, provideHttpClient(withInterceptorsFromDi()), provideHttpClientTesting()]
-});
+      imports: [],
+      providers: [{provide: API_URL, useValue: 'http://localhost'}, provideHttpClient(withInterceptorsFromDi()), provideHttpClientTesting()]
+    });
     service = TestBed.inject(TestService);
     httpTestingController = TestBed.inject(HttpTestingController);
   });
@@ -29,7 +29,7 @@ describe('ApiService', () => {
   });
 
   it('should not be created when base url ends with a slash', () => {
-    expect(() => new TestService('http://localhost/')).toThrow();
+    expect(() => new TestService2('http://localhost/')).toThrow();
   });
 
   describe('load', () => {
@@ -41,7 +41,7 @@ describe('ApiService', () => {
       const filter: TestFilter = {name: 'test'};
 
       // Act
-      service.load(offset, perPage, sort, filter).then(result => {
+      const promise = service.load(offset, perPage, sort, filter).then(result => {
         expect(result.content.length).toBe(1);
       }).catch(reason => {
         fail(reason);
@@ -68,11 +68,13 @@ describe('ApiService', () => {
         sort: {sorted: true, empty: false, unsorted: false},
         pageable: {paged: true, offset: 10}
       });
+
+      return promise;
     });
 
     it('should reject when loading page fails', () => {
       // Act
-      service.load(0, 5).then(() => {
+      const promise = service.load(0, 5).then(() => {
         fail('Expected promise to be rejected');
       }).catch(reason => {
         expect(reason).not.toBeNull();
@@ -82,6 +84,8 @@ describe('ApiService', () => {
       const req = httpTestingController.expectOne('http://localhost/test?size=5&page=0');
       expect(req.request.method).toBe('GET');
       req.flush('some error', {status: 400, statusText: 'Bad Request'});
+
+      return promise;
     });
   });
 
@@ -91,7 +95,7 @@ describe('ApiService', () => {
       const id = 3;
 
       // Act
-      service.get(id).then(result => {
+      const promise = service.get(id).then(result => {
         expect(result.id).toBe(id);
       }).catch(reason => {
         fail(reason);
@@ -100,6 +104,8 @@ describe('ApiService', () => {
       // Assert
       const req = httpTestingController.expectOne('http://localhost/test/' + id);
       req.flush({id: id, name: 'test'});
+
+      return promise;
     });
 
     it('should reject when loading entity fails', () => {
@@ -107,7 +113,7 @@ describe('ApiService', () => {
       const id = 3;
 
       // Act
-      service.get(3).then(() => {
+      const promise = service.get(3).then(() => {
         fail('Expected promise to be rejected');
       }).catch(reason => {
         expect(reason).not.toBeNull();
@@ -117,6 +123,8 @@ describe('ApiService', () => {
       const req = httpTestingController.expectOne('http://localhost/test/' + id);
       expect(req.request.method).toBe('GET');
       req.flush('some error', {status: 400, statusText: 'Bad Request'});
+
+      return promise;
     });
   });
 
@@ -127,7 +135,7 @@ describe('ApiService', () => {
       const dto = {name: 'test'};
 
       // Act
-      service.create(dto).then(result => {
+      const promise = service.create(dto).then(result => {
         expect(result.id).toBe(id);
       }).catch(reason => {
         fail(reason);
@@ -138,6 +146,8 @@ describe('ApiService', () => {
       expect(req.request.method).toBe('POST');
       expect(req.request.body).toEqual(dto);
       req.flush({id: id, name: 'test'});
+
+      return promise;
     });
 
     it('should reject when creating entity fails', () => {
@@ -145,7 +155,7 @@ describe('ApiService', () => {
       const dto = {name: 'test'};
 
       // Act
-      service.create(dto).then(() => {
+      const promise = service.create(dto).then(() => {
         fail('Expected promise to be rejected');
       }).catch(reason => {
         expect(reason).not.toBeNull();
@@ -155,6 +165,8 @@ describe('ApiService', () => {
       const req = httpTestingController.expectOne('http://localhost/test');
       expect(req.request.method).toBe('POST');
       req.flush('some error', {status: 400, statusText: 'Bad Request'});
+
+      return promise;
     });
   });
 
@@ -166,7 +178,7 @@ describe('ApiService', () => {
       const concurrencyToken = '1234567890';
 
       // Act
-      service.update(3, dto, concurrencyToken).then(() => {
+      const promise = service.update(3, dto, concurrencyToken).then(() => {
         // nothing to do
       }).catch(reason => {
         fail(reason);
@@ -178,6 +190,8 @@ describe('ApiService', () => {
       expect(req.request.body).toEqual(dto);
       expect(req.request.headers.get('If-Unmodified-Since')).toBe(concurrencyToken);
       req.flush(null);
+
+      return promise;
     });
 
     it('should reject when updating entity fails', () => {
@@ -186,7 +200,7 @@ describe('ApiService', () => {
       const dto = {name: 'test'};
 
       // Act
-      service.update(3, dto).then(() => {
+      const promise = service.update(3, dto).then(() => {
         fail('Expected promise to be rejected');
       }).catch(reason => {
         expect(reason).not.toBeNull();
@@ -196,6 +210,8 @@ describe('ApiService', () => {
       const req = httpTestingController.expectOne('http://localhost/test/' + id);
       expect(req.request.method).toBe('PUT');
       req.flush('some error', {status: 400, statusText: 'Bad Request'});
+
+      return promise;
     });
   });
 
@@ -205,7 +221,7 @@ describe('ApiService', () => {
       const id = 3;
 
       // Act
-      service.delete(3).then(() => {
+      const promise = service.delete(3).then(() => {
         // nothing to do
       }).catch(reason => {
         fail(reason);
@@ -215,6 +231,8 @@ describe('ApiService', () => {
       const req = httpTestingController.expectOne('http://localhost/test/' + id);
       expect(req.request.method).toBe('DELETE');
       req.flush(null);
+
+      return promise;
     });
 
     it('should reject when deleting entity fails', () => {
@@ -222,7 +240,7 @@ describe('ApiService', () => {
       const id = 3;
 
       // Act
-      service.delete(3).then(() => {
+      const promise = service.delete(3).then(() => {
         fail('Expected promise to be rejected');
       }).catch(reason => {
         expect(reason).not.toBeNull();
@@ -232,6 +250,8 @@ describe('ApiService', () => {
       const req = httpTestingController.expectOne('http://localhost/test/' + id);
       expect(req.request.method).toBe('DELETE');
       req.flush('some error', {status: 400, statusText: 'Bad Request'});
+
+      return promise;
     });
   });
 });
@@ -240,6 +260,18 @@ describe('ApiService', () => {
 class TestService extends ApiService<TestDto, ModifyTestDto, number, TestFilter> {
   constructor(@Inject(API_URL) baseUrl: string) {
     super('TestService', baseUrl + '/test');
+  }
+
+  protected override setFilterParam(params: HttpParams, filter: TestFilter): HttpParams {
+    if (filter.name)
+      return params.set('filter', filter.name);
+    return params;
+  }
+}
+
+class TestService2 extends ApiService<TestDto, ModifyTestDto, number, TestFilter> {
+  constructor(totalUrl: string) {
+    super('TestService2', totalUrl);
   }
 
   protected override setFilterParam(params: HttpParams, filter: TestFilter): HttpParams {

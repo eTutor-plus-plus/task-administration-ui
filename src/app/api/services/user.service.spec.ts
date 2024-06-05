@@ -11,9 +11,9 @@ describe('UserService', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-    imports: [],
-    providers: [{ provide: API_URL, useValue: 'http://localhost' }, provideHttpClient(withInterceptorsFromDi()), provideHttpClientTesting()]
-});
+      imports: [],
+      providers: [{provide: API_URL, useValue: 'http://localhost'}, provideHttpClient(withInterceptorsFromDi()), provideHttpClientTesting()]
+    });
     service = TestBed.inject(UserService);
     httpTestingController = TestBed.inject(HttpTestingController);
   });
@@ -116,7 +116,7 @@ describe('UserService', () => {
       const concurrencyToken = '0123456789';
 
       // Act
-      service.changePassword(id, data, concurrencyToken).then(() => {
+      const promise = service.changePassword(id, data, concurrencyToken).then(() => {
         // do nothing
       }).catch(reason => {
         fail(reason);
@@ -127,6 +127,9 @@ describe('UserService', () => {
       expect(req.request.method).toBe('PUT');
       expect(req.request.body).toEqual(data);
       req.flush(null);
+      httpTestingController.verify();
+
+      return promise;
     });
 
     it('should reject when changing password fails', () => {
@@ -135,7 +138,7 @@ describe('UserService', () => {
       const data = {password: 'test'};
 
       // Act
-      service.changePassword(id, data).then(() => {
+      const promise = service.changePassword(id, data).then(() => {
         fail('Expected promise to be rejected');
       }).catch(reason => {
         expect(reason).not.toBeNull();
@@ -145,6 +148,9 @@ describe('UserService', () => {
       const req = httpTestingController.expectOne('http://localhost/api/user/' + id + '/password');
       expect(req.request.method).toBe('PUT');
       req.flush('some error', {status: 400, statusText: 'Bad Request'});
+      httpTestingController.verify();
+
+      return promise;
     });
   });
 });

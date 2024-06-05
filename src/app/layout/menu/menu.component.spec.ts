@@ -1,10 +1,11 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { provideRouter } from '@angular/router';
-import { TranslocoTestingModule } from '@ngneat/transloco';
+import { provideTransloco } from '@ngneat/transloco';
 import { BehaviorSubject } from 'rxjs';
 
 import { MenuComponent } from './menu.component';
 import { ApplicationUser, AuthService } from '../../auth';
+import { translocoTestConfig } from '../../translation-loader.service.spec';
 
 describe('MenuComponent', () => {
   let component: MenuComponent;
@@ -12,12 +13,17 @@ describe('MenuComponent', () => {
   let userSub: BehaviorSubject<ApplicationUser | null>;
 
   beforeEach(async () => {
+    userSub = new BehaviorSubject<ApplicationUser | null>(null);
+
     await TestBed.configureTestingModule({
-      imports: [MenuComponent, TranslocoTestingModule.forRoot({})],
-      providers: [provideRouter([]), {provide: AuthService, useValue: {userChanged: userSub.asObservable()}}]
+      imports: [MenuComponent],
+      providers: [
+        provideRouter([]),
+        provideTransloco(translocoTestConfig),
+        {provide: AuthService, useValue: {userChanged: userSub.asObservable()}}
+      ]
     }).compileComponents();
 
-    userSub = new BehaviorSubject<ApplicationUser | null>(null);
     fixture = TestBed.createComponent(MenuComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();

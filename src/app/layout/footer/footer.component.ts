@@ -52,7 +52,7 @@ export class FooterComponent implements OnInit, OnDestroy {
   constructor(private readonly translationService: TranslocoService,
               private readonly healthService: SystemHealthService) {
     this.impressUrl = environment.impressUrl + '?lang=' + translationService.getActiveLang();
-    this.version = `${environment.version}-${environment.git.branch}#${environment.git.shortSha}`;
+    this.version = `${environment.version}#${environment.git.shortSha}`;
     this.versionDate = DateTime.fromISO(environment.git.commitDate).toFormat('dd.MM.yyyy HH:mm:ss');
   }
 

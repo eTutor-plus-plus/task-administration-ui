@@ -64,3 +64,6 @@ describe('roleGuard', () => {
     expect(tree).not.toBeNull();
   });
 });
+
+// Tests fail with TypeError: (0 , auth_1.roleGuard) is not a function
+// If the roleGuards in the route configuration are removed, then the tests work
