@@ -104,12 +104,15 @@
       },
       "descriptions": {
         "penalty": "A point deduction of -1 means that the submission is awarded 0 points."
-      },
-      "uml": {
-        "title": "uml",
-        "fields": {
-          "umlBlock": "Block"
-        }
+      }
+    },
+    "uml": {
+      "title": "UML",
+      "fields": {
+        "umlBlock": "Block {{id}}",
+        "umlSolution": "Solution",
+        "umlAddBlock": "Add Block",
+        "umlAddAlternative": "Add Alternative"
       }
     }
   }

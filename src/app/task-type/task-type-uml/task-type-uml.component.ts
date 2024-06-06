@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { ChangeDetectorRef, Component } from '@angular/core';
 import { MonacoEditorModule } from 'ngx-monaco-editor-v2';
 import { PaginatorModule } from 'primeng/paginator';
 import { FormArray, FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
@@ -34,32 +34,50 @@ export class TaskTypeUmlComponent extends TaskTypeFormComponent<TaskTypeForm> {
     language: 'sql'
   };
 
-  umlBlock = new FormArray<FormGroup<{ umlBlockItem: FormControl<string | null> }>>([]);
+  umlSolution = new FormArray<FormGroup<{ umlBlock: FormArray<FormGroup<{ umlBlockAlt: FormControl<string | null>; }>>; }>>([]);
 
-  constructor() {
+  constructor(private changeDetectorRef: ChangeDetectorRef) {
     super();
   }
 
   protected override initForm(): void {
-    this.form.addControl('umlBlock', this.umlBlock);
+    this.form.addControl('umlSolution', this.umlSolution);
   }
 
   get itemsControls() {
-    return this.umlBlock.controls as FormGroup[];
+    return this.umlSolution.controls as FormGroup[];
+  }
+  addUmlBlock() {
+    this.umlSolution.push(new FormGroup({
+      umlBlock: new FormArray([new FormGroup({
+        umlBlockAlt: new FormControl<string | null>(null)
+      })])
+    }));
+    this.changeDetectorRef.detectChanges();
+  }
+  itemsControlsAlt(index: number) {
+    return (this.umlSolution.at(index).get('umlBlock') as FormArray).controls as FormGroup[];
   }
 
-  addUmlBlock() {
-    const itemsForm = new FormGroup({
-      umlBlockItem: new FormControl('')
-    });
-    this.umlBlock.push(itemsForm);
+  addUmlBlockAlt(index: number) {
+    (this.umlSolution.at(index).get('umlBlock') as FormArray).push(new FormGroup({
+      umlBlockAlt: new FormControl<string | null>(null)
+    }));
+    this.changeDetectorRef.detectChanges();
   }
+
   removeUmlBlock(index: number) {
-    this.umlBlock.removeAt(index);
+    this.umlSolution.removeAt(index);
   }
+
+  removeUmlBlockAlt(index: number, indexAlt: number) {
+    (this.umlSolution.at(index).get('umlBlock') as FormArray).removeAt(indexAlt);
+  }
+
+
 }
 
 interface TaskTypeForm {
-  umlBlock: FormArray<FormGroup<{umlBlockItem: FormControl<string | null> }>>;
+  umlSolution: FormArray<FormGroup<{umlBlock: FormArray<FormGroup<{umlBlockAlt: FormControl<string|null>}>>}>>;
 
 }
