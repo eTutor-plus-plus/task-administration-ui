@@ -92,9 +92,11 @@ describe('ResetPasswordComponent', () => {
     fixture.detectChanges();
 
     // Assert
+    expect(component.form.controls.password.invalid).toBe(true);
     const elem: HTMLElement = fixture.nativeElement;
     const msg: HTMLElement | null = elem.querySelector('#password + .p-error');
     expect(msg).toBeTruthy();
+    expect(msg?.innerText.trim()).not.toHaveLength(0);
   });
 
   it('should show error if password is too short', () => {
@@ -106,9 +108,11 @@ describe('ResetPasswordComponent', () => {
     fixture.detectChanges();
 
     // Assert
+    expect(component.form.controls.password.invalid).toBe(true);
     const elem: HTMLElement = fixture.nativeElement;
     const msg: HTMLElement | null = elem.querySelector('#password + .p-error');
     expect(msg).toBeTruthy();
+    expect(msg?.innerText.trim()).not.toHaveLength(0);
   });
 
   it('should show error if password is too long', () => {
@@ -120,9 +124,11 @@ describe('ResetPasswordComponent', () => {
     fixture.detectChanges();
 
     // Assert
+    expect(component.form.controls.password.invalid).toBe(true);
     const elem: HTMLElement = fixture.nativeElement;
     const msg: HTMLElement | null = elem.querySelector('#password + .p-error');
     expect(msg).toBeTruthy();
+    expect(msg?.innerText.trim()).not.toHaveLength(0);
   });
 
   it('should show error if password confirmation is required', () => {
@@ -133,9 +139,11 @@ describe('ResetPasswordComponent', () => {
     fixture.detectChanges();
 
     // Assert
+    expect(component.form.controls.passwordConfirmation.invalid).toBe(true);
     const elem: HTMLElement = fixture.nativeElement;
     const msg: HTMLElement | null = elem.querySelector('#passwordConfirmation + .p-error');
     expect(msg).toBeTruthy();
+    expect(msg?.innerText.trim()).not.toHaveLength(0);
   });
 
   it('should show error if passwords do not match', () => {
@@ -147,9 +155,11 @@ describe('ResetPasswordComponent', () => {
     fixture.detectChanges();
 
     // Assert
+    expect(component.form.invalid).toBe(true);
     const elem: HTMLElement = fixture.nativeElement;
-    const msg: HTMLElement | null = elem.querySelector('#passwordConfirmation + .p-error');
+    const msg: HTMLElement | null = elem.querySelector('#passwordConfirmation + .p-error + .p-error');
     expect(msg).toBeTruthy();
+    expect(msg?.innerText.trim()).not.toHaveLength(0);
   });
 
   it('should disable submit button on invalid form', () => {

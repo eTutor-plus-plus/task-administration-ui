@@ -67,8 +67,10 @@ describe('ForgotPasswordComponent', () => {
     fixture.detectChanges();
 
     // Assert
+    expect(component.form.controls.username.invalid).toBe(true);
     const elem: HTMLElement = fixture.nativeElement;
     expect(elem.getElementsByClassName('p-error')).toHaveLength(1);
+    expect(elem?.innerText.trim()).not.toHaveLength(0);
   });
 
   it('should disable submit button on invalid form', () => {

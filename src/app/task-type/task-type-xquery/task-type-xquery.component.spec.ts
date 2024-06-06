@@ -15,8 +15,7 @@ describe('TaskTypeXqueryComponent', () => {
     await TestBed.configureTestingModule({
       imports: [TaskTypeXqueryComponent, MonacoEditorModule.forRoot({})],
       providers: [provideTransloco(translocoTestConfig)]
-    })
-      .compileComponents();
+    }).compileComponents();
 
     fixture = TestBed.createComponent(TaskTypeXqueryComponent);
     component = fixture.componentInstance;
@@ -62,35 +61,43 @@ describe('TaskTypeXqueryComponent', () => {
     fixture.detectChanges();
 
     // Assert
+    expect(component.form.controls.solution.invalid).toBe(true);
     const elem: HTMLElement = fixture.nativeElement;
     const msg: HTMLElement | null = elem.querySelector('#solution + .p-error');
     expect(msg).toBeTruthy();
+    expect(msg?.innerText.trim()).not.toHaveLength(0);
   });
 
   it('should show error if missingNodeStrategy is empty', () => {
     // Arrange
+    component.form.controls.missingNodeStrategy.setValue(null);
     component.form.controls.missingNodeStrategy.markAsDirty();
 
     // Act
     fixture.detectChanges();
 
     // Assert
+    expect(component.form.controls.missingNodeStrategy.invalid).toBe(true);
     const elem: HTMLElement = fixture.nativeElement;
     const msg: HTMLElement | null = elem.querySelector('.p-error');
     expect(msg).toBeTruthy();
+    expect(msg?.innerText.trim()).not.toHaveLength(0);
   });
 
   it('should show error if missingNodePenalty is empty', () => {
     // Arrange
+    component.form.controls.missingNodePenalty.setValue(null);
     component.form.controls.missingNodePenalty.markAsDirty();
 
     // Act
     fixture.detectChanges();
 
     // Assert
+    expect(component.form.controls.missingNodePenalty.invalid).toBe(true);
     const elem: HTMLElement = fixture.nativeElement;
     const msg: HTMLElement | null = elem.querySelector('.p-error');
     expect(msg).toBeTruthy();
+    expect(msg?.innerText.trim()).not.toHaveLength(0);
   });
 
   it('should show error if missingNodePenalty < 0', () => {
@@ -102,35 +109,43 @@ describe('TaskTypeXqueryComponent', () => {
     fixture.detectChanges();
 
     // Assert
+    expect(component.form.controls.missingNodePenalty.invalid).toBe(true);
     const elem: HTMLElement = fixture.nativeElement;
     const msg: HTMLElement | null = elem.querySelector('.p-error');
     expect(msg).toBeTruthy();
+    expect(msg?.innerText.trim()).not.toHaveLength(0);
   });
 
   it('should show error if superfluousNodeStrategy is empty', () => {
     // Arrange
+    component.form.controls.superfluousNodeStrategy.setValue(null);
     component.form.controls.superfluousNodeStrategy.markAsDirty();
 
     // Act
     fixture.detectChanges();
 
     // Assert
+    expect(component.form.controls.superfluousNodeStrategy.invalid).toBe(true);
     const elem: HTMLElement = fixture.nativeElement;
     const msg: HTMLElement | null = elem.querySelector('.p-error');
     expect(msg).toBeTruthy();
+    expect(msg?.innerText.trim()).not.toHaveLength(0);
   });
 
   it('should show error if superfluousNodePenalty is empty', () => {
     // Arrange
+    component.form.controls.superfluousNodePenalty.setValue(null);
     component.form.controls.superfluousNodePenalty.markAsDirty();
 
     // Act
     fixture.detectChanges();
 
     // Assert
+    expect(component.form.controls.superfluousNodePenalty.invalid).toBe(true);
     const elem: HTMLElement = fixture.nativeElement;
     const msg: HTMLElement | null = elem.querySelector('.p-error');
     expect(msg).toBeTruthy();
+    expect(msg?.innerText.trim()).not.toHaveLength(0);
   });
 
   it('should show error if superfluousNodePenalty < 0', () => {
@@ -142,35 +157,43 @@ describe('TaskTypeXqueryComponent', () => {
     fixture.detectChanges();
 
     // Assert
+    expect(component.form.controls.superfluousNodePenalty.invalid).toBe(true);
     const elem: HTMLElement = fixture.nativeElement;
     const msg: HTMLElement | null = elem.querySelector('.p-error');
     expect(msg).toBeTruthy();
+    expect(msg?.innerText.trim()).not.toHaveLength(0);
   });
 
   it('should show error if displacedNodeStrategy is empty', () => {
     // Arrange
+    component.form.controls.displacedNodeStrategy.setValue(null);
     component.form.controls.displacedNodeStrategy.markAsDirty();
 
     // Act
     fixture.detectChanges();
 
     // Assert
+    expect(component.form.controls.displacedNodeStrategy.invalid).toBe(true);
     const elem: HTMLElement = fixture.nativeElement;
     const msg: HTMLElement | null = elem.querySelector('.p-error');
     expect(msg).toBeTruthy();
+    expect(msg?.innerText.trim()).not.toHaveLength(0);
   });
 
   it('should show error if displacedNodePenalty is empty', () => {
     // Arrange
+    component.form.controls.displacedNodePenalty.setValue(null);
     component.form.controls.displacedNodePenalty.markAsDirty();
 
     // Act
     fixture.detectChanges();
 
     // Assert
+    expect(component.form.controls.displacedNodePenalty.invalid).toBe(true);
     const elem: HTMLElement = fixture.nativeElement;
     const msg: HTMLElement | null = elem.querySelector('.p-error');
     expect(msg).toBeTruthy();
+    expect(msg?.innerText.trim()).not.toHaveLength(0);
   });
 
   it('should show error if displacedNodePenalty < 0', () => {
@@ -182,35 +205,43 @@ describe('TaskTypeXqueryComponent', () => {
     fixture.detectChanges();
 
     // Assert
+    expect(component.form.controls.displacedNodePenalty.invalid).toBe(true);
     const elem: HTMLElement = fixture.nativeElement;
     const msg: HTMLElement | null = elem.querySelector('.p-error');
     expect(msg).toBeTruthy();
+    expect(msg?.innerText.trim()).not.toHaveLength(0);
   });
 
   it('should show error if missingAttributeStrategy is empty', () => {
     // Arrange
+    component.form.controls.missingAttributeStrategy.setValue(null);
     component.form.controls.missingAttributeStrategy.markAsDirty();
 
     // Act
     fixture.detectChanges();
 
     // Assert
+    expect(component.form.controls.missingAttributeStrategy.invalid).toBe(true);
     const elem: HTMLElement = fixture.nativeElement;
     const msg: HTMLElement | null = elem.querySelector('.p-error');
     expect(msg).toBeTruthy();
+    expect(msg?.innerText.trim()).not.toHaveLength(0);
   });
 
   it('should show error if missingAttributePenalty is empty', () => {
     // Arrange
+    component.form.controls.missingAttributePenalty.setValue(null);
     component.form.controls.missingAttributePenalty.markAsDirty();
 
     // Act
     fixture.detectChanges();
 
     // Assert
+    expect(component.form.controls.missingAttributePenalty.invalid).toBe(true);
     const elem: HTMLElement = fixture.nativeElement;
     const msg: HTMLElement | null = elem.querySelector('.p-error');
     expect(msg).toBeTruthy();
+    expect(msg?.innerText.trim()).not.toHaveLength(0);
   });
 
   it('should show error if missingAttributePenalty < 0', () => {
@@ -222,35 +253,43 @@ describe('TaskTypeXqueryComponent', () => {
     fixture.detectChanges();
 
     // Assert
+    expect(component.form.controls.missingAttributePenalty.invalid).toBe(true);
     const elem: HTMLElement = fixture.nativeElement;
     const msg: HTMLElement | null = elem.querySelector('.p-error');
     expect(msg).toBeTruthy();
+    expect(msg?.innerText.trim()).not.toHaveLength(0);
   });
 
   it('should show error if superfluousAttributeStrategy is empty', () => {
     // Arrange
+    component.form.controls.superfluousAttributeStrategy.setValue(null);
     component.form.controls.superfluousAttributeStrategy.markAsDirty();
 
     // Act
     fixture.detectChanges();
 
     // Assert
+    expect(component.form.controls.superfluousAttributeStrategy.invalid).toBe(true);
     const elem: HTMLElement = fixture.nativeElement;
     const msg: HTMLElement | null = elem.querySelector('.p-error');
     expect(msg).toBeTruthy();
+    expect(msg?.innerText.trim()).not.toHaveLength(0);
   });
 
   it('should show error if superfluousAttributePenalty is empty', () => {
     // Arrange
+    component.form.controls.superfluousAttributePenalty.setValue(null);
     component.form.controls.superfluousAttributePenalty.markAsDirty();
 
     // Act
     fixture.detectChanges();
 
     // Assert
+    expect(component.form.controls.superfluousAttributePenalty.invalid).toBe(true);
     const elem: HTMLElement = fixture.nativeElement;
     const msg: HTMLElement | null = elem.querySelector('.p-error');
     expect(msg).toBeTruthy();
+    expect(msg?.innerText.trim()).not.toHaveLength(0);
   });
 
   it('should show error if superfluousAttributePenalty < 0', () => {
@@ -262,35 +301,43 @@ describe('TaskTypeXqueryComponent', () => {
     fixture.detectChanges();
 
     // Assert
+    expect(component.form.controls.superfluousAttributePenalty.invalid).toBe(true);
     const elem: HTMLElement = fixture.nativeElement;
     const msg: HTMLElement | null = elem.querySelector('.p-error');
     expect(msg).toBeTruthy();
+    expect(msg?.innerText.trim()).not.toHaveLength(0);
   });
 
   it('should show error if incorrectAttributeValueStrategy is empty', () => {
     // Arrange
+    component.form.controls.incorrectAttributeValueStrategy.setValue(null);
     component.form.controls.incorrectAttributeValueStrategy.markAsDirty();
 
     // Act
     fixture.detectChanges();
 
     // Assert
+    expect(component.form.controls.incorrectAttributeValueStrategy.invalid).toBe(true);
     const elem: HTMLElement = fixture.nativeElement;
     const msg: HTMLElement | null = elem.querySelector('.p-error');
     expect(msg).toBeTruthy();
+    expect(msg?.innerText.trim()).not.toHaveLength(0);
   });
 
   it('should show error if incorrectAttributeValuePenalty is empty', () => {
     // Arrange
+    component.form.controls.incorrectAttributeValuePenalty.setValue(null);
     component.form.controls.incorrectAttributeValuePenalty.markAsDirty();
 
     // Act
     fixture.detectChanges();
 
     // Assert
+    expect(component.form.controls.incorrectAttributeValuePenalty.invalid).toBe(true);
     const elem: HTMLElement = fixture.nativeElement;
     const msg: HTMLElement | null = elem.querySelector('.p-error');
     expect(msg).toBeTruthy();
+    expect(msg?.innerText.trim()).not.toHaveLength(0);
   });
 
   it('should show error if incorrectAttributeValuePenalty < 0', () => {
@@ -302,35 +349,43 @@ describe('TaskTypeXqueryComponent', () => {
     fixture.detectChanges();
 
     // Assert
+    expect(component.form.controls.incorrectAttributeValuePenalty.invalid).toBe(true);
     const elem: HTMLElement = fixture.nativeElement;
     const msg: HTMLElement | null = elem.querySelector('.p-error');
     expect(msg).toBeTruthy();
+    expect(msg?.innerText.trim()).not.toHaveLength(0);
   });
 
   it('should show error if incorrectTextStrategy is empty', () => {
     // Arrange
+    component.form.controls.incorrectTextStrategy.setValue(null);
     component.form.controls.incorrectTextStrategy.markAsDirty();
 
     // Act
     fixture.detectChanges();
 
     // Assert
+    expect(component.form.controls.incorrectTextStrategy.invalid).toBe(true);
     const elem: HTMLElement = fixture.nativeElement;
     const msg: HTMLElement | null = elem.querySelector('.p-error');
     expect(msg).toBeTruthy();
+    expect(msg?.innerText.trim()).not.toHaveLength(0);
   });
 
   it('should show error if incorrectTextPenalty is empty', () => {
     // Arrange
+    component.form.controls.incorrectTextPenalty.setValue(null);
     component.form.controls.incorrectTextPenalty.markAsDirty();
 
     // Act
     fixture.detectChanges();
 
     // Assert
+    expect(component.form.controls.incorrectTextPenalty.invalid).toBe(true);
     const elem: HTMLElement = fixture.nativeElement;
     const msg: HTMLElement | null = elem.querySelector('.p-error');
     expect(msg).toBeTruthy();
+    expect(msg?.innerText.trim()).not.toHaveLength(0);
   });
 
   it('should show error if incorrectTextPenalty < 0', () => {
@@ -342,8 +397,10 @@ describe('TaskTypeXqueryComponent', () => {
     fixture.detectChanges();
 
     // Assert
+    expect(component.form.controls.incorrectTextPenalty.invalid).toBe(true);
     const elem: HTMLElement = fixture.nativeElement;
     const msg: HTMLElement | null = elem.querySelector('.p-error');
     expect(msg).toBeTruthy();
+    expect(msg?.innerText.trim()).not.toHaveLength(0);
   });
 });

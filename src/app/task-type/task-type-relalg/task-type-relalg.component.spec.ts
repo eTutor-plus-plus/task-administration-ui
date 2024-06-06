@@ -71,35 +71,43 @@ describe('TaskTypeRelalgComponent', () => {
     fixture.detectChanges();
 
     // Assert
+    expect(component.form.controls.solution.invalid).toBe(true);
     const elem: HTMLElement = fixture.nativeElement;
     const msg: HTMLElement | null = elem.querySelector('#solution + .p-error');
     expect(msg).toBeTruthy();
+    expect(msg?.innerText.trim()).not.toHaveLength(0);
   });
 
   it('should show error if wrongOrderPenalty is empty', () => {
     // Arrange
+    component.form.controls.wrongOrderPenalty.setValue(null);
     component.form.controls.wrongOrderPenalty.markAsDirty();
 
     // Act
     fixture.detectChanges();
 
     // Assert
+    expect(component.form.controls.wrongOrderPenalty.invalid).toBe(true);
     const elem: HTMLElement = fixture.nativeElement;
     const msg: HTMLElement | null = elem.querySelector('.p-error');
     expect(msg).toBeTruthy();
+    expect(msg?.innerText.trim()).not.toHaveLength(0);
   });
 
   it('should show error if superfluousColumnsPenalty is empty', () => {
     // Arrange
+    component.form.controls.superfluousColumnsPenalty.setValue(null);
     component.form.controls.superfluousColumnsPenalty.markAsDirty();
 
     // Act
     fixture.detectChanges();
 
     // Assert
+    expect(component.form.controls.superfluousColumnsPenalty.invalid).toBe(true);
     const elem: HTMLElement = fixture.nativeElement;
     const msg: HTMLElement | null = elem.querySelector('.p-error');
     expect(msg).toBeTruthy();
+    expect(msg?.innerText.trim()).not.toHaveLength(0);
   });
 
   it('should show error if wrongOrderPenalty < -1', () => {
@@ -111,9 +119,11 @@ describe('TaskTypeRelalgComponent', () => {
     fixture.detectChanges();
 
     // Assert
+    expect(component.form.controls.wrongOrderPenalty.invalid).toBe(true);
     const elem: HTMLElement = fixture.nativeElement;
     const msg: HTMLElement | null = elem.querySelector('.p-error');
     expect(msg).toBeTruthy();
+    expect(msg?.innerText.trim()).not.toHaveLength(0);
   });
 
   it('should show error if superfluousColumnsPenalty < -1', () => {
@@ -125,8 +135,10 @@ describe('TaskTypeRelalgComponent', () => {
     fixture.detectChanges();
 
     // Assert
+    expect(component.form.controls.superfluousColumnsPenalty.invalid).toBe(true);
     const elem: HTMLElement = fixture.nativeElement;
     const msg: HTMLElement | null = elem.querySelector('.p-error');
     expect(msg).toBeTruthy();
+    expect(msg?.innerText.trim()).not.toHaveLength(0);
   });
 });

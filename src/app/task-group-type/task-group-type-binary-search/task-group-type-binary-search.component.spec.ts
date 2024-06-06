@@ -66,9 +66,11 @@ describe('TaskGroupTypeBinarySearchComponent', () => {
     fixture.detectChanges();
 
     // Assert
+    expect(component.form.controls.minNumber.invalid).toBe(true);
     const elem: HTMLElement = fixture.nativeElement;
     const msg: HTMLElement | null = elem.querySelector('.p-error');
     expect(msg).toBeTruthy();
+    expect(msg?.innerText.trim()).not.toHaveLength(0);
   });
 
   it('should show error if maxNumber is empty', () => {
@@ -79,9 +81,11 @@ describe('TaskGroupTypeBinarySearchComponent', () => {
     fixture.detectChanges();
 
     // Assert
+    expect(component.form.controls.maxNumber.invalid).toBe(true);
     const elem: HTMLElement = fixture.nativeElement;
     const msg: HTMLElement | null = elem.querySelector('.p-error');
     expect(msg).toBeTruthy();
+    expect(msg?.innerText.trim()).not.toHaveLength(0);
   });
 
   it('should show error if maxNumber < minNumber', () => {
@@ -93,8 +97,10 @@ describe('TaskGroupTypeBinarySearchComponent', () => {
     fixture.detectChanges();
 
     // Assert
+    expect(component.form.invalid).toBe(true);
     const elem: HTMLElement = fixture.nativeElement;
     const msg: HTMLElement | null = elem.querySelector('.p-error');
     expect(msg).toBeTruthy();
+    expect(msg?.innerText.trim()).not.toHaveLength(0);
   });
 });

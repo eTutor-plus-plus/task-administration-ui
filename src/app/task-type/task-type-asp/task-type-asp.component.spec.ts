@@ -35,9 +35,11 @@ describe('TaskTypeAspComponent', () => {
     fixture.detectChanges();
 
     // Assert
+    expect(component.form.controls.solution.invalid).toBe(true);
     const elem: HTMLElement = fixture.nativeElement;
     const msg: HTMLElement | null = elem.querySelector('.p-error');
     expect(msg).toBeTruthy();
+    expect(msg?.innerText.trim()).not.toHaveLength(0);
   });
 
   it('should show error if maxN < 1', () => {
@@ -49,8 +51,10 @@ describe('TaskTypeAspComponent', () => {
     fixture.detectChanges();
 
     // Assert
+    expect(component.form.controls.maxN.invalid).toBe(true);
     const elem: HTMLElement = fixture.nativeElement;
     const msg: HTMLElement | null = elem.querySelector('.p-error');
     expect(msg).toBeTruthy();
+    expect(msg?.innerText.trim()).not.toHaveLength(0);
   });
 });

@@ -38,9 +38,11 @@ describe('TaskGroupTypeSqlComponent', () => {
     fixture.detectChanges();
 
     // Assert
+    expect(component.form.controls.ddlStatements.invalid).toBe(true);
     const elem: HTMLElement = fixture.nativeElement;
     const msg: HTMLElement | null = elem.querySelector('#ddlStatements + .p-error');
     expect(msg).toBeTruthy();
+    expect(msg?.innerText.trim()).not.toHaveLength(0);
   });
 
   it('should show error if ddlStatements is too short', () => {
@@ -52,9 +54,11 @@ describe('TaskGroupTypeSqlComponent', () => {
     fixture.detectChanges();
 
     // Assert
+    expect(component.form.controls.ddlStatements.invalid).toBe(true);
     const elem: HTMLElement = fixture.nativeElement;
     const msg: HTMLElement | null = elem.querySelector('#ddlStatements + .p-error');
     expect(msg).toBeTruthy();
+    expect(msg?.innerText.trim()).not.toHaveLength(0);
   });
 
   it('should show error if diagnoseDmlStatements is empty', () => {
@@ -65,9 +69,11 @@ describe('TaskGroupTypeSqlComponent', () => {
     fixture.detectChanges();
 
     // Assert
+    expect(component.form.controls.diagnoseDmlStatements.invalid).toBe(true);
     const elem: HTMLElement = fixture.nativeElement;
     const msg: HTMLElement | null = elem.querySelector('#diagnoseDmlStatements + .p-error');
     expect(msg).toBeTruthy();
+    expect(msg?.innerText.trim()).not.toHaveLength(0);
   });
 
   it('should show error if diagnoseDmlStatements is too short', () => {
@@ -79,9 +85,11 @@ describe('TaskGroupTypeSqlComponent', () => {
     fixture.detectChanges();
 
     // Assert
+    expect(component.form.controls.diagnoseDmlStatements.invalid).toBe(true);
     const elem: HTMLElement = fixture.nativeElement;
     const msg: HTMLElement | null = elem.querySelector('#diagnoseDmlStatements + .p-error');
     expect(msg).toBeTruthy();
+    expect(msg?.innerText.trim()).not.toHaveLength(0);
   });
 
   it('should show error if submitDmlStatements is empty', () => {
@@ -92,9 +100,11 @@ describe('TaskGroupTypeSqlComponent', () => {
     fixture.detectChanges();
 
     // Assert
+    expect(component.form.controls.submitDmlStatements.invalid).toBe(true);
     const elem: HTMLElement = fixture.nativeElement;
     const msg: HTMLElement | null = elem.querySelector('#submitDmlStatements + .p-error');
     expect(msg).toBeTruthy();
+    expect(msg?.innerText.trim()).not.toHaveLength(0);
   });
 
   it('should show error if submitDmlStatements is too short', () => {
@@ -106,8 +116,10 @@ describe('TaskGroupTypeSqlComponent', () => {
     fixture.detectChanges();
 
     // Assert
+    expect(component.form.controls.submitDmlStatements.invalid).toBe(true);
     const elem: HTMLElement = fixture.nativeElement;
     const msg: HTMLElement | null = elem.querySelector('#submitDmlStatements + .p-error');
     expect(msg).toBeTruthy();
+    expect(msg?.innerText.trim()).not.toHaveLength(0);
   });
 });

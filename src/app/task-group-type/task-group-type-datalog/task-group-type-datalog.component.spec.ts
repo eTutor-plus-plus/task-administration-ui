@@ -122,9 +122,11 @@ describe('TaskGroupTypeDatalogComponent', () => {
     fixture.detectChanges();
 
     // Assert
+    expect(component.form.controls.diagnoseFacts.invalid).toBe(true);
     const elem: HTMLElement = fixture.nativeElement;
     const msg: HTMLElement | null = elem.querySelector('#diagnoseFacts + .p-error');
     expect(msg).toBeTruthy();
+    expect(msg?.innerText.trim()).not.toHaveLength(0);
   });
 
   it('should show error if diagnoseFacts is too short', () => {
@@ -136,9 +138,11 @@ describe('TaskGroupTypeDatalogComponent', () => {
     fixture.detectChanges();
 
     // Assert
+    expect(component.form.controls.diagnoseFacts.invalid).toBe(true);
     const elem: HTMLElement = fixture.nativeElement;
     const msg: HTMLElement | null = elem.querySelector('#diagnoseFacts + .p-error');
     expect(msg).toBeTruthy();
+    expect(msg?.innerText.trim()).not.toHaveLength(0);
   });
 
   it('should show error if submissionFacts is empty', () => {
@@ -149,9 +153,11 @@ describe('TaskGroupTypeDatalogComponent', () => {
     fixture.detectChanges();
 
     // Assert
+    expect(component.form.controls.submissionFacts.invalid).toBe(true);
     const elem: HTMLElement = fixture.nativeElement;
     const msg: HTMLElement | null = elem.querySelector('#submissionFacts + .p-error');
     expect(msg).toBeTruthy();
+    expect(msg?.innerText.trim()).not.toHaveLength(0);
   });
 
   it('should show error if submissionFacts is too short', () => {
@@ -163,8 +169,10 @@ describe('TaskGroupTypeDatalogComponent', () => {
     fixture.detectChanges();
 
     // Assert
+    expect(component.form.controls.submissionFacts.invalid).toBe(true);
     const elem: HTMLElement = fixture.nativeElement;
     const msg: HTMLElement | null = elem.querySelector('#submissionFacts + .p-error');
     expect(msg).toBeTruthy();
+    expect(msg?.innerText.trim()).not.toHaveLength(0);
   });
 });

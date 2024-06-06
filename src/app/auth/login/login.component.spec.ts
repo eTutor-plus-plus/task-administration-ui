@@ -152,9 +152,11 @@ describe('LoginComponent', () => {
     fixture.detectChanges();
 
     // Assert
+    expect(component.form.controls.username.invalid).toBe(true);
     const elem: HTMLElement = fixture.nativeElement;
     const msg: HTMLElement | null = elem.querySelector('#username + .p-error');
     expect(msg).toBeTruthy();
+    expect(msg?.innerText.trim()).not.toHaveLength(0);
   });
 
   it('should show error if password is empty', async () => {
@@ -167,9 +169,11 @@ describe('LoginComponent', () => {
     fixture.detectChanges();
 
     // Assert
+    expect(component.form.controls.password.invalid).toBe(true);
     const elem: HTMLElement = fixture.nativeElement;
     const msg: HTMLElement | null = elem.querySelector('#password + .p-error');
     expect(msg).toBeTruthy();
+    expect(msg?.innerText.trim()).not.toHaveLength(0);
   });
 
   it('should disable submit button on invalid form', async () => {

@@ -29,7 +29,7 @@ export const translocoTestConfig = {
     prodMode: false,
     missingHandler: {
       useFallbackTranslation: true,
-      logMissingKey: true
+      logMissingKey: false
     },
     flatten: {
       aot: false

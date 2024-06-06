@@ -122,9 +122,11 @@ describe('TaskGroupTypeXqueryComponent', () => {
     fixture.detectChanges();
 
     // Assert
+    expect(component.form.controls.diagnoseDocument.invalid).toBe(true);
     const elem: HTMLElement = fixture.nativeElement;
     const msg: HTMLElement | null = elem.querySelector('#diagnoseDocument + .p-error');
     expect(msg).toBeTruthy();
+    expect(msg?.innerText.trim()).not.toHaveLength(0);
   });
 
   it('should show error if diagnoseDocument is too short', () => {
@@ -136,9 +138,11 @@ describe('TaskGroupTypeXqueryComponent', () => {
     fixture.detectChanges();
 
     // Assert
+    expect(component.form.controls.diagnoseDocument.invalid).toBe(true);
     const elem: HTMLElement = fixture.nativeElement;
     const msg: HTMLElement | null = elem.querySelector('#diagnoseDocument + .p-error');
     expect(msg).toBeTruthy();
+    expect(msg?.innerText.trim()).not.toHaveLength(0);
   });
 
   it('should show error if submitDocument is empty', () => {
@@ -149,9 +153,11 @@ describe('TaskGroupTypeXqueryComponent', () => {
     fixture.detectChanges();
 
     // Assert
+    expect(component.form.controls.submitDocument.invalid).toBe(true);
     const elem: HTMLElement = fixture.nativeElement;
     const msg: HTMLElement | null = elem.querySelector('#submitDocument + .p-error');
     expect(msg).toBeTruthy();
+    expect(msg?.innerText.trim()).not.toHaveLength(0);
   });
 
   it('should show error if submitDocument is too short', () => {
@@ -163,8 +169,10 @@ describe('TaskGroupTypeXqueryComponent', () => {
     fixture.detectChanges();
 
     // Assert
+    expect(component.form.controls.submitDocument.invalid).toBe(true);
     const elem: HTMLElement = fixture.nativeElement;
     const msg: HTMLElement | null = elem.querySelector('#submitDocument + .p-error');
     expect(msg).toBeTruthy();
+    expect(msg?.innerText.trim()).not.toHaveLength(0);
   });
 });
