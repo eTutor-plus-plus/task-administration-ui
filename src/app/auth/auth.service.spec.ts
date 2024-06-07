@@ -27,7 +27,7 @@ describe('AuthService', () => {
   });
 
   afterEach(() => {
-    localStorage.removeItem('dke-auth-token');
+    localStorage.removeItem('@dke-etutor/auth-token');
   });
 
   it('should be created', () => {
@@ -36,7 +36,7 @@ describe('AuthService', () => {
 
   it('should load stored token from storage', () => {
     // Arrange
-    localStorage.setItem('dke-auth-token', JSON.stringify({
+    localStorage.setItem('@dke-etutor/auth-token', JSON.stringify({
       'access_token': 'eyJhbGciOiJSUzI1NiJ9.eyJzdWIiOiJhZG1pbiIsInVpZCI6MSwiZnVsbF9hZG1pbiI6dHJ1ZSwicm9sZXMiOltdLCJpc3MiOiJzZWxmIiwicHJlZmVycmVkX3VzZXJuYW1lIjoiYWRtaW4iLCJleHAiOjE3MTcyNTg3MTAsImdpdmVuX25hbWUiOiJlVHV0b3IiLCJpYXQiOjE3MTcyNTY5MTAsImZhbWlseV9uYW1lIjoiQWRtaW5pc3RyYXRvciIsImVtYWlsIjoiZXR1dG9yQGV4YW1wbGUuY29tIn0.KKkk48-rz8OpvAqclr5LvcKEt5iDI4XlMXqoK232asKijIQgyFTiJQIoet8QcVpHcC7Jkf-qaB517qUjE9aGdCPwyIqfGCsIS3e8xD-T5ieVqVLyXmB2_0DuVYHo1ik3ZlXhrPqEtipjTvRQLFwwxX6xRKqYaPw0moWOU_jqTo3H7RLjvnSkZ-_E2Lw4cj_O7IWbESSkE4cYdhaZDhMa6GjdMty2owbzcOBUUskUOHWp-ZGPmpiFYRhAayr_LnS4cCcjpFYU2638crQe7uCplRpuSIBmSJjsR65BITtEtKwTLcoW_VUBma3dJaDE14U1y_C-r4BBL3i4rLDy8-pNK38XEWFWfTN0pY798PIzJMKnha2Q462GYj-4rAuEVSoVgFo8E5LcCvfTo_tq0fIxGVDNalNKzgH1harI0V0detXyVUcWv0zF-ytdvZ-UMX2ckttOx407L3cdvt4u65DufzUB4FupMwN2OjdEsvC1n581ECA1fd0-ucrwBTddjhZB0btn',
       'refresh_token': 'eyJhbGciOiJSUzI1NiJ9.eyJzZWMiOiJ7YmNyeXB0fSQyYSQxMCQ2bG1BUExQUFEueW9wTTd2Vk1wZFlPei5yb3dtWWguOG5JMDltLy9XMS9Oa1gyTG9yam9LaSIsImlzcyI6InNlbGYiLCJleHAiOjE3MTcyNTg5MTAsInRva2VuX3R5cGUiOiJyZWZyZXNoIiwiaWF0IjoxNzE3MjU2OTEwLCJzdWJfaWQiOiJhZG1pbiJ9.esxOP2jG9-mgn4RUfgwc9-WYeLoqfqlrCeDpSkySOjCL5lbRCW4ql3P3zZqt7ZF1XQviZkLSoK-U6x6D37_v5XKJib33jBgWz57oPqWgDS0ZblbDbeXhWe03tun8EN9V9hqZdqafap80OIqMV501DvRMRZ_lDviDzoq9NtgcOdbdEvqIjVxQs6TjDHO5fpDCghUad3ZxpUaiPfiDi7nX1ebsdnzld-lrJKVmO-zuXgB0lKoj-wyYu1TjPod7eFPbycdHVjF9hW5t5sMKwPW_uvhvswjeF6bsa7bo3IH9ymecsIIQD5sYvFs83kAVgiPovmdWtVIkrbVzMepDF1dMh_oOrNU2DXpto1U07HBN8VNTrHGljF6-l_wvSKFUYM3EQ-o4GHsHcjp1OXa8JNpL1AUr4MpWqvSaPDtDOwOaTkTY6z8tYHdMF4PTBTp415XzwLseRALydo1PDT7N6lAVqoEgyY1BSJHYczauBMV_YzXx1z7MIzO7O_83UXUMzfE6HaUZ',
       'token_type': 'Bearer',
@@ -53,7 +53,7 @@ describe('AuthService', () => {
 
   it('should not fail on loading invalid stored token from storage', () => {
     // Arrange
-    localStorage.setItem('dke-auth-token', 'invalid-json');
+    localStorage.setItem('@dke-etutor/auth-token', 'invalid-json');
 
     // Act
     const authServiceFromStorage = new AuthService(null!, null!, null!);
@@ -120,7 +120,7 @@ describe('AuthService', () => {
 
     // Act & Assert
     const promise = service.login(username, password).then(() => {
-      expect(localStorage.getItem('dke-auth-token')).toContain(accessToken);
+      expect(localStorage.getItem('@dke-etutor/auth-token')).toContain(accessToken);
       expect(service.isAuthenticated()).toBe(true);
       expect(service.authHeaderValue).toBe('Bearer ' + accessToken);
       expect(service.user).toBeDefined();
@@ -180,7 +180,7 @@ describe('AuthService', () => {
 
     // Act & Assert
     const promise = service.login(username, password).then(() => {
-      expect(localStorage.getItem('dke-auth-token')).toBeDefined();
+      expect(localStorage.getItem('@dke-etutor/auth-token')).toBeDefined();
       expect(service.isAuthenticated()).toBe(false);
       expect(service.isRefreshSubscriptionActive()).toBe(false);
     });
@@ -202,7 +202,7 @@ describe('AuthService', () => {
 
   it('should delete token from storage on logout', () => {
     // Arrange
-    localStorage.setItem('dke-auth-token', JSON.stringify({
+    localStorage.setItem('@dke-etutor/auth-token', JSON.stringify({
       'access_token': 'eyJhbGciOiJSUzI1NiJ9.eyJzdWIiOiJhZG1pbiIsInVpZCI6MSwiZnVsbF9hZG1pbiI6dHJ1ZSwicm9sZXMiOltdLCJpc3MiOiJzZWxmIiwicHJlZmVycmVkX3VzZXJuYW1lIjoiYWRtaW4iLCJleHAiOjE3MTcyNTg3MTAsImdpdmVuX25hbWUiOiJlVHV0b3IiLCJpYXQiOjE3MTcyNTY5MTAsImZhbWlseV9uYW1lIjoiQWRtaW5pc3RyYXRvciIsImVtYWlsIjoiZXR1dG9yQGV4YW1wbGUuY29tIn0.KKkk48-rz8OpvAqclr5LvcKEt5iDI4XlMXqoK232asKijIQgyFTiJQIoet8QcVpHcC7Jkf-qaB517qUjE9aGdCPwyIqfGCsIS3e8xD-T5ieVqVLyXmB2_0DuVYHo1ik3ZlXhrPqEtipjTvRQLFwwxX6xRKqYaPw0moWOU_jqTo3H7RLjvnSkZ-_E2Lw4cj_O7IWbESSkE4cYdhaZDhMa6GjdMty2owbzcOBUUskUOHWp-ZGPmpiFYRhAayr_LnS4cCcjpFYU2638crQe7uCplRpuSIBmSJjsR65BITtEtKwTLcoW_VUBma3dJaDE14U1y_C-r4BBL3i4rLDy8-pNK38XEWFWfTN0pY798PIzJMKnha2Q462GYj-4rAuEVSoVgFo8E5LcCvfTo_tq0fIxGVDNalNKzgH1harI0V0detXyVUcWv0zF-ytdvZ-UMX2ckttOx407L3cdvt4u65DufzUB4FupMwN2OjdEsvC1n581ECA1fd0-ucrwBTddjhZB0btn',
       'refresh_token': 'eyJhbGciOiJSUzI1NiJ9.eyJzZWMiOiJ7YmNyeXB0fSQyYSQxMCQ2bG1BUExQUFEueW9wTTd2Vk1wZFlPei5yb3dtWWguOG5JMDltLy9XMS9Oa1gyTG9yam9LaSIsImlzcyI6InNlbGYiLCJleHAiOjE3MTcyNTg5MTAsInRva2VuX3R5cGUiOiJyZWZyZXNoIiwiaWF0IjoxNzE3MjU2OTEwLCJzdWJfaWQiOiJhZG1pbiJ9.esxOP2jG9-mgn4RUfgwc9-WYeLoqfqlrCeDpSkySOjCL5lbRCW4ql3P3zZqt7ZF1XQviZkLSoK-U6x6D37_v5XKJib33jBgWz57oPqWgDS0ZblbDbeXhWe03tun8EN9V9hqZdqafap80OIqMV501DvRMRZ_lDviDzoq9NtgcOdbdEvqIjVxQs6TjDHO5fpDCghUad3ZxpUaiPfiDi7nX1ebsdnzld-lrJKVmO-zuXgB0lKoj-wyYu1TjPod7eFPbycdHVjF9hW5t5sMKwPW_uvhvswjeF6bsa7bo3IH9ymecsIIQD5sYvFs83kAVgiPovmdWtVIkrbVzMepDF1dMh_oOrNU2DXpto1U07HBN8VNTrHGljF6-l_wvSKFUYM3EQ-o4GHsHcjp1OXa8JNpL1AUr4MpWqvSaPDtDOwOaTkTY6z8tYHdMF4PTBTp415XzwLseRALydo1PDT7N6lAVqoEgyY1BSJHYczauBMV_YzXx1z7MIzO7O_83UXUMzfE6HaUZ',
       'token_type': 'Bearer',
@@ -214,7 +214,7 @@ describe('AuthService', () => {
     authServiceFromStorage.logout();
 
     // Assert
-    expect(localStorage.getItem('dke-auth-token')).toBeNull();
+    expect(localStorage.getItem('@dke-etutor/auth-token')).toBeNull();
     expect(authServiceFromStorage.isRefreshSubscriptionActive()).toBe(false);
     expect(authServiceFromStorage.user).toBeNull();
     expect(authServiceFromStorage.authHeaderValue).toBeNull();
@@ -247,7 +247,7 @@ describe('AuthService', () => {
       .setExpirationTime('5 minutes')
       .encode();
     const oldRefresh = 'eyJhbGciOiJSUzI1NiJ9.eyJzZWMiOiJ7YmNyeXB0fSQyYSQxMCQ2bG1BUExQUFEueW9wTTd2Vk1wZFlPei5yb3dtWWguOG5JMDltLy9XMS9Oa1gyTG9yam9LaSIsImlzcyI6InNlbGYiLCJleHAiOjE3MTcyNTg5MTAsInRva2VuX3R5cGUiOiJyZWZyZXNoIiwiaWF0IjoxNzE3MjU2OTEwLCJzdWJfaWQiOiJhZG1pbiJ9.esxOP2jG9-mgn4RUfgwc9-WYeLoqfqlrCeDpSkySOjCL5lbRCW4ql3P3zZqt7ZF1XQviZkLSoK-U6x6D37_v5XKJib33jBgWz57oPqWgDS0ZblbDbeXhWe03tun8EN9V9hqZdqafap80OIqMV501DvRMRZ_lDviDzoq9NtgcOdbdEvqIjVxQs6TjDHO5fpDCghUad3ZxpUaiPfiDi7nX1ebsdnzld-lrJKVmO-zuXgB0lKoj-wyYu1TjPod7eFPbycdHVjF9hW5t5sMKwPW_uvhvswjeF6bsa7bo3IH9ymecsIIQD5sYvFs83kAVgiPovmdWtVIkrbVzMepDF1dMh_oOrNU2DXpto1U07HBN8VNTrHGljF6-l_wvSKFUYM3EQ-o4GHsHcjp1OXa8JNpL1AUr4MpWqvSaPDtDOwOaTkTY6z8tYHdMF4PTBTp415XzwLseRALydo1PDT7N6lAVqoEgyY1BSJHYczauBMV_YzXx1z7MIzO7O_83UXUMzfE6HaUZ';
-    localStorage.setItem('dke-auth-token', JSON.stringify({
+    localStorage.setItem('@dke-etutor/auth-token', JSON.stringify({
       'access_token': 'eyJhbGciOiJSUzI1NiJ9.eyJzdWIiOiJhZG1pbiIsInVpZCI6MSwiZnVsbF9hZG1pbiI6dHJ1ZSwicm9sZXMiOltdLCJpc3MiOiJzZWxmIiwicHJlZmVycmVkX3VzZXJuYW1lIjoiYWRtaW4iLCJleHAiOjE3MTcyNTg3MTAsImdpdmVuX25hbWUiOiJlVHV0b3IiLCJpYXQiOjE3MTcyNTY5MTAsImZhbWlseV9uYW1lIjoiQWRtaW5pc3RyYXRvciIsImVtYWlsIjoiZXR1dG9yQGV4YW1wbGUuY29tIn0.KKkk48-rz8OpvAqclr5LvcKEt5iDI4XlMXqoK232asKijIQgyFTiJQIoet8QcVpHcC7Jkf-qaB517qUjE9aGdCPwyIqfGCsIS3e8xD-T5ieVqVLyXmB2_0DuVYHo1ik3ZlXhrPqEtipjTvRQLFwwxX6xRKqYaPw0moWOU_jqTo3H7RLjvnSkZ-_E2Lw4cj_O7IWbESSkE4cYdhaZDhMa6GjdMty2owbzcOBUUskUOHWp-ZGPmpiFYRhAayr_LnS4cCcjpFYU2638crQe7uCplRpuSIBmSJjsR65BITtEtKwTLcoW_VUBma3dJaDE14U1y_C-r4BBL3i4rLDy8-pNK38XEWFWfTN0pY798PIzJMKnha2Q462GYj-4rAuEVSoVgFo8E5LcCvfTo_tq0fIxGVDNalNKzgH1harI0V0detXyVUcWv0zF-ytdvZ-UMX2ckttOx407L3cdvt4u65DufzUB4FupMwN2OjdEsvC1n581ECA1fd0-ucrwBTddjhZB0btn',
       'refresh_token': oldRefresh,
       'token_type': 'Bearer',
@@ -257,7 +257,7 @@ describe('AuthService', () => {
 
     // Act & Assert
     const promise = authService.refreshToken().then(() => {
-      expect(localStorage.getItem('dke-auth-token')).toContain(accessToken);
+      expect(localStorage.getItem('@dke-etutor/auth-token')).toContain(accessToken);
       expect(authService.isAuthenticated()).toBe(true);
       expect(authService.authHeaderValue).toBe('Bearer ' + accessToken);
       expect(authService.user).toBeDefined();
@@ -283,7 +283,7 @@ describe('AuthService', () => {
   it('should logout on refresh with invalid refresh token', () => {
     // Arrange
     const oldRefresh = 'eyJhbGciOiJSUzI1NiJ9.eyJzZWMiOiJ7YmNyeXB0fSQyYSQxMCQ2bG1BUExQUFEueW9wTTd2Vk1wZFlPei5yb3dtWWguOG5JMDltLy9XMS9Oa1gyTG9yam9LaSIsImlzcyI6InNlbGYiLCJleHAiOjE3MTcyNTg5MTAsInRva2VuX3R5cGUiOiJyZWZyZXNoIiwiaWF0IjoxNzE3MjU2OTEwLCJzdWJfaWQiOiJhZG1pbiJ9.esxOP2jG9-mgn4RUfgwc9-WYeLoqfqlrCeDpSkySOjCL5lbRCW4ql3P3zZqt7ZF1XQviZkLSoK-U6x6D37_v5XKJib33jBgWz57oPqWgDS0ZblbDbeXhWe03tun8EN9V9hqZdqafap80OIqMV501DvRMRZ_lDviDzoq9NtgcOdbdEvqIjVxQs6TjDHO5fpDCghUad3ZxpUaiPfiDi7nX1ebsdnzld-lrJKVmO-zuXgB0lKoj-wyYu1TjPod7eFPbycdHVjF9hW5t5sMKwPW_uvhvswjeF6bsa7bo3IH9ymecsIIQD5sYvFs83kAVgiPovmdWtVIkrbVzMepDF1dMh_oOrNU2DXpto1U07HBN8VNTrHGljF6-l_wvSKFUYM3EQ-o4GHsHcjp1OXa8JNpL1AUr4MpWqvSaPDtDOwOaTkTY6z8tYHdMF4PTBTp415XzwLseRALydo1PDT7N6lAVqoEgyY1BSJHYczauBMV_YzXx1z7MIzO7O_83UXUMzfE6HaUZ';
-    localStorage.setItem('dke-auth-token', JSON.stringify({
+    localStorage.setItem('@dke-etutor/auth-token', JSON.stringify({
       'access_token': 'eyJhbGciOiJSUzI1NiJ9.eyJzdWIiOiJhZG1pbiIsInVpZCI6MSwiZnVsbF9hZG1pbiI6dHJ1ZSwicm9sZXMiOltdLCJpc3MiOiJzZWxmIiwicHJlZmVycmVkX3VzZXJuYW1lIjoiYWRtaW4iLCJleHAiOjE3MTcyNTg3MTAsImdpdmVuX25hbWUiOiJlVHV0b3IiLCJpYXQiOjE3MTcyNTY5MTAsImZhbWlseV9uYW1lIjoiQWRtaW5pc3RyYXRvciIsImVtYWlsIjoiZXR1dG9yQGV4YW1wbGUuY29tIn0.KKkk48-rz8OpvAqclr5LvcKEt5iDI4XlMXqoK232asKijIQgyFTiJQIoet8QcVpHcC7Jkf-qaB517qUjE9aGdCPwyIqfGCsIS3e8xD-T5ieVqVLyXmB2_0DuVYHo1ik3ZlXhrPqEtipjTvRQLFwwxX6xRKqYaPw0moWOU_jqTo3H7RLjvnSkZ-_E2Lw4cj_O7IWbESSkE4cYdhaZDhMa6GjdMty2owbzcOBUUskUOHWp-ZGPmpiFYRhAayr_LnS4cCcjpFYU2638crQe7uCplRpuSIBmSJjsR65BITtEtKwTLcoW_VUBma3dJaDE14U1y_C-r4BBL3i4rLDy8-pNK38XEWFWfTN0pY798PIzJMKnha2Q462GYj-4rAuEVSoVgFo8E5LcCvfTo_tq0fIxGVDNalNKzgH1harI0V0detXyVUcWv0zF-ytdvZ-UMX2ckttOx407L3cdvt4u65DufzUB4FupMwN2OjdEsvC1n581ECA1fd0-ucrwBTddjhZB0btn',
       'refresh_token': oldRefresh,
       'token_type': 'Bearer',
@@ -295,7 +295,7 @@ describe('AuthService', () => {
 
     // Act & Assert
     const promise = authService.refreshToken().then(() => {
-      expect(localStorage.getItem('dke-auth-token')).toBeNull();
+      expect(localStorage.getItem('@dke-etutor/auth-token')).toBeNull();
       expect(authService.isRefreshSubscriptionActive()).toBe(false);
       expect(authService.user).toBeNull();
       expect(authService.authHeaderValue).toBeNull();

@@ -33,6 +33,7 @@ import {
 import { TaskForm, TaskTypeRegistry } from '../../../task-type';
 import { TaskSubmissionComponent } from '../task-submission/task-submission.component';
 import { convertStringToSeverity } from '../../helpers';
+import { TaskAppTypeService } from '../../task-app-type.service';
 
 /**
  * Task Form
@@ -146,6 +147,7 @@ export class TaskFormComponent extends EditFormComponent<TaskDto, TaskService, T
 
   private allTaskCategories: TaskCategoryDto[];
   private allTaskGroups: TaskGroupDto[];
+  private availableTaskTypes: string[];
   private readonly destroy$ = new Subject<void>();
 
   /**
@@ -155,6 +157,7 @@ export class TaskFormComponent extends EditFormComponent<TaskDto, TaskService, T
               private readonly organizationalUnitService: OrganizationalUnitService,
               private readonly taskGroupService: TaskGroupService,
               private readonly taskCategoriesService: TaskCategoryService,
+              private readonly taskAppTypeService: TaskAppTypeService,
               private readonly authService: AuthService,
               private readonly route: ActivatedRoute,
               private readonly router: Router,
@@ -185,6 +188,7 @@ export class TaskFormComponent extends EditFormComponent<TaskDto, TaskService, T
     this.types = [];
     this.statuses = [];
     this.difficulties = [];
+    this.availableTaskTypes = [];
     this.role = this.authService.user?.maxRole ?? 'TUTOR';
     this.currentLocale = this.translationService.getActiveLang();
   }
@@ -210,6 +214,7 @@ export class TaskFormComponent extends EditFormComponent<TaskDto, TaskService, T
     this.loadOrganizationalUnits();
     this.loadTaskGroups();
     this.loadTaskCategories();
+    this.loadTaskTypes();
     this.updateDropdownTranslations();
 
     // Load data from route
@@ -456,6 +461,21 @@ export class TaskFormComponent extends EditFormComponent<TaskDto, TaskService, T
     }
   }
 
+  /**
+   * Loads the available task types.
+   */
+  private async loadTaskTypes(): Promise<void> {
+    try {
+      const types = await this.taskAppTypeService.getAvailableTaskTypes();
+      this.availableTaskTypes = TaskTypeRegistry.getTaskTypes().filter(x => types.includes(x));
+      if (this.availableTaskTypes.length === 0)
+        this.availableTaskTypes = TaskTypeRegistry.getTaskTypes();
+    } catch (err) {
+      this.availableTaskTypes = TaskTypeRegistry.getTaskTypes();
+    }
+    this.updateDropdownTranslations();
+  }
+
   //#endregion
 
   /**
@@ -502,7 +522,7 @@ export class TaskFormComponent extends EditFormComponent<TaskDto, TaskService, T
    */
   private updateDropdownTranslations(): void {
     this.currentLocale = this.translationService.getActiveLang();
-    this.types = TaskTypeRegistry.getTaskTypes().map(x => {
+    this.types = this.availableTaskTypes.map(x => {
       return {value: x, text: this.translationService.translate('taskTypes.' + x + '.title')};
     }).sort((a, b) => a.text.localeCompare(b.text));
     this.statuses = [

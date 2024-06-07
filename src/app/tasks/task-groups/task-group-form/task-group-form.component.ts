@@ -16,6 +16,7 @@ import { AuditInformationComponent, EditFormComponent } from '../../../layout';
 import { AuthService, Role } from '../../../auth';
 import { OrganizationalUnitDto, OrganizationalUnitService, StatusEnum, TaskGroupDto, TaskGroupService } from '../../../api';
 import { TaskGroupForm, TaskGroupTypeRegistry } from '../../../task-group-type';
+import { TaskAppTypeService } from '../../task-app-type.service';
 
 /**
  * Task Group Form
@@ -93,6 +94,7 @@ export class TaskGroupFormComponent extends EditFormComponent<TaskGroupDto, Task
    */
   supportsDescriptionGeneration: boolean;
 
+  private availableTaskTypes: string[];
   private readonly destroy$ = new Subject<void>();
 
   /**
@@ -100,6 +102,7 @@ export class TaskGroupFormComponent extends EditFormComponent<TaskGroupDto, Task
    */
   constructor(entityService: TaskGroupService,
               private readonly organizationalUnitService: OrganizationalUnitService,
+              private readonly taskAppTypeService: TaskAppTypeService,
               private readonly authService: AuthService,
               private readonly route: ActivatedRoute,
               private readonly router: Router,
@@ -116,9 +119,8 @@ export class TaskGroupFormComponent extends EditFormComponent<TaskGroupDto, Task
     this.readonly = false;
     this.supportsDescriptionGeneration = false;
     this.organizationalUnits = [];
-    this.types = TaskGroupTypeRegistry.getTaskTypes().map(x => {
-      return {value: x, text: this.translationService.translate('taskGroupTypes.' + x + '.title')};
-    }).sort((a, b) => a.text.localeCompare(b.text));
+    this.availableTaskTypes = [];
+    this.types = [];
     this.statuses = [
       {value: StatusEnum.DRAFT, text: this.translationService.translate('taskStatus.' + StatusEnum.DRAFT), disabled: false},
       {value: StatusEnum.READY_FOR_APPROVAL, text: this.translationService.translate('taskStatus.' + StatusEnum.READY_FOR_APPROVAL), disabled: false},
@@ -149,6 +151,7 @@ export class TaskGroupFormComponent extends EditFormComponent<TaskGroupDto, Task
 
     // Load organizational units
     this.loadOrganizationalUnits();
+    this.loadTaskTypes();
 
     // Load data from route
     this.route.paramMap
@@ -280,6 +283,21 @@ export class TaskGroupFormComponent extends EditFormComponent<TaskGroupDto, Task
   }
 
   /**
+   * Loads the available task types.
+   */
+  private async loadTaskTypes(): Promise<void> {
+    try {
+      const types = await this.taskAppTypeService.getAvailableTaskTypes();
+      this.availableTaskTypes = TaskGroupTypeRegistry.getTaskTypes().filter(x => types.includes(x));
+      if (this.availableTaskTypes.length === 0)
+        this.availableTaskTypes = TaskGroupTypeRegistry.getTaskTypes();
+    } catch (err) {
+      this.availableTaskTypes = TaskGroupTypeRegistry.getTaskTypes();
+    }
+    this.updateDropdownTranslations();
+  }
+
+  /**
    * Sets the dropdown values based on the current language.
    */
   private updateDropdownTranslations(): void {
@@ -291,10 +309,10 @@ export class TaskGroupFormComponent extends EditFormComponent<TaskGroupDto, Task
       };
     });
 
-    this.types = this.types.map(value => {
+    this.types = this.availableTaskTypes.map(x => {
       return {
-        ...value,
-        label: this.translationService.translate('taskGroupTypes.' + value.value + '.title')
+        value: x,
+        text: this.translationService.translate('taskGroupTypes.' + x + '.title')
       };
     });
   }

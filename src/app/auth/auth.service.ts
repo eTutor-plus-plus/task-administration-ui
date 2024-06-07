@@ -12,7 +12,7 @@ import { AuthTokenModel, Role, RoleAssignment, ApplicationUser } from './models'
  */
 @Injectable({providedIn: 'root'})
 export class AuthService implements OnDestroy {
-  private static readonly STORAGE_KEY: string = 'dke-auth-token';
+  private static readonly STORAGE_KEY: string = '@dke-etutor/auth-token';
   private readonly userChanged$ = new BehaviorSubject<ApplicationUser | null>(null);
   private authToken: AuthTokenModel | null = null;
   private tokenExpirationDate?: number;

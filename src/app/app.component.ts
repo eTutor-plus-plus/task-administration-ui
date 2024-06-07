@@ -19,7 +19,7 @@ import { Subject, takeUntil } from 'rxjs';
 })
 export class AppComponent implements OnInit, OnDestroy {
 
-  private static readonly STORAGE_KEY: string = 'dke-lang';
+  private static readonly STORAGE_KEY: string = '@dke-etutor/lang';
   private readonly destroy$ = new Subject<void>();
 
   /**

@@ -28,7 +28,7 @@ describe('AppComponent', () => {
     const lang = 'de';
 
     // Act
-    localStorage.setItem('dke-lang', lang);
+    localStorage.setItem('@dke-etutor/lang', lang);
     const fixture = TestBed.createComponent(AppComponent);
     fixture.detectChanges();
 
@@ -42,7 +42,7 @@ describe('AppComponent', () => {
     const lang = 'some language';
 
     // Act
-    localStorage.setItem('dke-lang', lang);
+    localStorage.setItem('@dke-etutor/lang', lang);
     const fixture = TestBed.createComponent(AppComponent);
     fixture.detectChanges();
 
