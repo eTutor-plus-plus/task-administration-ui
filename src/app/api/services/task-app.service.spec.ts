@@ -1,6 +1,6 @@
 import { TestBed } from '@angular/core/testing';
-import { HttpParams } from '@angular/common/http';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { HttpParams, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 
 import { TaskAppService } from './task-app.service';
 import { API_URL } from '../../app.config';
@@ -10,9 +10,9 @@ describe('TaskAppService', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule],
-      providers: [{provide: API_URL, useValue: 'http://localhost'}]
-    });
+    imports: [],
+    providers: [{ provide: API_URL, useValue: 'http://localhost' }, provideHttpClient(withInterceptorsFromDi()), provideHttpClientTesting()]
+});
     service = TestBed.inject(TaskAppService);
   });
 

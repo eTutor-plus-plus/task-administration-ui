@@ -8,7 +8,7 @@ import { distinctUntilChanged, Subject, takeUntil } from 'rxjs';
 
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
-import { DropdownModule } from 'primeng/dropdown';
+import { DropdownChangeEvent, DropdownModule } from 'primeng/dropdown';
 import { EditorModule } from 'primeng/editor';
 import { TreeSelectModule } from 'primeng/treeselect';
 import { TreeNode } from 'primeng/api';
@@ -32,6 +32,8 @@ import {
 } from '../../../api';
 import { TaskForm, TaskTypeRegistry } from '../../../task-type';
 import { TaskSubmissionComponent } from '../task-submission/task-submission.component';
+import { convertStringToSeverity } from '../../helpers';
+import { TaskAppTypeService } from '../../task-app-type.service';
 
 /**
  * Task Form
@@ -145,6 +147,7 @@ export class TaskFormComponent extends EditFormComponent<TaskDto, TaskService, T
 
   private allTaskCategories: TaskCategoryDto[];
   private allTaskGroups: TaskGroupDto[];
+  private availableTaskTypes: string[];
   private readonly destroy$ = new Subject<void>();
 
   /**
@@ -154,6 +157,7 @@ export class TaskFormComponent extends EditFormComponent<TaskDto, TaskService, T
               private readonly organizationalUnitService: OrganizationalUnitService,
               private readonly taskGroupService: TaskGroupService,
               private readonly taskCategoriesService: TaskCategoryService,
+              private readonly taskAppTypeService: TaskAppTypeService,
               private readonly authService: AuthService,
               private readonly route: ActivatedRoute,
               private readonly router: Router,
@@ -184,6 +188,7 @@ export class TaskFormComponent extends EditFormComponent<TaskDto, TaskService, T
     this.types = [];
     this.statuses = [];
     this.difficulties = [];
+    this.availableTaskTypes = [];
     this.role = this.authService.user?.maxRole ?? 'TUTOR';
     this.currentLocale = this.translationService.getActiveLang();
   }
@@ -209,6 +214,7 @@ export class TaskFormComponent extends EditFormComponent<TaskDto, TaskService, T
     this.loadOrganizationalUnits();
     this.loadTaskGroups();
     this.loadTaskCategories();
+    this.loadTaskTypes();
     this.updateDropdownTranslations();
 
     // Load data from route
@@ -355,7 +361,9 @@ export class TaskFormComponent extends EditFormComponent<TaskDto, TaskService, T
       this.additionalData = data.additionalData;
       this.form.patchValue({...this.originalEntity, taskCategoryIds: []});
       this.form.markAsPristine();
-      this.role = this.authService.user?.roles.find(x => x.organizationalUnit == data.dto.organizationalUnitId)?.role ?? 'TUTOR';
+      this.role = this.authService.user?.isFullAdmin ?
+        'FULL_ADMIN' :
+        this.authService.user?.roles.find(x => x.organizationalUnit == data.dto.organizationalUnitId)?.role ?? 'TUTOR';
       this.setFormEnabledDisabled();
       this.changeDetectorRef.detectChanges(); // required to prevent error
       this.onOrganizationalUnitChanged(this.originalEntity?.organizationalUnitId);
@@ -453,6 +461,21 @@ export class TaskFormComponent extends EditFormComponent<TaskDto, TaskService, T
     }
   }
 
+  /**
+   * Loads the available task types.
+   */
+  private async loadTaskTypes(): Promise<void> {
+    try {
+      const types = await this.taskAppTypeService.getAvailableTaskTypes();
+      this.availableTaskTypes = TaskTypeRegistry.getTaskTypes().filter(x => types.includes(x));
+      if (this.availableTaskTypes.length === 0)
+        this.availableTaskTypes = TaskTypeRegistry.getTaskTypes();
+    } catch (err) {
+      this.availableTaskTypes = TaskTypeRegistry.getTaskTypes();
+    }
+    this.updateDropdownTranslations();
+  }
+
   //#endregion
 
   /**
@@ -478,11 +501,28 @@ export class TaskFormComponent extends EditFormComponent<TaskDto, TaskService, T
   }
 
   /**
+   * Called when the selected task group changed.
+   * @param evt The change event.
+   */
+  onTaskGroupChanged(evt: DropdownChangeEvent) {
+    const tg = this.taskGroups.find(x => x.id === evt.value);
+    this.statuses = [
+      {value: StatusEnum.DRAFT, text: this.translationService.translate('taskStatus.' + StatusEnum.DRAFT), disabled: false},
+      {value: StatusEnum.READY_FOR_APPROVAL, text: this.translationService.translate('taskStatus.' + StatusEnum.READY_FOR_APPROVAL), disabled: false},
+      {
+        value: StatusEnum.APPROVED,
+        text: this.translationService.translate('taskStatus.' + StatusEnum.APPROVED),
+        disabled: this.role === 'TUTOR' || (tg !== undefined && tg !== null && tg.status !== 'APPROVED')
+      }
+    ];
+  }
+
+  /**
    * Sets the dropdown values based on the current language.
    */
   private updateDropdownTranslations(): void {
     this.currentLocale = this.translationService.getActiveLang();
-    this.types = TaskTypeRegistry.getTaskTypes().map(x => {
+    this.types = this.availableTaskTypes.map(x => {
       return {value: x, text: this.translationService.translate('taskTypes.' + x + '.title')};
     }).sort((a, b) => a.text.localeCompare(b.text));
     this.statuses = [
@@ -653,4 +693,6 @@ export class TaskFormComponent extends EditFormComponent<TaskDto, TaskService, T
       this.form.patchValue({taskCategoryIds: nodes});
     }
   }
+
+  public readonly convertStringToSeverity = convertStringToSeverity;
 }

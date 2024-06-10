@@ -59,7 +59,7 @@
             <p-button icon="pi pi-info-circle" [rounded]="true" [text]="true" styleClass="info-btn ml-2"
                       [disabled]="!form.controls.taskGroupId.value" (onClick)="showTaskGroupInformation()"/>
           </label>
-          <p-dropdown inputId="taskGroupId" formControlName="taskGroupId" [options]="taskGroups" optionValue="id"
+          <p-dropdown inputId="taskGroupId" formControlName="taskGroupId" [options]="taskGroups" optionValue="id" (onChange)="onTaskGroupChanged($event)"
                       optionLabel="name" [readonly]="!!originalEntity" [showClear]="true" [filter]="true" filterBy="name"/>
           @if (form.controls.taskGroupId.dirty || form.controls.taskGroupId.touched) {
             <small class="block mt-1 p-error">
@@ -128,7 +128,7 @@
             {{ getError(form.controls.status, this.baseTranslationKey + 'fields.status') }}
           </small>
         }
-        @if (form.controls.status.value === 'APPROVED' && getTaskGroup()?.status !== 'APPROVED') {
+        @if (form.controls.status.value === 'APPROVED' && getTaskGroup() !== undefined && getTaskGroup()?.status !== 'APPROVED') {
           <p-tag severity="warning" styleClass="mt-1" [value]="'tasks.errors.groupNotApproved' | transloco"></p-tag>
         }
       </div>
@@ -173,5 +173,8 @@
   </p>
 }
 <p-dialog [(visible)]="showTaskGroupDialog" [header]="getTaskGroup()?.name" [modal]="true">
+  <p-tag [severity]="convertStringToSeverity(('taskStatus.' + getTaskGroup()?.status + '_class') | transloco)">
+    {{ ('taskStatus.' + getTaskGroup()?.status) | transloco }}
+  </p-tag>
   <div [innerHtml]="currentLocale === 'de' ? getTaskGroup()?.descriptionDe : getTaskGroup()?.descriptionEn"></div>
 </p-dialog>

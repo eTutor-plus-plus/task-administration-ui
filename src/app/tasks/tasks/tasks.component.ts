@@ -18,6 +18,7 @@ import { DropdownModule } from 'primeng/dropdown';
 import { AuthService, Role } from '../../auth';
 import { TableOverviewComponent } from '../../layout';
 import { OrganizationalUnitDto, OrganizationalUnitService, StatusEnum, TaskDto, TaskGroupDto, TaskGroupService, TaskService } from '../../api';
+import { convertStringToSeverity } from '../helpers';
 
 /**
  * Page: Tasks Overview
@@ -183,6 +184,8 @@ export class TasksComponent extends TableOverviewComponent<TaskDto, TaskService>
     const user = this.authService.user;
     if (!user)
       return false;
+    if (entity.status !== 'APPROVED')
+      return false;
 
     if (user.isFullAdmin)
       return true;
@@ -261,9 +264,5 @@ export class TasksComponent extends TableOverviewComponent<TaskDto, TaskService>
     }
   }
 
-  convertStringToSeverity(severity: string): 'success' | 'secondary' | 'info' | 'warning' | 'danger' | 'contrast' | undefined {
-    if (severity === '')
-      return undefined;
-    return severity as any;
-  }
+  public readonly convertStringToSeverity = convertStringToSeverity;
 }

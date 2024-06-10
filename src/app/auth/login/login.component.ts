@@ -1,6 +1,6 @@
 import { AfterViewInit, Component, OnInit } from '@angular/core';
 import { HttpErrorResponse } from '@angular/common/http';
-import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 
 import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@ngneat/transloco';
@@ -57,8 +57,7 @@ export class LoginComponent implements OnInit, AfterViewInit {
               private readonly messageService: MessageService,
               private readonly authService: AuthService,
               private readonly healthService: SystemHealthService,
-              private readonly router: Router,
-              private readonly route: ActivatedRoute) {
+              private readonly router: Router) {
     this.loading = false;
     this.appAvailable = false;
     this.form = new FormGroup<LoginForm>({
@@ -84,6 +83,8 @@ export class LoginComponent implements OnInit, AfterViewInit {
         });
       })
       .finally(() => this.loading = false);
+    if (this.authService.isAuthenticated())
+      this.router.navigate(['/']);
   }
 
   /**
@@ -91,11 +92,18 @@ export class LoginComponent implements OnInit, AfterViewInit {
    */
   ngAfterViewInit(): void {
     this.messageService.clear('global');
-    if (this.route.snapshot.queryParamMap.has('expired') && this.route.snapshot.queryParamMap.get('expired') == 'true') {
+    const data = this.router.lastSuccessfulNavigation?.extras.state;
+    if (!data)
+      return;
+
+    if (data['expired'] === true) {
       setTimeout(() => this.messageService.add({
         severity: 'warn',
         detail: this.translationService.translate('auth.login.expired')
       }));
+    }
+    if (!!data['username']) {
+      this.form.patchValue({username: data['username']});
     }
   }
 

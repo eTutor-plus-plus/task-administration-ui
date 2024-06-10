@@ -2,6 +2,7 @@ import { ApplicationConfig, importProvidersFrom, InjectionToken, isDevMode, LOCA
 import { provideAnimations } from '@angular/platform-browser/animations';
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { provideRouter } from '@angular/router';
+import { provideServiceWorker } from '@angular/service-worker';
 
 import { provideTransloco } from '@ngneat/transloco';
 import { MonacoEditorModule } from 'ngx-monaco-editor-v2';
@@ -53,6 +54,10 @@ export const appConfig: ApplicationConfig = {
     })),
     {provide: API_URL, useValue: environment.apiUrl},
     {provide: MessageService},
-    {provide: LOCALE_ID, useValue: 'de-AT'}
+    {provide: LOCALE_ID, useValue: 'de-AT'},
+    provideServiceWorker('ngsw-worker.js', {
+      enabled: !isDevMode(),
+      registrationStrategy: 'registerWhenStable:30000'
+    })
   ]
 };

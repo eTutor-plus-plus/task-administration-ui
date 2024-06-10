@@ -1,5 +1,5 @@
 import { Inject, Injectable, OnDestroy } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { BehaviorSubject, firstValueFrom } from 'rxjs';
 import * as jose from 'jose';
@@ -12,7 +12,7 @@ import { AuthTokenModel, Role, RoleAssignment, ApplicationUser } from './models'
  */
 @Injectable({providedIn: 'root'})
 export class AuthService implements OnDestroy {
-  private static readonly STORAGE_KEY: string = 'dke-auth-token';
+  private static readonly STORAGE_KEY: string = '@dke-etutor/auth-token';
   private readonly userChanged$ = new BehaviorSubject<ApplicationUser | null>(null);
   private authToken: AuthTokenModel | null = null;
   private tokenExpirationDate?: number;
@@ -159,12 +159,21 @@ export class AuthService implements OnDestroy {
     this.authToken = token;
 
     this.tokenExpirationDate = claims.exp;
-    if (!this.tokenExpirationDate)
+    if (!this.tokenExpirationDate || !token.refresh_token)
       return;
 
-    const diff = this.tokenExpirationDate * 1000 - new Date().getTime() - 60000; // add 1 minute padding
-    console.debug('[AUTH] Refreshing token in ' + diff + ' milliseconds');
-    this.refreshSub = <any>setTimeout(async () => await this.refreshToken(), diff);
+    const diff = this.tokenExpirationDate * 1000 - new Date().getTime() - 60000;
+    if (diff > 0) {
+      console.debug('[AUTH] Refreshing token in ' + diff + ' milliseconds');
+      this.refreshSub = <any>setTimeout(async () => await this.refreshToken(), diff);
+    }
+  }
+
+  /**
+   * Returns whether a process that waits for the token to expire and then refreshes the token is active.
+   */
+  isRefreshSubscriptionActive(): boolean {
+    return this.refreshSub !== undefined;
   }
 
   /**
@@ -177,12 +186,14 @@ export class AuthService implements OnDestroy {
 
   /**
    * Refreshes the access token.
-   * @private
+   *
+   * Normally called automatically by token expiration timeout.
    */
-  private async refreshToken(): Promise<void> {
+  async refreshToken(): Promise<void> {
     if (!this.authToken)
       return;
 
+    this.stopRefreshToken();
     console.info('[AUTH] Refreshing token');
 
     try {

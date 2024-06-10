@@ -1,7 +1,7 @@
-import { HttpErrorResponse, HttpInterceptorFn } from '@angular/common/http';
+import { HttpErrorResponse, HttpEvent, HttpHandlerFn, HttpRequest } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { inject } from '@angular/core';
-import { tap } from 'rxjs';
+import { Observable, tap } from 'rxjs';
 
 import { AuthService } from './auth.service';
 
@@ -11,7 +11,7 @@ import { AuthService } from './auth.service';
  * @param req The request.
  * @param next The next interceptor.
  */
-export const unauthorizedInterceptor: HttpInterceptorFn = (req, next) => {
+export function unauthorizedInterceptor(req: HttpRequest<unknown>, next: HttpHandlerFn): Observable<HttpEvent<unknown>> {
   const router = inject(Router);
   const authService = inject(AuthService);
 
@@ -19,8 +19,8 @@ export const unauthorizedInterceptor: HttpInterceptorFn = (req, next) => {
     error: err => {
       if (err instanceof HttpErrorResponse && err.status === 401) {
         authService.logout();
-        router.navigateByUrl('/auth/login?expired=true');
+        router.navigateByUrl('/auth/login', {state: {expired: true}});
       }
     }
   }));
-};
+}

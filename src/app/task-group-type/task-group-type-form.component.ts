@@ -41,7 +41,7 @@ export abstract class TaskGroupTypeFormComponent<TForm extends { [K in keyof TFo
   }
 
   /**
-   * Sets the form.
+   * Sets the form group for the additional data.
    *
    * @param form The form group that can be used for the customized form.
    */
@@ -61,10 +61,12 @@ export abstract class TaskGroupTypeFormComponent<TForm extends { [K in keyof TFo
    */
   @Input({required: true}) set formData(data: unknown) {
     this._originalData = data;
-    if (this._originalData)
-      this.form.patchValue(this._originalData);
-    else
-      this.form.reset();
+    if (this.form) {
+      if (this._originalData)
+        this.form.patchValue(this._originalData);
+      else
+        this.form.reset();
+    }
     this.onOriginalDataChanged(data);
   }
 
@@ -94,7 +96,7 @@ export abstract class TaskGroupTypeFormComponent<TForm extends { [K in keyof TFo
   }
 
   /**
-   * Returns the parent form.
+   * Returns the parent form with the general task group data.
    * Can be used to modify values of the parent form.
    */
   get parentForm(): FormGroup<TaskGroupForm> | undefined {
@@ -102,7 +104,7 @@ export abstract class TaskGroupTypeFormComponent<TForm extends { [K in keyof TFo
   }
 
   /**
-   * Sets the parent form.
+   * Sets the parent form with the general task group data.
    *
    * @param value The parent form.
    */
