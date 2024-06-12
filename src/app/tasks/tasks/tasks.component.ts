@@ -88,7 +88,7 @@ export class TasksComponent extends TableOverviewComponent<TaskDto, TaskService>
               private readonly authService: AuthService,
               private readonly router: Router,
               private readonly route: ActivatedRoute) {
-    super(entityService, [{field: 'organizationalUnit.name', order: 1}, {field: 'taskType', order: 1}, {field: 'title', order: 1}], 'tasks.');
+    super(entityService, [{field: 'organizationalUnit.name', order: 1}, {field: 'taskType', order: 1}, {field: 'taskGroup.name', order: 1}], 'tasks.');
     this.organizationalUnits = [];
     this.taskGroups = [];
     this.types = [];
