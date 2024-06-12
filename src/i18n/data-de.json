@@ -84,6 +84,7 @@
       "update": "Die Änderungen der Aufgaben-App '{{name}}' wurden erfolgreich gespeichert."
     },
     "urlHint": "Konfigurieren Sie die Präfix-URLs nur, wenn die Aufgaben-App mehr als eine Aufgabenart unterstützt. Andernfalls lassen Sie die Felder leer.",
+    "reloadHint": "Nach einer Änderung müssen Benutzer ggf. den Browser-Tab schließen und die Seite danach erneut laden, damit die Änderung sichtbar wird.",
     "create": "Aufgaben-App erstellen",
     "edit": "Aufgaben-App bearbeiten"
   },

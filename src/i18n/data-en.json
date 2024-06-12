@@ -84,6 +84,7 @@
       "update": "The task app '{{name}}' was successfully updated."
     },
     "urlHint": "Only configure the prefix URLs if the task app supports more than one task type. Otherwise, leave the fields empty.",
+    "reloadHint": "After a change, users may have to close the browser tab and then reload the page so that the change is visible.",
     "create": "Create Task App",
     "edit": "Edit Task App"
   },
