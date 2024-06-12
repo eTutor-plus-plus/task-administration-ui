@@ -14,7 +14,7 @@
               <div *ngFor="let umlBlockAlt of itemsControlsAlt(i); let j = index" [formGroupName]="j">
                 <div class="grid formgrid p-fluid">
                   <div class="field col-11 mb-4">
-                    <ngx-monaco-editor formControlName="umlBlockItem" [options]="umlEditorOptions" style="height: 150px;"></ngx-monaco-editor>
+                    <ngx-monaco-editor formControlName="umlBlockAlt" [options]="umlEditorOptions" style="height: 150px;"></ngx-monaco-editor>
                   </div>
                   <div class="field col-1 mb-4">
                     <p-button icon="pi pi-trash" severity="danger" (onClick)="removeUmlBlockAlt(i, j)"></p-button>
