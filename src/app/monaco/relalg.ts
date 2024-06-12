@@ -17,16 +17,14 @@ export function registerRelationalAlgebraLanguage(): void {
       {open: '[', close: ']'},
       {open: '(', close: ')'},
       {open: '⊏', close: '⊐'},
-      {open: '\'', close: '\'', notIn: ['string']},
-      {open: '"', close: '"', notIn: ['string']}
+      {open: '\'', close: '\'', notIn: ['string']}
     ],
     surroundingPairs: [
       {open: '{', close: '}'},
       {open: '[', close: ']'},
       {open: '(', close: ')'},
       {open: '⊏', close: '⊐'},
-      {open: '\'', close: '\''},
-      {open: '"', close: '"'}
+      {open: '\'', close: '\''}
     ]
   });
   monaco.languages.setMonarchTokensProvider('relalg', {
@@ -72,8 +70,8 @@ export function registerRelationalAlgebraLanguage(): void {
         [/[{}()[\]⊏⊐]/, '@brackets'],
 
         // Strings
-        [/'([^'\\]|\\.)*$/, 'string.invalid'],  // single quote string
-        [/"/, 'string', '@string.double']
+        // [/'([^'\\]|\\.)*$/, 'string.invalid'],  // single quote string
+        [/'/, 'string', '@string.double']
       ],
 
       whitespace: [
