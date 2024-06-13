@@ -114,7 +114,8 @@
         "umlBlock": "Block {{id}}",
         "umlSolution": "Lösung",
         "umlAddBlock": "Block hinzufügen",
-        "umlAddAlternative": "Alternative hinzufügen"
+        "umlAddAlternative": "Alternative hinzufügen",
+        "fullComparison": "Vollständiger Vergleich?"
       }
     }
   }

@@ -112,7 +112,8 @@
         "umlBlock": "Block {{id}}",
         "umlSolution": "Solution",
         "umlAddBlock": "Add Block",
-        "umlAddAlternative": "Add Alternative"
+        "umlAddAlternative": "Add Alternative",
+        "fullComparison": "Fully Compare?"
       }
     }
   }

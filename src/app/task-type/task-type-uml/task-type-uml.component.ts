@@ -9,6 +9,7 @@ import { TaskTypeFormComponent } from '../task-type-form.component';
 import { editor } from 'monaco-editor';
 import { InputTextModule } from 'primeng/inputtext';
 import { NgForOf } from '@angular/common';
+import { CheckboxModule } from 'primeng/checkbox';
 
 
 @Component({
@@ -23,7 +24,8 @@ import { NgForOf } from '@angular/common';
     TranslocoPipe,
     TreeSelectModule,
     InputTextModule,
-    NgForOf
+    NgForOf,
+    CheckboxModule
   ],
   templateUrl: './task-type-uml.component.html',
   styleUrl: './task-type-uml.component.scss'
@@ -42,6 +44,7 @@ export class TaskTypeUmlComponent extends TaskTypeFormComponent<TaskTypeForm> {
 
   protected override initForm(): void {
     this.form.addControl('umlSolution', this.umlSolution);
+    this.form.addControl('completeComparison', new FormControl<boolean|null>(null));
   }
 
   get itemsControls() {
@@ -112,4 +115,5 @@ export class TaskTypeUmlComponent extends TaskTypeFormComponent<TaskTypeForm> {
 
 interface TaskTypeForm {
   umlSolution: FormArray<FormGroup<{ umlBlock: FormArray<FormGroup<{ umlBlockAlt: FormControl<string | null> }>> }>>;
+  completeComparison: FormControl<boolean|null>;
 }
