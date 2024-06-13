@@ -17,6 +17,7 @@ import { DialogService } from 'primeng/dynamicdialog';
 import { TagModule } from 'primeng/tag';
 import { BlockUIModule } from 'primeng/blockui';
 import { DialogModule } from 'primeng/dialog';
+import { CheckboxModule } from 'primeng/checkbox';
 
 import { AuditInformationComponent, EditFormComponent } from '../../../layout';
 import { ApplicationUser, AuthService, Role } from '../../../auth';
@@ -57,7 +58,8 @@ import { TaskAppTypeService } from '../../task-app-type.service';
     TreeSelectModule,
     TagModule,
     BlockUIModule,
-    DialogModule
+    DialogModule,
+    CheckboxModule
   ],
   providers: [DialogService],
   templateUrl: './task-form.component.html',
@@ -174,7 +176,8 @@ export class TaskFormComponent extends EditFormComponent<TaskDto, TaskService, T
       status: new FormControl<StatusEnum | null>('DRAFT', [Validators.required]),
       taskGroupId: new FormControl<number | null>(null, []),
       taskCategoryIds: new FormArray<FormControl<TreeNode | null>>([]),
-      additionalData: new FormGroup<any>({})
+      additionalData: new FormGroup<any>({}),
+      examTask: new FormControl<boolean | null>(false, [Validators.required])
     }), 'tasks.');
     this.readonly = false;
     this.supportsDescriptionGeneration = false;

@@ -99,7 +99,7 @@
         }
       </div>
 
-      <div class="field mb-4 col-12 md:col-4">
+      <div class="field mb-4 col-12 md:col-3">
         <label for="maxPoints" [transloco]="this.baseTranslationKey + 'fields.maxPoints'"></label>
         <p-inputNumber inputId="maxPoints" formControlName="maxPoints" [min]="0" [maxFractionDigits]="2"/>
         @if (form.controls.maxPoints.dirty || form.controls.maxPoints.touched) {
@@ -109,7 +109,7 @@
         }
       </div>
 
-      <div class="field mb-4 col-12 md:col-4">
+      <div class="field mb-4 col-12 md:col-3">
         <label for="difficulty" [transloco]="this.baseTranslationKey + 'fields.difficulty'"></label>
         <p-dropdown inputId="difficulty" formControlName="difficulty" [options]="difficulties" optionValue="value" optionDisabled="disabled"
                     optionLabel="text"/>
@@ -120,7 +120,7 @@
         }
       </div>
 
-      <div class="field mb-4 col-12 md:col-4">
+      <div class="field mb-4 col-12 md:col-3">
         <label for="status" [transloco]="this.baseTranslationKey + 'fields.status'"></label>
         <p-dropdown inputId="status" formControlName="status" [options]="statuses" optionValue="value" optionDisabled="disabled" optionLabel="text"/>
         @if (form.controls.status.dirty || form.controls.status.touched) {
@@ -132,6 +132,13 @@
           <p-tag severity="warning" styleClass="mt-1" [value]="'tasks.errors.groupNotApproved' | transloco"></p-tag>
         }
       </div>
+
+      @if (role !== 'TUTOR') {
+        <div class="field mb-4 col-12 md:col-3">
+          <label for="examTask" [transloco]="this.baseTranslationKey + 'fields.examTask'"></label>
+          <p-checkbox inputId="examTask" formControlName="examTask" class="block" [binary]="true"/>
+        </div>
+      }
     </div>
   </div>
 

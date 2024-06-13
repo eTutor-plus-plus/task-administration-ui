@@ -1,6 +1,6 @@
 {
   "organizationalUnits": {
-    "title": "Organizational Units",
+    "title": "Organizational Units / Courses",
     "fields": {
       "name": "Name"
     },
@@ -32,7 +32,7 @@
       "failedLoginCount": "Failed Login Count",
       "lockoutEnd": "End of Lockout",
       "activated": "Activation Date",
-      "organizationalUnit": "Organizational Unit",
+      "organizationalUnit": "Organizational Unit / Course",
       "role": "Role",
       "password": "Password"
     },
@@ -94,7 +94,7 @@
       "id": "ID",
       "name": "Name",
       "parentId": "Parent Category",
-      "organizationalUnitId": "Organizational Unit"
+      "organizationalUnitId": "Organizational Unit / Course"
     },
     "errors": {
       "moodleSync": "The task category is not synchronized with Moodle.",
@@ -121,7 +121,7 @@
       "descriptionEn": "Description English",
       "taskGroupType": "Task Type",
       "status": "Status",
-      "organizationalUnitId": "Organizational Unit",
+      "organizationalUnitId": "Organizational Unit / Course",
       "approvedBy": "Approved by",
       "approvedDate": "Approved at"
     },
@@ -150,14 +150,15 @@
       "descriptionEn": "Description English",
       "taskType": "Task Type",
       "status": "Status",
-      "organizationalUnitId": "Organizational Unit",
+      "organizationalUnitId": "Organizational Unit / Course",
       "approvedBy": "Approved by",
       "approvedDate": "Approved at",
       "difficulty": "Difficulty",
       "maxPoints": "Max. Points",
       "taskGroupId": "Task Group",
       "taskCategoryIds": "Task Categories",
-      "submitTest": "Test Task"
+      "submitTest": "Test Task",
+      "examTask": "Exam Task"
     },
     "errors": {
       "load": "The tasks could not be loaded.",
