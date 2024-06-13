@@ -47,21 +47,34 @@ export class TaskTypeUmlComponent extends TaskTypeFormComponent<TaskTypeForm> {
   get itemsControls() {
     return this.umlSolution.controls as FormGroup[];
   }
+
   addUmlBlock() {
-    this.umlSolution.push(new FormGroup({
-      umlBlock: new FormArray([new FormGroup({
-        umlBlockAlt: new FormControl<string | null>(null)
-      })])
-    }));
+    this.umlSolution.push(new FormGroup({umlBlock: new FormArray([new FormGroup({umlBlockAlt: new FormControl<string | null>(null)})])}));
     this.changeDetectorRef.detectChanges();
   }
+
   itemsControlsAlt(index: number) {
     return (this.umlSolution.at(index).get('umlBlock') as FormArray).controls as FormGroup[];
   }
 
-  addUmlBlockAlt(index: number) {
-    (this.umlSolution.at(index).get('umlBlock') as FormArray).push(new FormGroup({
-      umlBlockAlt: new FormControl<string | null>(null)
+  addUmlBlockAlt(index: number, value?: any) {
+    if (value) {
+      console.log(value);
+      (this.umlSolution.at(index).get('umlBlock') as FormArray).push(new FormGroup({
+        umlBlockAlt: new FormControl<string | null>(value.umlBlockAlt)
+      }));
+      return;
+    } else {
+      (this.umlSolution.at(index).get('umlBlock') as FormArray).push(new FormGroup({
+        umlBlockAlt: new FormControl<string | null>(null)
+      }));
+    }
+    this.changeDetectorRef.detectChanges();
+  }
+
+  addUmlBlockWithoutAlt() {
+    this.umlSolution.push(new FormGroup({
+      umlBlock: new FormArray<FormGroup<{ umlBlockAlt: FormControl<string | null>; }>>([])
     }));
     this.changeDetectorRef.detectChanges();
   }
@@ -75,9 +88,28 @@ export class TaskTypeUmlComponent extends TaskTypeFormComponent<TaskTypeForm> {
   }
 
 
+  protected override onOriginalDataChanged(originalData: unknown | undefined): void {
+    if (!this.form || !originalData) {
+      console.log('Form is not initialized or originalData is undefined');
+      return;
+    }
+
+    const data = originalData as { umlSolution: { umlBlock: string[] }[] };
+
+    this.umlSolution.clear();
+
+    for (const [index, item] of data.umlSolution.entries()) {
+      this.addUmlBlockWithoutAlt();
+
+      for (const block of item.umlBlock) {
+        this.addUmlBlockAlt(index, block);
+      }
+    }
+  }
+
+
 }
 
 interface TaskTypeForm {
-  umlSolution: FormArray<FormGroup<{umlBlock: FormArray<FormGroup<{umlBlockAlt: FormControl<string|null>}>>}>>;
-
+  umlSolution: FormArray<FormGroup<{ umlBlock: FormArray<FormGroup<{ umlBlockAlt: FormControl<string | null> }>> }>>;
 }
