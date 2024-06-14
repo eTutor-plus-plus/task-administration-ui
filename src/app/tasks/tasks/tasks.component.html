@@ -28,7 +28,7 @@
       }
       <th pSortableColumn="taskGroup.name" class="col-taskGroupId">
         {{ baseTranslationKey + 'fields.taskGroupId' | transloco }}
-        <p-sortIcon field="taskGroupId"/>
+        <p-sortIcon field="taskGroup.name"/>
       </th>
       <th pSortableColumn="taskType" class="col-taskType">
         {{ baseTranslationKey + 'fields.taskType' | transloco }}
@@ -101,8 +101,10 @@
       </td>
       <td>
         <span class="p-buttonset">
-          <p-button (onClick)="edit(entity)" icon="pi pi-pencil" [pTooltip]="'common.edit' | transloco" tooltipPosition="top" [showDelay]="1000"
-                    severity="warning" size="small"/>
+          @if (canEdit(entity)) {
+            <p-button (onClick)="edit(entity)" icon="pi pi-pencil" [pTooltip]="'common.edit' | transloco" tooltipPosition="top" [showDelay]="1000"
+                      severity="warning" size="small"/>
+          }
           @if (canDelete(entity)) {
             <p-button (onClick)="delete(entity, $event)" icon="pi pi-trash" [pTooltip]="'common.delete' | transloco" tooltipPosition="top" [showDelay]="1000"
                       severity="danger" size="small"/>

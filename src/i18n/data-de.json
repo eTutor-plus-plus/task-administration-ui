@@ -1,6 +1,6 @@
 {
   "organizationalUnits": {
-    "title": "Organisationseinheiten",
+    "title": "Organisationseinheiten / LVAs",
     "fields": {
       "name": "Name"
     },
@@ -32,7 +32,7 @@
       "failedLoginCount": "Anzahl fehlgeschlagener Anmeldeversuche",
       "lockoutEnd": "Ende der Sperre",
       "activated": "Aktivierungsdatum",
-      "organizationalUnit": "Organisationseinheit",
+      "organizationalUnit": "Organisationseinheit / LVA",
       "role": "Rolle",
       "password": "Passwort"
     },
@@ -84,6 +84,7 @@
       "update": "Die Änderungen der Aufgaben-App '{{name}}' wurden erfolgreich gespeichert."
     },
     "urlHint": "Konfigurieren Sie die Präfix-URLs nur, wenn die Aufgaben-App mehr als eine Aufgabenart unterstützt. Andernfalls lassen Sie die Felder leer.",
+    "reloadHint": "Nach einer Änderung müssen Benutzer ggf. den Browser-Tab schließen und die Seite danach erneut laden, damit die Änderung sichtbar wird.",
     "create": "Aufgaben-App erstellen",
     "edit": "Aufgaben-App bearbeiten"
   },
@@ -93,7 +94,7 @@
       "id": "ID",
       "name": "Name",
       "parentId": "Übergeordnete Kategorie",
-      "organizationalUnitId": "Organisationseinheit"
+      "organizationalUnitId": "Organisationseinheit / LVA"
     },
     "errors": {
       "moodleSync": "Die Aufgaben-Kategorie ist nicht mit Moodle synchronisiert.",
@@ -120,7 +121,7 @@
       "descriptionEn": "Beschreibung Englisch",
       "taskGroupType": "Aufgabenart",
       "status": "Status",
-      "organizationalUnitId": "Organisationseinheit",
+      "organizationalUnitId": "Organisationseinheit / LVA",
       "approvedBy": "Genehmigt von",
       "approvedDate": "Genehmigt"
     },
@@ -149,13 +150,14 @@
       "descriptionEn": "Beschreibung Englisch",
       "taskType": "Aufgabenart",
       "status": "Status",
-      "organizationalUnitId": "Organisationseinheit",
+      "organizationalUnitId": "Organisationseinheit / LVA",
       "approvedBy": "Genehmigt von",
       "approvedDate": "Genehmigt",
       "difficulty": "Schwierigkeit",
       "maxPoints": "Max. Punkte",
       "taskGroupId": "Aufgabengruppe",
-      "taskCategoryIds": "Aufgabenkategorien"
+      "taskCategoryIds": "Aufgabenkategorien",
+      "examTask": "Prüfungsaufgabe"
     },
     "errors": {
       "load": "Die Aufgaben konnten nicht geladen werden.",

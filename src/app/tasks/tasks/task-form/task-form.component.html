@@ -99,7 +99,7 @@
         }
       </div>
 
-      <div class="field mb-4 col-12 md:col-4">
+      <div class="field mb-4 col-12 md:col-3">
         <label for="maxPoints" [transloco]="this.baseTranslationKey + 'fields.maxPoints'"></label>
         <p-inputNumber inputId="maxPoints" formControlName="maxPoints" [min]="0" [maxFractionDigits]="2"/>
         @if (form.controls.maxPoints.dirty || form.controls.maxPoints.touched) {
@@ -109,7 +109,7 @@
         }
       </div>
 
-      <div class="field mb-4 col-12 md:col-4">
+      <div class="field mb-4 col-12 md:col-3">
         <label for="difficulty" [transloco]="this.baseTranslationKey + 'fields.difficulty'"></label>
         <p-dropdown inputId="difficulty" formControlName="difficulty" [options]="difficulties" optionValue="value" optionDisabled="disabled"
                     optionLabel="text"/>
@@ -120,7 +120,7 @@
         }
       </div>
 
-      <div class="field mb-4 col-12 md:col-4">
+      <div class="field mb-4 col-12 md:col-3">
         <label for="status" [transloco]="this.baseTranslationKey + 'fields.status'"></label>
         <p-dropdown inputId="status" formControlName="status" [options]="statuses" optionValue="value" optionDisabled="disabled" optionLabel="text"/>
         @if (form.controls.status.dirty || form.controls.status.touched) {
@@ -132,6 +132,13 @@
           <p-tag severity="warning" styleClass="mt-1" [value]="'tasks.errors.groupNotApproved' | transloco"></p-tag>
         }
       </div>
+
+      @if (role !== 'TUTOR') {
+        <div class="field mb-4 col-12 md:col-3">
+          <label for="examTask" [transloco]="this.baseTranslationKey + 'fields.examTask'"></label>
+          <p-checkbox inputId="examTask" formControlName="examTask" class="block" [binary]="true"/>
+        </div>
+      }
     </div>
   </div>
 
@@ -140,30 +147,32 @@
       *ngComponentOutlet="componentForm; inputs: {formGroup: form.controls.additionalData, formData: additionalData, parentForm: form, task: originalEntity}"/>
   }
 
-  <div class="surface-card p-4 shadow-2 border-round p-fluid mb-4">
-    <div class="flex justify-content-between mb-4">
-      <p class="font-bold" [transloco]="baseTranslationKey + 'fields.taskCategoryIds'"></p>
-      @if (role !== 'TUTOR' || !originalEntity || originalEntity.status !== 'APPROVED') {
-        <p-button [label]="this.baseTranslationKey + 'addTaskCategory' | transloco" (onClick)="addTaskCategory()" severity="help" [disabled]="loading"
-                  class="w-auto" size="small"/>
-      }
-    </div>
+  @if (originalEntity) {
+    <div class="surface-card p-4 shadow-2 border-round p-fluid mb-4">
+      <div class="flex justify-content-between mb-4">
+        <p class="font-bold" [transloco]="baseTranslationKey + 'fields.taskCategoryIds'"></p>
+        @if (role !== 'TUTOR' || !originalEntity || originalEntity.status !== 'APPROVED') {
+          <p-button [label]="this.baseTranslationKey + 'addTaskCategory' | transloco" (onClick)="addTaskCategory()" severity="help" [disabled]="loading"
+                    class="w-auto" size="small"/>
+        }
+      </div>
 
-    <div formArrayName="taskCategoryIds">
-      @for (f of form.controls.taskCategoryIds.controls; track $index) {
-        <div class="grid formgrid">
-          <div class="field col-11">
-            <p-treeSelect [formControl]="f" containerStyleClass="w-full" appendTo="body" [options]="taskCategories" [filter]="true"/>
+      <div formArrayName="taskCategoryIds">
+        @for (f of form.controls.taskCategoryIds.controls; track $index) {
+          <div class="grid formgrid">
+            <div class="field col-11">
+              <p-treeSelect [formControl]="f" containerStyleClass="w-full" appendTo="body" [options]="taskCategories" [filter]="true"/>
+            </div>
+            <div class="field col-1">
+              @if (role !== 'TUTOR' || !originalEntity || originalEntity.status !== 'APPROVED') {
+                <p-button icon="pi pi-trash" severity="danger" (onClick)="removeTaskCategory($index)"/>
+              }
+            </div>
           </div>
-          <div class="field col-1">
-            @if (role !== 'TUTOR' || !originalEntity || originalEntity.status !== 'APPROVED') {
-              <p-button icon="pi pi-trash" severity="danger" (onClick)="removeTaskCategory($index)"/>
-            }
-          </div>
-        </div>
-      }
+        }
+      </div>
     </div>
-  </div>
+  }
 </form>
 
 <dke-audit-information [data]="originalEntity"/>

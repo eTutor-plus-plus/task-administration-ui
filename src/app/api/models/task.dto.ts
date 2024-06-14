@@ -67,9 +67,13 @@ export interface TaskDto extends Audited {
    */
   approvedDate?: string;
 
-
   /**
    * Whether the task is synced with moodle.
    */
   moodleSynced: boolean;
+
+  /**
+   * Whether the task is an exam task.
+   */
+  examTask: boolean;
 }

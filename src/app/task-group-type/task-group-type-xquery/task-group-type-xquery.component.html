@@ -2,7 +2,7 @@
   <div class="grid formgrid p-fluid">
     <div class="field mb-4 col-12">
       <label for="diagnoseDocument" transloco="taskGroupTypes.xquery.fields.diagnoseDocument"></label>
-      <ngx-monaco-editor id="diagnoseDocument" formControlName="diagnoseDocument" [options]="editorOptions"/>
+      <ngx-monaco-editor id="diagnoseDocument" formControlName="diagnoseDocument" [options]="editorOptions" style="height: 500px;"/>
       @if (form.controls.diagnoseDocument.dirty || form.controls.diagnoseDocument.touched) {
         <small class="block mt-1 p-error">
           {{ getError(form.controls.diagnoseDocument, 'taskGroupTypes.xquery.fields.diagnoseDocument') }}
@@ -16,7 +16,7 @@
     </div>
     <div class="field mb-4 col-12">
       <label for="submitDocument" transloco="taskGroupTypes.xquery.fields.submitDocument"></label>
-      <ngx-monaco-editor id="submitDocument" formControlName="submitDocument" [options]="editorOptions"/>
+      <ngx-monaco-editor id="submitDocument" formControlName="submitDocument" [options]="editorOptions" style="height: 500px;"/>
       @if (form.controls.submitDocument.dirty || form.controls.submitDocument.touched) {
         <small class="block mt-1 p-error">
           {{ getError(form.controls.submitDocument, 'taskGroupTypes.xquery.fields.submitDocument') }}

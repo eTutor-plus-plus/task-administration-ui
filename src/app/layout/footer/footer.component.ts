@@ -53,7 +53,12 @@ export class FooterComponent implements OnInit, OnDestroy {
               private readonly healthService: SystemHealthService) {
     this.impressUrl = environment.impressUrl + '?lang=' + translationService.getActiveLang();
     this.version = `${environment.version}#${environment.git.shortSha}`;
-    this.versionDate = DateTime.fromISO(environment.git.commitDate).toFormat('dd.MM.yyyy HH:mm:ss');
+
+    const date = DateTime.fromISO(environment.git.commitDate);
+    if (date.isValid)
+      this.versionDate = date.toFormat('dd.MM.yyyy HH:mm:ss');
+    else
+      this.versionDate = environment.git.branch;
   }
 
   /**
@@ -68,8 +73,13 @@ export class FooterComponent implements OnInit, OnDestroy {
         if (info.git)
           this.serverVersion += '#' + info.git?.commit.id['describe-short'];
       }
-      if (info.git)
-        this.serverVersionDate = info.git?.commit.time ? DateTime.fromISO(info.git.commit.time).toFormat('dd.MM.yyyy HH:mm:ss') : '';
+      if (info.git) {
+        const date = DateTime.fromISO(info.git?.commit?.time ?? '');
+        if (date.isValid)
+          this.serverVersionDate = DateTime.fromISO(info.git.commit.time).toFormat('dd.MM.yyyy HH:mm:ss');
+        else
+          this.serverVersionDate = info.git.branch;
+      }
     });
   }
 
