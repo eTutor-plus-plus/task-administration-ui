@@ -64,7 +64,7 @@
         </p-columnFilter>
       </th>
       <th>
-        <p-columnFilter field="taskGroupType" matchMode="equals" [showMenu]="false" [showClearButton]="true">
+        <p-columnFilter field="taskType" matchMode="equals" [showMenu]="false" [showClearButton]="true">
           <ng-template pTemplate="filter" let-value let-filter="filterCallback">
             <p-dropdown [options]="types" optionValue="value" optionLabel="text" [ngModel]="value" appendTo="body" [showClear]="false"
                         (onChange)="filter($event.value)"/>
