@@ -110,7 +110,8 @@
       "update": "Die Änderungen der Aufgaben-Kategorie '{{name}}' wurden erfolgreich gespeichert."
     },
     "create": "Aufgaben-Kategorie erstellen",
-    "edit": "Aufgaben-Kategorie bearbeiten"
+    "edit": "Aufgaben-Kategorie bearbeiten",
+    "moodleHint": "Hinweis: Die Moodle-Synchronisierung funktioniert nur, wenn im Moodle in der entsprechenden Kurs-Kategorie zumindest ein Kurs existiert und in diesem Kurs zumindest einmal die Fragensammlung aufgerufen wurde."
   },
   "taskGroups": {
     "title": "Aufgaben-Gruppen",
