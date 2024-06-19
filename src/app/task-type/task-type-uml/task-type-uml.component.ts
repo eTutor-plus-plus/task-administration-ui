@@ -36,7 +36,7 @@ import { GradingStrategy } from '../task-type-xquery/grading-strategy.enum';
 export class TaskTypeUmlComponent extends TaskTypeFormComponent<TaskTypeForm> {
 
   readonly umlEditorOptions: editor.IStandaloneEditorConstructionOptions = {
-    language: 'sql'
+    language: 'plantuml'
   };
 
   umlSolution = new FormArray<FormGroup<{ umlBlock: FormArray<FormGroup<{ umlBlockAlt: FormControl<string | null>; }>>; }>>([]);
