@@ -71,7 +71,7 @@
 
       <div class="field mb-4 col-12 md:col-6">
         <label for="descriptionDe" [transloco]="this.baseTranslationKey + 'fields.descriptionDe'"></label>
-        <p-editor formControlName="descriptionDe" id="descriptionDe" [style]="{ height: '200px' }" [modules]="quillModules"/>
+        <dke-editor formControlName="descriptionDe" id="descriptionDe" [height]="250" />
         @if (form.controls.descriptionDe.dirty || form.controls.descriptionDe.touched) {
           <small class="block mt-1 p-error">
             {{ getError(form.controls.descriptionDe, this.baseTranslationKey + 'fields.descriptionDe') }}
@@ -86,7 +86,7 @@
 
       <div class="field mb-4 col-12 md:col-6">
         <label for="descriptionEn" [transloco]="this.baseTranslationKey + 'fields.descriptionEn'"></label>
-        <p-editor formControlName="descriptionEn" id="descriptionEn" [style]="{ height: '200px' }" [modules]="quillModules"/>
+        <dke-editor formControlName="descriptionEn" id="descriptionEn" [height]="250" />
         @if (form.controls.descriptionEn.dirty || form.controls.descriptionEn.touched) {
           <small class="block mt-1 p-error">
             {{ getError(form.controls.descriptionEn, this.baseTranslationKey + 'fields.descriptionEn') }}

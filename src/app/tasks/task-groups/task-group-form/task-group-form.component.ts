@@ -9,10 +9,9 @@ import { distinctUntilChanged, Subject, takeUntil } from 'rxjs';
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
 import { DropdownModule } from 'primeng/dropdown';
-import { EditorModule } from 'primeng/editor';
 import { BlockUIModule } from 'primeng/blockui';
 
-import { AuditInformationComponent, EditFormComponent } from '../../../layout';
+import { AuditInformationComponent, DkeEditorComponent, EditFormComponent } from '../../../layout';
 import { AuthService, Role } from '../../../auth';
 import { OrganizationalUnitDto, OrganizationalUnitService, StatusEnum, TaskGroupDto, TaskGroupService } from '../../../api';
 import { TaskGroupForm, TaskGroupTypeRegistry } from '../../../task-group-type';
@@ -32,27 +31,16 @@ import { TaskAppTypeService } from '../../task-app-type.service';
     ReactiveFormsModule,
     InputTextModule,
     DropdownModule,
-    EditorModule,
     AuditInformationComponent,
     NgComponentOutlet,
     DatePipe,
-    BlockUIModule
+    BlockUIModule,
+    DkeEditorComponent
   ],
   templateUrl: './task-group-form.component.html',
   styleUrl: './task-group-form.component.scss'
 })
 export class TaskGroupFormComponent extends EditFormComponent<TaskGroupDto, TaskGroupService, TaskGroupForm> implements OnInit, OnDestroy {
-
-  /**
-   * The quill module configuration.
-   */
-  readonly quillModules = {
-    htmlEditButton: {
-      okText: this.translationService.translate('common.ok'),
-      cancelText: this.translationService.translate('common.cancel'),
-      msg: this.translationService.translate('quill-html-edit-hint')
-    }
-  };
 
   /**
    * Whether the form should be readonly.

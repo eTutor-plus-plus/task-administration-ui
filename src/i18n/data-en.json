@@ -110,7 +110,8 @@
       "update": "The task category '{{name}}' was successfully updated."
     },
     "create": "Create Task Category",
-    "edit": "Edit Task Category"
+    "edit": "Edit Task Category",
+    "moodleHint": "Note: Moodle synchronization only works if at least one course exists in the corresponding course category in Moodle and the question bank has been called up at least once in this course."
   },
   "taskGroups": {
     "title": "Task Groups",

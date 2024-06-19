@@ -9,7 +9,6 @@ import { distinctUntilChanged, Subject, takeUntil } from 'rxjs';
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
 import { DropdownChangeEvent, DropdownModule } from 'primeng/dropdown';
-import { EditorModule } from 'primeng/editor';
 import { TreeSelectModule } from 'primeng/treeselect';
 import { TreeNode } from 'primeng/api';
 import { InputNumberModule } from 'primeng/inputnumber';
@@ -19,7 +18,7 @@ import { BlockUIModule } from 'primeng/blockui';
 import { DialogModule } from 'primeng/dialog';
 import { CheckboxModule } from 'primeng/checkbox';
 
-import { AuditInformationComponent, EditFormComponent } from '../../../layout';
+import { AuditInformationComponent, DkeEditorComponent, EditFormComponent } from '../../../layout';
 import { ApplicationUser, AuthService, Role } from '../../../auth';
 import {
   OrganizationalUnitDto,
@@ -50,7 +49,6 @@ import { TaskAppTypeService } from '../../task-app-type.service';
     ReactiveFormsModule,
     InputTextModule,
     DropdownModule,
-    EditorModule,
     AuditInformationComponent,
     NgComponentOutlet,
     DatePipe,
@@ -59,23 +57,14 @@ import { TaskAppTypeService } from '../../task-app-type.service';
     TagModule,
     BlockUIModule,
     DialogModule,
-    CheckboxModule
+    CheckboxModule,
+    DkeEditorComponent
   ],
   providers: [DialogService],
   templateUrl: './task-form.component.html',
   styleUrl: './task-form.component.scss'
 })
 export class TaskFormComponent extends EditFormComponent<TaskDto, TaskService, TaskForm> implements OnInit, OnDestroy {
-  /**
-   * The quill module configuration.
-   */
-  readonly quillModules = {
-    htmlEditButton: {
-      okText: this.translationService.translate('common.ok'),
-      cancelText: this.translationService.translate('common.cancel'),
-      msg: this.translationService.translate('quill-html-edit-hint')
-    }
-  };
 
   /**
    * Whether the form should be readonly.
