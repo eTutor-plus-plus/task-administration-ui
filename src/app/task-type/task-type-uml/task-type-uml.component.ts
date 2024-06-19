@@ -10,6 +10,9 @@ import { editor } from 'monaco-editor';
 import { InputTextModule } from 'primeng/inputtext';
 import { NgForOf } from '@angular/common';
 import { CheckboxModule } from 'primeng/checkbox';
+import { data, value } from 'happy-dom/lib/PropertySymbol';
+import { GradingStrategy } from '../task-type-xquery/grading-strategy.enum';
+
 
 
 @Component({
@@ -45,6 +48,23 @@ export class TaskTypeUmlComponent extends TaskTypeFormComponent<TaskTypeForm> {
   protected override initForm(): void {
     this.form.addControl('umlSolution', this.umlSolution);
     this.form.addControl('completeComparison', new FormControl<boolean|null>(null));
+    this.form.addControl('classPoints', new FormControl<number|null>(null));
+    this.form.addControl('attributePoints', new FormControl<number|null>(null));
+    this.form.addControl('relationshipPoints', new FormControl<number|null>(null));
+    this.form.addControl('associationPoints', new FormControl<number|null>(null));
+    this.form.addControl('constraintPoints', new FormControl<number|null>(null));
+  }
+
+
+  protected override getFormDefaultValues(): Partial<{ [K in keyof TaskTypeForm]: any }> | undefined {
+    return {
+      classPoints: 0,
+      relationshipPoints: 0,
+      attributePoints: 0,
+      associationPoints: 0,
+      constraintPoints: 0,
+      completeComparison: false
+    };
   }
 
   get itemsControls() {
@@ -116,4 +136,9 @@ export class TaskTypeUmlComponent extends TaskTypeFormComponent<TaskTypeForm> {
 interface TaskTypeForm {
   umlSolution: FormArray<FormGroup<{ umlBlock: FormArray<FormGroup<{ umlBlockAlt: FormControl<string | null> }>> }>>;
   completeComparison: FormControl<boolean|null>;
+  classPoints: FormControl<number|null>;
+  attributePoints: FormControl<number|null>;
+  relationshipPoints: FormControl<number|null>;
+  associationPoints: FormControl<number|null>;
+  constraintPoints: FormControl<number|null>;
 }

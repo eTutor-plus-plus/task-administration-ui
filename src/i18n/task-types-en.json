@@ -113,7 +113,12 @@
         "umlSolution": "Solution",
         "umlAddBlock": "Add Block",
         "umlAddAlternative": "Add Alternative",
-        "fullComparison": "Fully Compare?"
+        "fullComparison": "Fully Compare?",
+        "classPoints": "Points per correct Class",
+        "attributePoints": "Points per correct Attribute",
+        "relationshipPoints": "Points per correct Relation",
+        "associationPoints": "Points per correct Association",
+        "constraintPoints": "Points per correct Constraint"
       }
     }
   }
