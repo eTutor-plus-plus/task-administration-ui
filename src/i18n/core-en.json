@@ -134,7 +134,6 @@
     "created": "Created",
     "modified": "Modified"
   },
-  "quill-html-edit-hint": "Edit the HTML code here. If you click on \"OK\", the content of the editor will be replaced. Insert at least one space after clicking on \"OK\", otherwise your change will not be recognized correctly.",
   "404": {
     "go-back": "Go Back",
     "title": "Page Not Found",
@@ -512,5 +511,28 @@
       "rotateRight": "Rotate Right",
       "rotateLeft": "Rotate Left"
     }
+  },
+  "editor": {
+    "link": "Link",
+    "image": "Image",
+    "heading1": "Heading 1",
+    "heading2": "Heading 2",
+    "paragraph": "Paragraph",
+    "codeBlock": "Code-Block",
+    "bold": "Bold",
+    "italic": "Italic",
+    "underline": "Underline",
+    "code": "Code",
+    "ul": "Bullet List",
+    "ol": "Numbered List",
+    "alignLeft": "Align left",
+    "alignRight": "Align right",
+    "alignCenter": "Align center",
+    "alignJustify": "Align justify",
+    "addTable": "Create table",
+    "addColumn": "Add column",
+    "addRow": "Add row",
+    "deleteRow": "Delete row",
+    "html": "Toggle HTML-Code"
   }
 }

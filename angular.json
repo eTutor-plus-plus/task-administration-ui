@@ -42,10 +42,7 @@
               "src/styles.scss"
             ],
             "scripts": [],
-            "allowedCommonJsDependencies": [
-              "quill",
-              "quill-html-edit-button"
-            ],
+            "allowedCommonJsDependencies": [],
             "serviceWorker": "ngsw-config.json",
             "browser": "src/main.ts"
           },

@@ -1,0 +1,74 @@
+<div class="toolbar">
+  <div class="group" [ngClass]="{disabled: showMonaco || isDisabled}">
+    <button type="button" (click)="heading1()" [title]="'editor.heading1' | transloco"
+            [ngClass]="{'active': editor.isActive('heading', {level: 1})}"><span class="text">H1</span></button>
+    <button type="button" (click)="heading2()" [title]="'editor.heading2' | transloco"
+            [ngClass]="{'active': editor.isActive('heading', {level: 2})}"><span class="text">H2</span></button>
+    <button type="button" (click)="paragraph()" [title]="'editor.paragraph' | transloco"
+            [ngClass]="{'active': editor.isActive('paragraph')}"><i class="fa-solid fa-paragraph"></i></button>
+    <button type="button" (click)="code()" [title]="'editor.codeBlock' | transloco"
+            [ngClass]="{'active': editor.isActive('codeBlock')}"><i class="fa-solid fa-file-code"></i></button>
+  </div>
+  <div class="group" [ngClass]="{disabled: showMonaco || isDisabled}">
+    <button type="button" (click)="formatBold()" [title]="'editor.bold' | transloco"
+            [ngClass]="{'active': editor.isActive('bold')}"><i class="fa-solid fa-bold"></i></button>
+    <button type="button" (click)="formatItalic()" [title]="'editor.italic' | transloco"
+            [ngClass]="{'active': editor.isActive('italic')}"><i class="fa-solid fa-italic"></i></button>
+    <button type="button" (click)="formatUnderline()" [title]="'editor.underline' | transloco"
+            [ngClass]="{'active': editor.isActive('underline')}"><i class="fa-solid fa-underline"></i></button>
+    <button type="button" (click)="formatCode()" [title]="'editor.code' | transloco"
+            [ngClass]="{'active': editor.isActive('code')}"><i class="fa-solid fa-code"></i></button>
+  </div>
+  <div class="group" [ngClass]="{disabled: showMonaco || isDisabled}">
+    <button type="button" (click)="unorderedList()" [title]="'editor.ul' | transloco"
+            [ngClass]="{'active': editor.isActive('bulletList')}"><i class="fa-solid fa-list-ul"></i></button>
+    <button type="button" (click)="orderedList()" [title]="'editor.ol' | transloco"
+            [ngClass]="{'active': editor.isActive('orderedList')}"><i class="fa-solid fa-list-ol"></i></button>
+  </div>
+  <div class="group" [ngClass]="{disabled: showMonaco || isDisabled}">
+    <button type="button" (click)="align('left')" [title]="'editor.alignLeft' | transloco"
+            [ngClass]="{'active': editor.isActive({textAlign: 'left'})}"><i class="fa-solid fa-align-left"></i></button>
+    <button type="button" (click)="align('center')" [title]="'editor.alignCenter' | transloco"
+            [ngClass]="{'active': editor.isActive({textAlign: 'center'})}"><i class="fa-solid fa-align-center"></i>
+    </button>
+    <button type="button" (click)="align('right')" [title]="'editor.alignRight' | transloco"
+            [ngClass]="{'active': editor.isActive({textAlign: 'right'})}"><i class="fa-solid fa-align-right"></i>
+    </button>
+    <button type="button" (click)="align('justify')" [title]="'editor.alignJustify' | transloco"
+            [ngClass]="{'active': editor.isActive({textAlign: 'justify'})}"><i class="fa-solid fa-align-justify"></i>
+    </button>
+  </div>
+  <div class="group" [ngClass]="{disabled: showMonaco || isDisabled}">
+    <button type="button" (click)="insertTable()" [title]="'editor.addTable' | transloco"><i class="fa-solid fa-table"></i></button>
+    <button type="button" (click)="addColumn()" [title]="'editor.addColumn' | transloco"
+            [disabled]="!editor.isActive('table')"><i class="fa-solid fa-table-columns"></i></button>
+    <button type="button" (click)="addRow()" [title]="'editor.addRow' | transloco"
+            [disabled]="!editor.isActive('table')"><i class="fa-solid fa-table-cells-large"></i></button>
+    <button type="button" (click)="removeRow()" [title]="'editor.deleteRow' | transloco"
+            [disabled]="!editor.isActive('table')"><i class="fa-solid fa-delete-left"></i></button>
+  </div>
+  <div class="group" [ngClass]="{disabled: showMonaco || isDisabled}">
+    <button type="button" (click)="editLink($event)" [title]="'editor.link' | transloco"><i class="fa-solid fa-link"></i></button>
+    <button type="button" (click)="addImage()" [title]="'editor.image' | transloco"><i class="fa-solid fa-image"></i></button>
+  </div>
+  <div class="group">
+    <button type="button" (click)="toggleMonaco()" [title]="'editor.html' | transloco">
+      <i class="fa-solid" [ngClass]="{'fa-toggle-on': !showMonaco, 'fa-toggle-off': showMonaco}"></i>
+    </button>
+  </div>
+</div>
+
+<ngx-monaco-editor [options]="monacoOptions" [(ngModel)]="value" (onInit)="onMonacoInit($event)" (ngModelChange)="onModelChanged()"
+                   [ngStyle]="{height: this.height + 'px', display: showMonaco ? 'block' : 'none'}" [disabled]="isDisabled"/>
+
+<div class="container" [ngStyle]="{height: height + 'px', display: showMonaco ? 'none' : 'block'}" (click)="focusEditor()">
+  <tiptap-editor [editor]="editor" outputFormat="html" [(ngModel)]="value" [disabled]="isDisabled"/>
+</div>
+
+<p-overlayPanel #linkPanel>
+  <span class="font-medium text-900 block mb-2" transloco="editor.link"></span>
+  <input pInputText type="url" class="w-25rem" #linkInput/>
+  <button pButton transloco="common.ok" (click)="setLink(linkInput.value)"></button>
+</p-overlayPanel>
+
+<input type="file" #fileInput style="display: none" accept="image/*">
