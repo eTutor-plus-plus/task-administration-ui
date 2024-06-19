@@ -118,7 +118,7 @@
         "fullComparison": "Vollständiger Vergleich?",
         "classPoints": "Punkte pro richtiger Klasse",
         "attributePoints": "Punkte pro richtigem Attribut",
-        "relationshipPoints": "Punkte pro richtiger Methode",
+        "relationshipPoints": "Punkte pro richtiger Beziehung",
         "associationPoints": "Punkte pro richtiger Assoziation",
         "constraintPoints": "Punkte pro richtiger Constraint"
 
