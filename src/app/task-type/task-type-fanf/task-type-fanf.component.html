@@ -145,11 +145,11 @@
               </div>
 
               <div class="field mb-4 col-12 md:col-6">
-                <label for="minimalCoverPenaltyPerExtraneousDependency" transloco="taskTypes.fanf.fields.minimalCoverPenaltyPerExtraneousDependency"></label>
-                <p-inputNumber inputId="minimalCoverPenaltyPerExtraneousDependency" formControlName="minimalCoverPenaltyPerExtraneousDependency" mode="decimal" [maxFractionDigits]="2" [min]="0"/>
-                @if (form.controls.minimalCoverPenaltyPerExtraneousDependency.dirty || form.controls.minimalCoverPenaltyPerExtraneousDependency.touched) {
+                <label for="minimalCoverPenaltyPerExtraneousAttribute" transloco="taskTypes.fanf.fields.minimalCoverPenaltyPerExtraneousAttribute"></label>
+                <p-inputNumber inputId="minimalCoverPenaltyPerExtraneousAttribute" formControlName="minimalCoverPenaltyPerExtraneousAttribute" mode="decimal" [maxFractionDigits]="2" [min]="0"/>
+                @if (form.controls.minimalCoverPenaltyPerExtraneousAttribute.dirty || form.controls.minimalCoverPenaltyPerExtraneousAttribute.touched) {
                   <small class="block mt-1 p-error">
-                    {{ getError(form.controls.minimalCoverPenaltyPerExtraneousDependency, 'taskTypes.fanf.fields.minimalCoverPenaltyPerExtraneousDependency') }}
+                    {{ getError(form.controls.minimalCoverPenaltyPerExtraneousAttribute, 'taskTypes.fanf.fields.minimalCoverPenaltyPerExtraneousAttribute') }}
                   </small>
                 }
               </div>

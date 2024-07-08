@@ -7,7 +7,7 @@ import { PaginatorModule } from 'primeng/paginator';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { TranslocoDirective, TranslocoPipe } from '@ngneat/transloco';
 import { TaskTypeFormComponent } from '../task-type-form.component';
-import { GradingStrategy } from '../task-type-xquery/grading-strategy.enum';
+import { Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'dke-task-type-fanf',
@@ -28,7 +28,26 @@ import { GradingStrategy } from '../task-type-xquery/grading-strategy.enum';
 export class TaskTypeFanfComponent extends TaskTypeFormComponent<TaskTypeForm> {
   constructor() {
     super();
+    this.currentLocale = this.translationService.getActiveLang();
   }
+  private readonly destroy$ = new Subject<void>();
+  currentLocale: string;
+
+
+
+  ngOnInit(): void {
+    this.translationService.langChanges$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(() => this.updateDropdownTranslations());
+  }
+
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
+
+
   subtypeOptions =
     [
     { name: this.translationService.translate('taskTypes.fanf.subtype.keysDetermination') , id: 0 },
@@ -51,7 +70,7 @@ export class TaskTypeFanfComponent extends TaskTypeFormComponent<TaskTypeForm> {
     this.form.addControl('attributeClosurePenaltyPerIncorrectAttribute', new FormControl<number | null>(null));
     this.form.addControl('minimalCoverPenaltyPerNonCanonicalDependency', new FormControl<number | null>(null));
     this.form.addControl('minimalCoverPenaltyPerTrivialDependency', new FormControl<number | null>(null));
-    this.form.addControl('minimalCoverPenaltyPerExtraneousDependency', new FormControl<number | null>(null));
+    this.form.addControl('minimalCoverPenaltyPerExtraneousAttribute', new FormControl<number | null>(null));
     this.form.addControl('minimalCoverPenaltyPerRedundantDependency', new FormControl<number | null>(null));
     this.form.addControl('minimalCoverPenaltyPerMissingDependencyVsSolution', new FormControl<number | null>(null));
     this.form.addControl('minimalCoverPenaltyPerIncorrectDependencyVsSolution', new FormControl<number | null>(null));
@@ -73,6 +92,16 @@ export class TaskTypeFanfComponent extends TaskTypeFormComponent<TaskTypeForm> {
     this.form.addControl('normalizationPenaltyPerIncorrectNFRelation', new FormControl<number | null>(null));
   }
 
+  private updateDropdownTranslations() {
+    this.currentLocale = this.translationService.getActiveLang();
+    this.subtypeOptions = [
+      { name: this.translationService.translate('taskTypes.fanf.subtype.keysDetermination') , id: 0 },
+      { name: this.translationService.translate('taskTypes.fanf.subtype.attributeClosure') , id: 1},
+      { name: this.translationService.translate('taskTypes.fanf.subtype.minimalCover') , id: 2},
+      { name: this.translationService.translate('taskTypes.fanf.subtype.normalFormDetermination') , id: 3},
+      { name: this.translationService.translate('taskTypes.fanf.subtype.normalization') , id: 4}
+    ];
+  }
 }
 
 
@@ -88,7 +117,7 @@ interface TaskTypeForm {
   attributeClosurePenaltyPerIncorrectAttribute: FormControl<number | null>;
   minimalCoverPenaltyPerNonCanonicalDependency: FormControl<number | null>;
   minimalCoverPenaltyPerTrivialDependency: FormControl<number | null>;
-  minimalCoverPenaltyPerExtraneousDependency: FormControl<number | null>;
+  minimalCoverPenaltyPerExtraneousAttribute: FormControl<number | null>;
   minimalCoverPenaltyPerRedundantDependency: FormControl<number | null>;
   minimalCoverPenaltyPerMissingDependencyVsSolution: FormControl<number | null>;
   minimalCoverPenaltyPerIncorrectDependencyVsSolution: FormControl<number | null>;
