@@ -118,7 +118,8 @@ describe('TaskTypeFormComponent', () => {
       createdBy: null,
       createdDate: null,
       lastModifiedBy: null,
-      lastModifiedDate: null
+      lastModifiedDate: null,
+      examTask: false,
     };
 
     // Act

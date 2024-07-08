@@ -105,6 +105,18 @@
       "descriptions": {
         "penalty": "A point deduction of -1 means that the submission is awarded 0 points."
       }
+    },
+    "fanf": {
+      "title": "Functional Dependencies",
+      "fields": {
+        "baseRelationName": "Name of the Base Relation",
+        "baseRelationAttributes": "Attributes of the Base Relation",
+        "baseRelationDependencies": "Dependencies of the Base Relation",
+        "subtype": "Subtask"
+      },
+      "descriptions": {
+        "penalty": "Ein Punkteabzug von -1 bedeutet, dass die Abgabe mit 0 Punkten bewertet wird."
+      }
     }
   }
 }

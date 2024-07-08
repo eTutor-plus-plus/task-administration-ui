@@ -7,6 +7,7 @@ import { TaskTypeDroolsComponent } from './task-type-drools/task-type-drools.com
 import { TaskTypeAspComponent } from './task-type-asp/task-type-asp.component';
 import { TaskTypeSqlComponent } from './task-type-sql/task-type-sql.component';
 import { TaskTypeRelalgComponent } from './task-type-relalg/task-type-relalg.component';
+import { TaskTypeFanfComponent } from './task-type-fanf/task-type-fanf.component';
 
 /**
  * Registry for task types.
@@ -74,6 +75,13 @@ return $d`,
       submissionTemplate: '',
       supportsDescriptionGeneration: false,
       submissionInputLanguage: 'relalg'
+    }, {
+      name: 'fanf',
+      supportedTaskGroupTypes: [],
+      component: TaskTypeFanfComponent,
+      submissionTemplate: '',
+      supportsDescriptionGeneration: true,
+      submissionInputLanguage: 'fanf'
     }
   ];
 

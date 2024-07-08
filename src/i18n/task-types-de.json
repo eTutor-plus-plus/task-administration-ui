@@ -106,6 +106,18 @@
       "descriptions": {
         "penalty": "Ein Punkteabzug von -1 bedeutet, dass die Abgabe mit 0 Punkten bewertet wird."
       }
+    },
+    "fanf": {
+      "title": "Funktionale Abhängigkeiten",
+      "fields": {
+        "baseRelationName": "Name der Basisrelation",
+        "baseRelationAttributes": "Attribute der Basisrelation",
+        "baseRelationDependencies": "Abhängigkeiten der Basisrelation",
+        "subtype": "Unteraufgabe"
+      },
+      "descriptions": {
+        "penalty": "Ein Punkteabzug von -1 bedeutet, dass die Abgabe mit 0 Punkten bewertet wird."
+      }
     }
   }
 }
