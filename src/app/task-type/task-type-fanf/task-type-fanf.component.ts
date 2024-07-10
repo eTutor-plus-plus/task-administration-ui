@@ -1,13 +1,14 @@
 import { Component } from '@angular/core';
-import { Button } from 'primeng/button';
-import { EditorComponent } from 'ngx-monaco-editor-v2';
+import { Button, ButtonModule } from 'primeng/button';
+import { EditorComponent, MonacoEditorModule } from 'ngx-monaco-editor-v2';
 import { InputTextModule } from 'primeng/inputtext';
 import { NgForOf } from '@angular/common';
 import { PaginatorModule } from 'primeng/paginator';
-import { FormControl, ReactiveFormsModule } from '@angular/forms';
+import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { TranslocoDirective, TranslocoPipe } from '@ngneat/transloco';
 import { TaskTypeFormComponent } from '../task-type-form.component';
 import { Subject, takeUntil } from 'rxjs';
+import { TreeSelectModule } from 'primeng/treeselect';
 
 @Component({
   selector: 'dke-task-type-fanf',
@@ -20,7 +21,10 @@ import { Subject, takeUntil } from 'rxjs';
     PaginatorModule,
     ReactiveFormsModule,
     TranslocoDirective,
-    TranslocoPipe
+    TranslocoPipe,
+    MonacoEditorModule,
+    ButtonModule,
+    TreeSelectModule
   ],
   templateUrl: './task-type-fanf.component.html',
   styleUrl: './task-type-fanf.component.scss'
@@ -51,10 +55,10 @@ export class TaskTypeFanfComponent extends TaskTypeFormComponent<TaskTypeForm> {
   subtypeOptions =
     [
     { name: this.translationService.translate('taskTypes.fanf.subtype.keysDetermination') , id: 0 },
-    { name: this.translationService.translate('taskTypes.fanf.subtype.attributeClosure') , id: 1},
+    { name: this.translationService.translate('taskTypes.fanf.subtype.attributeClosure') , id: 3},
       { name: this.translationService.translate('taskTypes.fanf.subtype.minimalCover') , id: 2},
-      { name: this.translationService.translate('taskTypes.fanf.subtype.normalFormDetermination') , id: 3},
-      { name: this.translationService.translate('taskTypes.fanf.subtype.normalization') , id: 4}
+      { name: this.translationService.translate('taskTypes.fanf.subtype.normalFormDetermination') , id: 4},
+      { name: this.translationService.translate('taskTypes.fanf.subtype.normalization') , id: 1}
     ];
 
 
@@ -96,13 +100,14 @@ export class TaskTypeFanfComponent extends TaskTypeFormComponent<TaskTypeForm> {
     this.currentLocale = this.translationService.getActiveLang();
     this.subtypeOptions = [
       { name: this.translationService.translate('taskTypes.fanf.subtype.keysDetermination') , id: 0 },
-      { name: this.translationService.translate('taskTypes.fanf.subtype.attributeClosure') , id: 1},
+      { name: this.translationService.translate('taskTypes.fanf.subtype.attributeClosure') , id: 3},
       { name: this.translationService.translate('taskTypes.fanf.subtype.minimalCover') , id: 2},
-      { name: this.translationService.translate('taskTypes.fanf.subtype.normalFormDetermination') , id: 3},
-      { name: this.translationService.translate('taskTypes.fanf.subtype.normalization') , id: 4}
+      { name: this.translationService.translate('taskTypes.fanf.subtype.normalFormDetermination') , id: 4},
+      { name: this.translationService.translate('taskTypes.fanf.subtype.normalization') , id: 1}
     ];
   }
 }
+
 
 
 interface TaskTypeForm {
