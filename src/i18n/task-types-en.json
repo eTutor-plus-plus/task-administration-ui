@@ -132,7 +132,7 @@
           "normalizationPenaltyForLossyDecomposition": "Penalty for Lossy Decomposition",
           "normalizationPenaltyPerNonCanonicalDependency": "Penalty per Non-Canonical Dependency",
           "normalizationPenaltyPerTrivialDependency": "Penalty per Trivial Dependency",
-          "normalizationPenaltyPerExtraneousAttributeInDependency": "Penalty per Extraneous Attribute in Dependency",
+          "normalizationPenaltyPerExtraneousAttributeInDependencies": "Penalty per Extraneous Attribute in Dependency",
           "normalizationPenaltyPerRedundantDependency": "Penalty per Redundant Dependency",
           "normalizationPenaltyPerExcessiveLostDependency": "Penalty per Excessive Lost Dependency",
           "normalizationPenaltyPerMissingNewDependency": "Penalty per Missing New Dependency",
