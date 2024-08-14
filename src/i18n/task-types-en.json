@@ -107,6 +107,52 @@
         "penalty": "A point deduction of -1 means that the submission is awarded 0 points."
       }
     },
+      "fanf": {
+        "title": "Functional Dependencies",
+        "fields": {
+          "baseRelationName": "Name of the Base Relation",
+          "baseRelationAttributes": "Attributes of the Base Relation",
+          "baseRelationDependencies": "Dependencies of the Base Relation",
+          "subtype": "Subtask",
+          "keysDeterminationPenaltyPerMissingKey": "Penalty per Missing Key",
+          "keysDeterminationPenaltyPerIncorrectKey": "Penalty per Incorrect Key",
+          "attributeClosureBaseAttributes": "Base Attributes",
+          "attributeClosurePenaltyPerMissingAttribute": "Penalty per Missing Attribute",
+          "attributeClosurePenaltyPerIncorrectAttribute": "Penalty per Incorrect Attribute",
+          "minimalCoverPenaltyPerNonCanonicalDependency": "Penalty per Non-Canonical Dependency",
+          "minimalCoverPenaltyPerTrivialDependency": "Penalty per Trivial Dependency",
+          "minimalCoverPenaltyPerExtraneousAttribute": "Penalty per Extraneous Attribute",
+          "minimalCoverPenaltyPerRedundantDependency": "Penalty per Redundant Dependency",
+          "minimalCoverPenaltyPerMissingDependencyVsSolution": "Penalty per Missing Dependency vs. Solution",
+          "minimalCoverPenaltyPerIncorrectDependencyVsSolution": "Penalty per Incorrect Dependency vs. Solution",
+          "normalFormDeterminationPenaltyForIncorrectOverallNormalform": "Penalty for Incorrect Overall Normal Form",
+          "normalFormDeterminationPenaltyPerIncorrectDependencyNormalform": "Penalty per Incorrect Dependency Normal Form",
+          "normalizationTargetLevel": "Target Normal Form",
+          "normalizationMaxLostDependencies": "Max Lost Dependencies",
+          "normalizationPenaltyPerLostAttribute": "Penalty per Lost Attribute",
+          "normalizationPenaltyForLossyDecomposition": "Penalty for Lossy Decomposition",
+          "normalizationPenaltyPerNonCanonicalDependency": "Penalty per Non-Canonical Dependency",
+          "normalizationPenaltyPerTrivialDependency": "Penalty per Trivial Dependency",
+          "normalizationPenaltyPerExtraneousAttributeInDependencies": "Penalty per Extraneous Attribute in Dependency",
+          "normalizationPenaltyPerRedundantDependency": "Penalty per Redundant Dependency",
+          "normalizationPenaltyPerExcessiveLostDependency": "Penalty per Excessive Lost Dependency",
+          "normalizationPenaltyPerMissingNewDependency": "Penalty per Missing New Dependency",
+          "normalizationPenaltyPerIncorrectNewDependency": "Penalty per Incorrect New Dependency",
+          "normalizationPenaltyPerMissingKey": "Penalty per Missing Key",
+          "normalizationPenaltyPerIncorrectKey": "Penalty per Incorrect Key",
+          "normalizationPenaltyPerIncorrectNFRelation": "Penalty per Incorrect NF Relation"
+    },
+      "descriptions": {
+        "penalty": "Ein Punkteabzug von -1 bedeutet, dass die Abgabe mit 0 Punkten bewertet wird."
+      },
+        "subtype": {
+          "keysDetermination": "Key Determination",
+          "attributeClosure": "Attribute Closure",
+          "minimalCover": "Minimal Cover",
+          "normalFormDetermination": "Normal Form Determination",
+          "normalization": "Normalization"
+        }
+      },
     "uml": {
       "title": "UML",
       "fields": {
