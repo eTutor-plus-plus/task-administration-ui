@@ -106,6 +106,21 @@
       "descriptions": {
         "penalty": "A point deduction of -1 means that the submission is awarded 0 points."
       }
+    },
+    "uml": {
+      "title": "UML",
+      "fields": {
+        "umlBlock": "Block {{id}}",
+        "umlSolution": "Solution",
+        "umlAddBlock": "Add Block",
+        "umlAddAlternative": "Add Alternative",
+        "fullComparison": "Fully Compare?",
+        "classPoints": "Points per correct Class",
+        "attributePoints": "Points per correct Attribute",
+        "relationshipPoints": "Points per correct Relation",
+        "associationPoints": "Points per correct Association",
+        "constraintPoints": "Points per correct Constraint"
+      }
     }
   }
 }
