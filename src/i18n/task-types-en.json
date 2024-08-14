@@ -80,7 +80,8 @@
         "droolsClasses": "Classes",
         "droolsValidationClassname": "Validation Classname",
         "droolsErrorWeighting": "Error Weighting",
-        "droolsAddClass": "Add Class"
+        "droolsAddClass": "Add Class",
+        "droolsIsCEP": "Is this a CEP Task?"
       }
     },
     "sql": {
