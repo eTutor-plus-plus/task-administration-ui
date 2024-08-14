@@ -4,11 +4,13 @@ import { TaskTypeXqueryComponent } from './task-type-xquery/task-type-xquery.com
 import { TaskTypeFormComponent } from './task-type-form.component';
 import { TaskTypeDatalogComponent } from './task-type-datalog/task-type-datalog.component';
 import { TaskTypeDroolsComponent } from './task-type-drools/task-type-drools.component';
+import { TaskTypeSqlDdlComponent } from './task-type-sql-ddl/task-type-sql-ddl.component';
 import { TaskTypeAspComponent } from './task-type-asp/task-type-asp.component';
 import { TaskTypeSqlComponent } from './task-type-sql/task-type-sql.component';
 import { TaskTypeRelalgComponent } from './task-type-relalg/task-type-relalg.component';
 import { TaskTypeFanfComponent } from './task-type-fanf/task-type-fanf.component';
 import { TaskTypeUmlComponent } from './task-type-uml/task-type-uml.component';
+
 
 /**
  * Registry for task types.
@@ -62,6 +64,16 @@ return $d`,
       submissionTemplate: '',
       supportsDescriptionGeneration: false,
       submissionInputLanguage: 'drools'
+
+    },
+    {
+      name: 'sql-ddl',
+      supportedTaskGroupTypes: [],
+      component: TaskTypeSqlDdlComponent,
+      submissionTemplate: '',
+      supportsDescriptionGeneration: false,
+      submissionInputLanguage: 'sql'
+
     }, {
       name: 'sql',
       supportedTaskGroupTypes: ['sql'],
@@ -92,6 +104,7 @@ return $d`,
       submissionTemplate: '',
       supportsDescriptionGeneration: false,
       submissionInputLanguage: 'uml'
+
     }
 
   ];

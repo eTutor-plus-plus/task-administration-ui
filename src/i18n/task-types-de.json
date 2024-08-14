@@ -85,6 +85,19 @@
         "droolsIsCEP": "Ist dieser Task ein CEP Task?"
       }
     },
+
+    "sql-ddl": {
+      "title": "SQL DDL",
+      "fields": {
+        "sqlDDL": "SQL DDL",
+        "solution": "Lösung",
+        "insertStatements": "Insert Statement",
+        "tablePoints": "Punkte pro Tabelle",
+        "columnPoints": "Punkte pro Spalte",
+        "constraintPoints": "Punkte pro Constraint",
+        "primaryKeyPoints": "Punkte pro Primary Key",
+        "foreignKeyPoints": "Punkte pro Foreign Key"
+  }},
     "sql": {
       "title": "SQL",
       "fields": {
@@ -175,3 +188,4 @@
     }
   }
 }
+
