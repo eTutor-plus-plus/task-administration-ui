@@ -81,7 +81,8 @@
         "droolsErrorWeighting": "Fehlergewichtung",
         "droolsValidationClassname": "Validierungsklasse",
         "droolsAddClass": "Klasse hinzufügen",
-        "droolsClassesName": "Klassen"
+        "droolsClassesName": "Klassen",
+        "droolsIsCEP": "Ist dieser Task ein CEP Task?"
       }
     },
     "sql": {
@@ -152,6 +153,24 @@
         "minimalCover": "Minimale Überdeckung",
         "normalFormDetermination": "Normalformen bestimmen",
         "normalization": "Normalisierung"
+
+      }
+    },
+    "uml": {
+      "title": "UML",
+      "fields": {
+        "umlBlock": "Block {{id}}",
+        "umlSolution": "Lösung",
+        "umlAddBlock": "Block hinzufügen",
+        "umlAddAlternative": "Alternative hinzufügen",
+        "fullComparison": "Vollständiger Vergleich?",
+        "classPoints": "Punkte pro richtiger Klasse",
+        "attributePoints": "Punkte pro richtigem Attribut",
+        "relationshipPoints": "Punkte pro richtiger Beziehung",
+        "associationPoints": "Punkte pro richtiger Assoziation",
+        "constraintPoints": "Punkte pro richtiger Constraint"
+
+
       }
     }
   }

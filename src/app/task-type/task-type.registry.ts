@@ -8,6 +8,7 @@ import { TaskTypeAspComponent } from './task-type-asp/task-type-asp.component';
 import { TaskTypeSqlComponent } from './task-type-sql/task-type-sql.component';
 import { TaskTypeRelalgComponent } from './task-type-relalg/task-type-relalg.component';
 import { TaskTypeFanfComponent } from './task-type-fanf/task-type-fanf.component';
+import { TaskTypeUmlComponent } from './task-type-uml/task-type-uml.component';
 
 /**
  * Registry for task types.
@@ -75,6 +76,7 @@ return $d`,
       submissionTemplate: '',
       supportsDescriptionGeneration: false,
       submissionInputLanguage: 'relalg'
+
     }, {
       name: 'fanf',
       supportedTaskGroupTypes: [],
@@ -82,7 +84,16 @@ return $d`,
       submissionTemplate: '',
       supportsDescriptionGeneration: true,
       submissionInputLanguage: 'fanf'
+    },
+    {
+      name: 'uml',
+      supportedTaskGroupTypes: [],
+      component: TaskTypeUmlComponent,
+      submissionTemplate: '',
+      supportsDescriptionGeneration: false,
+      submissionInputLanguage: 'uml'
     }
+
   ];
 
   /**
