@@ -1,12 +1,15 @@
-<p-blockUI [blocked]="loading" />
+<p-blockUI [blocked]="loading"/>
 
 <div class="flex justify-content-between align-items-center">
   <h1 [transloco]="baseTranslationKey + (originalEntity ? 'edit' : 'create')"></h1>
   <div>
-    <p-button [label]="(form.dirty ? 'primeng.cancel' : 'primeng.back') | transloco" class="w-auto" (onClick)="cancel()" severity="secondary" [outlined]="true" [disabled]="loading"
+    <p-button [label]="(form.dirty ? 'primeng.cancel' : 'primeng.back') | transloco" class="w-auto" (onClick)="cancel()" severity="secondary" [outlined]="true"
+              [disabled]="loading"
               styleClass="mr-2"/>
-    <p-button [label]="(originalEntity ? 'common.save' : 'common.create') | transloco" [disabled]="form.invalid" [loading]="loading"
-              (onClick)="submit()"></p-button>
+    @if (role !== 'TUTOR' || !originalEntity || originalEntity.status !== 'APPROVED') {
+      <p-button [label]="(originalEntity ? 'common.save' : 'common.create') | transloco" [disabled]="form.invalid" [loading]="loading"
+                (onClick)="submit()"></p-button>
+    }
   </div>
 </div>
 
@@ -36,13 +39,13 @@
 
       <div class="field mb-4 col-12 md:col-6">
         <label for="descriptionDe" [transloco]="this.baseTranslationKey + 'fields.descriptionDe'"></label>
-        <p-editor formControlName="descriptionDe" id="descriptionDe" [style]="{ height: '200px' }" [modules]="quillModules"/>
+        <dke-editor formControlName="descriptionDe" id="descriptionDe" [height]="250" />
         @if (form.controls.descriptionDe.dirty || form.controls.descriptionDe.touched) {
           <small class="block mt-1 p-error">
             {{ getError(form.controls.descriptionDe, this.baseTranslationKey + 'fields.descriptionDe') }}
           </small>
         }
-        @if(supportsDescriptionGeneration){
+        @if (supportsDescriptionGeneration) {
           <small class="block mt-1 text-color-secondary">
             {{ baseTranslationKey + 'descriptionGeneration' | transloco }}
           </small>
@@ -51,13 +54,13 @@
 
       <div class="field mb-4 col-12 md:col-6">
         <label for="descriptionEn" [transloco]="this.baseTranslationKey + 'fields.descriptionEn'"></label>
-        <p-editor formControlName="descriptionEn" id="descriptionEn" [style]="{ height: '200px' }" [modules]="quillModules"/>
+        <dke-editor formControlName="descriptionEn" id="descriptionEn" [height]="250" />
         @if (form.controls.descriptionEn.dirty || form.controls.descriptionEn.touched) {
           <small class="block mt-1 p-error">
             {{ getError(form.controls.descriptionEn, this.baseTranslationKey + 'fields.descriptionEn') }}
           </small>
         }
-        @if(supportsDescriptionGeneration){
+        @if (supportsDescriptionGeneration) {
           <small class="block mt-1 text-color-secondary">
             {{ baseTranslationKey + 'descriptionGeneration' | transloco }}
           </small>
@@ -88,7 +91,7 @@
   </div>
 
   @if (componentForm) {
-    <ng-container *ngComponentOutlet="componentForm; inputs: {formGroup: form.controls.additionalData, formData: additionalData, parentForm: form}"/>
+    <ng-container *ngComponentOutlet="componentForm; inputs: {formGroup: form.controls.additionalData, formData: additionalData, parentForm: form, taskGroup: originalEntity}"/>
   }
 </form>
 

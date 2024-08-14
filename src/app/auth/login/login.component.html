@@ -21,7 +21,7 @@
           <a class="block text-right font-light no-underline text-color-secondary"
              transloco="auth.login.forgot-password" routerLink="/auth/forgotPassword"></a>
         </div>
-        <input id="password" type="password" pInputText formControlName="password" autocomplete="current-password" [autofocus]="form.value.username"
+        <input id="password" type="password" pInputText formControlName="password" autocomplete="current-password" [autofocus]="!!form.value.username"
                tabindex="2">
         @if (form.controls.password.dirty) {
           <small class="block mt-1 p-error">
@@ -33,5 +33,7 @@
       <button pButton [label]="'auth.login.login' | transloco" class="w-full"
               [disabled]="form.invalid || !appAvailable" [loading]="loading" type="submit"></button>
     </form>
+  } @else if (loading) {
+    <p-message severity="info" [text]="'auth.login.messages.please_wait' | transloco"/>
   }
 </dke-simple-layout>

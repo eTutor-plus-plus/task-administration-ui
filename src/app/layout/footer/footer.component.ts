@@ -52,8 +52,13 @@ export class FooterComponent implements OnInit, OnDestroy {
   constructor(private readonly translationService: TranslocoService,
               private readonly healthService: SystemHealthService) {
     this.impressUrl = environment.impressUrl + '?lang=' + translationService.getActiveLang();
-    this.version = `${environment.version}-${environment.git.branch}#${environment.git.shortSha}`;
-    this.versionDate = DateTime.fromISO(environment.git.commitDate).toFormat('dd.MM.yyyy HH:mm:ss');
+    this.version = `${environment.version}#${environment.git.shortSha}`;
+
+    const date = DateTime.fromISO(environment.git.commitDate);
+    if (date.isValid)
+      this.versionDate = date.toFormat('dd.MM.yyyy HH:mm:ss');
+    else
+      this.versionDate = environment.git.branch;
   }
 
   /**
@@ -63,8 +68,18 @@ export class FooterComponent implements OnInit, OnDestroy {
     this.sub = this.translationService.langChanges$
       .subscribe(lang => this.impressUrl = environment.impressUrl + '?lang=' + lang);
     this.healthService.loadAppInfo().then(info => {
-      this.serverVersion = info.build?.version + '#' + info.git?.commit.id['describe-short'];
-      this.serverVersionDate = info.git?.commit.time ? DateTime.fromISO(info.git.commit.time).toFormat('dd.MM.yyyy HH:mm:ss') : '';
+      if (info.build) {
+        this.serverVersion = info.build?.version;
+        if (info.git)
+          this.serverVersion += '#' + info.git?.commit.id['describe-short'];
+      }
+      if (info.git) {
+        const date = DateTime.fromISO(info.git?.commit?.time ?? '');
+        if (date.isValid)
+          this.serverVersionDate = DateTime.fromISO(info.git.commit.time).toFormat('dd.MM.yyyy HH:mm:ss');
+        else
+          this.serverVersionDate = info.git.branch;
+      }
     });
   }
 

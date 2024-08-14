@@ -76,7 +76,6 @@ export class AccountService {
     }));
   }
 
-
   /**
    * Changes the password of the current user.
    *

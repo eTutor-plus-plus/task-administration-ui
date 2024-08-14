@@ -9,9 +9,8 @@ describe('AuditInformationComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [AuditInformationComponent]
-    })
-    .compileComponents();
-    
+    }).compileComponents();
+
     fixture = TestBed.createComponent(AuditInformationComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();

@@ -34,6 +34,22 @@ export class TaskGroupService extends ApiService<TaskGroupDto, ModifyTaskGroupDt
     }));
   }
 
+  /**
+   * Loads the details of all task groups.
+   *
+   * @return List of task groups.
+   */
+  export(): Promise<string> {
+    console.info(`[${this.serviceName}] Exporting task group details`);
+    return new Promise<string>((resolve, reject) => this.http.get(this.apiUrl + '/export', {responseType: 'text'}).subscribe({
+      next: value => resolve(value),
+      error: err => {
+        console.error(`[${this.serviceName}] Failed exporting task groups`, err);
+        reject(err);
+      }
+    }));
+  }
+
   protected override setFilterParam(params: HttpParams, filter: TaskGroupFilter): HttpParams {
     if (filter.name)
       params = params.set('nameFilter', filter.name);
@@ -45,7 +61,6 @@ export class TaskGroupService extends ApiService<TaskGroupDto, ModifyTaskGroupDt
       params = params.set('orgUnitFilter', filter.organizationalUnit);
     return params;
   }
-
 }
 
 /**

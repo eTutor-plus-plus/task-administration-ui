@@ -3,17 +3,18 @@
 <p-confirmPopup/>
 
 <p-table [value]="tableData.content" [tableStyle]="{'min-width': '30rem'}" [lazy]="true" (onLazyLoad)="loadTableData($event)" dataKey="id" [loading]="loading"
-         [paginator]="true" [rows]="10" [rowsPerPageOptions]="[10, 25, 50, 100]" [showCurrentPageReport]="true" [totalRecords]="tableData.totalElements"
+         [paginator]="true" [rows]="10" [rowsPerPageOptions]="[10, 25, 50, 100]" [showCurrentPageReport]="true" [totalRecords]="tableData.page.totalElements"
          [currentPageReportTemplate]="'common.paginator' | transloco" [sortMode]="'multiple'" [multiSortMeta]="defaultSort"
-         [ngClass]="{'with-ou': showOrganizationalUnit}">
+         [ngClass]="{'with-ou': showOrganizationalUnit}" stateStorage="session" stateKey="@dke-etutor/table/tasks">
   <ng-template pTemplate="caption">
     <div class="flex align-items-center justify-content-between">
-      @if (canCreate()) {
-        <p-button [label]="'common.new' | transloco" icon="pi pi-plus" (onClick)="create()"/>
-      } @else {
-        <div></div>
-      }
-      <p-button [label]="'common.refresh' | transloco" icon="pi pi-refresh" (onClick)="reload()" severity="secondary"/>
+      <p-button [label]="'common.new' | transloco" icon="pi pi-plus" (onClick)="create()"/>
+      <div>
+        @if (role == 'ADMIN' || role == 'FULL_ADMIN') {
+          <p-button [label]="'common.download' | transloco" icon="pi pi-download" (onClick)="download()" severity="info" class="mr-2"/>
+        }
+        <p-button [label]="'common.refresh' | transloco" icon="pi pi-refresh" (onClick)="reload()" severity="secondary"/>
+      </div>
     </div>
   </ng-template>
 
@@ -27,7 +28,7 @@
       }
       <th pSortableColumn="taskGroup.name" class="col-taskGroupId">
         {{ baseTranslationKey + 'fields.taskGroupId' | transloco }}
-        <p-sortIcon field="taskGroupId"/>
+        <p-sortIcon field="taskGroup.name"/>
       </th>
       <th pSortableColumn="taskType" class="col-taskType">
         {{ baseTranslationKey + 'fields.taskType' | transloco }}
@@ -63,7 +64,7 @@
         </p-columnFilter>
       </th>
       <th>
-        <p-columnFilter field="taskGroupType" matchMode="equals" [showMenu]="false" [showClearButton]="true">
+        <p-columnFilter field="taskType" matchMode="equals" [showMenu]="false" [showClearButton]="true">
           <ng-template pTemplate="filter" let-value let-filter="filterCallback">
             <p-dropdown [options]="types" optionValue="value" optionLabel="text" [ngModel]="value" appendTo="body" [showClear]="false"
                         (onChange)="filter($event.value)"/>
@@ -94,19 +95,21 @@
       <td>{{ 'taskTypes.' + entity.taskType + '.title' | transloco }}</td>
       <td>{{ entity.title }}</td>
       <td>
-        <p-tag [severity]="('taskStatus.' + entity.status + '_class') | transloco">
+        <p-tag [severity]="convertStringToSeverity(('taskStatus.' + entity.status + '_class') | transloco)">
           {{ ('taskStatus.' + entity.status) | transloco }}
         </p-tag>
       </td>
       <td>
         <span class="p-buttonset">
-          <p-button (onClick)="edit(entity)" icon="pi pi-pencil" [pTooltip]="'common.edit' | transloco" tooltipPosition="top" [showDelay]="1000"
-                    severity="warning" size="small"/>
+          @if (canEdit(entity)) {
+            <p-button (onClick)="edit(entity)" icon="pi pi-pencil" [pTooltip]="'common.edit' | transloco" tooltipPosition="top" [showDelay]="1000"
+                      severity="warning" size="small"/>
+          }
           @if (canDelete(entity)) {
             <p-button (onClick)="delete(entity, $event)" icon="pi pi-trash" [pTooltip]="'common.delete' | transloco" tooltipPosition="top" [showDelay]="1000"
                       severity="danger" size="small"/>
           }
-          @if (!entity.moodleSynced) {
+          @if (!entity.moodleSynced && canSync(entity)) {
             <p-button size="small" icon="pi pi-exclamation-triangle" severity="danger" [text]="true" (onClick)="sync(entity)"
                       [pTooltip]="baseTranslationKey + 'errors.moodleSync' | transloco" [showDelay]="1000"/>
           }

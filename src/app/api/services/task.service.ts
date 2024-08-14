@@ -34,18 +34,20 @@ export class TaskService extends ApiService<TaskDto, ModifyTaskDto, number, Task
     }));
   }
 
-  protected override setFilterParam(params: HttpParams, filter: TaskFilter): HttpParams {
-    if (filter.name)
-      params = params.set('nameFilter', filter.name);
-    if (filter.status)
-      params = params.set('statusFilter', filter.status);
-    if (filter.taskType)
-      params = params.set('taskTypeFilter', filter.taskType);
-    if (filter.organizationalUnit)
-      params = params.set('orgUnitFilter', filter.organizationalUnit);
-    if (filter.taskGroup)
-      params = params.set('taskGroupFilter', filter.taskGroup);
-    return params;
+  /**
+   * Loads the details of all tasks.
+   *
+   * @return List of tasks.
+   */
+  export(): Promise<string> {
+    console.info(`[${this.serviceName}] Exporting task details`);
+    return new Promise<string>((resolve, reject) => this.http.get(this.apiUrl + '/export', {responseType: 'text'}).subscribe({
+      next: value => resolve(value),
+      error: err => {
+        console.error(`[${this.serviceName}] Failed exporting tasks`, err);
+        reject(err);
+      }
+    }));
   }
 
   /**
@@ -54,7 +56,7 @@ export class TaskService extends ApiService<TaskDto, ModifyTaskDto, number, Task
    * @param submission The submission.
    * @return The grading result.
    */
-  async submit(submission: {
+  submit(submission: {
     mode: string;
     feedbackLevel: number;
     language: string;
@@ -71,6 +73,11 @@ export class TaskService extends ApiService<TaskDto, ModifyTaskDto, number, Task
     }));
   }
 
+  /**
+   * Initiates synchronization of the task with Moodle.
+   *
+   * @param id The task identifier.
+   */
   syncWithMoodle(id: number): Promise<void> {
     console.info(`[${this.serviceName}] Sync with moodle ` + id);
     return new Promise<void>((resolve, reject) => this.http.post(this.apiUrl + '/' + encodeURIComponent(id), null).subscribe({
@@ -82,9 +89,20 @@ export class TaskService extends ApiService<TaskDto, ModifyTaskDto, number, Task
     }));
   }
 
+  protected override setFilterParam(params: HttpParams, filter: TaskFilter): HttpParams {
+    if (filter.name)
+      params = params.set('nameFilter', filter.name);
+    if (filter.status)
+      params = params.set('statusFilter', filter.status);
+    if (filter.taskType)
+      params = params.set('taskTypeFilter', filter.taskType);
+    if (filter.organizationalUnit)
+      params = params.set('orgUnitFilter', filter.organizationalUnit);
+    if (filter.taskGroup)
+      params = params.set('taskGroupFilter', filter.taskGroup);
+    return params;
+  }
 }
-
-
 
 /**
  * The filter properties for tasks.

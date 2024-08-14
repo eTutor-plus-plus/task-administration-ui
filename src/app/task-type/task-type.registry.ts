@@ -4,6 +4,9 @@ import { TaskTypeXqueryComponent } from './task-type-xquery/task-type-xquery.com
 import { TaskTypeFormComponent } from './task-type-form.component';
 import { TaskTypeDatalogComponent } from './task-type-datalog/task-type-datalog.component';
 import { TaskTypeDroolsComponent } from './task-type-drools/task-type-drools.component';
+import { TaskTypeAspComponent } from './task-type-asp/task-type-asp.component';
+import { TaskTypeSqlComponent } from './task-type-sql/task-type-sql.component';
+import { TaskTypeRelalgComponent } from './task-type-relalg/task-type-relalg.component';
 
 /**
  * Registry for task types.
@@ -43,14 +46,34 @@ return $d`,
       submissionTemplate: '',
       supportsDescriptionGeneration: false,
       submissionInputLanguage: 'datalog'
-    },
-    {
+    }, {
+      name: 'asp',
+      supportedTaskGroupTypes: ['datalog'],
+      component: TaskTypeAspComponent,
+      submissionTemplate: '',
+      supportsDescriptionGeneration: false,
+      submissionInputLanguage: 'datalog'
+    }, {
       name: 'drools',
       supportedTaskGroupTypes: [],
       component: TaskTypeDroolsComponent,
       submissionTemplate: '',
       supportsDescriptionGeneration: false,
       submissionInputLanguage: 'drools'
+    }, {
+      name: 'sql',
+      supportedTaskGroupTypes: ['sql'],
+      component: TaskTypeSqlComponent,
+      submissionTemplate: '',
+      supportsDescriptionGeneration: false,
+      submissionInputLanguage: 'sql'
+    }, {
+      name: 'relalg',
+      supportedTaskGroupTypes: ['sql'],
+      component: TaskTypeRelalgComponent,
+      submissionTemplate: '',
+      supportsDescriptionGeneration: false,
+      submissionInputLanguage: 'relalg'
     }
   ];
 

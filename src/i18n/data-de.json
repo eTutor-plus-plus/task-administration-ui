@@ -1,6 +1,6 @@
 {
   "organizationalUnits": {
-    "title": "Organisationseinheiten",
+    "title": "Organisationseinheiten / LVAs",
     "fields": {
       "name": "Name"
     },
@@ -12,7 +12,7 @@
       "update": "Die Änderungen der Organisationseinheit '{{name}}' konnten nicht gespeichert werden."
     },
     "success": {
-      "moodleSync": "Die Synchronisation mit Moodle wurde erfolgreich initiiert.",
+      "moodleSync": "Die Synchronisation mit Moodle wurde initiiert. Bitte aktualisieren Sie die Tabelle nach ein paar Sekunden.",
       "delete": "Die Organisationseinheit '{{name}}' wurde erfolgreich gelöscht.",
       "create": "Die Organisationseinheit '{{name}}' wurde erfolgreich erstellt.",
       "update": "Die Änderungen der Organisationseinheit '{{name}}' wurden erfolgreich gespeichert."
@@ -32,7 +32,7 @@
       "failedLoginCount": "Anzahl fehlgeschlagener Anmeldeversuche",
       "lockoutEnd": "Ende der Sperre",
       "activated": "Aktivierungsdatum",
-      "organizationalUnit": "Organisationseinheit",
+      "organizationalUnit": "Organisationseinheit / LVA",
       "role": "Rolle",
       "password": "Passwort"
     },
@@ -67,7 +67,10 @@
     "fields": {
       "taskType": "Aufgabenart",
       "url": "URL",
-      "apiKey": "API Key"
+      "apiKey": "API Key",
+      "taskPrefix": "Aufgaben-URL Präfix",
+      "taskGroupPrefix": "Aufgabengruppen-URL Präfix",
+      "submissionPrefix": "Abgabe-URL Präfix"
     },
     "errors": {
       "load": "Die Aufgaben-Apps konnten nicht geladen werden.",
@@ -80,6 +83,8 @@
       "create": "Die Aufgaben-App '{{name}}' wurde erfolgreich erstellt.",
       "update": "Die Änderungen der Aufgaben-App '{{name}}' wurden erfolgreich gespeichert."
     },
+    "urlHint": "Konfigurieren Sie die Präfix-URLs nur, wenn die Aufgaben-App mehr als eine Aufgabenart unterstützt. Andernfalls lassen Sie die Felder leer.",
+    "reloadHint": "Nach einer Änderung müssen Benutzer ggf. den Browser-Tab schließen und die Seite danach erneut laden, damit die Änderung sichtbar wird.",
     "create": "Aufgaben-App erstellen",
     "edit": "Aufgaben-App bearbeiten"
   },
@@ -89,7 +94,7 @@
       "id": "ID",
       "name": "Name",
       "parentId": "Übergeordnete Kategorie",
-      "organizationalUnitId": "Organisationseinheit"
+      "organizationalUnitId": "Organisationseinheit / LVA"
     },
     "errors": {
       "moodleSync": "Die Aufgaben-Kategorie ist nicht mit Moodle synchronisiert.",
@@ -99,13 +104,14 @@
       "update": "Die Änderungen der Aufgaben-Kategorie '{{name}}' konnten nicht gespeichert werden."
     },
     "success": {
-      "moodleSync": "Die Synchronisation mit Moodle wurde erfolgreich initiiert.",
+      "moodleSync": "Die Synchronisation mit Moodle wurde initiiert. Bitte aktualisieren Sie die Tabelle nach ein paar Sekunden.",
       "delete": "Die Aufgaben-Kategorie '{{name}}' wurde erfolgreich gelöscht.",
       "create": "Die Aufgaben-Kategorie '{{name}}' wurde erfolgreich erstellt.",
       "update": "Die Änderungen der Aufgaben-Kategorie '{{name}}' wurden erfolgreich gespeichert."
     },
     "create": "Aufgaben-Kategorie erstellen",
-    "edit": "Aufgaben-Kategorie bearbeiten"
+    "edit": "Aufgaben-Kategorie bearbeiten",
+    "moodleHint": "Hinweis: Die Moodle-Synchronisierung funktioniert nur, wenn im Moodle in der entsprechenden Kurs-Kategorie zumindest ein Kurs existiert und in diesem Kurs zumindest einmal die Fragensammlung aufgerufen wurde."
   },
   "taskGroups": {
     "title": "Aufgaben-Gruppen",
@@ -116,7 +122,7 @@
       "descriptionEn": "Beschreibung Englisch",
       "taskGroupType": "Aufgabenart",
       "status": "Status",
-      "organizationalUnitId": "Organisationseinheit",
+      "organizationalUnitId": "Organisationseinheit / LVA",
       "approvedBy": "Genehmigt von",
       "approvedDate": "Genehmigt"
     },
@@ -145,13 +151,14 @@
       "descriptionEn": "Beschreibung Englisch",
       "taskType": "Aufgabenart",
       "status": "Status",
-      "organizationalUnitId": "Organisationseinheit",
+      "organizationalUnitId": "Organisationseinheit / LVA",
       "approvedBy": "Genehmigt von",
       "approvedDate": "Genehmigt",
       "difficulty": "Schwierigkeit",
       "maxPoints": "Max. Punkte",
       "taskGroupId": "Aufgabengruppe",
-      "taskCategoryIds": "Aufgabenkategorien"
+      "taskCategoryIds": "Aufgabenkategorien",
+      "examTask": "Prüfungsaufgabe"
     },
     "errors": {
       "load": "Die Aufgaben konnten nicht geladen werden.",
@@ -163,7 +170,7 @@
       "moodleSync": "Diese Aufgabe ist nicht vollständig in Moodle verfügbar."
     },
     "success": {
-      "moodleSync": "Die Synchronisation mit Moodle wurde erfolgreich initiiert.",
+      "moodleSync": "Die Synchronisation mit Moodle wurde initiiert. Bitte aktualisieren Sie die Tabelle nach ein paar Sekunden.",
       "delete": "Die Aufgaben '{{name}}' wurde erfolgreich gelöscht.",
       "create": "Die Aufgaben '{{name}}' wurde erfolgreich erstellt.",
       "update": "Die Änderungen der Aufgaben '{{name}}' wurden erfolgreich gespeichert."
@@ -201,7 +208,7 @@
     "DRAFT": "Entwurf",
     "READY_FOR_APPROVAL": "Bereit für Freigabe",
     "APPROVED": "Freigegeben",
-    "DRAFT_class": "primary",
+    "DRAFT_class": "",
     "READY_FOR_APPROVAL_class": "info",
     "APPROVED_class": "success"
   },

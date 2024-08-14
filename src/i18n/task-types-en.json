@@ -62,6 +62,16 @@
         "EACH": "Once per element"
       }
     },
+    "asp": {
+      "title": "Answer Set Programming",
+      "fields": {
+        "solution": "Solution",
+        "maxN": "Maximum Integer"
+      },
+      "descriptions": {
+        "solution": "The rules that represent the solution can be defined here. No query declarations may be made here."
+      }
+    },
     "drools": {
       "title": "Drools",
       "fields": {
@@ -72,6 +82,29 @@
         "droolsErrorWeighting": "Error Weighting",
         "droolsAddClass": "Add Class",
         "droolsIsCEP": "Is this a CEP Task?"
+      }
+    },
+    "sql": {
+      "title": "SQL",
+      "fields": {
+        "solution": "Solution",
+        "wrongOrderPenalty": "Wrong Sorting: Penalty",
+        "superfluousColumnsPenalty": "Superfluous Column: Penalty"
+      },
+      "descriptions": {
+        "penalty": "A point deduction of -1 means that the submission is awarded 0 points."
+      }
+    },
+    "relalg": {
+      "title": "Relational Algebra",
+      "fields": {
+        "solution": "Solution",
+        "sqlSolution": "SQL-Solution",
+        "wrongOrderPenalty": "Wrong Sorting: Penalty",
+        "superfluousColumnsPenalty": "Superfluous Column: Penalty"
+      },
+      "descriptions": {
+        "penalty": "A point deduction of -1 means that the submission is awarded 0 points."
       }
     }
   }

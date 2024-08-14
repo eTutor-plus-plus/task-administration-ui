@@ -11,6 +11,7 @@ import { MessagesModule } from 'primeng/messages';
 
 import { SimpleLayoutComponent } from '../../layout';
 import { AccountService, getValidationErrorMessage } from '../../api';
+import { AuthService } from '../auth.service';
 
 /**
  * Page: Reset Password
@@ -58,6 +59,7 @@ export class ResetPasswordComponent implements OnInit {
   constructor(private readonly translationService: TranslocoService,
               private readonly messageService: MessageService,
               private readonly accountService: AccountService,
+              private readonly authService: AuthService,
               private readonly route: ActivatedRoute,
               private readonly router: Router) {
     this.loading = false;
@@ -82,11 +84,14 @@ export class ResetPasswordComponent implements OnInit {
   /**
    * Retrieves the reset token form the URL.
    * If no token exists the user will be redirected to the login page.
+   * The user will be redirected if he/she is already authenticated.
    */
   ngOnInit(): void {
     this.token = this.route.snapshot.queryParamMap.get('token');
     if (!this.token)
       this.router.navigate(['auth', 'login']);
+    if (this.authService.isAuthenticated())
+      this.router.navigate(['/']);
   }
 
   /**

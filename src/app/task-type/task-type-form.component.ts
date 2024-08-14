@@ -2,7 +2,7 @@ import { Directive, inject, Input } from '@angular/core';
 import { AbstractControl, FormControl, FormGroup, UntypedFormGroup } from '@angular/forms';
 import { TranslocoService } from '@ngneat/transloco';
 
-import { getValidationErrorMessage } from '../api';
+import { getValidationErrorMessage, TaskDto } from '../api';
 import { TaskForm } from './task.form';
 
 /**
@@ -27,6 +27,7 @@ export abstract class TaskTypeFormComponent<TForm extends { [K in keyof TForm]: 
    */
   protected readonly translationService: TranslocoService;
 
+  private _task?: TaskDto | null;
   private _originalData?: unknown;
   private _parentForm?: FormGroup<TaskForm>;
   private _loadingCounter: number;
@@ -40,7 +41,7 @@ export abstract class TaskTypeFormComponent<TForm extends { [K in keyof TForm]: 
   }
 
   /**
-   * Sets the form.
+   * Sets the form group for the additional data
    *
    * @param form The form group that can be used for the customized form.
    */
@@ -60,10 +61,13 @@ export abstract class TaskTypeFormComponent<TForm extends { [K in keyof TForm]: 
    */
   @Input({required: true}) set formData(data: unknown) {
     this._originalData = data;
-    if (this._originalData)
-      this.form.patchValue(this._originalData);
-    else
-      this.form.reset(this.getFormDefaultValues());
+    if (this.form) {
+      if (this._originalData)
+        this.form.patchValue(this._originalData);
+      else
+        this.form.reset(this.getFormDefaultValues());
+    }
+    this.onOriginalDataChanged(data);
   }
 
   /**
@@ -74,7 +78,25 @@ export abstract class TaskTypeFormComponent<TForm extends { [K in keyof TForm]: 
   }
 
   /**
-   * Returns the parent form.
+   * Sets the current task.
+   *
+   * @param value The task.
+   */
+  @Input({required: true}) set task(value: TaskDto | undefined | null) {
+    this._task = value;
+    this.onTaskChanged(value);
+  }
+
+  /**
+   * The current task.
+   * Do not use this to access type specific data. Use original data instead.
+   */
+  get task(): TaskDto | undefined | null {
+    return this._task;
+  }
+
+  /**
+   * Returns the parent form with the general task group data.
    * Can be used to modify values of the parent form.
    */
   get parentForm(): FormGroup<TaskForm> | undefined {
@@ -82,7 +104,7 @@ export abstract class TaskTypeFormComponent<TForm extends { [K in keyof TForm]: 
   }
 
   /**
-   * Sets the parent form.
+   * Sets the parent form with the general task group data.
    *
    * @param value The parent form.
    */
@@ -94,6 +116,18 @@ export abstract class TaskTypeFormComponent<TForm extends { [K in keyof TForm]: 
    * Hook that can be used to initialize the form group.
    */
   protected abstract initForm(): void;
+
+  /**
+   * Hook that can be used to handle changes of the original data.
+   */
+  protected onOriginalDataChanged(originalData: unknown | undefined): void {
+  }
+
+  /**
+   * Hook that can be used to handle changes of the task.
+   */
+  protected onTaskChanged(task: TaskDto | undefined | null): void {
+  }
 
   //#region --- Loading ---
 

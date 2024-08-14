@@ -2,13 +2,13 @@ import { Component, DestroyRef, OnInit } from '@angular/core';
 import { FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { TranslocoDirective } from '@ngneat/transloco';
+import { DropdownModule } from 'primeng/dropdown';
+import { InputNumberModule } from 'primeng/inputnumber';
 import { editor } from 'monaco-editor';
 import { MonacoEditorModule } from 'ngx-monaco-editor-v2';
 
 import { TaskTypeFormComponent } from '../task-type-form.component';
 import { GradingStrategy } from './grading-strategy.enum';
-import { DropdownModule } from 'primeng/dropdown';
-import { InputNumberModule } from 'primeng/inputnumber';
 
 /**
  * Task Type Form: Datalog
@@ -91,10 +91,10 @@ interface TaskTypeForm {
   solution: FormControl<string | null>;
   query: FormControl<string | null>;
   uncheckedTerms: FormControl<string | null>;
-  missingPredicatePenalty: FormControl<number | null>,
-  missingPredicateStrategy: FormControl<GradingStrategy | null>,
-  missingFactPenalty: FormControl<number | null>,
-  missingFactStrategy: FormControl<GradingStrategy | null>,
-  superfluousFactPenalty: FormControl<number | null>,
-  superfluousFactStrategy: FormControl<GradingStrategy | null>,
+  missingPredicatePenalty: FormControl<number | null>;
+  missingPredicateStrategy: FormControl<GradingStrategy | null>;
+  missingFactPenalty: FormControl<number | null>;
+  missingFactStrategy: FormControl<GradingStrategy | null>;
+  superfluousFactPenalty: FormControl<number | null>;
+  superfluousFactStrategy: FormControl<GradingStrategy | null>;
 }

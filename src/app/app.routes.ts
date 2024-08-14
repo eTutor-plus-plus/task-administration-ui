@@ -27,7 +27,7 @@ export const routes: Routes = [
       {
         path: 'health',
         loadComponent: () => import('./admin/system-health/system-health.component').then(c => c.SystemHealthComponent),
-        canActivate: [roleGuard(['FULL_ADMIN'])],
+        canActivate: [roleGuard(['FULL_ADMIN', 'ADMIN'])],
         children: [
           {
             path: 'health',
@@ -35,7 +35,8 @@ export const routes: Routes = [
           },
           {
             path: 'logfile',
-            loadComponent: () => import('./admin/system-health/system-health-log-file/system-health-log-file.component').then(c => c.SystemHealthLogFileComponent)
+            loadComponent: () => import('./admin/system-health/system-health-log-file/system-health-log-file.component').then(c => c.SystemHealthLogFileComponent),
+            canActivate: [roleGuard(['FULL_ADMIN'])]
           },
           {
             path: 'info',
@@ -43,23 +44,28 @@ export const routes: Routes = [
           },
           {
             path: 'metrics',
-            loadComponent: () => import('./admin/system-health/system-health-metrics/system-health-metrics.component').then(c => c.SystemHealthMetricsComponent)
+            loadComponent: () => import('./admin/system-health/system-health-metrics/system-health-metrics.component').then(c => c.SystemHealthMetricsComponent),
+            canActivate: [roleGuard(['FULL_ADMIN'])]
           },
           {
             path: 'env',
-            loadComponent: () => import('./admin/system-health/system-health-env/system-health-env.component').then(c => c.SystemHealthEnvComponent)
+            loadComponent: () => import('./admin/system-health/system-health-env/system-health-env.component').then(c => c.SystemHealthEnvComponent),
+            canActivate: [roleGuard(['FULL_ADMIN'])]
           },
           {
             path: 'scheduledtasks',
-            loadComponent: () => import('./admin/system-health/system-health-scheduled-tasks/system-health-scheduled-tasks.component').then(c => c.SystemHealthScheduledTasksComponent)
+            loadComponent: () => import('./admin/system-health/system-health-scheduled-tasks/system-health-scheduled-tasks.component').then(c => c.SystemHealthScheduledTasksComponent),
+            canActivate: [roleGuard(['FULL_ADMIN'])]
           },
           {
             path: 'flyway',
-            loadComponent: () => import('./admin/system-health/system-health-flyway/system-health-flyway.component').then(c => c.SystemHealthFlywayComponent)
+            loadComponent: () => import('./admin/system-health/system-health-flyway/system-health-flyway.component').then(c => c.SystemHealthFlywayComponent),
+            canActivate: [roleGuard(['FULL_ADMIN'])]
           },
           {
             path: 'httpexchanges',
-            loadComponent: () => import('./admin/system-health/system-health-http/system-health-http.component').then(c => c.SystemHealthHttpComponent)
+            loadComponent: () => import('./admin/system-health/system-health-http/system-health-http.component').then(c => c.SystemHealthHttpComponent),
+            canActivate: [roleGuard(['FULL_ADMIN'])]
           }
         ]
       },
