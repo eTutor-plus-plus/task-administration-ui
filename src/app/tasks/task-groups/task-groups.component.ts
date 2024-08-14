@@ -18,6 +18,7 @@ import { DropdownModule } from 'primeng/dropdown';
 import { AuthService, Role } from '../../auth';
 import { TableOverviewComponent } from '../../layout';
 import { OrganizationalUnitDto, OrganizationalUnitService, StatusEnum, TaskGroupDto, TaskGroupService } from '../../api';
+import { convertStringToSeverity } from '../helpers';
 
 /**
  * Page: Task Groups Overview
@@ -132,6 +133,30 @@ export class TaskGroupsComponent extends TableOverviewComponent<TaskGroupDto, Ta
     return ou ? ou.name : id + '';
   }
 
+  /**
+   * Downloads all task groups.
+   */
+  async download(): Promise<void> {
+    try {
+      this.startLoading();
+      const result = await this.entityService.export();
+      const a = document.createElement('a');
+      a.href = 'data:text/json;charset=utf-8,' + encodeURIComponent(result);
+      a.download = 'task-groups.json';
+      a.click();
+    } catch (err) {
+      console.error('[TaskGroupsComponent] Could not download task groups', err);
+      this.messageService.add({
+        severity: 'error',
+        detail: this.translationService.translate(this.baseTranslationKey + 'errors.load'),
+        life: 10000,
+        key: 'global'
+      });
+    } finally {
+      this.finishLoading();
+    }
+  }
+
   override getMessageParams(entity: TaskGroupDto, type: 'error' | 'success'): Record<string, unknown> {
     return {name: entity.name};
   }
@@ -148,10 +173,6 @@ export class TaskGroupsComponent extends TableOverviewComponent<TaskGroupDto, Ta
     await this.router.navigate(['edit', entity.id], {relativeTo: this.route});
   }
 
-  override canCreate(): boolean {
-    return this.role !== 'TUTOR';
-  }
-
   override canDelete(entity: TaskGroupDto): boolean {
     const user = this.authService.user;
     if (!user)
@@ -160,8 +181,8 @@ export class TaskGroupsComponent extends TableOverviewComponent<TaskGroupDto, Ta
     if (user.isFullAdmin)
       return true;
 
-    const ou = user.roles.find(x => x.organizationalUnit == entity.organizationalUnitId);
-    return ou ? ou.role !== 'TUTOR' : false;
+    const role = user.roles.find(x => x.organizationalUnit == entity.organizationalUnitId)?.role;
+    return role ? role !== 'TUTOR' || entity.status !== 'APPROVED' : false;
   }
 
   private async loadOrganizationalUnits(): Promise<void> {
@@ -173,7 +194,7 @@ export class TaskGroupsComponent extends TableOverviewComponent<TaskGroupDto, Ta
       console.error('[TaskGroupsComponent] Could not load organizational units', err);
       this.messageService.add({
         severity: 'error',
-        detail: this.translationService.translate('organizationalUnits.errors.load'),
+        detail: this.translationService.translate(this.baseTranslationKey + 'errors.load'),
         life: 10000,
         key: 'global'
       });
@@ -181,4 +202,6 @@ export class TaskGroupsComponent extends TableOverviewComponent<TaskGroupDto, Ta
       this.finishLoading();
     }
   }
+
+  public readonly convertStringToSeverity = convertStringToSeverity;
 }

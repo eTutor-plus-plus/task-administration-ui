@@ -24,4 +24,4 @@ export function langInterceptor(req: HttpRequest<unknown>, next: HttpHandlerFn):
   }
 
   return next(req);
-};
+}

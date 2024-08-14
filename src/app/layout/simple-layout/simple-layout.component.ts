@@ -1,10 +1,12 @@
-import { booleanAttribute, Component, Input } from '@angular/core';
+import { booleanAttribute, Component, Input, isDevMode } from '@angular/core';
 
 import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@ngneat/transloco';
 
-import { AuthService } from '../../auth';
 import { environment } from '../../../environments/environment';
 
+/**
+ * Plain layout with only the child component and the logo.
+ */
 @Component({
   selector: 'dke-simple-layout',
   standalone: true,
@@ -28,6 +30,11 @@ export class SimpleLayoutComponent {
   readonly impressUrl: string;
 
   /**
+   * Whether app is in dev-mode.
+   */
+  devEnvironment: boolean;
+
+  /**
    * The current language.
    */
   currentLanguage: string;
@@ -35,10 +42,10 @@ export class SimpleLayoutComponent {
   /**
    * Creates a new instance of class SimpleLayoutComponent.
    */
-  constructor(private readonly translationService: TranslocoService,
-              private readonly authService: AuthService) {
+  constructor(private readonly translationService: TranslocoService) {
     this.currentLanguage = translationService.getActiveLang();
     this.impressUrl = environment.impressUrl;
+    this.devEnvironment = isDevMode();
   }
 
   /**

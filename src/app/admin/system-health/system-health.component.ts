@@ -1,15 +1,16 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { NgClass } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@ngneat/transloco';
+import { distinctUntilChanged, Subscription } from 'rxjs';
 
 import { DropdownChangeEvent, DropdownModule } from 'primeng/dropdown';
 import { MessageService } from 'primeng/api';
 
+import { AuthService } from '../../auth';
 import { SystemHealthService, TaskAppService } from '../../api';
 import { HealthSelectionService } from './health-selection.service';
-import { distinctUntilChanged, Subscription } from 'rxjs';
-import { FormsModule } from '@angular/forms';
 
 /**
  * Base component for the System Health page.
@@ -57,7 +58,8 @@ export class SystemHealthComponent implements OnInit, OnDestroy {
               private readonly route: ActivatedRoute,
               private readonly taskAppService: TaskAppService,
               private readonly messageService: MessageService,
-              private readonly translationService: TranslocoService) {
+              private readonly translationService: TranslocoService,
+              private readonly authService: AuthService) {
     this.availableTabs = [];
     this.selectedApp = '';
     this.apps = [{value: '', label: this.translationService.translate('appName')}];
@@ -71,7 +73,14 @@ export class SystemHealthComponent implements OnInit, OnDestroy {
       this.selectedApp = app;
       this.availableTabs = [];
       this.healthService.loadAvailableEndpoints(app)
-        .then(endpoints => this.availableTabs = endpoints)
+        .then(endpoints => {
+          if (this.authService.user?.isFullAdmin)
+            this.availableTabs = endpoints;
+          else if (this.authService.user?.maxRole === 'ADMIN')
+            this.availableTabs = endpoints.filter(x => x === 'info' || x === 'health');
+          else
+            this.availableTabs = [];
+        })
         .catch(() => this.availableTabs = []);
     });
 

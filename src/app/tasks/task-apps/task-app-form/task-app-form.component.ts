@@ -52,7 +52,10 @@ export class TaskAppFormComponent extends DialogEditFormComponent<TaskAppDto, Ta
     super(entityService, new FormGroup<TaskAppForm>({
       url: new FormControl<string | null>(null, [Validators.required, Validators.minLength(8), Validators.maxLength(255), Validators.pattern('^(http|https)://.+$')]),
       taskType: new FormControl<string | null>(null, [Validators.required, Validators.minLength(2), Validators.maxLength(100)]),
-      apiKey: new FormControl<string | null>(null, [Validators.maxLength(255)])
+      apiKey: new FormControl<string | null>(null, [Validators.maxLength(255)]),
+      taskPrefix: new FormControl<string | null>(null, [Validators.maxLength(50)]),
+      taskGroupPrefix: new FormControl<string | null>(null, [Validators.maxLength(50)]),
+      submissionPrefix: new FormControl<string | null>(null, [Validators.maxLength(50)])
     }), 'taskApps.');
     this.suggestions = [];
     this.availableTaskTypes = [...new Set(TaskTypeRegistry.getTaskTypes().concat(TaskGroupTypeRegistry.getTaskTypes()))];
@@ -81,4 +84,7 @@ interface TaskAppForm {
   url: FormControl<string | null>;
   taskType: FormControl<string | null>;
   apiKey: FormControl<string | null>;
+  taskPrefix: FormControl<string | null>;
+  taskGroupPrefix: FormControl<string | null>;
+  submissionPrefix: FormControl<string | null>;
 }

@@ -5,6 +5,12 @@ import { TaskTypeFormComponent } from './task-type-form.component';
 import { TaskTypeDatalogComponent } from './task-type-datalog/task-type-datalog.component';
 import { TaskTypeDroolsComponent } from './task-type-drools/task-type-drools.component';
 import { TaskTypeSqlDdlComponent } from './task-type-sql-ddl/task-type-sql-ddl.component';
+import { TaskTypeAspComponent } from './task-type-asp/task-type-asp.component';
+import { TaskTypeSqlComponent } from './task-type-sql/task-type-sql.component';
+import { TaskTypeRelalgComponent } from './task-type-relalg/task-type-relalg.component';
+import { TaskTypeFanfComponent } from './task-type-fanf/task-type-fanf.component';
+import { TaskTypeUmlComponent } from './task-type-uml/task-type-uml.component';
+
 
 /**
  * Registry for task types.
@@ -44,14 +50,21 @@ return $d`,
       submissionTemplate: '',
       supportsDescriptionGeneration: false,
       submissionInputLanguage: 'datalog'
-    },
-    {
+    }, {
+      name: 'asp',
+      supportedTaskGroupTypes: ['datalog'],
+      component: TaskTypeAspComponent,
+      submissionTemplate: '',
+      supportsDescriptionGeneration: false,
+      submissionInputLanguage: 'datalog'
+    }, {
       name: 'drools',
       supportedTaskGroupTypes: [],
       component: TaskTypeDroolsComponent,
       submissionTemplate: '',
       supportsDescriptionGeneration: false,
       submissionInputLanguage: 'drools'
+
     },
     {
       name: 'sql-ddl',
@@ -60,7 +73,40 @@ return $d`,
       submissionTemplate: '',
       supportsDescriptionGeneration: false,
       submissionInputLanguage: 'sql'
+
+    }, {
+      name: 'sql',
+      supportedTaskGroupTypes: ['sql'],
+      component: TaskTypeSqlComponent,
+      submissionTemplate: '',
+      supportsDescriptionGeneration: false,
+      submissionInputLanguage: 'sql'
+    }, {
+      name: 'relalg',
+      supportedTaskGroupTypes: ['sql'],
+      component: TaskTypeRelalgComponent,
+      submissionTemplate: '',
+      supportsDescriptionGeneration: false,
+      submissionInputLanguage: 'relalg'
+
+    }, {
+      name: 'fanf',
+      supportedTaskGroupTypes: [],
+      component: TaskTypeFanfComponent,
+      submissionTemplate: '',
+      supportsDescriptionGeneration: true,
+      submissionInputLanguage: 'fanf'
+    },
+    {
+      name: 'uml',
+      supportedTaskGroupTypes: [],
+      component: TaskTypeUmlComponent,
+      submissionTemplate: '',
+      supportsDescriptionGeneration: false,
+      submissionInputLanguage: 'uml'
+
     }
+
   ];
 
   /**

@@ -2,6 +2,7 @@ import { ApplicationConfig, importProvidersFrom, InjectionToken, isDevMode, LOCA
 import { provideAnimations } from '@angular/platform-browser/animations';
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { provideRouter } from '@angular/router';
+import { provideServiceWorker } from '@angular/service-worker';
 
 import { provideTransloco } from '@ngneat/transloco';
 import { MonacoEditorModule } from 'ngx-monaco-editor-v2';
@@ -10,7 +11,7 @@ import { MessageService } from 'primeng/api';
 import { routes } from './app.routes';
 import { environment } from '../environments/environment';
 import { TranslationLoaderService } from './translation-loader.service';
-import { authInterceptor, langInterceptor } from './auth';
+import { authInterceptor, langInterceptor, unauthorizedInterceptor } from './auth';
 import { customizeMonaco } from './monaco';
 
 /**
@@ -24,7 +25,7 @@ export const API_URL = new InjectionToken<string>('API_URL');
 export const appConfig: ApplicationConfig = {
   providers: [
     provideRouter(routes),
-    provideHttpClient(withInterceptors([authInterceptor, langInterceptor])),
+    provideHttpClient(withInterceptors([authInterceptor, langInterceptor, unauthorizedInterceptor])),
     provideAnimations(),
     provideTransloco({
       config: {
@@ -53,6 +54,10 @@ export const appConfig: ApplicationConfig = {
     })),
     {provide: API_URL, useValue: environment.apiUrl},
     {provide: MessageService},
-    {provide: LOCALE_ID, useValue: 'de-AT'}
+    {provide: LOCALE_ID, useValue: 'de-AT'},
+    provideServiceWorker('ngsw-worker.js', {
+      enabled: !isDevMode(),
+      registrationStrategy: 'registerWhenStable:30000'
+    })
   ]
 };

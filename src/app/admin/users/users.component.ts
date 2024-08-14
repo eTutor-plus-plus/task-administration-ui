@@ -77,7 +77,7 @@ export class UsersComponent extends TableDialogOverviewComponent<UserDto, UserSe
 
     const entity: UserDto = {
       id: value,
-      username: '',
+      username: '' + value,
       firstName: '',
       lastName: '',
       email: '',

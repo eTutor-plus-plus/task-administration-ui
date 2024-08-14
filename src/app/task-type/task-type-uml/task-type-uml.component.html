@@ -1,0 +1,93 @@
+<div [formGroup]="form">
+  <div class="surface-card p-4 shadow-2 border-round p-fluid mb-4">
+    <div class="flex justify-content-between mb-4">
+      <p class="font-bold" transloco="taskTypes.uml.fields.umlSolution"></p>
+      <p-button [label]="'taskTypes.uml.fields.umlAddBlock' | transloco" (onClick)="addUmlBlock()" severity="help" [disabled]="loading"
+                class="w-auto" size="small"/>
+    </div>
+    <div formArrayName="umlSolution">
+      <div *ngFor="let umlBlock of umlSolution.controls; let i = index" [formGroupName]="i">
+        <div class="grid formgrid p-fluid">
+          <div class="field col-11 mb-4">
+            <label for="umlBlock" [transloco]="'taskTypes.uml.fields.umlBlock'" [translocoParams]="{ id: i+1 }"></label>
+            <div formArrayName="umlBlock" [formGroup]="umlBlock">
+              <div *ngFor="let umlBlockAlt of itemsControlsAlt(i); let j = index" [formGroupName]="j">
+                <div class="grid formgrid p-fluid">
+                  <div class="field col-11 mb-4">
+                    <ngx-monaco-editor formControlName="umlBlockAlt" [options]="umlEditorOptions" style="height: 150px;"></ngx-monaco-editor>
+                  </div>
+                  <div class="field col-1 mb-4">
+                    <p-button icon="pi pi-trash" severity="danger" (onClick)="removeUmlBlockAlt(i, j)"></p-button>
+                  </div>
+                </div>
+              </div>
+              <div class="field col-1 mb-4">
+                <p-button icon="pi pi-plus" (onClick)="addUmlBlockAlt(i)"></p-button>
+              </div>
+            </div>
+          </div>
+          <div class="field col-1 mb-4">
+            <p-button icon="pi pi-trash" severity="danger" (onClick)="removeUmlBlock(i)"></p-button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+  <div class="surface-card p-4 shadow-2 border-round p-fluid mb-4">
+    <div class="field mb-4 col-12 md:col-6">
+      <label for="completeComparison" transloco="taskTypes.uml.fields.fullComparison"></label>
+      <p-checkbox inputId="completeComparison" formControlName="completeComparison" class="block" [binary]="true"/>
+    </div>
+
+    <div class="surface-card p-4 shadow-2 border-round p-fluid mb-4">
+      <div class="grid formgrid p-fluid">
+        <div class="field mb-4 col-12 md:col-6">
+          <label for="classPoints" transloco="taskTypes.uml.fields.classPoints"></label>
+          <p-inputNumber inputId="classPoints" formControlName="classPoints" mode="decimal" [maxFractionDigits]="2" [min]="0"/>
+          @if (form.controls.classPoints.dirty || form.controls.classPoints.touched) {
+            <small class="block mt-1 p-error">
+              {{ getError(form.controls.classPoints, 'taskTypes.uml.fields.classPoints') }}
+            </small>
+          }
+        </div>
+        <div class="field mb-4 col-12 md:col-6">
+          <label for="attributePoints" transloco="taskTypes.uml.fields.attributePoints"></label>
+          <p-inputNumber inputId="attributePoints" formControlName="attributePoints" mode="decimal" [maxFractionDigits]="2" [min]="0"/>
+          @if (form.controls.attributePoints.dirty || form.controls.attributePoints.touched) {
+            <small class="block mt-1 p-error">
+              {{ getError(form.controls.attributePoints, 'taskTypes.uml.fields.attributePoints') }}
+            </small>
+          }
+      </div>
+      <div class="field mb-4 col-12 md:col-6">
+        <label for="relationshipPoints" transloco="taskTypes.uml.fields.relationshipPoints"></label>
+        <p-inputNumber inputId="relationshipPoints" formControlName="relationshipPoints" mode="decimal" [maxFractionDigits]="2" [min]="0"/>
+        @if (form.controls.relationshipPoints.dirty || form.controls.relationshipPoints.touched) {
+          <small class="block mt-1 p-error">
+            {{ getError(form.controls.relationshipPoints, 'taskTypes.uml.fields.relationshipPoints') }}
+          </small>
+        }
+        </div>
+        <div class="field mb-4 col-12 md:col-6">
+          <label for="associationPoints" transloco="taskTypes.uml.fields.associationPoints"></label>
+          <p-inputNumber inputId="associationPoints" formControlName="associationPoints" mode="decimal" [maxFractionDigits]="2" [min]="0"/>
+          @if (form.controls.associationPoints.dirty || form.controls.associationPoints.touched) {
+            <small class="block mt-1 p-error">
+              {{ getError(form.controls.associationPoints, 'taskTypes.uml.fields.associationPoints') }}
+            </small>
+          }
+        </div>
+        <div class="field mb-4 col-12 md:col-6">
+          <label for="constraintPoints" transloco="taskTypes.uml.fields.constraintPoints"></label>
+          <p-inputNumber inputId="constraintPoints" formControlName="constraintPoints" mode="decimal" [maxFractionDigits]="2" [min]="0"/>
+          @if (form.controls.constraintPoints.dirty || form.controls.constraintPoints.touched) {
+            <small class="block mt-1 p-error">
+              {{ getError(form.controls.constraintPoints, 'taskTypes.uml.fields.constraintPoints') }}
+            </small>
+          }
+    </div>
+  </div>
+
+</div>
+

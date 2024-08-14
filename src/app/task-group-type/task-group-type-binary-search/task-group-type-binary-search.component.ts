@@ -6,7 +6,7 @@ import { InputGroupModule } from 'primeng/inputgroup';
 import { ButtonModule } from 'primeng/button';
 
 import { TaskGroupTypeFormComponent } from '../task-group-type-form.component';
-import { BinarySearchService } from '../../api';
+import { BinarySearchService } from './binary-search.service';
 
 /**
  * Task Group Type Form: Binary Search

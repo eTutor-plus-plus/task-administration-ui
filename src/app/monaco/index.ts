@@ -3,6 +3,8 @@ import { registerXPathLanguage } from './xpath';
 import { registerDatalogLanguage } from './datalog';
 import { registerCsvLanguage } from './csv';
 import { registerDroolsLanguage } from './drools';
+import { registerRelationalAlgebraLanguage } from './relalg';
+import { registerPlantUmlLanguage } from './puml';
 
 /**
  * Called on monaco editor initialization.
@@ -14,4 +16,6 @@ export function customizeMonaco(): void {
   registerDatalogLanguage();
   registerCsvLanguage();
   registerDroolsLanguage();
+  registerRelationalAlgebraLanguage();
+  registerPlantUmlLanguage();
 }

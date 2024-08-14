@@ -34,7 +34,8 @@
         "no_connection": "The eTutor-Server does not answer.",
         "login_failed": "Sign in failed",
         "login_success_summary": "Sign in successful",
-        "login_success_detail": "You will be redirected shortly ..."
+        "login_success_detail": "You will be redirected shortly ...",
+        "please_wait": "The connection to the Server is being established. Please wait ..."
       }
     },
     "forgot": {
@@ -106,8 +107,8 @@
   },
   "validation": {
     "required": "{{field}} must not be empty!",
-    "minlength": "{{field}} must be at least {{length}} characters long.",
-    "maxlength": "{{field}} can be maximum {{length}} characters long.",
+    "minlength": "{{field}} must be at least {{requiredLength}} characters long.",
+    "maxlength": "{{field}} can be maximum {{requiredLength}} characters long.",
     "max": "{{field}} must not be greater than {{max}}.",
     "min": "{{field}} must not be less than {{min}}.",
     "email": "{{field}} is not a valid email address.",
@@ -127,12 +128,12 @@
     "ok": "OK",
     "cancel": "Cancel",
     "search": "Search",
+    "download": "Download",
     "paginator": "{first} to {last} of {totalRecords}",
     "concurrency-error": "The entry has since been edited by someone else. Please reload and then try again.",
     "created": "Created",
     "modified": "Modified"
   },
-  "quill-html-edit-hint": "Edit the HTML code here. If you click on \"OK\", the content of the editor will be replaced. Insert at least one space after clicking on \"OK\", otherwise your change will not be recognized correctly.",
   "404": {
     "go-back": "Go Back",
     "title": "Page Not Found",
@@ -150,12 +151,16 @@
       "diskSpace": "Disk Space",
       "livenessState": "Liveness",
       "ping": "Ping",
+      "dlv": "Datalog DLV",
+      "xq": "XQuery",
       "icons": {
         "readinessState": "pi-arrow-right-arrow-left",
         "db": "pi-database",
         "diskSpace": "pi-server",
         "livenessState": "pi-verified",
-        "ping": "pi-wifi"
+        "ping": "pi-wifi",
+        "dlv": "pi-info-circle",
+        "xq": "pi-code"
       },
       "backgroundClass": {
         "UP": "bg-green-100",
@@ -192,6 +197,14 @@
           "threshold": "Threshold",
           "path": "Path",
           "exists": "Exists"
+        },
+        "dlv": {
+          "version": "Version",
+          "output": "Output",
+          "exitCode": "Exit-Code"
+        },
+        "xq": {
+          "version": "Version"
         }
       }
     },
@@ -498,5 +511,28 @@
       "rotateRight": "Rotate Right",
       "rotateLeft": "Rotate Left"
     }
+  },
+  "editor": {
+    "link": "Link",
+    "image": "Image",
+    "heading1": "Heading 1",
+    "heading2": "Heading 2",
+    "paragraph": "Paragraph",
+    "codeBlock": "Code-Block",
+    "bold": "Bold",
+    "italic": "Italic",
+    "underline": "Underline",
+    "code": "Code",
+    "ul": "Bullet List",
+    "ol": "Numbered List",
+    "alignLeft": "Align left",
+    "alignRight": "Align right",
+    "alignCenter": "Align center",
+    "alignJustify": "Align justify",
+    "addTable": "Create table",
+    "addColumn": "Add column",
+    "addRow": "Add row",
+    "deleteRow": "Delete row",
+    "html": "Toggle HTML-Code"
   }
 }

@@ -10,8 +10,10 @@
       <p-button [label]="baseTranslationKey + 'submitTest' | transloco" class="w-auto" (onClick)="testTask()"
                 severity="info" [disabled]="loading || form.invalid" styleClass="mr-2"/>
     }
-    <p-button [label]="(originalEntity ? 'common.save' : 'common.create') | transloco" [disabled]="form.invalid" [loading]="loading"
-              (onClick)="submit()"></p-button>
+    @if (role !== 'TUTOR' || !originalEntity || originalEntity.status !== 'APPROVED') {
+      <p-button [label]="(originalEntity ? 'common.save' : 'common.create') | transloco" [disabled]="form.invalid" [loading]="loading"
+                (onClick)="submit()"></p-button>
+    }
   </div>
 </div>
 
@@ -52,8 +54,12 @@
 
       <div class="field mb-4 col-12 md:col-6">
         @if (supportedTaskGroupTypes.length > 0) {
-          <label for="taskGroupId" [transloco]="this.baseTranslationKey + 'fields.taskGroupId'"></label>
-          <p-dropdown inputId="taskGroupId" formControlName="taskGroupId" [options]="taskGroups" optionValue="id"
+          <label for="taskGroupId">
+            <span [transloco]="this.baseTranslationKey + 'fields.taskGroupId'"></span>
+            <p-button icon="pi pi-info-circle" [rounded]="true" [text]="true" styleClass="info-btn ml-2"
+                      [disabled]="!form.controls.taskGroupId.value" (onClick)="showTaskGroupInformation()"/>
+          </label>
+          <p-dropdown inputId="taskGroupId" formControlName="taskGroupId" [options]="taskGroups" optionValue="id" (onChange)="onTaskGroupChanged($event)"
                       optionLabel="name" [readonly]="!!originalEntity" [showClear]="true" [filter]="true" filterBy="name"/>
           @if (form.controls.taskGroupId.dirty || form.controls.taskGroupId.touched) {
             <small class="block mt-1 p-error">
@@ -65,7 +71,7 @@
 
       <div class="field mb-4 col-12 md:col-6">
         <label for="descriptionDe" [transloco]="this.baseTranslationKey + 'fields.descriptionDe'"></label>
-        <p-editor formControlName="descriptionDe" id="descriptionDe" [style]="{ height: '200px' }" [modules]="quillModules"/>
+        <dke-editor formControlName="descriptionDe" id="descriptionDe" [height]="250" />
         @if (form.controls.descriptionDe.dirty || form.controls.descriptionDe.touched) {
           <small class="block mt-1 p-error">
             {{ getError(form.controls.descriptionDe, this.baseTranslationKey + 'fields.descriptionDe') }}
@@ -80,7 +86,7 @@
 
       <div class="field mb-4 col-12 md:col-6">
         <label for="descriptionEn" [transloco]="this.baseTranslationKey + 'fields.descriptionEn'"></label>
-        <p-editor formControlName="descriptionEn" id="descriptionEn" [style]="{ height: '200px' }" [modules]="quillModules"/>
+        <dke-editor formControlName="descriptionEn" id="descriptionEn" [height]="250" />
         @if (form.controls.descriptionEn.dirty || form.controls.descriptionEn.touched) {
           <small class="block mt-1 p-error">
             {{ getError(form.controls.descriptionEn, this.baseTranslationKey + 'fields.descriptionEn') }}
@@ -93,7 +99,7 @@
         }
       </div>
 
-      <div class="field mb-4 col-12 md:col-4">
+      <div class="field mb-4 col-12 md:col-3">
         <label for="maxPoints" [transloco]="this.baseTranslationKey + 'fields.maxPoints'"></label>
         <p-inputNumber inputId="maxPoints" formControlName="maxPoints" [min]="0" [maxFractionDigits]="2"/>
         @if (form.controls.maxPoints.dirty || form.controls.maxPoints.touched) {
@@ -103,7 +109,7 @@
         }
       </div>
 
-      <div class="field mb-4 col-12 md:col-4">
+      <div class="field mb-4 col-12 md:col-3">
         <label for="difficulty" [transloco]="this.baseTranslationKey + 'fields.difficulty'"></label>
         <p-dropdown inputId="difficulty" formControlName="difficulty" [options]="difficulties" optionValue="value" optionDisabled="disabled"
                     optionLabel="text"/>
@@ -114,7 +120,7 @@
         }
       </div>
 
-      <div class="field mb-4 col-12 md:col-4">
+      <div class="field mb-4 col-12 md:col-3">
         <label for="status" [transloco]="this.baseTranslationKey + 'fields.status'"></label>
         <p-dropdown inputId="status" formControlName="status" [options]="statuses" optionValue="value" optionDisabled="disabled" optionLabel="text"/>
         @if (form.controls.status.dirty || form.controls.status.touched) {
@@ -122,39 +128,55 @@
             {{ getError(form.controls.status, this.baseTranslationKey + 'fields.status') }}
           </small>
         }
+
         @if (supportedTaskGroupTypes.length > 1) {
           @if (form.controls.status.value === 'APPROVED' && getTaskGroup()?.status !== 'APPROVED') {
             <p-tag severity="warning" styleClass="mt-1" [value]="'tasks.errors.groupNotApproved' | transloco"></p-tag>
           }
+
         }
       </div>
-    </div>
-  </div>
 
-  @if (componentForm) {
-    <ng-container *ngComponentOutlet="componentForm; inputs: {formGroup: form.controls.additionalData, formData: additionalData, parentForm: form}"/>
-  }
-
-  <div class="surface-card p-4 shadow-2 border-round p-fluid mb-4">
-    <div class="flex justify-content-between mb-4">
-      <p class="font-bold" [transloco]="baseTranslationKey + 'fields.taskCategoryIds'"></p>
-      <p-button [label]="this.baseTranslationKey + 'addTaskCategory' | transloco" (onClick)="addTaskCategory()" severity="help" [disabled]="loading"
-                class="w-auto" size="small"/>
-    </div>
-
-    <div formArrayName="taskCategoryIds">
-      @for (f of form.controls.taskCategoryIds.controls; track $index) {
-        <div class="grid formgrid">
-          <div class="field col-11">
-            <p-treeSelect [formControl]="f" containerStyleClass="w-full" appendTo="body" [options]="taskCategories" [filter]="true"/>
-          </div>
-          <div class="field col-1">
-            <p-button icon="pi pi-trash" severity="danger" (onClick)="removeTaskCategory($index)"/>
-          </div>
+      @if (role !== 'TUTOR') {
+        <div class="field mb-4 col-12 md:col-3">
+          <label for="examTask" [transloco]="this.baseTranslationKey + 'fields.examTask'"></label>
+          <p-checkbox inputId="examTask" formControlName="examTask" class="block" [binary]="true"/>
         </div>
       }
     </div>
   </div>
+
+  @if (componentForm) {
+    <ng-container
+      *ngComponentOutlet="componentForm; inputs: {formGroup: form.controls.additionalData, formData: additionalData, parentForm: form, task: originalEntity}"/>
+  }
+
+  @if (originalEntity) {
+    <div class="surface-card p-4 shadow-2 border-round p-fluid mb-4">
+      <div class="flex justify-content-between mb-4">
+        <p class="font-bold" [transloco]="baseTranslationKey + 'fields.taskCategoryIds'"></p>
+        @if (role !== 'TUTOR' || !originalEntity || originalEntity.status !== 'APPROVED') {
+          <p-button [label]="this.baseTranslationKey + 'addTaskCategory' | transloco" (onClick)="addTaskCategory()" severity="help" [disabled]="loading"
+                    class="w-auto" size="small"/>
+        }
+      </div>
+
+      <div formArrayName="taskCategoryIds">
+        @for (f of form.controls.taskCategoryIds.controls; track $index) {
+          <div class="grid formgrid">
+            <div class="field col-11">
+              <p-treeSelect [formControl]="f" containerStyleClass="w-full" appendTo="body" [options]="taskCategories" [filter]="true"/>
+            </div>
+            <div class="field col-1">
+              @if (role !== 'TUTOR' || !originalEntity || originalEntity.status !== 'APPROVED') {
+                <p-button icon="pi pi-trash" severity="danger" (onClick)="removeTaskCategory($index)"/>
+              }
+            </div>
+          </div>
+        }
+      </div>
+    </div>
+  }
 </form>
 
 <dke-audit-information [data]="originalEntity"/>
@@ -163,3 +185,9 @@
     {{ baseTranslationKey + 'approved' | transloco }}: {{ originalEntity.approvedBy }}, {{ originalEntity.approvedDate | date:'medium' }}
   </p>
 }
+<p-dialog [(visible)]="showTaskGroupDialog" [header]="getTaskGroup()?.name" [modal]="true">
+  <p-tag [severity]="convertStringToSeverity(('taskStatus.' + getTaskGroup()?.status + '_class') | transloco)">
+    {{ ('taskStatus.' + getTaskGroup()?.status) | transloco }}
+  </p-tag>
+  <div [innerHtml]="currentLocale === 'de' ? getTaskGroup()?.descriptionDe : getTaskGroup()?.descriptionEn"></div>
+</p-dialog>

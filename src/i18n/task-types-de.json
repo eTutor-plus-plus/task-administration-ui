@@ -18,8 +18,8 @@
         "missingNodeStrategy": "Fehlender Knoten: Strategie",
         "superfluousNodePenalty": "Überflüssiger Knoten: Punkteabzug",
         "superfluousNodeStrategy": "Überflüssiger Knoten: Strategie",
-        "displacedNodePenalty": "Verdrängter Knoten: Punkteabzug",
-        "displacedNodeStrategy": "Verdrängter Knoten: Strategie",
+        "displacedNodePenalty": "Fehlplatzierter Knoten: Punkteabzug",
+        "displacedNodeStrategy": "Fehlplatzierter Knoten: Strategie",
         "missingAttributePenalty": "Fehlendes Attribut: Punkteabzug",
         "missingAttributeStrategy": "Fehlendes Attribut: Strategie",
         "superfluousAttributePenalty": "Überflüssiges Attribut: Punkteabzug",
@@ -62,6 +62,16 @@
         "EACH": "Einmal pro Element"
       }
     },
+    "asp": {
+      "title": "Answer Set Programming",
+      "fields": {
+        "solution": "Lösung",
+        "maxN": "Max. Integer"
+      },
+      "descriptions": {
+        "solution": "Hier können die Regeln, welche die Lösung repräsentieren, definiert werden. Hier dürfen keine Query-Deklarationen erfolgen."
+      }
+    },
     "drools": {
       "title": "Drools",
       "fields": {
@@ -75,6 +85,7 @@
         "droolsIsCEP": "Ist dieser Task ein CEP Task?"
       }
     },
+
     "sql-ddl": {
       "title": "SQL DDL",
       "fields": {
@@ -86,6 +97,93 @@
         "constraintPoints": "Punkte pro Constraint",
         "primaryKeyPoints": "Punkte pro Primary Key",
         "foreignKeyPoints": "Punkte pro Foreign Key"
+  }},
+    "sql": {
+      "title": "SQL",
+      "fields": {
+        "solution": "Lösung",
+        "wrongOrderPenalty": "Falsche Sortierung: Punkteabzug",
+        "superfluousColumnsPenalty": "Überflüssige Spalte: Punkteabzug"
+      },
+      "descriptions": {
+        "penalty": "Ein Punkteabzug von -1 bedeutet, dass die Abgabe mit 0 Punkten bewertet wird."
+      }
+    },
+    "relalg": {
+      "title": "Relationale Algebra",
+      "fields": {
+        "solution": "Lösung",
+        "sqlSolution": "SQL-Lösung",
+        "wrongOrderPenalty": "Falsche Sortierung: Punkteabzug",
+        "superfluousColumnsPenalty": "Überflüssige Spalte: Punkteabzug"
+      },
+      "descriptions": {
+        "penalty": "Ein Punkteabzug von -1 bedeutet, dass die Abgabe mit 0 Punkten bewertet wird."
+      }
+    },
+    "fanf": {
+      "title": "Funktionale Abhängigkeiten",
+      "fields": {
+        "baseRelationName": "Name der Basisrelation",
+        "baseRelationAttributes": "Attribute der Basisrelation",
+        "baseRelationDependencies": "Abhängigkeiten der Basisrelation",
+        "subtype": "Unteraufgabe",
+        "keysDeterminationPenaltyPerMissingKey": "Punktabzug pro fehlendem Schlüssel",
+        "keysDeterminationPenaltyPerIncorrectKey": "Punktabzug pro falschem Schlüssel",
+        "attributeClosureBaseAttributes": "Basisattribute",
+        "attributeClosurePenaltyPerMissingAttribute": "Punktabzug pro fehlendem Attribut",
+        "attributeClosurePenaltyPerIncorrectAttribute": "Punktabzug pro falschem Attribut",
+        "minimalCoverPenaltyPerNonCanonicalDependency": "Punktabzug pro nicht-kanonischer Abhängigkeit",
+        "minimalCoverPenaltyPerTrivialDependency": "Punktabzug pro trivialer Abhängigkeit",
+        "minimalCoverPenaltyPerExtraneousAttribute": "Punktabzug pro überflüssigem Attribut",
+        "minimalCoverPenaltyPerRedundantDependency": "Punktabzug pro redundanter Abhängigkeit",
+        "minimalCoverPenaltyPerMissingDependencyVsSolution": "Punktabzug pro fehlender Abhängigkeit",
+        "minimalCoverPenaltyPerIncorrectDependencyVsSolution": "Punktabzug pro falscher Abhängigkeit",
+        "normalFormDeterminationPenaltyForIncorrectOverallNormalform": "Punktabzug bei falscher Gesamt-Normalform",
+        "normalFormDeterminationPenaltyPerIncorrectDependencyNormalform": "Punktabzug mit falscher verletzter Normalform bei Abhängigkeit",
+        "normalizationTargetLevel": "Ziel-Normalform",
+        "normalizationMaxLostDependencies": "The maximum number of functional dependencies that is permitted to be lost in the decomposition process before points are deducted in a normalization task",
+        "normalizationPenaltyPerLostAttribute": "Punktabzug pro verlorenem Attribut",
+        "normalizationPenaltyForLossyDecomposition": "Punktabzug bei verlustbehafteter Zerlegung",
+        "normalizationPenaltyPerNonCanonicalDependency": "Punktabzug pro nicht-kanonischer Abhängigkeit",
+        "normalizationPenaltyPerTrivialDependency": "Punktabzug pro trivialer Abhängigkeit",
+        "normalizationPenaltyPerExtraneousAttributeInDependency": "Punktabzug pro überflüssigem Attribut in Abhängigkeit",
+        "normalizationPenaltyPerRedundantDependency": "Punktabzug pro redundanter Abhängigkeit",
+        "normalizationPenaltyPerExcessiveLostDependency": "Punktabzug pro übermäßig verlorene Abhängigkeit",
+        "normalizationPenaltyPerMissingNewDependency": "Punktabzug pro fehlender neuer Abhängigkeit",
+        "normalizationPenaltyPerIncorrectNewDependency": "Punktabzug pro falscher neuer Abhängigkeit",
+        "normalizationPenaltyPerMissingKey": "Punktabzug pro fehlendem Schlüssel",
+        "normalizationPenaltyPerIncorrectKey": "Punktabzug pro falschem Schlüssel",
+        "normalizationPenaltyPerIncorrectNFRelation": "Punktabzug pro falscher Normalform-Relation"
+
+      },
+      "descriptions": {
+        "penalty": "Ein Punkteabzug von -1 bedeutet, dass die Abgabe mit 0 Punkten bewertet wird."
+      },
+      "subtype": {
+        "keysDetermination": "Schlüsselbestimmung",
+        "attributeClosure": "Bildung der Attributhülle",
+        "minimalCover": "Minimale Überdeckung",
+        "normalFormDetermination": "Normalformen bestimmen",
+        "normalization": "Normalisierung"
+
+      }
+    },
+    "uml": {
+      "title": "UML",
+      "fields": {
+        "umlBlock": "Block {{id}}",
+        "umlSolution": "Lösung",
+        "umlAddBlock": "Block hinzufügen",
+        "umlAddAlternative": "Alternative hinzufügen",
+        "fullComparison": "Vollständiger Vergleich?",
+        "classPoints": "Punkte pro richtiger Klasse",
+        "attributePoints": "Punkte pro richtigem Attribut",
+        "relationshipPoints": "Punkte pro richtiger Beziehung",
+        "associationPoints": "Punkte pro richtiger Assoziation",
+        "constraintPoints": "Punkte pro richtiger Constraint"
+
+
       }
     }
   }

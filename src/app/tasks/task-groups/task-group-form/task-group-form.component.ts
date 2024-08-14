@@ -9,13 +9,13 @@ import { distinctUntilChanged, Subject, takeUntil } from 'rxjs';
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
 import { DropdownModule } from 'primeng/dropdown';
-import { EditorModule } from 'primeng/editor';
 import { BlockUIModule } from 'primeng/blockui';
 
-import { AuditInformationComponent, EditFormComponent } from '../../../layout';
+import { AuditInformationComponent, DkeEditorComponent, EditFormComponent } from '../../../layout';
 import { AuthService, Role } from '../../../auth';
 import { OrganizationalUnitDto, OrganizationalUnitService, StatusEnum, TaskGroupDto, TaskGroupService } from '../../../api';
 import { TaskGroupForm, TaskGroupTypeRegistry } from '../../../task-group-type';
+import { TaskAppTypeService } from '../../task-app-type.service';
 
 /**
  * Task Group Form
@@ -31,27 +31,16 @@ import { TaskGroupForm, TaskGroupTypeRegistry } from '../../../task-group-type';
     ReactiveFormsModule,
     InputTextModule,
     DropdownModule,
-    EditorModule,
     AuditInformationComponent,
     NgComponentOutlet,
     DatePipe,
-    BlockUIModule
+    BlockUIModule,
+    DkeEditorComponent
   ],
   templateUrl: './task-group-form.component.html',
   styleUrl: './task-group-form.component.scss'
 })
 export class TaskGroupFormComponent extends EditFormComponent<TaskGroupDto, TaskGroupService, TaskGroupForm> implements OnInit, OnDestroy {
-
-  /**
-   * The quill module configuration.
-   */
-  readonly quillModules = {
-    htmlEditButton: {
-      okText: this.translationService.translate('common.ok'),
-      cancelText: this.translationService.translate('common.cancel'),
-      msg: this.translationService.translate('quill-html-edit-hint')
-    }
-  };
 
   /**
    * Whether the form should be readonly.
@@ -93,6 +82,7 @@ export class TaskGroupFormComponent extends EditFormComponent<TaskGroupDto, Task
    */
   supportsDescriptionGeneration: boolean;
 
+  private availableTaskTypes: string[];
   private readonly destroy$ = new Subject<void>();
 
   /**
@@ -100,6 +90,7 @@ export class TaskGroupFormComponent extends EditFormComponent<TaskGroupDto, Task
    */
   constructor(entityService: TaskGroupService,
               private readonly organizationalUnitService: OrganizationalUnitService,
+              private readonly taskAppTypeService: TaskAppTypeService,
               private readonly authService: AuthService,
               private readonly route: ActivatedRoute,
               private readonly router: Router,
@@ -116,15 +107,14 @@ export class TaskGroupFormComponent extends EditFormComponent<TaskGroupDto, Task
     this.readonly = false;
     this.supportsDescriptionGeneration = false;
     this.organizationalUnits = [];
-    this.types = TaskGroupTypeRegistry.getTaskTypes().map(x => {
-      return {value: x, text: this.translationService.translate('taskGroupTypes.' + x + '.title')};
-    }).sort((a, b) => a.text.localeCompare(b.text));
+    this.availableTaskTypes = [];
+    this.types = [];
     this.statuses = [
       {value: StatusEnum.DRAFT, text: this.translationService.translate('taskStatus.' + StatusEnum.DRAFT), disabled: false},
       {value: StatusEnum.READY_FOR_APPROVAL, text: this.translationService.translate('taskStatus.' + StatusEnum.READY_FOR_APPROVAL), disabled: false},
       {value: StatusEnum.APPROVED, text: this.translationService.translate('taskStatus.' + StatusEnum.APPROVED), disabled: false}
     ];
-    this.role = this.authService.user?.maxRole ?? 'TUTOR'; // We assume that the user and its role do not change during lifetime of this component
+    this.role = this.authService.user?.maxRole ?? 'TUTOR';
   }
 
   /**
@@ -149,6 +139,7 @@ export class TaskGroupFormComponent extends EditFormComponent<TaskGroupDto, Task
 
     // Load organizational units
     this.loadOrganizationalUnits();
+    this.loadTaskTypes();
 
     // Load data from route
     this.route.paramMap
@@ -159,6 +150,7 @@ export class TaskGroupFormComponent extends EditFormComponent<TaskGroupDto, Task
           await this.loadTaskGroup(id);
         } else {
           this.originalEntity = null;
+          this.role = this.authService.user?.maxRole ?? 'TUTOR';
         }
         this.setDefaultOrganizationalUnitIfUnset();
         this.setFormEnabledDisabled();
@@ -220,6 +212,9 @@ export class TaskGroupFormComponent extends EditFormComponent<TaskGroupDto, Task
       this.additionalData = data.additionalData;
       this.form.patchValue(this.originalEntity);
       this.form.markAsPristine();
+      this.role = this.authService.user?.isFullAdmin ?
+        'FULL_ADMIN' :
+        this.authService.user?.roles.find(x => x.organizationalUnit == data.dto.organizationalUnitId)?.role ?? 'TUTOR';
       this.setFormEnabledDisabled();
       this.changeDetectorRef.detectChanges(); // required to prevent error
     } catch (err) {
@@ -276,6 +271,21 @@ export class TaskGroupFormComponent extends EditFormComponent<TaskGroupDto, Task
   }
 
   /**
+   * Loads the available task types.
+   */
+  private async loadTaskTypes(): Promise<void> {
+    try {
+      const types = await this.taskAppTypeService.getAvailableTaskTypes();
+      this.availableTaskTypes = TaskGroupTypeRegistry.getTaskTypes().filter(x => types.includes(x));
+      if (this.availableTaskTypes.length === 0)
+        this.availableTaskTypes = TaskGroupTypeRegistry.getTaskTypes();
+    } catch (err) {
+      this.availableTaskTypes = TaskGroupTypeRegistry.getTaskTypes();
+    }
+    this.updateDropdownTranslations();
+  }
+
+  /**
    * Sets the dropdown values based on the current language.
    */
   private updateDropdownTranslations(): void {
@@ -287,10 +297,10 @@ export class TaskGroupFormComponent extends EditFormComponent<TaskGroupDto, Task
       };
     });
 
-    this.types = this.types.map(value => {
+    this.types = this.availableTaskTypes.map(x => {
       return {
-        ...value,
-        label: this.translationService.translate('taskGroupTypes.' + value.value + '.title')
+        value: x,
+        text: this.translationService.translate('taskGroupTypes.' + x + '.title')
       };
     });
   }
