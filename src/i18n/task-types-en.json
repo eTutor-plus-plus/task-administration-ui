@@ -84,7 +84,6 @@
         "droolsIsCEP": "Is this a CEP Task?"
       }
     },
-
       "sql-ddl": {
         "title": "SQL DDL",
         "fields": {
@@ -184,4 +183,5 @@
       }
     }
   }
+}
 
