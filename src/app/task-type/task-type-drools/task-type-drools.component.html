@@ -2,42 +2,46 @@
   <div class="surface-card p-4 shadow-2 border-round p-fluid mb-4">
     <div class="grid formgrid p-fluid">
       <div class="field mb-4 col-12">
-        <label for="droolsSolution" transloco="taskTypes.drools.fields.droolsSolution"></label>
-        <ngx-monaco-editor id="droolsSolution" formControlName="droolsSolution" [options]="droolsEditorOptions" style="height: 300px;"/>
-        @if (form.controls.droolsSolution.dirty || form.controls.droolsSolution.touched) {
+        <label for="solution" transloco="taskTypes.drools.fields.droolsSolution"></label>
+        <ngx-monaco-editor id="solution" formControlName="solution" [options]="droolsEditorOptions" style="height: 300px;"/>
+        @if (form.controls.solution.dirty || form.controls.solution.touched) {
           <small class="block mt-1 p-error">
-            {{ getError(form.controls.droolsSolution, 'taskTypes.xquery.fields.droolsSolution') }}
+            {{ getError(form.controls.solution, 'taskTypes.xquery.fields.droolsSolution') }}
           </small>
         }
       </div>
 
       <div class="field mb-4 col-12">
-        <label for="droolsObjects" transloco="taskTypes.drools.fields.droolsObjects"></label>
-        <ngx-monaco-editor id="droolsObjects" formControlName="droolsObjects" [options]="csvEditorOptions" style="height: 200px;"/>
-        @if (form.controls.droolsObjects.dirty || form.controls.droolsObjects.touched) {
+        <label for="objects" transloco="taskTypes.drools.fields.droolsObjects"></label>
+        <ngx-monaco-editor id="objects" formControlName="objects" [options]="csvEditorOptions" style="height: 200px;"/>
+        @if (form.controls.objects.dirty || form.controls.objects.touched) {
           <small class="block mt-1 p-error">
-            {{ getError(form.controls.droolsObjects, 'taskTypes.drools.fields.droolsObjects') }}
+            {{ getError(form.controls.objects, 'taskTypes.drools.fields.droolsObjects') }}
           </small>
         }
       </div>
       <div class="field mb-4 col-12">
-        <label for="droolsErrorWeighting" [transloco]="'taskTypes.drools.fields.droolsErrorWeighting'"></label>
-        <input id="droolsErrorWeighting" type="number" pInputText formControlName="droolsErrorWeighting" autocomplete="off">
-        @if (form.controls.droolsErrorWeighting.dirty || form.controls.droolsErrorWeighting.touched) {
+        <label for="errorWeighting" [transloco]="'taskTypes.drools.fields.droolsErrorWeighting'"></label>
+        <input id="errorWeighting" type="number" pInputText formControlName="errorWeighting" autocomplete="off">
+        @if (form.controls.errorWeighting.dirty || form.controls.errorWeighting.touched) {
           <small class="block mt-1 p-error">
-            {{ getError(form.controls.droolsErrorWeighting, 'taksTypes.drools.fields.droolsErrorWeighting') }}
+            {{ getError(form.controls.errorWeighting, 'taksTypes.drools.fields.errorWeighting') }}
           </small>
         }
       </div>
       <div class="field mb-4 col-12">
-        <label for="droolsValidationClassname" [transloco]="'taskTypes.drools.fields.droolsValidationClassname'"></label>
-        <input id="droolsValidationClassname" type="text" pInputText formControlName="droolsValidationClassname" autocomplete="off">
-        @if (form.controls.droolsValidationClassname.dirty || form.controls.droolsValidationClassname.touched) {
+        <label for="validationClassname" [transloco]="'taskTypes.drools.fields.droolsValidationClassname'"></label>
+        <input id="validationClassname" type="text" pInputText formControlName="validationClassname" autocomplete="off">
+        @if (form.controls.validationClassname.dirty || form.controls.validationClassname.touched) {
           <small class="block mt-1 p-error">
-            {{ getError(form.controls.droolsValidationClassname, 'taskTypes.drools.fields.droolsValidationClassname') }}
+            {{ getError(form.controls.validationClassname, 'taskTypes.drools.fields.droolsValidationClassname') }}
           </small>
         }
       </div>
+    </div>
+    <div class="field mb-4 col-12 md:col-6">
+      <label for="isCEP" transloco="taskTypes.drools.fields.droolsIsCEP"></label>
+      <p-checkbox inputId="isCEP" formControlName="isCEP" class="block" [binary]="true"/>
     </div>
   </div>
   <div class="surface-card p-4 shadow-2 border-round p-fluid mb-4">
@@ -46,8 +50,8 @@
       <p-button [label]="'taskTypes.drools.fields.droolsAddClass' | transloco" (onClick)="addDroolsClass()" severity="help" [disabled]="loading"
                 class="w-auto" size="small"/>
     </div>
-    <div formArrayName="droolsClasses">
-      <div *ngFor="let droolsClass of droolsClasses.controls; let i = index" [formGroupName]="i">
+    <div formArrayName="classes">
+      <div *ngFor="let c of classes.controls; let i = index" [formGroupName]="i">
         <div class="grid formgrid p-fluid">
           <div class="field col-3 mb-4">
             <input type="text" pInputText formControlName="classname" placeholder="Class Name">
@@ -62,5 +66,8 @@
         </div>
       </div>
     </div>
+  </div>
+  <div>
+
   </div>
 </div>

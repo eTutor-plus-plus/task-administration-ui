@@ -1,0 +1,392 @@
+<div [formGroup]="form">
+  <div class="surface-card p-4 shadow-2 border-round p-fluid mb-4">
+    <div class="grid formgrid p-fluid">
+      <div class="field mb-4 col-12">
+
+        <div class="field mb-4 col-12">
+          <label for="baseRelationName" [transloco]="'taskTypes.fanf.fields.baseRelationName'"></label>
+          <input id="baseRelationName" type="text" pInputText formControlName="baseRelationName" autocomplete="off">
+          @if (form.controls.baseRelationName.dirty || form.controls.baseRelationName.touched) {
+            <small class="block mt-1 p-error">
+              {{ getError(form.controls.baseRelationName, 'taskTypes.fanf.fields.baseRelationName') }}
+            </small>
+          }
+        </div>
+
+        <div class="field mb-4 col-12">
+          <label for="baseRelationAttributes" [transloco]="'taskTypes.fanf.fields.baseRelationAttributes'"></label>
+          <input id="baseRelationAttributes" type="text" pInputText formControlName="baseRelationAttributes" autocomplete="off">
+          @if (form.controls.baseRelationAttributes.dirty || form.controls.baseRelationAttributes.touched) {
+            <small class="block mt-1 p-error">
+              {{ getError(form.controls.baseRelationAttributes, 'taskTypes.fanf.fields.baseRelationAttributes') }}
+            </small>
+          }
+        </div>
+
+        <div class="field mb-4 col-12">
+          <label for="baseRelationDependencies" [transloco]="'taskTypes.fanf.fields.baseRelationDependencies'"></label>
+          <input id="baseRelationDependencies" type="text" pInputText formControlName="baseRelationDependencies" autocomplete="off">
+          @if (form.controls.baseRelationDependencies.dirty || form.controls.baseRelationDependencies.touched) {
+
+            <small class="block mt-1 p-error">
+              {{ getError(form.controls.baseRelationDependencies, 'taskTypes.fanf.fields.baseRelationDependencies') }}
+            </small>
+          }
+        </div>
+
+        <div class="field mb-4 col-12 md:col-6">
+          <label for="subtype" [transloco]="'taskTypes.fanf.fields.subtype'"></label>
+          <p-dropdown inputId="subtype" formControlName="subtype" [options]="subtypeOptions" optionValue="id"
+                      optionLabel="name" [readonly]="!!originalData" [filter]="true" filterBy="name"/>
+          @if (form.controls.subtype.dirty || form.controls.subtype.touched) {
+            <small class="block mt-1 p-error">
+              {{ getError(form.controls.subtype, 'taskTypes.fanf.fields.subtype') }}
+            </small>
+          }
+        </div>
+        <!--        KeyDetermination-->
+        @if (form.controls.subtype.value === 0) {
+          <div class="surface-card p-4 shadow-2 border-round p-fluid mb-4">
+            <div class="grid formgrid p-fluid">
+
+
+              <div class="field mb-4 col-12 md:col-6">
+                <label for="keysDeterminationPenaltyPerMissingKey" transloco="taskTypes.fanf.fields.keysDeterminationPenaltyPerMissingKey"></label>
+                <p-inputNumber inputId="keysDeterminationPenaltyPerMissingKey" formControlName="keysDeterminationPenaltyPerMissingKey" mode="decimal"
+                               [maxFractionDigits]="2" [min]="0"/>
+                @if (form.controls.keysDeterminationPenaltyPerMissingKey.dirty || form.controls.keysDeterminationPenaltyPerMissingKey.touched) {
+                  <small class="block mt-1 p-error">
+                    {{ getError(form.controls.keysDeterminationPenaltyPerMissingKey, 'taskTypes.fanf.fields.keysDeterminationPenaltyPerMissingKey') }}
+                  </small>
+                }
+              </div>
+
+              <div class="field mb-4 col-12 md:col-6">
+                <label for="keysDeterminationPenaltyPerIncorrectKey" transloco="taskTypes.fanf.fields.keysDeterminationPenaltyPerIncorrectKey"></label>
+                <p-inputNumber inputId="keysDeterminationPenaltyPerIncorrectKey" formControlName="keysDeterminationPenaltyPerIncorrectKey" mode="decimal"
+                               [maxFractionDigits]="2" [min]="0"/>
+                @if (form.controls.keysDeterminationPenaltyPerIncorrectKey.dirty || form.controls.keysDeterminationPenaltyPerIncorrectKey.touched) {
+                  <small class="block mt-1 p-error">
+                    {{ getError(form.controls.keysDeterminationPenaltyPerIncorrectKey, 'taskTypes.fanf.fields.keysDeterminationPenaltyPerIncorrectKey') }}
+                  </small>
+                }
+              </div>
+            </div>
+          </div>
+        }
+        <!--        AttributeClosure-->
+        @if (form.controls.subtype.value === 3) {
+          <div class="surface-card p-4 shadow-2 border-round p-fluid mb-4">
+            <div class="grid formgrid p-fluid">
+
+              <div class="field mb-4 col-12">
+                <label for="attributeClosureBaseAttributes" [transloco]="'taskTypes.fanf.fields.attributeClosureBaseAttributes'"></label>
+                <input id="attributeClosureBaseAttributes" type="text" pInputText formControlName="attributeClosureBaseAttributes" autocomplete="off">
+                @if (form.controls.attributeClosureBaseAttributes.dirty || form.controls.attributeClosureBaseAttributes.touched) {
+
+                  <small class="block mt-1 p-error">
+                    {{ getError(form.controls.attributeClosureBaseAttributes, 'taskTypes.fanf.fields.attributeClosureBaseAttributes') }}
+                  </small>
+                }
+              </div>
+
+
+              <div class="field mb-4 col-12 md:col-6">
+                <label for="attributeClosurePenaltyPerMissingAttribute" transloco="taskTypes.fanf.fields.attributeClosurePenaltyPerMissingAttribute"></label>
+                <p-inputNumber inputId="attributeClosurePenaltyPerMissingAttribute" formControlName="attributeClosurePenaltyPerMissingAttribute" mode="decimal"
+                               [maxFractionDigits]="2" [min]="0"/>
+                @if (form.controls.attributeClosurePenaltyPerMissingAttribute.dirty || form.controls.attributeClosurePenaltyPerMissingAttribute.touched) {
+                  <small class="block mt-1 p-error">
+                    {{ getError(form.controls.attributeClosurePenaltyPerMissingAttribute, 'taskTypes.fanf.fields.attributeClosurePenaltyPerMissingAttribute') }}
+                  </small>
+                }
+              </div>
+
+              <div class="field mb-4 col-12 md:col-6">
+                <label for="attributeClosurePenaltyPerIncorrectAttribute" transloco="taskTypes.fanf.fields.attributeClosurePenaltyPerIncorrectAttribute"></label>
+                <p-inputNumber inputId="attributeClosurePenaltyPerIncorrectAttribute" formControlName="attributeClosurePenaltyPerIncorrectAttribute" mode="decimal" [maxFractionDigits]="2" [min]="0"/>
+                @if (form.controls.attributeClosurePenaltyPerIncorrectAttribute.dirty || form.controls.attributeClosurePenaltyPerIncorrectAttribute.touched) {
+                  <small class="block mt-1 p-error">
+                    {{ getError(form.controls.attributeClosurePenaltyPerIncorrectAttribute, 'taskTypes.fanf.fields.attributeClosurePenaltyPerIncorrectAttribute') }}
+                  </small>
+                }
+              </div>
+            </div>
+          </div>
+        }
+
+
+
+        <!--Minimal Cover-->
+        @if (form.controls.subtype.value === 2) {
+          <div class="surface-card p-4 shadow-2 border-round p-fluid mb-4">
+            <div class="grid formgrid p-fluid">
+
+
+              <div class="field mb-4 col-12 md:col-6">
+                <label for="minimalCoverPenaltyPerNonCanonicalDependency" transloco="taskTypes.fanf.fields.minimalCoverPenaltyPerNonCanonicalDependency"></label>
+                <p-inputNumber inputId="minimalCoverPenaltyPerNonCanonicalDependency" formControlName="minimalCoverPenaltyPerNonCanonicalDependency" mode="decimal"
+                               [maxFractionDigits]="2" [min]="0"/>
+                @if (form.controls.minimalCoverPenaltyPerNonCanonicalDependency.dirty || form.controls.minimalCoverPenaltyPerNonCanonicalDependency.touched) {
+                  <small class="block mt-1 p-error">
+                    {{ getError(form.controls.minimalCoverPenaltyPerNonCanonicalDependency, 'taskTypes.fanf.fields.minimalCoverPenaltyPerNonCanonicalDependency') }}
+                  </small>
+                }
+              </div>
+
+              <div class="field mb-4 col-12 md:col-6">
+                <label for="minimalCoverPenaltyPerTrivialDependency" transloco="taskTypes.fanf.fields.minimalCoverPenaltyPerTrivialDependency"></label>
+                <p-inputNumber inputId="minimalCoverPenaltyPerTrivialDependency" formControlName="minimalCoverPenaltyPerTrivialDependency" mode="decimal" [maxFractionDigits]="2" [min]="0"/>
+                @if (form.controls.minimalCoverPenaltyPerTrivialDependency.dirty || form.controls.minimalCoverPenaltyPerTrivialDependency.touched) {
+                  <small class="block mt-1 p-error">
+                    {{ getError(form.controls.minimalCoverPenaltyPerTrivialDependency, 'taskTypes.fanf.fields.minimalCoverPenaltyPerTrivialDependency') }}
+                  </small>
+                }
+              </div>
+
+              <div class="field mb-4 col-12 md:col-6">
+                <label for="minimalCoverPenaltyPerExtraneousAttribute" transloco="taskTypes.fanf.fields.minimalCoverPenaltyPerExtraneousAttribute"></label>
+                <p-inputNumber inputId="minimalCoverPenaltyPerExtraneousAttribute" formControlName="minimalCoverPenaltyPerExtraneousAttribute" mode="decimal" [maxFractionDigits]="2" [min]="0"/>
+                @if (form.controls.minimalCoverPenaltyPerExtraneousAttribute.dirty || form.controls.minimalCoverPenaltyPerExtraneousAttribute.touched) {
+                  <small class="block mt-1 p-error">
+                    {{ getError(form.controls.minimalCoverPenaltyPerExtraneousAttribute, 'taskTypes.fanf.fields.minimalCoverPenaltyPerExtraneousAttribute') }}
+                  </small>
+                }
+              </div>
+
+
+              <div class="field mb-4 col-12 md:col-6">
+                <label for="minimalCoverPenaltyPerRedundantDependency" transloco="taskTypes.fanf.fields.minimalCoverPenaltyPerRedundantDependency"></label>
+                <p-inputNumber inputId="minimalCoverPenaltyPerRedundantDependency" formControlName="minimalCoverPenaltyPerRedundantDependency" mode="decimal" [maxFractionDigits]="2" [min]="0"/>
+                @if (form.controls.minimalCoverPenaltyPerRedundantDependency.dirty || form.controls.minimalCoverPenaltyPerRedundantDependency.touched) {
+                  <small class="block mt-1 p-error">
+                    {{ getError(form.controls.minimalCoverPenaltyPerRedundantDependency, 'taskTypes.fanf.fields.minimalCoverPenaltyPerRedundantDependency') }}
+                  </small>
+                }
+              </div>
+
+
+              <div class="field mb-4 col-12 md:col-6">
+                <label for="minimalCoverPenaltyPerMissingDependencyVsSolution" transloco="taskTypes.fanf.fields.minimalCoverPenaltyPerMissingDependencyVsSolution"></label>
+                <p-inputNumber inputId="minimalCoverPenaltyPerMissingDependencyVsSolution" formControlName="minimalCoverPenaltyPerMissingDependencyVsSolution" mode="decimal" [maxFractionDigits]="2" [min]="0"/>
+                @if (form.controls.minimalCoverPenaltyPerMissingDependencyVsSolution.dirty || form.controls.minimalCoverPenaltyPerMissingDependencyVsSolution.touched) {
+                  <small class="block mt-1 p-error">
+                    {{ getError(form.controls.minimalCoverPenaltyPerMissingDependencyVsSolution, 'taskTypes.fanf.fields.minimalCoverPenaltyPerMissingDependencyVsSolution') }}
+                  </small>
+                }
+              </div>
+
+
+              <div class="field mb-4 col-12 md:col-6">
+                <label for="minimalCoverPenaltyPerIncorrectDependencyVsSolution" transloco="taskTypes.fanf.fields.minimalCoverPenaltyPerIncorrectDependencyVsSolution"></label>
+                <p-inputNumber inputId="minimalCoverPenaltyPerIncorrectDependencyVsSolution" formControlName="minimalCoverPenaltyPerIncorrectDependencyVsSolution" mode="decimal" [maxFractionDigits]="2" [min]="0"/>
+                @if (form.controls.minimalCoverPenaltyPerIncorrectDependencyVsSolution.dirty || form.controls.minimalCoverPenaltyPerIncorrectDependencyVsSolution.touched) {
+                  <small class="block mt-1 p-error">
+                    {{ getError(form.controls.minimalCoverPenaltyPerIncorrectDependencyVsSolution, 'taskTypes.fanf.fields.minimalCoverPenaltyPerIncorrectDependencyVsSolution') }}
+                  </small>
+                }
+              </div>
+            </div>
+          </div>
+        }
+
+
+        <!--Normal Form-->
+        @if (form.controls.subtype.value === 4) {
+          <div class="surface-card p-4 shadow-2 border-round p-fluid mb-4">
+            <div class="grid formgrid p-fluid">
+
+
+              <div class="field mb-4 col-12 md:col-6">
+                <label for="normalFormDeterminationPenaltyForIncorrectOverallNormalform" transloco="taskTypes.fanf.fields.normalFormDeterminationPenaltyForIncorrectOverallNormalform"></label>
+                <p-inputNumber inputId="normalFormDeterminationPenaltyForIncorrectOverallNormalform" formControlName="normalFormDeterminationPenaltyForIncorrectOverallNormalform" mode="decimal"
+                               [maxFractionDigits]="2" [min]="0"/>
+                @if (form.controls.normalFormDeterminationPenaltyForIncorrectOverallNormalform.dirty || form.controls.normalFormDeterminationPenaltyForIncorrectOverallNormalform.touched) {
+                  <small class="block mt-1 p-error">
+                    {{ getError(form.controls.normalFormDeterminationPenaltyForIncorrectOverallNormalform, 'taskTypes.fanf.fields.normalFormDeterminationPenaltyForIncorrectOverallNormalform') }}
+                  </small>
+                }
+              </div>
+
+              <div class="field mb-4 col-12 md:col-6">
+                <label for="normalFormDeterminationPenaltyPerIncorrectDependencyNormalform" transloco="taskTypes.fanf.fields.normalFormDeterminationPenaltyPerIncorrectDependencyNormalform"></label>
+                <p-inputNumber inputId="normalFormDeterminationPenaltyPerIncorrectDependencyNormalform" formControlName="normalFormDeterminationPenaltyPerIncorrectDependencyNormalform" mode="decimal" [maxFractionDigits]="2" [min]="0"/>
+                @if (form.controls.normalFormDeterminationPenaltyPerIncorrectDependencyNormalform.dirty || form.controls.normalFormDeterminationPenaltyPerIncorrectDependencyNormalform.touched) {
+                  <small class="block mt-1 p-error">
+                    {{ getError(form.controls.normalFormDeterminationPenaltyPerIncorrectDependencyNormalform, 'taskTypes.fanf.fields.normalFormDeterminationPenaltyPerIncorrectDependencyNormalform') }}
+                  </small>
+                }
+              </div>
+            </div>
+          </div>
+        }
+
+
+
+        <!--Normalization-->
+        @if (form.controls.subtype.value === 1) {
+          <div class="surface-card p-4 shadow-2 border-round p-fluid mb-4">
+            <div class="grid formgrid p-fluid">
+
+
+              <div class="field mb-4 col-12">
+                <label for="normalizationTargetLevel" [transloco]="'taskTypes.fanf.fields.normalizationTargetLevel'"></label>
+                <input id="normalizationTargetLevel" type="text" pInputText formControlName="normalizationTargetLevel" autocomplete="off">
+                @if (form.controls.normalizationTargetLevel.dirty || form.controls.normalizationTargetLevel.touched) {
+
+                  <small class="block mt-1 p-error">
+                    {{ getError(form.controls.normalizationTargetLevel, 'taskTypes.fanf.fields.normalizationTargetLevel') }}
+                  </small>
+                }
+              </div>
+
+
+
+              <div class="field mb-4 col-12 md:col-6">
+                <label for="normalizationMaxLostDependencies" transloco="taskTypes.fanf.fields.normalizationMaxLostDependencies"></label>
+                <p-inputNumber inputId="normalizationMaxLostDependencies" formControlName="normalizationMaxLostDependencies" mode="decimal"
+                               [maxFractionDigits]="2" [min]="0"/>
+                @if (form.controls.normalizationMaxLostDependencies.dirty || form.controls.normalizationMaxLostDependencies.touched) {
+                  <small class="block mt-1 p-error">
+                    {{ getError(form.controls.normalizationMaxLostDependencies, 'taskTypes.fanf.fields.normalizationMaxLostDependencies') }}
+                  </small>
+                }
+              </div>
+
+              <div class="field mb-4 col-12 md:col-6">
+                <label for="normalizationPenaltyPerLostAttribute" transloco="taskTypes.fanf.fields.normalizationPenaltyPerLostAttribute"></label>
+                <p-inputNumber inputId="normalizationPenaltyPerLostAttribute" formControlName="normalizationPenaltyPerLostAttribute" mode="decimal" [maxFractionDigits]="2" [min]="0"/>
+                @if (form.controls.normalizationPenaltyPerLostAttribute.dirty || form.controls.normalizationPenaltyPerLostAttribute.touched) {
+                  <small class="block mt-1 p-error">
+                    {{ getError(form.controls.normalizationPenaltyPerLostAttribute, 'taskTypes.fanf.fields.normalizationPenaltyPerLostAttribute') }}
+                  </small>
+                }
+              </div>
+
+              <div class="field mb-4 col-12 md:col-6">
+                <label for="normalizationPenaltyForLossyDecomposition" transloco="taskTypes.fanf.fields.normalizationPenaltyForLossyDecomposition"></label>
+                <p-inputNumber inputId="normalizationPenaltyForLossyDecomposition" formControlName="normalizationPenaltyForLossyDecomposition" mode="decimal" [maxFractionDigits]="2" [min]="0"/>
+                @if (form.controls.normalizationPenaltyForLossyDecomposition.dirty || form.controls.normalizationPenaltyForLossyDecomposition.touched) {
+                  <small class="block mt-1 p-error">
+                    {{ getError(form.controls.normalizationPenaltyForLossyDecomposition, 'taskTypes.fanf.fields.normalizationPenaltyForLossyDecomposition') }}
+                  </small>
+                }
+              </div>
+
+
+              <div class="field mb-4 col-12 md:col-6">
+                <label for="normalizationPenaltyPerNonCanonicalDependency" transloco="taskTypes.fanf.fields.normalizationPenaltyPerNonCanonicalDependency"></label>
+                <p-inputNumber inputId="normalizationPenaltyPerNonCanonicalDependency" formControlName="normalizationPenaltyPerNonCanonicalDependency" mode="decimal" [maxFractionDigits]="2" [min]="0"/>
+                @if (form.controls.normalizationPenaltyPerNonCanonicalDependency.dirty || form.controls.normalizationPenaltyPerNonCanonicalDependency.touched) {
+                  <small class="block mt-1 p-error">
+                    {{ getError(form.controls.normalizationPenaltyPerNonCanonicalDependency, 'taskTypes.fanf.fields.normalizationPenaltyPerNonCanonicalDependency') }}
+                  </small>
+                }
+              </div>
+
+
+              <div class="field mb-4 col-12 md:col-6">
+                <label for="normalizationPenaltyPerTrivialDependency" transloco="taskTypes.fanf.fields.normalizationPenaltyPerTrivialDependency"></label>
+                <p-inputNumber inputId="normalizationPenaltyPerTrivialDependency" formControlName="normalizationPenaltyPerTrivialDependency" mode="decimal" [maxFractionDigits]="2" [min]="0"/>
+                @if (form.controls.normalizationPenaltyPerTrivialDependency.dirty || form.controls.normalizationPenaltyPerTrivialDependency.touched) {
+                  <small class="block mt-1 p-error">
+                    {{ getError(form.controls.normalizationPenaltyPerTrivialDependency, 'taskTypes.fanf.fields.normalizationPenaltyPerTrivialDependency') }}
+                  </small>
+                }
+              </div>
+
+
+              <div class="field mb-4 col-12 md:col-6">
+                <label for="normalizationPenaltyPerExtraneousAttributeInDependencies" transloco="taskTypes.fanf.fields.normalizationPenaltyPerExtraneousAttributeInDependencies"></label>
+                <p-inputNumber inputId="normalizationPenaltyPerExtraneousAttributeInDependencies" formControlName="normalizationPenaltyPerExtraneousAttributeInDependencies" mode="decimal" [maxFractionDigits]="2" [min]="0"/>
+                @if (form.controls.normalizationPenaltyPerExtraneousAttributeInDependencies.dirty || form.controls.normalizationPenaltyPerExtraneousAttributeInDependencies.touched) {
+                  <small class="block mt-1 p-error">
+                    {{ getError(form.controls.normalizationPenaltyPerExtraneousAttributeInDependencies, 'taskTypes.fanf.fields.normalizationPenaltyPerExtraneousAttributeInDependencies') }}
+                  </small>
+                }
+              </div>
+
+
+              <div class="field mb-4 col-12 md:col-6">
+                <label for="normalizationPenaltyPerRedundantDependency" transloco="taskTypes.fanf.fields.normalizationPenaltyPerRedundantDependency"></label>
+                <p-inputNumber inputId="normalizationPenaltyPerRedundantDependency" formControlName="normalizationPenaltyPerRedundantDependency" mode="decimal" [maxFractionDigits]="2" [min]="0"/>
+                @if (form.controls.normalizationPenaltyPerRedundantDependency.dirty || form.controls.normalizationPenaltyPerRedundantDependency.touched) {
+                  <small class="block mt-1 p-error">
+                    {{ getError(form.controls.normalizationPenaltyPerRedundantDependency, 'taskTypes.fanf.fields.normalizationPenaltyPerRedundantDependency') }}
+                  </small>
+                }
+              </div>
+
+              <div class="field mb-4 col-12 md:col-6">
+                <label for="normalizationPenaltyPerExcessiveLostDependency" transloco="taskTypes.fanf.fields.normalizationPenaltyPerExcessiveLostDependency"></label>
+                <p-inputNumber inputId="normalizationPenaltyPerExcessiveLostDependency" formControlName="normalizationPenaltyPerExcessiveLostDependency" mode="decimal" [maxFractionDigits]="2" [min]="0"/>
+                @if (form.controls.normalizationPenaltyPerExcessiveLostDependency.dirty || form.controls.normalizationPenaltyPerExcessiveLostDependency.touched) {
+                  <small class="block mt-1 p-error">
+                    {{ getError(form.controls.normalizationPenaltyPerExcessiveLostDependency, 'taskTypes.fanf.fields.normalizationPenaltyPerExcessiveLostDependency') }}
+                  </small>
+                }
+              </div>
+
+
+              <div class="field mb-4 col-12 md:col-6">
+                <label for="normalizationPenaltyPerMissingNewDependency" transloco="taskTypes.fanf.fields.normalizationPenaltyPerMissingNewDependency"></label>
+                <p-inputNumber inputId="normalizationPenaltyPerMissingNewDependency" formControlName="normalizationPenaltyPerMissingNewDependency" mode="decimal" [maxFractionDigits]="2" [min]="0"/>
+                @if (form.controls.normalizationPenaltyPerMissingNewDependency.dirty || form.controls.normalizationPenaltyPerMissingNewDependency.touched) {
+                  <small class="block mt-1 p-error">
+                    {{ getError(form.controls.normalizationPenaltyPerMissingNewDependency, 'taskTypes.fanf.fields.normalizationPenaltyPerMissingNewDependency') }}
+                  </small>
+                }
+              </div>
+
+              <div class="field mb-4 col-12 md:col-6">
+                <label for="normalizationPenaltyPerIncorrectNewDependency" transloco="taskTypes.fanf.fields.normalizationPenaltyPerIncorrectNewDependency"></label>
+                <p-inputNumber inputId="normalizationPenaltyPerIncorrectNewDependency" formControlName="normalizationPenaltyPerIncorrectNewDependency" mode="decimal" [maxFractionDigits]="2" [min]="0"/>
+                @if (form.controls.normalizationPenaltyPerIncorrectNewDependency.dirty || form.controls.normalizationPenaltyPerIncorrectNewDependency.touched) {
+                  <small class="block mt-1 p-error">
+                    {{ getError(form.controls.normalizationPenaltyPerIncorrectNewDependency, 'taskTypes.fanf.fields.normalizationPenaltyPerIncorrectNewDependency') }}
+                  </small>
+                }
+              </div>
+
+              <div class="field mb-4 col-12 md:col-6">
+                <label for="normalizationPenaltyPerMissingKey" transloco="taskTypes.fanf.fields.normalizationPenaltyPerMissingKey"></label>
+                <p-inputNumber inputId="normalizationPenaltyPerMissingKey" formControlName="normalizationPenaltyPerMissingKey" mode="decimal" [maxFractionDigits]="2" [min]="0"/>
+                @if (form.controls.normalizationPenaltyPerMissingKey.dirty || form.controls.normalizationPenaltyPerMissingKey.touched) {
+                  <small class="block mt-1 p-error">
+                    {{ getError(form.controls.normalizationPenaltyPerMissingKey, 'taskTypes.fanf.fields.normalizationPenaltyPerMissingKey') }}
+                  </small>
+                }
+              </div>
+
+              <div class="field mb-4 col-12 md:col-6">
+                <label for="normalizationPenaltyPerIncorrectKey" transloco="taskTypes.fanf.fields.normalizationPenaltyPerIncorrectKey"></label>
+                <p-inputNumber inputId="normalizationPenaltyPerIncorrectKey" formControlName="normalizationPenaltyPerIncorrectKey" mode="decimal" [maxFractionDigits]="2" [min]="0"/>
+                @if (form.controls.normalizationPenaltyPerIncorrectKey.dirty || form.controls.normalizationPenaltyPerIncorrectKey.touched) {
+                  <small class="block mt-1 p-error">
+                    {{ getError(form.controls.normalizationPenaltyPerIncorrectKey, 'taskTypes.fanf.fields.normalizationPenaltyPerIncorrectKey') }}
+                  </small>
+                }
+              </div>
+
+              <div class="field mb-4 col-12 md:col-6">
+                <label for="normalizationPenaltyPerIncorrectNFRelation" transloco="taskTypes.fanf.fields.normalizationPenaltyPerIncorrectNFRelation"></label>
+                <p-inputNumber inputId="normalizationPenaltyPerIncorrectNFRelation" formControlName="normalizationPenaltyPerIncorrectNFRelation" mode="decimal" [maxFractionDigits]="2" [min]="0"/>
+                @if (form.controls.normalizationPenaltyPerIncorrectNFRelation.dirty || form.controls.normalizationPenaltyPerIncorrectNFRelation.touched) {
+                  <small class="block mt-1 p-error">
+                    {{ getError(form.controls.normalizationPenaltyPerIncorrectNFRelation, 'taskTypes.fanf.fields.normalizationPenaltyPerIncorrectNFRelation') }}
+                  </small>
+                }
+              </div>
+
+
+
+
+            </div>
+          </div>
+        }
+
+
+      </div>
+    </div>
+  </div>
+</div>
