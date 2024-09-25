@@ -175,9 +175,8 @@
         "umlAddAlternative": "Add Alternative",
         "fullComparison": "Fully Compare?",
         "classPoints": "Points per correct Class",
-        "attributePoints": "Points per correct Attribute",
-        "relationshipPoints": "Points per correct Relation",
-        "associationPoints": "Points per correct Association",
+        "relationshipPoints": "Points per correct Association",
+        "associationPoints": "Points per correct assignment to Association Class",
         "constraintPoints": "Points per correct Constraint"
 
       }

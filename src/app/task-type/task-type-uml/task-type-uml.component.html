@@ -51,30 +51,30 @@
             </small>
           }
         </div>
-        <div class="field mb-4 col-12 md:col-6">
-          <label for="attributePoints" transloco="taskTypes.uml.fields.attributePoints"></label>
-          <p-inputNumber inputId="attributePoints" formControlName="attributePoints" mode="decimal" [maxFractionDigits]="2" [min]="0"/>
-          @if (form.controls.attributePoints.dirty || form.controls.attributePoints.touched) {
-            <small class="block mt-1 p-error">
-              {{ getError(form.controls.attributePoints, 'taskTypes.uml.fields.attributePoints') }}
-            </small>
-          }
-      </div>
-      <div class="field mb-4 col-12 md:col-6">
-        <label for="relationshipPoints" transloco="taskTypes.uml.fields.relationshipPoints"></label>
-        <p-inputNumber inputId="relationshipPoints" formControlName="relationshipPoints" mode="decimal" [maxFractionDigits]="2" [min]="0"/>
-        @if (form.controls.relationshipPoints.dirty || form.controls.relationshipPoints.touched) {
-          <small class="block mt-1 p-error">
-            {{ getError(form.controls.relationshipPoints, 'taskTypes.uml.fields.relationshipPoints') }}
-          </small>
-        }
-        </div>
+        <!--        <div class="field mb-4 col-12 md:col-6">-->
+        <!--          <label for="attributePoints" transloco="taskTypes.uml.fields.attributePoints"></label>-->
+        <!--          <p-inputNumber inputId="attributePoints" formControlName="attributePoints" mode="decimal" [maxFractionDigits]="2" [min]="0"/>-->
+        <!--          @if (form.controls.attributePoints.dirty || form.controls.attributePoints.touched) {-->
+        <!--            <small class="block mt-1 p-error">-->
+        <!--              {{ getError(form.controls.attributePoints, 'taskTypes.uml.fields.attributePoints') }}-->
+        <!--            </small>-->
+        <!--          }-->
+        <!--      </div>-->
         <div class="field mb-4 col-12 md:col-6">
           <label for="associationPoints" transloco="taskTypes.uml.fields.associationPoints"></label>
           <p-inputNumber inputId="associationPoints" formControlName="associationPoints" mode="decimal" [maxFractionDigits]="2" [min]="0"/>
           @if (form.controls.associationPoints.dirty || form.controls.associationPoints.touched) {
             <small class="block mt-1 p-error">
               {{ getError(form.controls.associationPoints, 'taskTypes.uml.fields.associationPoints') }}
+            </small>
+          }
+        </div>
+        <div class="field mb-4 col-12 md:col-6">
+          <label for="associationClassPoints" transloco="taskTypes.uml.fields.associationClassPoints"></label>
+          <p-inputNumber inputId="associationClassPoints" formControlName="associationClassPoints" mode="decimal" [maxFractionDigits]="2" [min]="0"/>
+          @if (form.controls.associationClassPoints.dirty || form.controls.associationClassPoints.touched) {
+            <small class="block mt-1 p-error">
+              {{ getError(form.controls.associationClassPoints, 'taskTypes.uml.fields.associationClassPoints') }}
             </small>
           }
         </div>
@@ -86,8 +86,9 @@
               {{ getError(form.controls.constraintPoints, 'taskTypes.uml.fields.constraintPoints') }}
             </small>
           }
+        </div>
+      </div>
+
     </div>
   </div>
-
 </div>
-
