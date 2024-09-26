@@ -49,9 +49,8 @@ export class TaskTypeUmlComponent extends TaskTypeFormComponent<TaskTypeForm> {
     this.form.addControl('umlSolution', this.umlSolution);
     this.form.addControl('completeComparison', new FormControl<boolean|null>(null));
     this.form.addControl('classPoints', new FormControl<number|null>(null));
-    this.form.addControl('attributePoints', new FormControl<number|null>(null));
-    this.form.addControl('relationshipPoints', new FormControl<number|null>(null));
     this.form.addControl('associationPoints', new FormControl<number|null>(null));
+    this.form.addControl('associationClassPoints', new FormControl<number|null>(null));
     this.form.addControl('constraintPoints', new FormControl<number|null>(null));
   }
 
@@ -59,9 +58,8 @@ export class TaskTypeUmlComponent extends TaskTypeFormComponent<TaskTypeForm> {
   protected override getFormDefaultValues(): Partial<{ [K in keyof TaskTypeForm]: any }> | undefined {
     return {
       classPoints: 0,
-      relationshipPoints: 0,
-      attributePoints: 0,
       associationPoints: 0,
+      associationClassPoints: 0,
       constraintPoints: 0,
       completeComparison: false
     };
@@ -137,8 +135,7 @@ interface TaskTypeForm {
   umlSolution: FormArray<FormGroup<{ umlBlock: FormArray<FormGroup<{ umlBlockAlt: FormControl<string | null> }>> }>>;
   completeComparison: FormControl<boolean|null>;
   classPoints: FormControl<number|null>;
-  attributePoints: FormControl<number|null>;
-  relationshipPoints: FormControl<number|null>;
   associationPoints: FormControl<number|null>;
+  associationClassPoints: FormControl<number|null>;
   constraintPoints: FormControl<number|null>;
 }

@@ -178,9 +178,8 @@
         "umlAddAlternative": "Alternative hinzufügen",
         "fullComparison": "Vollständiger Vergleich?",
         "classPoints": "Punkte pro richtiger Klasse",
-        "attributePoints": "Punkte pro richtigem Attribut",
-        "relationshipPoints": "Punkte pro richtiger Beziehung",
         "associationPoints": "Punkte pro richtiger Assoziation",
+        "associationClassPoints": "Punkte pro richtiger Zuordnung einer Assoziationsklasse",
         "constraintPoints": "Punkte pro richtiger Constraint"
 
 
