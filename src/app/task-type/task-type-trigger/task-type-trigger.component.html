@@ -1,0 +1,99 @@
+<div [formGroup]="form">
+    <div class="surface-card p-4 shadow-2 border-round p-fluid mb-4">
+      <div class="grid formgrid p-fluid">
+        <div class="field mb-4 col-12">
+          <label for="solution" transloco="taskTypes.trigger.fields.solution"></label>
+          <ngx-monaco-editor id="solution" formControlName="solution" [options]="editorOptions" style="height: 250px;"/>
+          @if (form.controls.solution.dirty || form.controls.solution.touched) {
+            <small class="block mt-1 p-error">
+              {{ getError(form.controls.solution, 'taskTypes.trigger.fields.solution') }}
+            </small>
+          }
+        </div>
+      </div>
+    </div>
+
+    <div class="surface-card p-4 shadow-2 border-round p-fluid mb-4">
+      <div class="grid formgrid p-fluid">
+        <div class="field mb-4 col-12">
+          <label for="triggerOperations" transloco="taskTypes.trigger.fields.triggerOperations"></label>
+          <ngx-monaco-editor id="triggerOperations" formControlName="triggerOperations" [options]="editorOptions" style="height: 250px;"/>
+          @if (form.controls.triggerOperations.dirty || form.controls.triggerOperations.touched) {
+            <small class="block mt-1 p-error">
+              {{ getError(form.controls.triggerOperations, 'taskTypes.trigger.fields.triggerOperations') }}
+            </small>
+          }
+        </div>
+      </div>
+    </div>
+
+    <div class="surface-card p-4 shadow-2 border-round p-fluid mb-4">
+      <div class="grid formgrid p-fluid">
+        <div class="field mb-4 col-12">
+          <label for="resultTables" transloco="taskTypes.trigger.fields.resultTables"></label>
+            <br/>
+            <input type="textarea" formControlName="resultTables" style="width: 50%; height: 50%;">
+            @if (form.controls.resultTables.dirty || form.controls.resultTables.touched) {
+              <small class="block mt-1 p-error">
+                {{ getError(form.controls.resultTables, 'taskTypes.trigger.fields.resultTables') }}
+              </small>
+            }
+          </div>
+        </div>
+      </div>
+
+    <div class="surface-card p-4 shadow-2 border-round p-fluid mb-4">
+        <div class="grid formgrid p-fluid">
+          <div class="field mb-4 col-12">
+            <label for="buffered" transloco="taskTypes.trigger.fields.buffered"></label>
+            <br/>
+            <input type="checkbox" formControlName="buffered">
+            @if (form.controls.buffered.dirty || form.controls.buffered.touched) {
+              <small class="block mt-1 p-error">
+                {{ getError(form.controls.buffered, 'taskTypes.trigger.fields.buffered') }}
+              </small>
+            }
+          </div>
+        </div>
+      </div>
+  
+      <div class="surface-card p-4 shadow-2 border-round p-fluid mb-4">
+        <div class="grid formgrid p-fluid">
+          <div class="field mb-4 col-12">
+            <label for="comparisonExecution" transloco="taskTypes.trigger.fields.comparisonExecution"></label>
+            <br/>
+            <input type="checkbox" formControlName="comparisonExecution">
+            @if (form.controls.comparisonExecution.dirty || form.controls.comparisonExecution.touched) {
+              <small class="block mt-1 p-error">
+                {{ getError(form.controls.comparisonExecution, 'taskTypes.trigger.fields.comparisonExecution') }}
+              </small>
+            }
+          </div>
+        </div>
+      </div>
+
+    <div class="surface-card p-4 shadow-2 border-round p-fluid mb-4">
+      <div class="grid formgrid p-fluid">
+        <div class="field mb-4 col-12 md:col-6">
+          <label for="wrongHeadPenalty" transloco="taskTypes.trigger.fields.wrongHeadPenalty"></label>
+          <p-inputNumber inputId="wrongHeadPenalty" formControlName="wrongHeadPenalty" mode="decimal" [maxFractionDigits]="2" [min]="-1"/>
+          @if (form.controls.wrongHeadPenalty.dirty || form.controls.wrongHeadPenalty.touched) {
+            <small class="block mt-1 p-error">
+              {{ getError(form.controls.wrongHeadPenalty, 'taskTypes.trigger.fields.wrongHeadPenalty') }}
+            </small>
+          }
+        </div>
+        <div class="field mb-4 col-12 md:col-6">
+          <label for="wrongBodyPenalty" transloco="taskTypes.trigger.fields.wrongBodyPenalty"></label>
+          <p-inputNumber inputId="wrongBodyPenalty" formControlName="wrongBodyPenalty" mode="decimal" [maxFractionDigits]="2" [min]="-1"/>
+          @if (form.controls.wrongBodyPenalty.dirty || form.controls.wrongBodyPenalty.touched) {
+            <small class="block mt-1 p-error">
+              {{ getError(form.controls.wrongBodyPenalty, 'taskTypes.trigger.fields.wrongBodyPenalty') }}
+            </small>
+          }
+        </div>
+      </div>
+      <small transloco="taskTypes.trigger.descriptions.penalty" class="text-color-secondary block mt-1"></small>
+    </div>
+  </div>
+  

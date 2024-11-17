@@ -94,6 +94,21 @@
         "penalty": "A point deduction of -1 means that the submission is awarded 0 points."
       }
     },
+    "trigger": {
+      "title": "SQL Databes Triggers",
+      "fields": {
+        "solution": "Solution",
+        "triggerOperations": "Operations which execute the trigger",
+        "resultTables": "Results tables which will be compared (semicolon separated)",
+        "buffered": "Buffered execution (buffer solution once and execution result with buffered table)",
+        "comparisonExecution": "Result comparison after each operation",
+        "wrongHeadPenalty": "Wrong Head: Penalty",
+        "wrongBodyPenalty": "Wrong Body (actual execution logic): Penalty"
+      },
+      "descriptions": {
+        "penalty": "A point deduction of -1 means that the submission is awarded 0 points."
+      }
+    },
     "relalg": {
       "title": "Relational Algebra",
       "fields": {

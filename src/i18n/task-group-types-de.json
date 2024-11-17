@@ -31,6 +31,14 @@
         "diagnoseDmlStatements": "INSERT INTO Statements (Diagnose)",
         "submitDmlStatements": "INSERT INTO Statements (Abgabe)"
       }
+    },
+    "trigger": {
+      "title": "SQL Datenbank Trigger",
+      "fields": {
+        "ddlStatements": "CREATE TABLE Statements",
+        "diagnoseDmlStatements": "INSERT INTO Statements bevor Digagnose (Schema initialisieren)",
+        "submitDmlStatements": "INSERT INTO Statements bevor Abgabe (Schema initialisieren)"
+      }
     }
   }
 }

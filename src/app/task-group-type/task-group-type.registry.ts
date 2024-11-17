@@ -4,6 +4,7 @@ import { TaskGroupTypeBinarySearchComponent } from './task-group-type-binary-sea
 import { TaskGroupTypeXqueryComponent } from './task-group-type-xquery/task-group-type-xquery.component';
 import { TaskGroupTypeDatalogComponent } from './task-group-type-datalog/task-group-type-datalog.component';
 import { TaskGroupTypeSqlComponent } from './task-group-type-sql/task-group-type-sql.component';
+import { TaskGroupTypeTriggerComponent } from './task-group-type-trigger/task-group-type-trigger.component';
 
 /**
  * Registry for task group types.
@@ -18,6 +19,7 @@ export class TaskGroupTypeRegistry {
     {name: 'xquery', component: TaskGroupTypeXqueryComponent, supportsDescriptionGeneration: true},
     {name: 'datalog', component: TaskGroupTypeDatalogComponent, supportsDescriptionGeneration: true},
     {name: 'sql', component: TaskGroupTypeSqlComponent, supportsDescriptionGeneration: true},
+    {name: 'trigger', component: TaskGroupTypeTriggerComponent, supportsDescriptionGeneration: true}
   ];
 
   /**

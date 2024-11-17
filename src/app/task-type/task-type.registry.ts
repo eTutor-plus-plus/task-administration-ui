@@ -6,6 +6,7 @@ import { TaskTypeDatalogComponent } from './task-type-datalog/task-type-datalog.
 import { TaskTypeDroolsComponent } from './task-type-drools/task-type-drools.component';
 import { TaskTypeAspComponent } from './task-type-asp/task-type-asp.component';
 import { TaskTypeSqlComponent } from './task-type-sql/task-type-sql.component';
+import { TaskTypeTriggerComponent } from './task-type-trigger/task-type-trigger.component';
 import { TaskTypeRelalgComponent } from './task-type-relalg/task-type-relalg.component';
 
 /**
@@ -67,6 +68,13 @@ return $d`,
       submissionTemplate: '',
       supportsDescriptionGeneration: false,
       submissionInputLanguage: 'sql'
+    }, {
+      name: 'trigger',
+      supportedTaskGroupTypes: ['trigger'],
+      component: TaskTypeTriggerComponent,
+      submissionTemplate: '',
+      supportsDescriptionGeneration: false,
+      submissionInputLanguage: 'trigger'
     }, {
       name: 'relalg',
       supportedTaskGroupTypes: ['sql'],

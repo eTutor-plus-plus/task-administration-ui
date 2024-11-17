@@ -95,6 +95,21 @@
         "penalty": "Ein Punkteabzug von -1 bedeutet, dass die Abgabe mit 0 Punkten bewertet wird."
       }
     },
+    "trigger": {
+      "title": "SQL Datenbank Trigger",
+      "fields": {
+        "solution": "Lösung",
+        "triggerOperations": "Operationen welche den Trigger ausführen",
+        "resultTables": "Ergebnistabellen, welche verglichen werden (Strichpunkt getrtennt)",
+        "buffered": "Gepufferte Ausführung (Lösung einmalig ausführen und Ausführungsergebnis mit Puffertabelle vergleichen)",
+        "comparisonExecution": "Mengenvergleich nach jeder Operstion",
+        "wrongHeadPenalty": "Falsche Trigger-Kopf: Punkteabzug",
+        "wrongBodyPenalty": "Falscher Trigger-Körper (eigentliche Ausführungslogik): Punkteabzug"
+      },
+      "descriptions": {
+        "penalty": "Ein Punkteabzug von -1 bedeutet, dass die Abgabe mit 0 Punkten bewertet wird."
+      }
+    },
     "relalg": {
       "title": "Relationale Algebra",
       "fields": {
