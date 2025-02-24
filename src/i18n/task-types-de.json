@@ -100,10 +100,10 @@
       "fields": {
         "solution": "Lösung",
         "triggerOperations": "Operationen welche den Trigger ausführen",
-        "resultTables": "Ergebnistabellen, welche verglichen werden (Strichpunkt getrtennt)",
+        "resultTables": "Ergebnistabellen, welche verglichen werden (Strichpunkt getrennt)",
         "buffered": "Gepufferte Ausführung (Lösung einmalig ausführen und Ausführungsergebnis mit Puffertabelle vergleichen)",
-        "comparisonExecution": "Mengenvergleich nach jeder Operstion",
-        "wrongHeadPenalty": "Falsche Trigger-Kopf: Punkteabzug",
+        "comparisonExecution": "Mengenvergleich nach jeder Operation",
+        "wrongHeadPenalty": "Falscher Trigger-Kopf: Punkteabzug",
         "wrongBodyPenalty": "Falscher Trigger-Körper (eigentliche Ausführungslogik): Punkteabzug"
       },
       "descriptions": {
