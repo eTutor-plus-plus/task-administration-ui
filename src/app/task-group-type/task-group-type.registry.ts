@@ -4,6 +4,7 @@ import { TaskGroupTypeBinarySearchComponent } from './task-group-type-binary-sea
 import { TaskGroupTypeXqueryComponent } from './task-group-type-xquery/task-group-type-xquery.component';
 import { TaskGroupTypeDatalogComponent } from './task-group-type-datalog/task-group-type-datalog.component';
 import { TaskGroupTypeSqlComponent } from './task-group-type-sql/task-group-type-sql.component';
+import { TaskGroupTypeJDBCComponent } from './task-group-type-jdbc/task-group-type-jdbc.component'; 
 
 /**
  * Registry for task group types.
@@ -15,6 +16,7 @@ export class TaskGroupTypeRegistry {
 
   private static readonly taskTypes: { name: string, component?: Type<TaskGroupTypeFormComponent<any>>, supportsDescriptionGeneration?: boolean }[] = [
     {name: 'binary-search', component: TaskGroupTypeBinarySearchComponent, supportsDescriptionGeneration: true},
+    {name: 'jdbc', component: TaskGroupTypeJDBCComponent, supportsDescriptionGeneration: true},
     {name: 'xquery', component: TaskGroupTypeXqueryComponent, supportsDescriptionGeneration: true},
     {name: 'datalog', component: TaskGroupTypeDatalogComponent, supportsDescriptionGeneration: true},
     {name: 'sql', component: TaskGroupTypeSqlComponent, supportsDescriptionGeneration: true},

@@ -9,6 +9,12 @@
         "solution": "Gesuchte Zahl"
       }
     },
+    "jdbc": {
+      "title": "JDBC",
+      "fields": {
+        "solution": "Eingabe:"
+      }
+    },
     "xquery": {
       "title": "XQuery",
       "fields": {

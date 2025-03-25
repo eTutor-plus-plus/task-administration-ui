@@ -110,6 +110,8 @@ export abstract class ApiService<TDto extends object, TModifyDto extends object,
    */
   create(data: TModifyDto): Promise<TDto> {
     console.info(`[${this.serviceName}] Create`);
+    // console.log(data)
+    // console.log(this.apiUrl)
     return new Promise<TDto>((resolve, reject) => this.http.post<TDto>(this.apiUrl, data).subscribe({
       next: value => resolve(value),
       error: err => {
@@ -118,6 +120,7 @@ export abstract class ApiService<TDto extends object, TModifyDto extends object,
       }
     }));
   }
+
 
   /**
    * Updates an existing entity.

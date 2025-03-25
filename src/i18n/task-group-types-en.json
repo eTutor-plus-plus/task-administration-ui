@@ -10,6 +10,13 @@
         "maxNumber": "Maximum Value"
       }
     },
+    "jdbc": {
+      "title": "JDBC",
+      "fields": {
+        "minNumber": "Kleinster Wert",
+        "maxNumber": "Größter Wert"
+      }
+    },
     "xquery": {
       "title": "XQuery",
       "fields": {

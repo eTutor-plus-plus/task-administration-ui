@@ -111,7 +111,13 @@ export class TaskSubmissionComponent implements OnInit {
     this.modes = ['RUN', 'DIAGNOSE', 'SUBMIT'];
     const inputLang = TaskTypeRegistry.getSubmissionInputLanguage(this.dialogConf.data.taskType);
     this.isSimpleInput = inputLang !== undefined;
-    this.editorOptions.language = inputLang ?? 'json';
+    console.log("Language: " + inputLang)
+    if(inputLang == 'jdbc'){
+      this.editorOptions.language = 'java'
+    }
+    else{
+      this.editorOptions.language = inputLang ?? 'json';
+    }
   }
 
   /**

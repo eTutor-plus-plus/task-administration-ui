@@ -9,6 +9,12 @@
         "solution": "Solution"
       }
     },
+    "jdbc": {
+      "title": "JDBC",
+      "fields": {
+        "solution": "Instruction:"
+      }
+    },
     "xquery": {
       "title": "XQuery",
       "fields": {
