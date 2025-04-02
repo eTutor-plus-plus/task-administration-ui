@@ -12,7 +12,7 @@
     "jdbc": {
       "title": "JDBC",
       "fields": {
-        "solution": "Eingabe:"
+        "solution": "Lösung"
       }
     },
     "xquery": {

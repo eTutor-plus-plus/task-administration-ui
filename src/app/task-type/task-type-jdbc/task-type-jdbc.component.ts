@@ -82,7 +82,9 @@ export class TaskTypeJDBCComponent extends TaskTypeFormComponent<TaskTypeForm> i
 
       const min = tg.additionalData['minNumber'] as number;
       const max = tg.additionalData['maxNumber'] as number;
+      const schema = tg.additionalData['schema'] as string;
       this.form.controls.solution.addValidators(Validators.min(min));
+      // this.form.controls.solution.addValidators(Validators.required(schema));
       this.form.controls.solution.addValidators(Validators.max(max));
       this.form.controls.solution.updateValueAndValidity();
     } catch (err) {
@@ -94,4 +96,5 @@ export class TaskTypeJDBCComponent extends TaskTypeFormComponent<TaskTypeForm> i
 
 interface TaskTypeForm {
   solution: FormControl<number | null>;
+  schema: FormControl<string | null>;
 }

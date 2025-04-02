@@ -4,6 +4,8 @@ import { TranslocoDirective } from '@ngneat/transloco';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { InputGroupModule } from 'primeng/inputgroup';
 import { ButtonModule } from 'primeng/button';
+import { MonacoEditorModule } from 'ngx-monaco-editor-v2';
+import { editor } from 'monaco-editor';
 
 import { TaskGroupTypeFormComponent } from '../task-group-type-form.component';
 import { JDBCService } from './jdbc.service';
@@ -17,6 +19,7 @@ import { JDBCService } from './jdbc.service';
   imports: [
     ReactiveFormsModule,
     InputNumberModule,
+    MonacoEditorModule,
     TranslocoDirective,
     InputGroupModule,
     ButtonModule
@@ -27,6 +30,14 @@ import { JDBCService } from './jdbc.service';
 export class TaskGroupTypeJDBCComponent extends TaskGroupTypeFormComponent<TaskGroupTypeForm> {
 
   /**
+   * The editor options.
+   */
+  readonly editorOptions: editor.IStandaloneEditorConstructionOptions = {
+    language: 'sql'
+  };
+
+
+  /**
    * Creates a new instance of class TaskGroupTypeJDBCComponent.
    */
   constructor(private readonly binSearchService: JDBCService) {
@@ -34,17 +45,12 @@ export class TaskGroupTypeJDBCComponent extends TaskGroupTypeFormComponent<TaskG
   }
 
   protected override initForm(): void {
-    this.form.addControl('minNumber', new FormControl<number | null>(null, [Validators.required]));
-    this.form.addControl('maxNumber', new FormControl<number | null>(null, [Validators.required]));
+    this.form.addControl('schema', new FormControl<string | null>(null, [Validators.required]));
     this.form.addValidators((group: AbstractControl<TaskGroupTypeForm>) => {
-      const controlMin = group.get('minNumber');
-      const controlMax = group.get('maxNumber');
-      if (!controlMin || !controlMax)
+      const controlSchema = group.get('schema');
+    
+      if (!controlSchema)
         return null;
-
-      if (controlMin.value > controlMax.value) {
-        controlMax.setErrors({min: {min: controlMin.value, actual: controlMax.value}});
-      }
 
       return null;
     });
@@ -69,6 +75,5 @@ export class TaskGroupTypeJDBCComponent extends TaskGroupTypeFormComponent<TaskG
 }
 
 interface TaskGroupTypeForm {
-  minNumber: FormControl<number | null>;
-  maxNumber: FormControl<number | null>;
+  schema: FormControl<string | null>;
 }

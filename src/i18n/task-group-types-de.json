@@ -13,8 +13,7 @@
     "jdbc": {
       "title": "JDBC",
       "fields": {
-        "minNumber": "Kleinster Wert",
-        "maxNumber": "Größter Wert"
+        "schema": "Datenbankschema"
       }
     },
     "xquery": {
