@@ -3,12 +3,13 @@ import { FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
 import { TranslocoDirective } from '@ngneat/transloco';
 import { distinctUntilChanged, Subscription } from 'rxjs';
 import { InputNumberModule } from 'primeng/inputnumber';
+import { InputTextModule } from 'primeng/inputtext';
 import { PaginatorModule } from 'primeng/paginator';
 import { MonacoEditorModule } from 'ngx-monaco-editor-v2';
-import { editor } from 'monaco-editor';
-
+import { editor } from 'monaco-editor'
 import { TaskTypeFormComponent } from '../task-type-form.component';
 import { TaskGroupService } from '../../api';
+import { AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
 
 /**
  * Task Type Form: Binary Search
@@ -18,6 +19,7 @@ import { TaskGroupService } from '../../api';
   standalone: true,
   imports: [
     InputNumberModule,
+    InputTextModule,
     MonacoEditorModule,
     PaginatorModule,
     ReactiveFormsModule,
@@ -46,7 +48,39 @@ export class TaskTypeJDBCComponent extends TaskTypeFormComponent<TaskTypeForm> i
 
   protected override initForm(): void {
     this.form.addControl('solution', new FormControl<number | null>(null, [Validators.required]));
+  
+    const tableListPattern = /^\s*[a-zA-Z_][a-zA-Z0-9_]*(\s*,\s*[a-zA-Z_][a-zA-Z0-9_]*)*\s*$/;
+    const requiredPatternHint = this.translationService.translate('taskTypes.jdbc.errors.tables');
+  
+    this.form.addControl(
+      'tables',
+      new FormControl<string | null>(
+        '',
+        [
+          Validators.required,
+          this.patternValidator(tableListPattern, requiredPatternHint)
+        ]
+      )
+    );
   }
+  
+  
+  private patternValidator(regex: RegExp, requiredPatternHint: string): ValidatorFn {
+    return (control: AbstractControl): ValidationErrors | null => {
+      const value = control.value;
+  
+      if (value && !regex.test(value)) {
+        return {
+          pattern: {
+            requiredPattern: requiredPatternHint
+          }
+        };
+      }
+  
+      return null;
+    };
+  }  
+  
 
   /**
    * Listens to input changes.
@@ -83,6 +117,7 @@ export class TaskTypeJDBCComponent extends TaskTypeFormComponent<TaskTypeForm> i
       const min = tg.additionalData['minNumber'] as number;
       const max = tg.additionalData['maxNumber'] as number;
       const schema = tg.additionalData['schema'] as string;
+      const tables = tg.additionalData['tables'] as string;
       this.form.controls.solution.addValidators(Validators.min(min));
       // this.form.controls.solution.addValidators(Validators.required(schema));
       this.form.controls.solution.addValidators(Validators.max(max));
@@ -94,7 +129,9 @@ export class TaskTypeJDBCComponent extends TaskTypeFormComponent<TaskTypeForm> i
 
 }
 
+
 interface TaskTypeForm {
   solution: FormControl<number | null>;
   schema: FormControl<string | null>;
+  tables: FormControl<string | null>;
 }

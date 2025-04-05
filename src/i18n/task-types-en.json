@@ -12,7 +12,11 @@
     "jdbc": {
       "title": "JDBC",
       "fields": {
-        "solution": "Solution"
+        "solution": "Solution",
+        "tables": "Tables to be checked"
+      },
+      "errors": {
+        "tables": "table1, table2, table3"
       }
     },
     "xquery": {
