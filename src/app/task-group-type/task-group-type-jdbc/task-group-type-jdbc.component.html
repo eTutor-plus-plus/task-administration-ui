@@ -1,12 +1,36 @@
 <div class="surface-card p-4 shadow-2 border-round p-fluid mb-4" [formGroup]="form">
   <div class="grid formgrid p-fluid">
+    
+    <!-- CREATE TABLE Statements -->
     <div class="field mb-4 col-12 md:col-6 w-full">
-      <label for="schema" transloco="taskGroupTypes.jdbc.fields.schema"></label>
-      <ngx-monaco-editor inputId="schema" formControlName="schema" [options]="editorOptions" style="height: 350px; width: 100%"/>
-      @if (form.controls.schema.dirty || form.controls.schema.touched) {
-      <small class="block mt-1 p-error">
-        {{ getError(form.controls.schema, 'taskGroupTypes.jdbc.fields.schema') }}
-      </small>
+      <label for="createStatements" transloco="taskGroupTypes.jdbc.fields.createStatements"></label>
+      <ngx-monaco-editor inputId="createStatements" formControlName="createStatements" [options]="editorOptions" style="height: 300px; width: 100%" />
+      @if (form.controls.createStatements.dirty || form.controls.createStatements.touched) {
+        <small class="block mt-1 p-error">
+          {{ getError(form.controls.createStatements, 'taskGroupTypes.jdbc.fields.createStatements') }}
+        </small>
+      }
+    </div>
+
+    <!-- INSERT INTO (Diagnose) -->
+    <div class="field mb-4 col-12 md:col-6 w-full">
+      <label for="insertStatementsDiagnose" transloco="taskGroupTypes.jdbc.fields.insertStatementsDiagnose"></label>
+      <ngx-monaco-editor inputId="insertStatementsDiagnose" formControlName="insertStatementsDiagnose" [options]="editorOptions" style="height: 300px; width: 100%" />
+      @if (form.controls.insertStatementsDiagnose.dirty || form.controls.insertStatementsDiagnose.touched) {
+        <small class="block mt-1 p-error">
+          {{ getError(form.controls.insertStatementsDiagnose, 'taskGroupTypes.jdbc.fields.insertStatementsDiagnose') }}
+        </small>
+      }
+    </div>
+
+    <!-- INSERT INTO (Abgabe) -->
+    <div class="field mb-4 col-12 md:col-6 w-full">
+      <label for="insertStatementsSubmission" transloco="taskGroupTypes.jdbc.fields.insertStatementsSubmission"></label>
+      <ngx-monaco-editor inputId="insertStatementsSubmission" formControlName="insertStatementsSubmission" [options]="editorOptions" style="height: 300px; width: 100%" />
+      @if (form.controls.insertStatementsSubmission.dirty || form.controls.insertStatementsSubmission.touched) {
+        <small class="block mt-1 p-error">
+          {{ getError(form.controls.insertStatementsSubmission, 'taskGroupTypes.jdbc.fields.insertStatementsSubmission') }}
+        </small>
       }
     </div>
   </div>

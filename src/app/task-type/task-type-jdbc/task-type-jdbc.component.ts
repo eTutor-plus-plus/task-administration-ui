@@ -10,6 +10,8 @@ import { editor } from 'monaco-editor'
 import { TaskTypeFormComponent } from '../task-type-form.component';
 import { TaskGroupService } from '../../api';
 import { AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
+import { CheckboxModule } from 'primeng/checkbox';
+
 
 /**
  * Task Type Form: Binary Search
@@ -23,7 +25,8 @@ import { AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
     MonacoEditorModule,
     PaginatorModule,
     ReactiveFormsModule,
-    TranslocoDirective
+    TranslocoDirective,
+    CheckboxModule
   ],
   templateUrl: './task-type-jdbc.component.html',
   styleUrl: './task-type-jdbc.component.scss'
@@ -47,7 +50,7 @@ export class TaskTypeJDBCComponent extends TaskTypeFormComponent<TaskTypeForm> i
   }
 
   protected override initForm(): void {
-    this.form.addControl('solution', new FormControl<number | null>(null, [Validators.required]));
+    this.form.addControl('solution', new FormControl<string | null>(null, [Validators.required]));
   
     const tableListPattern = /^\s*[a-zA-Z_][a-zA-Z0-9_]*(\s*,\s*[a-zA-Z_][a-zA-Z0-9_]*)*\s*$/;
     const requiredPatternHint = this.translationService.translate('taskTypes.jdbc.errors.tables');
@@ -62,6 +65,41 @@ export class TaskTypeJDBCComponent extends TaskTypeFormComponent<TaskTypeForm> i
         ]
       )
     );
+
+     // Neu hinzugefügte Felder
+  this.form.addControl('wrongOutputPenalty', new FormControl<number | null>(null, [
+    Validators.required,
+    Validators.min(0)
+  ]));
+
+  this.form.addControl('exceptionHandlingPenalty', new FormControl<number | null>(null, [
+    Validators.required,
+    Validators.min(0)
+  ]));
+
+  this.form.addControl('wrongDbContentPenalty', new FormControl<number | null>(null, [
+    Validators.required,
+    Validators.min(0)
+  ]));
+
+  this.form.addControl('checkAutocommit', new FormControl<boolean>(false));
+
+  // Autocommit Penalty (anfangs disabled)
+  this.form.addControl('autocommitPenalty', new FormControl<number | null>({value: null, disabled: true}, [
+    Validators.required,
+    Validators.min(0)
+  ]));
+
+  // Logik, um das Feld 'autocommitPenalty' abhängig von 'checkAutocommit' zu aktivieren
+  this.form.controls.checkAutocommit.valueChanges.subscribe(checked => {
+    const autocommitControl = this.form.controls.autocommitPenalty;
+    if (checked) {
+      autocommitControl.enable();
+    } else {
+      autocommitControl.disable();
+      autocommitControl.reset();
+    }
+  });
   }
   
   
@@ -131,7 +169,13 @@ export class TaskTypeJDBCComponent extends TaskTypeFormComponent<TaskTypeForm> i
 
 
 interface TaskTypeForm {
-  solution: FormControl<number | null>;
+  solution: FormControl<string | null>;
   schema: FormControl<string | null>;
   tables: FormControl<string | null>;
+  wrongOutputPenalty: FormControl<number | null>;
+  exceptionHandlingPenalty: FormControl<number | null>;
+  wrongDbContentPenalty: FormControl<number | null>;
+  checkAutocommit: FormControl<boolean | null>;
+  autocommitPenalty: FormControl<number | null>;
 }
+

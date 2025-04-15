@@ -45,16 +45,11 @@ export class TaskGroupTypeJDBCComponent extends TaskGroupTypeFormComponent<TaskG
   }
 
   protected override initForm(): void {
-    this.form.addControl('schema', new FormControl<string | null>(null, [Validators.required]));
-    this.form.addValidators((group: AbstractControl<TaskGroupTypeForm>) => {
-      const controlSchema = group.get('schema');
-    
-      if (!controlSchema)
-        return null;
-
-      return null;
-    });
+    this.form.addControl('createStatements', new FormControl<string | null>(null, [Validators.required]));
+    this.form.addControl('insertStatementsDiagnose', new FormControl<string | null>(null, [Validators.required]));
+    this.form.addControl('insertStatementsSubmission', new FormControl<string | null>(null, [Validators.required]));
   }
+  
 
   /**
    * Loads random numbers.
@@ -75,5 +70,7 @@ export class TaskGroupTypeJDBCComponent extends TaskGroupTypeFormComponent<TaskG
 }
 
 interface TaskGroupTypeForm {
-  schema: FormControl<string | null>;
+  createStatements: FormControl<string | null>;
+  insertStatementsDiagnose: FormControl<string | null>;
+  insertStatementsSubmission: FormControl<string | null>;
 }

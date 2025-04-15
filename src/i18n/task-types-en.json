@@ -13,7 +13,12 @@
       "title": "JDBC",
       "fields": {
         "solution": "Solution",
-        "tables": "Tables to be checked"
+        "tables": "Tables to be checked",
+        "wrongOutputPenalty": "Penalty wrong output",
+        "exceptionHandlingPenalty": "Penalty exception handling",
+        "wrongDbContentPenalty": "Penalty wrong DB content",
+        "checkAutocommit": "Check Autocommit",
+        "autocommitPenalty": "Penalty Autocommit"
       },
       "errors": {
         "tables": "table1, table2, table3"

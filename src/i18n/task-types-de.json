@@ -13,7 +13,12 @@
       "title": "JDBC",
       "fields": {
         "solution": "Lösung",
-        "tables": "Zu Prüfende Tabllen"
+        "tables": "Zu prüfende Tabellen",
+        "wrongOutputPenalty": "Punkteabzug fehlerhafte Ausgabe",
+        "exceptionHandlingPenalty": "Punkteabzug Exception Handling",
+        "wrongDbContentPenalty": "Punkteabzug falscher DB-Inhalt",
+        "checkAutocommit": "Autocommit prüfen",
+        "autocommitPenalty": "Punkteabzug Autocommit"
       },
       "errors": {
         "tables": "tabelle1, tabelle2, tabelle3"
