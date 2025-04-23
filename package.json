@@ -41,7 +41,7 @@
     "jose": "^5.6.3",
     "lodash-es": "^4.17.21",
     "luxon": "^3.4.4",
-    "ngx-monaco-editor-v2": "^18.0.1",
+    "ngx-monaco-editor-v2": "^18.1.0",
     "ngx-tiptap": "^11.0.0",
     "normalize.css": "^8.0.1",
     "primeflex": "^3.3.1",
