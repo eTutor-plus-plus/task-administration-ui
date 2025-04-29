@@ -13,7 +13,9 @@
     "jdbc": {
       "title": "JDBC",
       "fields": {
-        "schema": "Datenbankschema"
+        "createStatements": "CREATE TABLE-Statements",
+        "insertStatementsDiagnose": "INSERT INTO-Statements (Diagnose)",
+        "insertStatementsSubmission": "INSERT INTO-Statements (Abgabe)"
       }
     },
     "xquery": {
