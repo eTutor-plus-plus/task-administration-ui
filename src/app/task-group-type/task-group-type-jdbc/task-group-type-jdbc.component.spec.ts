@@ -1,106 +1,66 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { UntypedFormGroup } from '@angular/forms';
 import { provideTransloco } from '@ngneat/transloco';
-
-import { TaskGroupTypeJDBCComponent } from './task-group-type-jdbc.component';
-import { JDBCService } from './jdbc.service';
 import { translocoTestConfig } from '../../translation-loader.service.spec';
+import { MonacoEditorModule } from 'ngx-monaco-editor-v2';
+import { TaskGroupTypeJDBCComponent } from './task-group-type-jdbc.component';
+import { provideHttpClient } from '@angular/common/http';
+import { UntypedFormGroup } from '@angular/forms';
+import { API_URL } from '../../app.config';
 
 describe('TaskGroupTypeJDBCComponent', () => {
-  // let component: TaskGroupTypeJDBCComponent;
-  // let fixture: ComponentFixture<TaskGroupTypeJDBCComponent>;
+  let component: TaskGroupTypeJDBCComponent;
+  let fixture: ComponentFixture<TaskGroupTypeJDBCComponent>;
 
-  // const randomFn = jest.fn();
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [
+        TaskGroupTypeJDBCComponent,
+        MonacoEditorModule.forRoot({})
+      ],
+      providers: [
+        provideTransloco(translocoTestConfig),
+        provideHttpClient(),
+        { provide: API_URL, useValue: 'http://localhost/api' },
+      ]
+    }).compileComponents();
 
-  // beforeEach(async () => {
-  //   randomFn.mockClear();
-  //   randomFn.mockResolvedValue({min: 1, max: 10});
+    fixture = TestBed.createComponent(TaskGroupTypeJDBCComponent);
+    component = fixture.componentInstance;
+    component.formGroup = new UntypedFormGroup({});
+    fixture.detectChanges();
+  });
 
-  //   await TestBed.configureTestingModule({
-  //     imports: [TaskGroupTypeJDBCComponent],
-  //     providers: [
-  //       provideTransloco(translocoTestConfig),
-  //       {provide: JDBCService, useValue: {loadNewRandomNumbers: randomFn}}
-  //     ]
-  //   }).compileComponents();
+  it('should create the component', () => {
+    expect(component).toBeTruthy();
+  });
 
-  //   fixture = TestBed.createComponent(TaskGroupTypeJDBCComponent);
-  //   component = fixture.componentInstance;
-  //   component.formGroup = new UntypedFormGroup({});
-  //   fixture.detectChanges();
-  // });
+  it('should initialize all required form controls', () => {
+    const form = component.form;
+    expect(form.contains('createStatements')).toBeTruthy();
+    expect(form.contains('insertStatementsDiagnose')).toBeTruthy();
+    expect(form.contains('insertStatementsSubmission')).toBeTruthy();
+  });
 
-  // it('should create', () => {
-  //   expect(component).toBeTruthy();
-  //   expect(Object.keys(component.form.controls)).toHaveLength(2);
-  // });
+  it('should require all form fields (validators)', () => {
+    const form = component.form;
 
-  // it('should load numbers', async () => {
-  //   // Act
-  //   await component.loadNumbers();
+    form.get('createStatements')?.setValue(null);
+    form.get('insertStatementsDiagnose')?.setValue(null);
+    form.get('insertStatementsSubmission')?.setValue(null);
 
-  //   // Assert
-  //   expect(component.form.value.minNumber).toBe(1);
-  //   expect(component.form.value.maxNumber).toBe(10);
-  //   expect(component.loading).toBe(false);
-  // });
+    expect(form.valid).toBeFalsy();
+    expect(form.get('createStatements')?.valid).toBeFalsy();
+    expect(form.get('insertStatementsDiagnose')?.valid).toBeFalsy();
+    expect(form.get('insertStatementsSubmission')?.valid).toBeFalsy();
+  });
 
-  // it('should not fail on failed number loading', async () => {
-  //   // Act
-  //   randomFn.mockRejectedValueOnce('some error');
+  it('should be valid if all required fields are filled', () => {
+    const form = component.form;
 
-  //   // Act
-  //   await component.loadNumbers();
+    form.get('createStatements')?.setValue('CREATE TABLE test (id INT);');
+    form.get('insertStatementsDiagnose')?.setValue("INSERT INTO test VALUES (1);");
+    form.get('insertStatementsSubmission')?.setValue("INSERT INTO test VALUES (2);");
 
-  //   // Assert
-  //   expect(component.form.value.minNumber).toBeNull();
-  //   expect(component.form.value.minNumber).toBeNull();
-  //   expect(component.loading).toBe(false);
-  // });
-
-  // it('should show error if minNumber is empty', () => {
-  //   // Arrange
-  //   component.form.controls.minNumber.markAsDirty();
-
-  //   // Act
-  //   fixture.detectChanges();
-
-  //   // Assert
-  //   expect(component.form.controls.minNumber.invalid).toBe(true);
-  //   const elem: HTMLElement = fixture.nativeElement;
-  //   const msg: HTMLElement | null = elem.querySelector('.p-error');
-  //   expect(msg).toBeTruthy();
-  //   expect(msg?.innerText.trim()).not.toHaveLength(0);
-  // });
-
-  // it('should show error if maxNumber is empty', () => {
-  //   // Arrange
-  //   component.form.controls.maxNumber.markAsDirty();
-
-  //   // Act
-  //   fixture.detectChanges();
-
-  //   // Assert
-  //   expect(component.form.controls.maxNumber.invalid).toBe(true);
-  //   const elem: HTMLElement = fixture.nativeElement;
-  //   const msg: HTMLElement | null = elem.querySelector('.p-error');
-  //   expect(msg).toBeTruthy();
-  //   expect(msg?.innerText.trim()).not.toHaveLength(0);
-  // });
-
-  // it('should show error if maxNumber < minNumber', () => {
-  //   // Arrange
-  //   component.form.patchValue({minNumber: 100, maxNumber: 99});
-  //   component.form.controls.maxNumber.markAsDirty();
-
-  //   // Act
-  //   fixture.detectChanges();
-
-  //   // Assert
-  //   expect(component.form.invalid).toBe(true);
-  //   const elem: HTMLElement = fixture.nativeElement;
-  //   const msg: HTMLElement | null = elem.querySelector('.p-error');
-  //   expect(msg).toBeTruthy();
-  //   expect(msg?.innerText.trim()).not.toHaveLength(0);
-  // });
+    expect(form.valid).toBeTruthy();
+  });
 });

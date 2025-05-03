@@ -14,7 +14,7 @@ import { CheckboxModule } from 'primeng/checkbox';
 
 
 /**
- * Task Type Form: Binary Search
+ * Task Type Form: JDBC
  */
 @Component({
   selector: 'dke-task-type-jdbc',
@@ -34,7 +34,7 @@ import { CheckboxModule } from 'primeng/checkbox';
 export class TaskTypeJDBCComponent extends TaskTypeFormComponent<TaskTypeForm> implements OnChanges, OnDestroy {
 
   /**
-   * The editor options.
+   * Editor options.
    */
   readonly editorOptions: editor.IStandaloneEditorConstructionOptions = {
     language: 'java'
@@ -54,19 +54,14 @@ export class TaskTypeJDBCComponent extends TaskTypeFormComponent<TaskTypeForm> i
   
     const tableListPattern = /^\s*[a-zA-Z_][a-zA-Z0-9_]*(\s*,\s*[a-zA-Z_][a-zA-Z0-9_]*)*\s*$/;
     const requiredPatternHint = this.translationService.translate('taskTypes.jdbc.errors.tables');
-  
     this.form.addControl(
       'tables',
-      new FormControl<string | null>(
-        '',
-        [
-          Validators.required,
-          this.patternValidator(tableListPattern, requiredPatternHint)
-        ]
-      )
+      new FormControl<string | null>('', [
+        Validators.required,
+        this.patternValidator(tableListPattern, requiredPatternHint)
+      ])
     );
 
-     // Neu hinzugefügte Felder
   this.form.addControl('wrongOutputPenalty', new FormControl<number | null>(null, [
     Validators.required,
     Validators.min(0)
@@ -84,22 +79,10 @@ export class TaskTypeJDBCComponent extends TaskTypeFormComponent<TaskTypeForm> i
 
   this.form.addControl('checkAutocommit', new FormControl<boolean>(false));
 
-  // Autocommit Penalty (anfangs disabled)
   this.form.addControl('autocommitPenalty', new FormControl<number | null>({value: null, disabled: true}, [
     Validators.required,
     Validators.min(0)
   ]));
-
-  // Logik, um das Feld 'autocommitPenalty' abhängig von 'checkAutocommit' zu aktivieren
-  this.form.controls.checkAutocommit.valueChanges.subscribe(checked => {
-    const autocommitControl = this.form.controls.autocommitPenalty;
-    if (checked) {
-      autocommitControl.enable();
-    } else {
-      autocommitControl.disable();
-      autocommitControl.reset();
-    }
-  });
   }
   
   
@@ -144,33 +127,35 @@ export class TaskTypeJDBCComponent extends TaskTypeFormComponent<TaskTypeForm> i
   private async updateValidator(taskGroupId: number | null): Promise<void> {
     if (!taskGroupId)
       return;
-
-    this.form.controls.solution.clearValidators();
-    this.form.controls.solution.addValidators(Validators.required);
+  
+    const solutionControl = this.form.controls['solution'];
+    if (!solutionControl)
+      return;
+  
+    solutionControl.clearValidators();
+    solutionControl.addValidators(Validators.required);
+  
     try {
       const tg = await this.taskGroupService.get(taskGroupId);
       if (!tg.additionalData || tg.dto.taskGroupType !== 'jdbc')
         return;
-
+  
       const min = tg.additionalData['minNumber'] as number;
       const max = tg.additionalData['maxNumber'] as number;
-      const schema = tg.additionalData['schema'] as string;
       const tables = tg.additionalData['tables'] as string;
-      this.form.controls.solution.addValidators(Validators.min(min));
-      // this.form.controls.solution.addValidators(Validators.required(schema));
-      this.form.controls.solution.addValidators(Validators.max(max));
-      this.form.controls.solution.updateValueAndValidity();
+  
+      solutionControl.addValidators(Validators.min(min));
+      solutionControl.addValidators(Validators.max(max));
+      solutionControl.updateValueAndValidity();
     } catch (err) {
-      // ignore
     }
   }
+  
 
 }
 
-
 interface TaskTypeForm {
   solution: FormControl<string | null>;
-  schema: FormControl<string | null>;
   tables: FormControl<string | null>;
   wrongOutputPenalty: FormControl<number | null>;
   exceptionHandlingPenalty: FormControl<number | null>;
@@ -178,4 +163,5 @@ interface TaskTypeForm {
   checkAutocommit: FormControl<boolean | null>;
   autocommitPenalty: FormControl<number | null>;
 }
+
 

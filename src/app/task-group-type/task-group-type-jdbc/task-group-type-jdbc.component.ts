@@ -11,7 +11,7 @@ import { TaskGroupTypeFormComponent } from '../task-group-type-form.component';
 import { JDBCService } from './jdbc.service';
 
 /**
- * Task Group Type Form: Binary Search
+ * Task Group Type Form: JDBC
  */
 @Component({
   selector: 'dke-task-group-type-jdbc',
@@ -30,7 +30,7 @@ import { JDBCService } from './jdbc.service';
 export class TaskGroupTypeJDBCComponent extends TaskGroupTypeFormComponent<TaskGroupTypeForm> {
 
   /**
-   * The editor options.
+   * Editor options.
    */
   readonly editorOptions: editor.IStandaloneEditorConstructionOptions = {
     language: 'sql'
@@ -49,24 +49,6 @@ export class TaskGroupTypeJDBCComponent extends TaskGroupTypeFormComponent<TaskG
     this.form.addControl('insertStatementsDiagnose', new FormControl<string | null>(null, [Validators.required]));
     this.form.addControl('insertStatementsSubmission', new FormControl<string | null>(null, [Validators.required]));
   }
-  
-
-  /**
-   * Loads random numbers.
-   */
-  // async loadNumbers(): Promise<void> {
-  //   try {
-  //     this.startLoading();
-  //     const minMax = await this.binSearchService.loadNewRandomNumbers();
-  //     this.form.patchValue({
-  //       minNumber: minMax.min,
-  //       maxNumber: minMax.max
-  //     });
-  //   } catch (err) {
-  //   } finally {
-  //     this.finishLoading();
-  //   }
-  // }
 }
 
 interface TaskGroupTypeForm {
