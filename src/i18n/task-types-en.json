@@ -180,6 +180,11 @@
         "constraintPoints": "Points per correct Constraint"
 
       }
+    },
+    "owl": {
+      "fields": {
+        "solution": "Solution Ontology"
+      }
     }
   }
 }
