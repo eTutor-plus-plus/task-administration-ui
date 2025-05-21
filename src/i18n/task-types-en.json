@@ -18,7 +18,8 @@
         "exceptionHandlingPenalty": "Penalty exception handling",
         "wrongDbContentPenalty": "Penalty wrong DB content",
         "checkAutocommit": "Check Autocommit",
-        "autocommitPenalty": "Penalty Autocommit"
+        "autocommitPenalty": "Penalty Autocommit",
+        "variables": "Variables (optional)"
       },
       "errors": {
         "tables": "table1, table2, table3"

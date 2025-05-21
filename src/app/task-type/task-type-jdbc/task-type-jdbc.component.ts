@@ -51,7 +51,7 @@ export class TaskTypeJDBCComponent extends TaskTypeFormComponent<TaskTypeForm> i
 
   protected override initForm(): void {
     this.form.addControl('solution', new FormControl<string | null>(null, [Validators.required]));
-  
+
     const tableListPattern = /^\s*[a-zA-Z_][a-zA-Z0-9_]*(\s*,\s*[a-zA-Z_][a-zA-Z0-9_]*)*\s*$/;
     const requiredPatternHint = this.translationService.translate('taskTypes.jdbc.errors.tables');
     this.form.addControl(
@@ -62,34 +62,47 @@ export class TaskTypeJDBCComponent extends TaskTypeFormComponent<TaskTypeForm> i
       ])
     );
 
-  this.form.addControl('wrongOutputPenalty', new FormControl<number | null>(null, [
-    Validators.required,
-    Validators.min(0)
-  ]));
+    this.form.addControl('variables', new FormControl<string>(''));
 
-  this.form.addControl('exceptionHandlingPenalty', new FormControl<number | null>(null, [
-    Validators.required,
-    Validators.min(0)
-  ]));
+    this.form.addControl('wrongOutputPenalty', new FormControl<number | null>(null, [
+      Validators.required,
+      Validators.min(0)
+    ]));
 
-  this.form.addControl('wrongDbContentPenalty', new FormControl<number | null>(null, [
-    Validators.required,
-    Validators.min(0)
-  ]));
+    this.form.addControl('exceptionHandlingPenalty', new FormControl<number | null>(null, [
+      Validators.required,
+      Validators.min(0)
+    ]));
 
-  this.form.addControl('checkAutocommit', new FormControl<boolean>(false));
+    this.form.addControl('wrongDbContentPenalty', new FormControl<number | null>(null, [
+      Validators.required,
+      Validators.min(0)
+    ]));
 
-  this.form.addControl('autocommitPenalty', new FormControl<number | null>({value: null, disabled: true}, [
-    Validators.required,
-    Validators.min(0)
-  ]));
+    this.form.addControl('checkAutocommit', new FormControl<boolean>(false));
+    this.form.get('checkAutocommit')?.valueChanges.subscribe((checked) => {
+      const penaltyCtrl = this.form.get('autocommitPenalty');
+      if (checked) {
+        penaltyCtrl?.enable();
+      } else {
+        penaltyCtrl?.reset();
+        penaltyCtrl?.disable();
+      }
+    });
+
+    this.form.addControl('autocommitPenalty', new FormControl<number | null>({ value: null, disabled: true }, [
+      Validators.required,
+      Validators.min(0)
+    ]));
+
+
   }
-  
-  
+
+
   private patternValidator(regex: RegExp, requiredPatternHint: string): ValidatorFn {
     return (control: AbstractControl): ValidationErrors | null => {
       const value = control.value;
-  
+
       if (value && !regex.test(value)) {
         return {
           pattern: {
@@ -97,11 +110,11 @@ export class TaskTypeJDBCComponent extends TaskTypeFormComponent<TaskTypeForm> i
           }
         };
       }
-  
+
       return null;
     };
-  }  
-  
+  }
+
 
   /**
    * Listens to input changes.
@@ -127,30 +140,30 @@ export class TaskTypeJDBCComponent extends TaskTypeFormComponent<TaskTypeForm> i
   private async updateValidator(taskGroupId: number | null): Promise<void> {
     if (!taskGroupId)
       return;
-  
+
     const solutionControl = this.form.controls['solution'];
     if (!solutionControl)
       return;
-  
+
     solutionControl.clearValidators();
     solutionControl.addValidators(Validators.required);
-  
+
     try {
       const tg = await this.taskGroupService.get(taskGroupId);
       if (!tg.additionalData || tg.dto.taskGroupType !== 'jdbc')
         return;
-  
+
       const min = tg.additionalData['minNumber'] as number;
       const max = tg.additionalData['maxNumber'] as number;
       const tables = tg.additionalData['tables'] as string;
-  
+
       solutionControl.addValidators(Validators.min(min));
       solutionControl.addValidators(Validators.max(max));
       solutionControl.updateValueAndValidity();
     } catch (err) {
     }
   }
-  
+
 
 }
 
@@ -162,6 +175,7 @@ interface TaskTypeForm {
   wrongDbContentPenalty: FormControl<number | null>;
   checkAutocommit: FormControl<boolean | null>;
   autocommitPenalty: FormControl<number | null>;
+  variables: FormControl<string | null>;
 }
 
 

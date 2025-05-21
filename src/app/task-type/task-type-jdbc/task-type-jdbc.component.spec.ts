@@ -112,5 +112,14 @@ describe('TaskTypeJDBCComponent', () => {
     expect(form.valid).toBeTruthy();
   });
   
+  it('should have an optional variables field', () => {
+    const variablesControl = component.form.get('variables');
+    expect(variablesControl).toBeTruthy();
+    expect([null, '']).toContain(variablesControl?.value);
+    expect(variablesControl?.valid).toBeTruthy();
+    variablesControl?.setValue('int book = 1; int user = 42;');
+    expect(variablesControl?.valid).toBeTruthy();
+  });
+
   
 });

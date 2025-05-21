@@ -18,7 +18,8 @@
         "exceptionHandlingPenalty": "Punkteabzug Exception Handling",
         "wrongDbContentPenalty": "Punkteabzug falscher DB-Inhalt",
         "checkAutocommit": "Autocommit prüfen",
-        "autocommitPenalty": "Punkteabzug Autocommit"
+        "autocommitPenalty": "Punkteabzug Autocommit",
+        "variables": "Variablen (optional)"
       },
       "errors": {
         "tables": "tabelle1, tabelle2, tabelle3"
