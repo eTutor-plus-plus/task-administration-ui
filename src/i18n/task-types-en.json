@@ -180,6 +180,25 @@
         "constraintPoints": "Points per correct Constraint"
 
       }
+    },
+    "clustering": {
+      "title": "Clustering",
+      "fields": {
+        "numberOfClusters": "K-Value (Number of Clusters) (2-5)",
+        "numberOfDataPoints": "Number of data points (2-20)",
+        "distanceMetric": "Distance metric",
+        "difficulty": "Difficulty"
+      },
+      "metric": {
+        "euclidean": "Euclidean distance",
+        "manhattan": "Manhattan distance"
+      },
+      "difficulty": {
+        "easy": "Easy (1 iteration)",
+        "medium": "Medium (2 iterations)",
+        "hard": "Hard (3 iterations)",
+        "full": "Full optimization"
+      }
     }
   }
 }

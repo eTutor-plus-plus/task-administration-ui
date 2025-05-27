@@ -1,0 +1,47 @@
+<div [formGroup]="form">
+  <div class="surface-card p-4 shadow-2 border-round p-fluid mb-4">
+    <div class="grid formgrid p-fluid">
+
+      <div class="field mb-4 col-12 md:col-6">
+        <label for="numberOfClusters" transloco="taskTypes.clustering.fields.numberOfClusters"></label>
+        <p-inputNumber
+          inputId="numberOfClusters"
+          formControlName="numberOfClusters"
+          [min]="1"
+        ></p-inputNumber>
+      </div>
+      <!--
+      <div class="field mb-4 col-12 md:col-6">
+        <label for="numberOfDataPoints" transloco="taskTypes.clustering.fields.numberOfDataPoints"></label>
+        <p-inputNumber
+          inputId="numberOfDataPoints"
+          formControlName="numberOfDataPoints"
+          [min]="1"
+        ></p-inputNumber>
+      </div>
+      -->
+      <div class="field mb-4 col-12 md:col-6">
+        <label for="distanceMetric" transloco="taskTypes.clustering.fields.distanceMetric"></label>
+        <p-dropdown
+          inputId="distanceMetric"
+          formControlName="distanceMetric"
+          [options]="distanceMetricOptions"
+          optionLabel="label"
+          optionValue="value">
+        </p-dropdown>
+      </div>
+
+      <div class="field mb-4 col-12 md:col-6">
+        <label for="difficulty" transloco="taskTypes.clustering.fields.difficulty"></label>
+        <p-dropdown
+          inputId="difficulty"
+          formControlName="difficulty"
+          [options]="difficultyOptions"
+          optionLabel="label"
+          optionValue="value">
+        </p-dropdown>
+      </div>
+
+    </div>
+  </div>
+</div>
