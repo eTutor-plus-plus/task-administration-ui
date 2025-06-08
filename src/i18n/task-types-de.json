@@ -187,21 +187,28 @@
     },
     "clustering": {
       "title": "Clustering",
+      "parameters": "Parameter für Beispielgenerierung",
       "fields": {
         "numberOfClusters": "k-Wert (Anzahl der Cluster) (2-5)",
         "numberOfDataPoints": "Anzahl der Datenpunkte (2-20)",
         "distanceMetric": "Distanzmetrik",
-        "difficulty": "Schwierigkeit"
+        "taskLength": "Beispiellänge",
+        "solution": "Lösung anzeigen"
+      },
+      "deductions": {
+        "title": "Punkteabzüge",
+        "wrongClusters": "Falsche Anzahl an Clustern/Iterationen",
+        "wrongLabels": "Falsche Zuordnung von Datenpunkten",
+        "wrongCentroids": "Falsche Koordinaten der Schwerpunkte"
       },
       "metric": {
         "euclidean": "Euklidische Distanz",
         "manhattan": "Manhattan Distanz"
       },
-      "difficulty": {
-        "easy": "Leicht (1 Iteration)",
-        "medium": "Mittel (2 Iterationen)",
-        "hard": "Schwer (3 Iterationen)",
-        "full": "Volle Optimierung"
+      "taskLength": {
+        "short": "Kurz",
+        "medium": "Mittel",
+        "long": "Lang"
       }
     }
   }

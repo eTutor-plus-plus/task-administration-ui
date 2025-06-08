@@ -1,5 +1,16 @@
 <div [formGroup]="form">
+  <div *ngIf="task?.id" class="surface-card p-4 shadow-2 border-round p-fluid mb-4">
+      <div class="field mb-4 col-12">
+        <button pButton type="button" label="Get Solution" icon="pi pi-check" transloco="taskTypes.clustering.fields.solution"
+                (click)="fetchSolutionViaSubmission()" class="p-button-success p-button-lg"></button>
+
+        <div class="p-3 border-1 surface-border border-round bg-gray-50">
+          <div [innerHTML]="form.get('solution')?.value"></div>
+        </div>
+      </div>
+  </div>
   <div class="surface-card p-4 shadow-2 border-round p-fluid mb-4">
+    <h4 class="mb-3" transloco="taskTypes.clustering.parameters"></h4>
     <div class="grid formgrid p-fluid">
 
       <div class="field mb-4 col-12 md:col-6">
@@ -10,16 +21,7 @@
           [min]="1"
         ></p-inputNumber>
       </div>
-      <!--
-      <div class="field mb-4 col-12 md:col-6">
-        <label for="numberOfDataPoints" transloco="taskTypes.clustering.fields.numberOfDataPoints"></label>
-        <p-inputNumber
-          inputId="numberOfDataPoints"
-          formControlName="numberOfDataPoints"
-          [min]="1"
-        ></p-inputNumber>
-      </div>
-      -->
+
       <div class="field mb-4 col-12 md:col-6">
         <label for="distanceMetric" transloco="taskTypes.clustering.fields.distanceMetric"></label>
         <p-dropdown
@@ -32,14 +34,54 @@
       </div>
 
       <div class="field mb-4 col-12 md:col-6">
-        <label for="difficulty" transloco="taskTypes.clustering.fields.difficulty"></label>
+        <label for="taskLength" transloco="taskTypes.clustering.fields.taskLength"></label>
         <p-dropdown
-          inputId="difficulty"
-          formControlName="difficulty"
-          [options]="difficultyOptions"
+          inputId="taskLength"
+          formControlName="taskLength"
+          [options]="taskLengthOptions"
           optionLabel="label"
           optionValue="value">
         </p-dropdown>
+      </div>
+
+    </div>
+  </div>
+  <div class="surface-card p-4 shadow-2 border-round p-fluid mb-4">
+    <h4 class="mb-3" transloco="taskTypes.clustering.deductions.title"></h4>
+
+    <div class="grid formgrid p-fluid">
+
+      <div class="field mb-4 col-12 md:col-4">
+        <label for="deductionWrongClusters" transloco="taskTypes.clustering.deductions.wrongClusters"></label>
+        <p-inputNumber
+          inputId="deductionWrongClusters"
+          formControlName="deductionWrongClusters"
+          [min]="0"
+          [step]="0.5"
+          mode="decimal"
+        ></p-inputNumber>
+      </div>
+
+      <div class="field mb-4 col-12 md:col-4">
+        <label for="deductionWrongLabels" transloco="taskTypes.clustering.deductions.wrongLabels"></label>
+        <p-inputNumber
+          inputId="deductionWrongLabels"
+          formControlName="deductionWrongLabels"
+          [min]="0"
+          [step]="0.5"
+          mode="decimal"
+        ></p-inputNumber>
+      </div>
+
+      <div class="field mb-4 col-12 md:col-4">
+        <label for="deductionWrongCentroids" transloco="taskTypes.clustering.deductions.wrongCentroids"></label>
+        <p-inputNumber
+          inputId="deductionWrongCentroids"
+          formControlName="deductionWrongCentroids"
+          [min]="0"
+          [step]="0.5"
+          mode="decimal"
+        ></p-inputNumber>
       </div>
 
     </div>

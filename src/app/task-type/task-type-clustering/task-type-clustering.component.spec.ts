@@ -29,17 +29,15 @@ describe('TaskTypeClusteringComponent', () => {
 
   it('should initialize the form with default values', () => {
     expect(component.form.get('numberOfClusters')?.value).toBe(2);
-    //expect(component.form.get('numberOfDataPoints')?.value).toBe(5);
     expect(component.form.get('distanceMetric')?.value).toBe('EUCLIDEAN');
-    expect(component.form.get('difficulty')?.value).toBe('EASY');
+    expect(component.form.get('taskLength')?.value).toBe('SHORT');
   });
 
   it('should patch form values on originalData change', () => {
     const data = {
       numberOfClusters: 2,
-      //numberOfDataPoints: 5,
       distanceMetric: 'EUCLIDEAN',
-      difficulty: 'EASY'
+      taskLength: 'SHORT'
     };
 
     component.testSetOriginalData(data);

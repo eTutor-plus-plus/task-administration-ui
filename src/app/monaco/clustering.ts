@@ -41,9 +41,8 @@ export function registerClusteringLanguage(): void {
         // Semicolon between clusters
         [/;/, 'delimiter'],
 
-        // Numbers
-        [/\d+.\d+/, 'number'],
-        [/\d+/, 'number'], 
+        // Numbers (integers or decimals)
+        [/\d+(\.\d+)?/, 'number'],
 
         // Labels like A, B, C
         [/[A-Z]\b/, 'identifier'],

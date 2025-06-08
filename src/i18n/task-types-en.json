@@ -183,21 +183,28 @@
     },
     "clustering": {
       "title": "Clustering",
+      "parameters": "Exercise generation parameters",
       "fields": {
         "numberOfClusters": "K-Value (Number of Clusters) (2-5)",
         "numberOfDataPoints": "Number of data points (2-20)",
         "distanceMetric": "Distance metric",
-        "difficulty": "Difficulty"
+        "taskLength": "Task Length",
+        "solution": "Show solution"
+      },
+      "deductions": {
+        "title": "Point Deductions",
+        "wrongClusters": "Wrong Number of Clusters/Iterations",
+        "wrongLabels": "Wrong Data Point Assignment",
+        "wrongCentroids": "Wrong Centroid Coordinates"
       },
       "metric": {
         "euclidean": "Euclidean distance",
         "manhattan": "Manhattan distance"
       },
-      "difficulty": {
-        "easy": "Easy (1 iteration)",
-        "medium": "Medium (2 iterations)",
-        "hard": "Hard (3 iterations)",
-        "full": "Full optimization"
+      "taskLength": {
+        "short": "Short",
+        "medium": "Medium",
+        "long": "Long"
       }
     }
   }
