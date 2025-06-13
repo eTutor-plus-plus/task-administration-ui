@@ -1,10 +1,15 @@
+<p-confirmDialog></p-confirmDialog>
+
 <div [formGroup]="form">
   <div *ngIf="task?.id" class="surface-card p-4 shadow-2 border-round p-fluid mb-4">
       <div class="field mb-4 col-12">
-        <button pButton type="button" label="Get Solution" icon="pi pi-check" transloco="taskTypes.clustering.fields.solution"
-                (click)="fetchSolutionViaSubmission()" class="p-button-success p-button-lg"></button>
+        <!--no clue why p-button does not accept the usual transloco attribute-->
+        <p-button
+          [label]="showSolution ? ('taskTypes.clustering.fields.solutionHide' | transloco) : ('taskTypes.clustering.fields.solutionShow' | transloco)"
+          (click)="toggleSolution()">
+        </p-button>
 
-        <div class="p-3 border-1 surface-border border-round bg-gray-50">
+        <div *ngIf="showSolution" class="p-3 border-1 surface-border border-round bg-gray-50">
           <div [innerHTML]="form.get('solution')?.value"></div>
         </div>
       </div>
@@ -35,6 +40,10 @@
 
       <div class="field mb-4 col-12 md:col-6">
         <label for="taskLength" transloco="taskTypes.clustering.fields.taskLength"></label>
+        <i class="pi pi-info-circle ml-2"
+            pTooltip="{{ 'taskTypes.clustering.taskLengthTooltip' | transloco }}"
+            tooltipPosition="right"
+            style="cursor: pointer;"></i>
         <p-dropdown
           inputId="taskLength"
           formControlName="taskLength"
@@ -44,6 +53,12 @@
         </p-dropdown>
       </div>
 
+      <div class="field mb-4 col-12 md:col-6" *ngIf="showDeleteDescriptionButton">
+        <p-button
+          [label]="'taskTypes.clustering.fields.deleteDesc' | transloco"
+          (click)="confirmClearDescription()" severity="warning"> 
+        </p-button>
+      </div>
     </div>
   </div>
   <div class="surface-card p-4 shadow-2 border-round p-fluid mb-4">
