@@ -180,6 +180,41 @@
         "constraintPoints": "Points per correct Constraint"
 
       }
+    },
+    "clustering": {
+      "title": "Clustering",
+      "parameters": "Exercise generation parameters",
+      "confirmDeleteDesc": {
+      "message": "Do you really want to delete the description?",
+      "header": "Confirm Deletion",
+      "accept": "Yes",
+      "reject": "No"
+    },
+      "fields": {
+        "numberOfClusters": "K-Value (Number of Clusters) (2-5)",
+        "numberOfDataPoints": "Number of data points (2-20)",
+        "distanceMetric": "Distance metric",
+        "taskLength": "Task Length",
+        "solutionShow": "Show Solution",
+        "solutionHide": "Hide Solution",
+        "deleteDesc": "Delete Description"
+      },
+      "taskLengthTooltip": "Short: 5-8 data points, random centroids\nMedium: 8-12 data points, most central centroids\nLong: 12-16 data points, most central centroids",
+      "deductions": {
+        "title": "Point Deductions",
+        "wrongClusters": "Wrong Number of Clusters/Iterations",
+        "wrongLabels": "Wrong Data Point Assignment",
+        "wrongCentroids": "Wrong Centroid Coordinates"
+      },
+      "metric": {
+        "euclidean": "Euclidean distance",
+        "manhattan": "Manhattan distance"
+      },
+      "taskLength": {
+        "short": "Short",
+        "medium": "Medium",
+        "long": "Long"
+      }
     }
   }
 }
