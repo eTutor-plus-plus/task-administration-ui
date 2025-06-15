@@ -13,11 +13,15 @@ export class TaskGroupTypeRegistry {
   private constructor() {
   }
 
-  private static readonly taskTypes: { name: string, component?: Type<TaskGroupTypeFormComponent<any>>, supportsDescriptionGeneration?: boolean }[] = [
-    {name: 'binary-search', component: TaskGroupTypeBinarySearchComponent, supportsDescriptionGeneration: true},
-    {name: 'xquery', component: TaskGroupTypeXqueryComponent, supportsDescriptionGeneration: true},
-    {name: 'datalog', component: TaskGroupTypeDatalogComponent, supportsDescriptionGeneration: true},
-    {name: 'sql', component: TaskGroupTypeSqlComponent, supportsDescriptionGeneration: true},
+  private static readonly taskTypes: {
+    name: string,
+    component?: Type<TaskGroupTypeFormComponent<any>>,
+    supportsDescriptionGeneration?: boolean
+  }[] = [
+    { name: 'binary-search', component: TaskGroupTypeBinarySearchComponent, supportsDescriptionGeneration: true },
+    { name: 'xquery',          component: TaskGroupTypeXqueryComponent,       supportsDescriptionGeneration: true },
+    { name: 'datalog',         component: TaskGroupTypeDatalogComponent,      supportsDescriptionGeneration: true },
+    { name: 'sql',             component: TaskGroupTypeSqlComponent,          supportsDescriptionGeneration: true },
   ];
 
   /**

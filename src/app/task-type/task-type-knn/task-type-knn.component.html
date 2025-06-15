@@ -1,0 +1,209 @@
+<div [formGroup]="form">
+  <!-- KNN Settings -->
+    <div class="surface-card p-4 mb-4">
+      <h3 class="mb-3">{{ 'taskTypes.knn.model.knn' | transloco }}</h3>
+
+      <!-- First row: k, numTrain, numTest, trainLabels -->
+      <div class="grid formgrid mb-6">
+        <!-- k setting -->
+        <div class="field col-12 md:col-3">
+          <label>{{ 'taskTypes.knn.fields.k' | transloco }}</label>
+          <p-inputNumber formControlName="k" min="1" class="w-full" />
+        </div>
+        <!-- numTrain setting -->
+        <div class="field col-12 md:col-3">
+          <label>{{ 'taskTypes.knn.fields.numTrain' | transloco }}</label>
+          <p-inputNumber formControlName="numTrain" min="1" class="w-full" />
+        </div>
+        <!-- numTest setting -->
+        <div class="field col-12 md:col-3">
+          <label>{{ 'taskTypes.knn.fields.numTest' | transloco }}</label>
+          <p-inputNumber formControlName="numTest" min="1" class="w-full" />
+        </div>
+        <!-- Class labels management -->
+        <div class="field col-12 md:col-3">
+          <label>{{ 'taskTypes.knn.fields.trainLabels' | transloco }}</label>
+          <div class="surface-card p-2 mb-2">
+            <div class="flex gap-2 items-center mb-2">
+              <!-- Add class label button -->
+              <button type="button" pButton (click)="addClassLabel()" icon="pi pi-plus"
+                [label]="'taskTypes.knn.fields.trainLabelsAdd' | transloco"></button>
+              <span class="ml-2 text-sm text-secondary">
+                ({{ trainLabelsArray.length }} {{ 'taskTypes.knn.fields.trainLabelsCount' | transloco }})
+              </span>
+            </div>
+            <!-- List of labels -->
+            <div formArrayName="trainLabels">
+              <div *ngFor="let ctrl of trainLabelsArray.controls; let i = index" class="flex items-center gap-2 mb-2">
+                <input pInputText [formControlName]="i" class="w-32"
+                      [placeholder]="'taskTypes.knn.fields.trainLabelsPlaceholder' | transloco" />
+                <!-- Remove label button -->
+                <button type="button"
+                        pButton
+                        class="p-button-danger p-button-sm"
+                        icon="pi pi-times"
+                        (click)="removeClassLabel(i)">
+                </button>
+              </div>
+            </div>
+            <!-- Error display -->
+            <div *ngIf="trainLabelsArray.invalid && trainLabelsArray.touched" class="p-error mt-1">
+              {{ 'taskTypes.knn.fields.trainLabelsError' | transloco }}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Distance metric and tiebreaker -->
+      <div class="grid formgrid mb-3">
+        <!-- Metric dropdown -->
+        <div class="field col-12 md:col-3">
+          <label>{{ 'taskTypes.knn.fields.metric' | transloco }}</label>
+          <p-dropdown
+            formControlName="metric"
+            class="w-full"
+            [options]="[
+              {label: ('taskTypes.knn.fields.metric.euclidean' | transloco), value:'euclidean'},
+              {label: ('taskTypes.knn.fields.metric.manhattan' | transloco), value:'manhattan'},
+              {label: ('taskTypes.knn.fields.metric.minkowski' | transloco), value:'minkowski'}
+            ]"
+          ></p-dropdown>
+        </div>
+        <!-- Tiebreaker dropdown -->
+        <div class="field col-12 md:col-3">
+          <label>{{ 'taskTypes.knn.fields.tiebreaker' | transloco }}</label>
+          <p-dropdown
+            formControlName="tiebreaker"
+            class="w-full"
+            [options]="tiebreakerOptions"
+          ></p-dropdown>
+        </div>
+      </div>
+
+      <!-- Feature range: min/max for x and y -->
+      <h4 class="mt-4 mb-2">→ {{ 'taskTypes.knn.fields.featureRange' | transloco }}</h4>
+      <div class="grid formgrid mb-3">
+        <div class="field col-6 md:col-3">
+          <label>{{ 'taskTypes.knn.fields.xMin' | transloco }}</label>
+          <p-inputNumber formControlName="xMin" class="w-full" />
+        </div>
+        <div class="field col-6 md:col-3">
+          <label>{{ 'taskTypes.knn.fields.xMax' | transloco }}</label>
+          <p-inputNumber formControlName="xMax" class="w-full" />
+        </div>
+        <div class="field col-6 md:col-3">
+          <label>{{ 'taskTypes.knn.fields.yMin' | transloco }}</label>
+          <p-inputNumber formControlName="yMin" class="w-full" />
+        </div>
+        <div class="field col-6 md:col-3">
+          <label>{{ 'taskTypes.knn.fields.yMax' | transloco }}</label>
+          <p-inputNumber formControlName="yMax" class="w-full" />
+        </div>
+      </div>
+
+      <!-- Axis labels -->
+      <h4 class="mt-4 mb-2">
+        → {{ 'taskTypes.knn.fields.xLabel' | transloco }}
+        / {{ 'taskTypes.knn.fields.yLabel' | transloco }}
+      </h4>
+      <div class="grid formgrid">
+        <div class="field col-12 md:col-6">
+          <label>{{ 'taskTypes.knn.fields.xLabel' | transloco }}</label>
+          <input pInputText formControlName="xLabel" class="w-full" />
+        </div>
+        <div class="field col-12 md:col-6">
+          <label>{{ 'taskTypes.knn.fields.yLabel' | transloco }}</label>
+          <input pInputText formControlName="yLabel" class="w-full" />
+        </div>
+      </div>
+    </div>
+
+
+  <!-- Training points table (edit mode only) -->
+  <div *ngIf="isEditMode">
+    <div class="surface-card p-4 mb-4">
+      <h3>{{ 'taskTypes.knn.fields.editTrainPoints' | transloco }}</h3>
+      <div formArrayName="trainPoints">
+        <div *ngFor="let grp of trainPointsArray.controls; let i = index"
+            [formGroupName]="i" class="mb-4">
+            <!-- Show class label -->
+          <div class="flex items-center gap-2 mb-2">
+            <span class="w-32 font-bold block py-1 px-2" style="background: #f4f4f4; border-radius: 0.375rem;">
+              {{ grp.get('label')?.value }}
+            </span>
+          </div>
+          <div formArrayName="points">
+            <div class="overflow-x-auto">
+              <table class="min-w-[240px] border-separate border-spacing-y-1">
+                <thead>
+                  <tr>
+                    <th class="text-center font-semibold text-sm text-secondary p-1" style="width: 100px;">
+                      {{ form.get('xLabel')?.value }}
+                    </th>
+                    <th class="text-center font-semibold text-sm text-secondary p-1" style="width: 100px;">
+                      {{ form.get('yLabel')?.value }}
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <!-- Row for each train point -->
+                  <tr *ngFor="let pGrp of getPointsControls($any(grp)); let j = index"
+                      [formGroupName]="j">
+                    <td class="p-1">
+                      <input type="number" formControlName="x"
+                            (input)="updatePoint(getPointsArray($any(grp)), j, 0, $event)"
+                            class="w-20 text-center" />
+                    </td>
+                    <td class="p-1">
+                      <input type="number" formControlName="y"
+                            (input)="updatePoint(getPointsArray($any(grp)), j, 1, $event)"
+                            class="w-20 text-center" />
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Test points table (edit mode only) -->
+  <div *ngIf="isEditMode">
+    <div class="surface-card p-4 mb-4">
+      <h3>{{ 'taskTypes.knn.fields.editTestPoints' | transloco }}</h3>
+      <div formArrayName="testPoints">
+        <div class="overflow-x-auto">
+          <table class="min-w-[240px] border-separate border-spacing-y-1">
+            <thead>
+              <tr>
+                <th class="text-center font-semibold text-sm text-secondary p-1" style="width: 100px;">
+                  {{ form.get('xLabel')?.value }}
+                </th>
+                <th class="text-center font-semibold text-sm text-secondary p-1" style="width: 100px;">
+                  {{ form.get('yLabel')?.value }}
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <!-- Row for each test point -->
+              <tr *ngFor="let grp of testPointsArray.controls; let i = index"
+                  [formGroupName]="i">
+                <td class="p-1">
+                  <input type="number" formControlName="x"
+                        (input)="updateTestPoint(i, 0, $event)" class="w-20 text-center" />
+                </td>
+                <td class="p-1">
+                  <input type="number" formControlName="y"
+                        (input)="updateTestPoint(i, 1, $event)" class="w-20 text-center" />
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>

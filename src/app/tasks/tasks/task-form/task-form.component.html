@@ -68,6 +68,7 @@
           }
         }
       </div>
+     
 
       <div class="field mb-4 col-12 md:col-6">
         <label for="descriptionDe" [transloco]="this.baseTranslationKey + 'fields.descriptionDe'"></label>
@@ -177,7 +178,7 @@
       </div>
     </div>
   }
-</form>
+
 
 <dke-audit-information [data]="originalEntity"/>
 @if (originalEntity && (originalEntity.approvedBy || originalEntity.approvedDate)) {

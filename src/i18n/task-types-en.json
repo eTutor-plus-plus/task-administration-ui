@@ -180,7 +180,70 @@
         "constraintPoints": "Points per correct Constraint"
 
       }
+    },
+    "knn": {
+      "title": "K-Nearest-Neighbors",
+      "meta": "General Information",
+      "model": {
+        "knn": "KNN Classifier"
+      },
+      "labels": {
+        "feature": "Feature"
+      },
+      "placeholders": {
+        "taskName": "Enter task name",
+        "descriptionDe": "Markdown / HTML allowed …",
+        "descriptionEn": "Markdown / HTML allowed …"
+      },
+      "fields": {
+        "k": "k-Value",
+        "trainLabels": "Training classes",
+        "trainLabelsAdd": "Add class",
+        "trainLabelsCount": "classes",
+        "trainLabelsPlaceholder": "e.g. A, B, C …",
+        "trainLabelsError": "Please provide a label for each class (at least 2 classes required).",
+        "metric": "Distance Metric",
+        "metric.euclidean": "Euclidean",
+        "metric.manhattan": "Manhattan",
+        "metric.minkowski": "Minkowski",
+        "numTrain": "Training Points per Class",
+        "numTest": "Test Points",
+        "featureName": "Feature Name",
+        "featureRange": "Feature Range",
+        "xMin": "X-Axis Min",
+        "xMax": "X-Axis Max",
+        "yMin": "Y-Axis Min",
+        "yMax": "Y-Axis Max",
+        "xLabel": "X-Axis Label",
+        "yLabel": "Y-Axis Label",
+        "tiebreaker": "Tiebreaker Method",
+        "tiebreaker.sum": "Sum of distances (alphabetical if still tied)",
+        "tiebreaker.mean": "Mean of distances (alphabetical if still tied)",
+        "tiebreaker.nearest": "Nearest point decides (alphabetical if still tied)",
+        "editTrainPoints": "Edit Training Points",
+        "editTestPoints": "Edit Test Points",
+        "preview": "Preview",
+        "feedbackLevel": "Feedback Level",
+        "feedback.RUN": "Syntax/Format Check Only",
+        "feedback.DIAGNOSE": "some Feedback",
+        "feedback.SUBMIT": "Full Feedback & Points",
+        "taskName": "Task Name",
+        "organization": "Organisation / Course",
+        "taskGroup": "Task Group",
+        "descriptionDe": "Description (German)",
+        "descriptionEn": "Description (English)",
+        "maxPoints": "Maximum Points",
+        "previewButtons": {
+          "generateTaskPdf": "Generate Task PDF",
+          "generateSolutionPdf": "Generate Solution PDF"
+        }
+      },
+      "errors": {
+        "required": "This field is required",
+        "min": "Value must be greater than 0"
+      }
     }
   }
 }
+
 

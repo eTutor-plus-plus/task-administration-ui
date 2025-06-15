@@ -184,7 +184,69 @@
 
 
       }
-    }
+    },
+    "knn": {
+      "title": "K-Nächste-Nachbarn",
+      "meta": "Allgemeine Angaben",
+      "model": {
+        "knn": "KNN-Klassifikation"
+      },
+      "labels": {
+        "feature": "Merkmal"
+      },
+      "placeholders": {
+        "taskName": "Name der Aufgabe",
+        "descriptionDe": "Markdown / HTML möglich …",
+        "descriptionEn": "Markdown / HTML möglich …"
+      },
+      "fields": {
+        "k": "K-Wert",
+        "trainLabels": "Trainingsklassen",
+        "trainLabelsAdd": "Klasse hinzufügen",
+        "trainLabelsCount": "Klassen",
+        "trainLabelsPlaceholder": "z. B. A, B, C …",
+        "trainLabelsError": "Bitte gib für jede Klasse ein Label an (mind. 2 Klassen).",
+        "metric": "Distanz-Metrik",
+        "metric.euclidean": "Euklidisch",
+        "metric.manhattan": "Manhattan",
+        "metric.minkowski": "Minkowski",
+        "numTrain": "Trainings-punkte je Klasse",
+        "numTest": "Test-punkte",
+        "featureName": "Merkmal‑Name",
+        "featureRange": "Merkmal-Bereich",
+        "xMin": "X-Achse von",
+        "xMax": "X-Achse bis",
+        "yMin": "Y-Achse von",
+        "yMax": "Y-Achse bis",
+        "xLabel": "X-Achsen-Beschriftung",
+        "yLabel": "Y-Achsen-Beschriftung",
+        "tiebreaker": "Tiebreaker-Verfahren",
+        "tiebreaker.sum": "Summe der Distanzen (bei Gleichstand alphabetisch)",
+        "tiebreaker.mean": "Durchschnitt der Distanzen (bei Gleichstand alphabetisch)",
+        "tiebreaker.nearest": "Nächstgelegener Punkt entscheidet (bei Gleichstand alphabetisch)",
+        "editTrainPoints": "Trainingspunkte bearbeiten",
+        "editTestPoints": "Testpunkte bearbeiten",
+        "preview": "Vorschau",
+        "feedbackLevel": "Feedback-Level",
+        "feedback.RUN": "Nur Syntax-/Format-Check",
+        "feedback.DIAGNOSE": "ein bisschen Feedback",
+        "feedback.SUBMIT": "Vollfeedback & Punkte",
+        "taskName": "Aufgaben-Name",
+        "organization": "Organisationseinheit / LVA",
+        "taskGroup": "Aufgaben-Gruppe",
+        "descriptionDe": "Beschreibung (Deutsch)",
+        "descriptionEn": "Beschreibung (Englisch)",
+        "maxPoints": "Maximale Punkte",
+        "previewButtons": {
+          "generateTaskPdf": "Generiere Aufgabenstellung",
+          "generateSolutionPdf": "Generiere Lösung"
+        }
+      },
+      "errors": {
+        "required": "Dieses Feld ist erforderlich",
+        "min": "Der Wert muss größer als 0 sein"
+      }
+    } 
   }
 }
 
