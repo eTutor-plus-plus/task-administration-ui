@@ -206,6 +206,7 @@
         "trainLabelsCount": "Klassen",
         "trainLabelsPlaceholder": "z. B. A, B, C …",
         "trainLabelsError": "Bitte gib für jede Klasse ein Label an (mind. 2 Klassen).",
+        "trainLabelsErrorMax": "Maximal 7 Klassen erlaubt.",
         "metric": "Distanz-Metrik",
         "metric.euclidean": "Euklidisch",
         "metric.manhattan": "Manhattan",

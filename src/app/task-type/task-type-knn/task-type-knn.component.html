@@ -26,7 +26,9 @@
           <div class="surface-card p-2 mb-2">
             <div class="flex gap-2 items-center mb-2">
               <!-- Add class label button -->
-              <button type="button" pButton (click)="addClassLabel()" icon="pi pi-plus"
+              <button type="button" pButton (click)="addClassLabel()" 
+                [disabled]="trainLabelsArray.length >= 7"
+                icon="pi pi-plus"
                 [label]="'taskTypes.knn.fields.trainLabelsAdd' | transloco"></button>
               <span class="ml-2 text-sm text-secondary">
                 ({{ trainLabelsArray.length }} {{ 'taskTypes.knn.fields.trainLabelsCount' | transloco }})
@@ -47,6 +49,9 @@
               </div>
             </div>
             <!-- Error display -->
+             <div *ngIf="trainLabelsArray.hasError('maxShapes')" class="p-error mt-1">
+              {{ 'taskTypes.knn.fields.trainLabelsErrorMax' | transloco }}
+            </div>
             <div *ngIf="trainLabelsArray.invalid && trainLabelsArray.touched" class="p-error mt-1">
               {{ 'taskTypes.knn.fields.trainLabelsError' | transloco }}
             </div>

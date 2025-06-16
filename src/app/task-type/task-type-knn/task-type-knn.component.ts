@@ -1,5 +1,5 @@
 import { ChangeDetectorRef, Component, EventEmitter, Output } from '@angular/core';
-import { FormControl, FormGroup, Validators, FormArray, ReactiveFormsModule, AbstractControl } from '@angular/forms';
+import { FormControl, FormGroup, Validators, FormArray, ReactiveFormsModule, AbstractControl, ValidationErrors } from '@angular/forms';
 import { TaskTypeFormComponent } from '../task-type-form.component';
 import { TranslocoModule, TranslocoService } from '@ngneat/transloco';
 import { InputNumberModule } from 'primeng/inputnumber';
@@ -47,7 +47,7 @@ export class TaskTypeKnnComponent extends TaskTypeFormComponent<TaskTypeForm> {
     form.addControl('xLabel',         new FormControl('X', Validators.required));
     form.addControl('yLabel',         new FormControl('Y', Validators.required));
     form.addControl('tiebreaker',     new FormControl('sum', Validators.required));
-    form.addControl('trainLabels',    new FormArray([]));
+    form.addControl('trainLabels',    new FormArray([], [this.maxShapesValidator(7)]));
     form.addControl('trainPoints',    new FormArray([])); 
     form.addControl('testPoints',     new FormArray([])); 
   }
@@ -167,26 +167,33 @@ export class TaskTypeKnnComponent extends TaskTypeFormComponent<TaskTypeForm> {
 
 
   // ========== Methods for add/remove buttons ==========
+  
+  // Custom Validator for max shapes
+  private maxShapesValidator(max: number) {
+    return (ctrl: AbstractControl): ValidationErrors | null => {
+      const arr = ctrl as FormArray;
+      return arr.length >= max ? { maxShapes: true } : null;   
+    };
+  }
 
   addClassLabel() {
-    // 1) sichtbares Control für den Input
+     
+    // visible control for the input
     const uiCtrl   = new FormControl('', Validators.required);
-    // 2) Daten-Control, das ans Backend geht
+    // control for the data
     const dataCtrl = new FormControl('', Validators.required);
 
-    // automatisch spiegeln
     uiCtrl.valueChanges.subscribe(v => dataCtrl.setValue(v, { emitEvent: false }));
-
-    // sichtbare Liste
     this.trainLabelsArray.push(uiCtrl);
-
-    // verborgene Trainingsstruktur
+    //  structure for backend
     this.trainPointsArray.push(
       new FormGroup({
         label : dataCtrl,
         points: new FormArray([])
       })
     );
+    this.trainLabelsArray.updateValueAndValidity();
+    this.cdr.detectChanges();
   }
 
   // Remove class label and its point group (keep at least two)
@@ -195,6 +202,7 @@ export class TaskTypeKnnComponent extends TaskTypeFormComponent<TaskTypeForm> {
       this.trainLabelsArray.removeAt(idx);
       this.trainPointsArray.removeAt(idx);
     }
+    this.trainLabelsArray.updateValueAndValidity();
     this.cdr.detectChanges();
   }
 
@@ -248,6 +256,7 @@ export class TaskTypeKnnComponent extends TaskTypeFormComponent<TaskTypeForm> {
     const y = dim === 1 ? Number(input.value) : group.value.y;
     group.setValue({ x, y });
   }
+ 
 }
 
 // Form interface definition
