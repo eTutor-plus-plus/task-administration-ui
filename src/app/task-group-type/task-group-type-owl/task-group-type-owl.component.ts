@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { TranslocoDirective } from '@ngneat/transloco';
 import { InputTextareaModule } from 'primeng/inputtextarea';
 import { TaskGroupTypeFormComponent } from '../task-group-type-form.component';
@@ -25,9 +25,9 @@ export class TaskGroupTypeOwlComponent extends TaskGroupTypeFormComponent<TaskGr
   }
 
   protected override initForm(): void {
-    this.form.addControl('solution', new FormControl<string | null>('', [
+    /*this.form.addControl('solution', new FormControl<string | null>('', [
       Validators.required,
       Validators.minLength(1)
-    ]));
+    ]));*/
   }
 }

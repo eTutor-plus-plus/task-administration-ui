@@ -182,6 +182,7 @@
       }
     },
     "owl": {
+      "title": "OWL",
       "fields": {
         "solution": "Solution Ontology"
       }
