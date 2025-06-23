@@ -101,6 +101,7 @@
         "solution": "Lösung",
         "triggerOperations": "Operationen welche den Trigger ausführen",
         "resultTables": "Ergebnistabellen, welche verglichen werden (Strichpunkt getrennt)",
+        "timingIndependent": "Zeitpunktunabhängiger Trigger (Wenn diese Option gewählt ist, wird nicht zwischen BEFORE und AFTER unterschieden)",
         "buffered": "Gepufferte Ausführung (Lösung einmalig ausführen und Ausführungsergebnis mit Puffertabelle vergleichen)",
         "comparisonExecution": "Mengenvergleich nach jeder Operation",
         "wrongHeadPenalty": "Falscher Trigger-Kopf: Punkteabzug",

@@ -43,12 +43,14 @@ export class TaskTypeTriggerComponent extends TaskTypeFormComponent<TaskTypeForm
     this.form.addControl('resultTables', new FormControl<string | null>(null, [Validators.required]));
     this.form.addControl('wrongHeadPenalty', new FormControl<number | null>(null, [Validators.required, Validators.min(-1)]));
     this.form.addControl('wrongBodyPenalty', new FormControl<number | null>(null, [Validators.required, Validators.min(-0.75)]));
+    this.form.addControl('timingIndependent', new FormControl<string | null>(null, [Validators.required]));
     this.form.addControl('buffered', new FormControl<string | null>(null, [Validators.required]));
     this.form.addControl('comparisonExecution', new FormControl<string | null>(null, [Validators.required]));
   }
 
   protected override getFormDefaultValues(): Partial<{ [K in keyof TaskTypeForm]: any }> | undefined {
     return {
+      timingIndependent: false,
       buffered: true,
       comparisonExecution: false,
       wrongHeadPenalty: -1,
@@ -61,6 +63,7 @@ interface TaskTypeForm {
   solution: FormControl<string | null>,
   triggerOperations: FormControl<string | null>,
   resultTables : FormControl<string | null>,
+  timingIndependent: FormControl<string | null>,
   buffered: FormControl<string | null>,
   comparisonExecution: FormControl<string | null>,
   wrongHeadPenalty: FormControl<number | null>,

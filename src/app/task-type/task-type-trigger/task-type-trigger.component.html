@@ -42,6 +42,21 @@
         </div>
       </div>
 
+      <div class="surface-card p-4 shadow-2 border-round p-fluid mb-4">
+        <div class="grid formgrid p-fluid">
+          <div class="field mb-4 col-12">
+            <label for="timingIndependent" transloco="taskTypes.trigger.fields.timingIndependent"></label>
+            <br/>
+            <input type="checkbox" formControlName="timingIndependent">
+            @if (form.controls.timingIndependent.dirty || form.controls.timingIndependent.touched) {
+              <small class="block mt-1 p-error">
+                {{ getError(form.controls.timingIndependent, 'taskTypes.trigger.fields.timingIndependent') }}
+              </small>
+            }
+          </div>
+        </div>
+      </div>
+
     <div class="surface-card p-4 shadow-2 border-round p-fluid mb-4">
         <div class="grid formgrid p-fluid">
           <div class="field mb-4 col-12">
