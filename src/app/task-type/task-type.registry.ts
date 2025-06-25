@@ -110,7 +110,7 @@ return $d`,
       name: 'knn',
       supportedTaskGroupTypes: [],
       component: TaskTypeKnnComponent,
-      submissionTemplate: 'A,B,A',
+      submissionTemplate: '',
       supportsDescriptionGeneration: true,
       submissionInputLanguage: 'plaintext'
     }

@@ -172,7 +172,7 @@ export class TaskTypeKnnComponent extends TaskTypeFormComponent<TaskTypeForm> {
   private maxShapesValidator(max: number) {
     return (ctrl: AbstractControl): ValidationErrors | null => {
       const arr = ctrl as FormArray;
-      return arr.length >= max ? { maxShapes: true } : null;   
+      return arr.length > max ? { maxShapes: true } : null;   
     };
   }
 
