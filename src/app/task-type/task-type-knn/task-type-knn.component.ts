@@ -9,8 +9,6 @@ import { ButtonModule } from 'primeng/button';
 import { RadioButtonModule } from 'primeng/radiobutton';
 import { CommonModule } from '@angular/common';
 
-
-
 @Component({
   selector: 'dke-task-type-knn',
   standalone: true,
@@ -50,8 +48,11 @@ export class TaskTypeKnnComponent extends TaskTypeFormComponent<TaskTypeForm> {
     form.addControl('trainLabels',    new FormArray([], [this.maxShapesValidator(7)]));
     form.addControl('trainPoints',    new FormArray([])); 
     form.addControl('testPoints',     new FormArray([])); 
-  }
 
+    this.trainPointsArray.valueChanges.subscribe(() => this.checkDuplicateCoords());
+    this.testPointsArray .valueChanges.subscribe(() => this.checkDuplicateCoords())
+  }
+  
   // Returns default values for the form
   protected override getFormDefaultValues(): Partial<{ [K in keyof TaskTypeForm]: any }> | undefined {
     return {
@@ -161,7 +162,7 @@ export class TaskTypeKnnComponent extends TaskTypeFormComponent<TaskTypeForm> {
       );
     }
 
-    this.cdr.detectChanges();         // View refreshen
+    this.cdr.detectChanges();         
   }
 
 
@@ -225,6 +226,7 @@ export class TaskTypeKnnComponent extends TaskTypeFormComponent<TaskTypeForm> {
     this.testPointsArray.push(new FormGroup({ x: new FormControl(0), y: new FormControl(0) }));
     this.cdr.detectChanges();
   }
+
   // Remove test point
   removeTestPoint(idx: number) {
     this.testPointsArray.removeAt(idx);
@@ -247,7 +249,9 @@ export class TaskTypeKnnComponent extends TaskTypeFormComponent<TaskTypeForm> {
     const x = dim === 0 ? Number(input.value) : group.value.x;
     const y = dim === 1 ? Number(input.value) : group.value.y;
     group.setValue({ x, y });
+    this.checkDuplicateCoords();
   }
+
   // Handle training point input changes
   updatePoint(pointsArray: FormArray, pointIdx: number, dim: number, event: Event) {
     const input = event.target as HTMLInputElement;
@@ -255,10 +259,70 @@ export class TaskTypeKnnComponent extends TaskTypeFormComponent<TaskTypeForm> {
     const x = dim === 0 ? Number(input.value) : group.value.x;
     const y = dim === 1 ? Number(input.value) : group.value.y;
     group.setValue({ x, y });
+    this.checkDuplicateCoords();
+  }
+
+  // Check for duplicates when manually changing coordinates
+  private checkDuplicateCoords(): void {
+    // helpers
+    const clrDup = (c: FormControl) => {
+      if (c.errors?.['duplicate']) {
+        const { duplicate, duplicateCoords, ...rest } = c.errors!;
+        c.setErrors(Object.keys(rest).length ? rest : null);
+      }
+    };
+    const setDup = (c: FormControl, key: string) =>
+      c.setErrors({ ...(c.errors ?? {}), duplicate: true, duplicateCoords: key });
+
+    // clear old errors 
+    [...this.trainPointsArray.controls.flatMap(tp =>
+        (tp.get('points') as FormArray).controls),
+    ...this.testPointsArray.controls
+    ].forEach(ctrl => { clrDup(ctrl.get('x') as FormControl);
+                        clrDup(ctrl.get('y') as FormControl); });
+
+    // gather all points
+    const bucket = new Map<string, PtRef[]>();
+
+    const push = (fg: FormGroup, isTest: boolean) => {
+      const x = fg.get('x') as FormControl<number>;
+      const y = fg.get('y') as FormControl<number>;
+      const key = `${x.value}/${y.value}`;
+      (bucket.get(key) ?? bucket.set(key, []).get(key)!).push({ x, y, isTest });
+    };
+
+    this.trainPointsArray.controls
+        .forEach(tp => (tp.get('points') as FormArray).controls
+        .forEach(pt => push(pt as FormGroup, false)));
+
+    this.testPointsArray.controls.forEach(pt => push(pt as FormGroup, true));
+
+    // mark duplicates and collect coordinate lists 
+    const dupTrainCoords: string[] = [];
+    const dupTestCoords : string[] = [];
+
+    bucket.forEach((list, key) => {
+      if (list.length > 1) {
+        list.forEach(r => { setDup(r.x, key); setDup(r.y, key); });
+        (list.some(r => r.isTest) ? dupTestCoords : dupTrainCoords).push(key);
+      }
+    });
+
+    // array‑level and form‑level errors
+    const flagArr = (arr: AbstractControl, coords: string[]) => {
+      if (coords.length) arr.setErrors({ duplicate: true, duplicateCoords: coords });
+      else if (arr.hasError('duplicate')) arr.setErrors(null);
+    };
+
+    flagArr(this.trainPointsArray, dupTrainCoords);
+    flagArr(this.testPointsArray , dupTestCoords );
+
+    (dupTrainCoords.length || dupTestCoords.length)
+      ? this.form.setErrors({ duplicate: true })
+      : this.form.hasError('duplicate') && this.form.setErrors(null);
   }
  
 }
-
 // Form interface definition
 export interface TaskTypeForm {
   k: FormControl<number>;
@@ -275,5 +339,11 @@ export interface TaskTypeForm {
   trainLabels: FormControl<string[]>;
   trainPoints: FormArray; 
   testPoints: FormArray; 
+}
+// Additional interface for checking duplicates
+interface PtRef { 
+  x: FormControl<number>; 
+  y: FormControl<number>; 
+  isTest: boolean; 
 }
 

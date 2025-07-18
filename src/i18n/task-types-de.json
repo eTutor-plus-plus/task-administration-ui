@@ -238,6 +238,7 @@
         "descriptionDe": "Beschreibung (Deutsch)",
         "descriptionEn": "Beschreibung (Englisch)",
         "maxPoints": "Maximale Punkte",
+        "duplicate": "Duplikate in den folgenden Koordinaten erkannt",
         "previewButtons": {
           "generateTaskPdf": "Generiere Aufgabenstellung",
           "generateSolutionPdf": "Generiere Lösung"

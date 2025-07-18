@@ -234,6 +234,7 @@
         "descriptionDe": "Description (German)",
         "descriptionEn": "Description (English)",
         "maxPoints": "Maximum Points",
+        "duplicate": "Duplicates in the following coordinates detected",
         "previewButtons": {
           "generateTaskPdf": "Generate Task PDF",
           "generateSolutionPdf": "Generate Solution PDF"
