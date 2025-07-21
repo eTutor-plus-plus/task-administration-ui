@@ -196,10 +196,10 @@
         "descriptionEn": "Markdown / HTML allowed …"
       },
       "fields": {
-        "k": "k-Value",
+        "k": "K-Value",
         "trainLabels": "Training classes",
         "trainLabelsAdd": "Add class",
-        "trainLabelsCount": "classes",
+        "trainLabelsCount": "Classes",
         "trainLabelsPlaceholder": "e.g. A, B, C …",
         "trainLabelsError": "Please provide a label for each class (at least 2 classes required).",
         "trainLabelsErrorMax": "Maximum 7 classes allowed.",
@@ -217,7 +217,7 @@
         "yMax": "Y-Axis Max",
         "xLabel": "X-Axis Label",
         "yLabel": "Y-Axis Label",
-        "tiebreaker": "Tiebreaker Method",
+        "tiebreaker": "Tiebreaker Strategy",
         "tiebreaker.sum": "Sum of distances (alphabetical if still tied)",
         "tiebreaker.mean": "Mean of distances (alphabetical if still tied)",
         "tiebreaker.nearest": "Nearest point decides (alphabetical if still tied)",
@@ -226,7 +226,7 @@
         "preview": "Preview",
         "feedbackLevel": "Feedback Level",
         "feedback.RUN": "Syntax/Format Check Only",
-        "feedback.DIAGNOSE": "some Feedback",
+        "feedback.DIAGNOSE": "Some Feedback",
         "feedback.SUBMIT": "Full Feedback & Points",
         "taskName": "Task Name",
         "organization": "Organisation / Course",
@@ -234,7 +234,7 @@
         "descriptionDe": "Description (German)",
         "descriptionEn": "Description (English)",
         "maxPoints": "Maximum Points",
-        "duplicate": "Duplicates in the following coordinates detected",
+        "duplicate": "Duplicate coordinates detected",
         "previewButtons": {
           "generateTaskPdf": "Generate Task PDF",
           "generateSolutionPdf": "Generate Solution PDF"
