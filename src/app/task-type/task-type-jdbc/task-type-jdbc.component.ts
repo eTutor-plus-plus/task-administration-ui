@@ -90,11 +90,21 @@ export class TaskTypeJDBCComponent extends TaskTypeFormComponent<TaskTypeForm> i
       }
     });
 
-    this.form.addControl('autocommitPenalty', new FormControl<number | null>({ value: null, disabled: true }, [
-      Validators.required,
-      Validators.min(0)
-    ]));
-
+      this.form.addControl('autocommitPenalty',
+        new FormControl<number | null>({ value: null, disabled: true })
+      );
+      this.form.get('checkAutocommit')!.valueChanges.subscribe((checked) => {
+        const c = this.form.get('autocommitPenalty')!;
+        if (checked) {
+          c.setValidators([Validators.required, Validators.min(0)]);
+          c.enable();
+        } else {
+          c.clearValidators();
+          c.reset();
+          c.disable();
+        }
+        c.updateValueAndValidity({ onlySelf: true });
+      });
 
   }
 
@@ -122,12 +132,24 @@ export class TaskTypeJDBCComponent extends TaskTypeFormComponent<TaskTypeForm> i
    * @param changes The changes.
    */
   ngOnChanges(changes: SimpleChanges): void {
-    if (!('parentForm' in changes))
-      return;
+    if (changes['parentForm']) {
+      this.sub?.unsubscribe();
+      this.sub = changes['parentForm'].currentValue
+        .controls
+        .taskGroupId
+        .valueChanges
+        .pipe(distinctUntilChanged())
+        .subscribe((val: number | null) => this.updateValidator(val));
+    }
 
-    this.sub?.unsubscribe();
-    this.sub = changes['parentForm'].currentValue.controls.taskGroupId.valueChanges
-      .pipe(distinctUntilChanged()).subscribe((val: number | null) => this.updateValidator(val));
+    const checked = this.form.get('checkAutocommit')?.value as boolean;
+    const penaltyCtrl = this.form.get('autocommitPenalty');
+    if (checked) {
+      penaltyCtrl?.enable();
+    } else {
+      penaltyCtrl?.reset();
+      penaltyCtrl?.disable();
+    }
   }
 
   /**
