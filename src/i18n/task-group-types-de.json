@@ -10,6 +10,14 @@
         "maxNumber": "Größter Wert"
       }
     },
+    "jdbc": {
+      "title": "JDBC",
+      "fields": {
+        "createStatements": "CREATE TABLE-Statements",
+        "insertStatementsDiagnose": "INSERT INTO-Statements (Diagnose)",
+        "insertStatementsSubmission": "INSERT INTO-Statements (Abgabe)"
+      }
+    },
     "xquery": {
       "title": "XQuery",
       "fields": {

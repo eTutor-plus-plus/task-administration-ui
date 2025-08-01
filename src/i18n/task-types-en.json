@@ -9,6 +9,22 @@
         "solution": "Solution"
       }
     },
+    "jdbc": {
+      "title": "JDBC",
+      "fields": {
+        "solution": "Solution",
+        "tables": "Tables to be checked",
+        "wrongOutputPenalty": "Penalty wrong output",
+        "exceptionHandlingPenalty": "Penalty exception handling",
+        "wrongDbContentPenalty": "Penalty wrong DB content",
+        "checkAutocommit": "Check Autocommit",
+        "autocommitPenalty": "Penalty Autocommit",
+        "variables": "Variables (optional)"
+      },
+      "errors": {
+        "tables": "table1, table2, table3"
+      }
+    },
     "xquery": {
       "title": "XQuery",
       "fields": {
