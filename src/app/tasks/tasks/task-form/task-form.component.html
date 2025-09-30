@@ -11,9 +11,9 @@
                 severity="info" [disabled]="loading || form.invalid" styleClass="mr-2"/>
     }
     @if (role !== 'TUTOR' || !originalEntity || originalEntity.status !== 'APPROVED') {
-      <p-button [label]="(originalEntity ? 'common.save' : 'common.create') | transloco" [disabled]="form.invalid" [loading]="loading"
-                (onClick)="submit()"></p-button>
-    }
+    <p-button [label]="(originalEntity ? 'common.save' : 'common.create') | transloco" [disabled]="form.invalid" [loading]="loading"
+              (onClick)="submit()"></p-button>
+  }
   </div>
 </div>
 
@@ -178,6 +178,14 @@
     </div>
   }
 </form>
+
+
+@if (role !== 'TUTOR' || !originalEntity || originalEntity.status !== 'APPROVED') {
+  <div class="flex justify-content-end">
+  <p-button [label]="(originalEntity ? 'common.save' : 'common.create') | transloco" [disabled]="form.invalid" [loading]="loading"
+            (onClick)="submit()"></p-button>
+  </div>
+}
 
 <dke-audit-information [data]="originalEntity"/>
 @if (originalEntity && (originalEntity.approvedBy || originalEntity.approvedDate)) {

@@ -14,6 +14,7 @@ import { ButtonModule } from 'primeng/button';
 
 import { SubmissionDto, TaskService } from '../../../api';
 import { TaskTypeRegistry } from '../../../task-type';
+import { DkeEditorComponent } from '../../../layout';
 
 /**
  * Form for submitting a task.
@@ -30,7 +31,8 @@ import { TaskTypeRegistry } from '../../../task-type';
     TranslocoPipe,
     MonacoEditorModule,
     FormsModule,
-    NgClass
+    NgClass,
+    DkeEditorComponent
   ],
   templateUrl: './task-submission.component.html',
   styleUrl: './task-submission.component.scss'
@@ -41,6 +43,14 @@ export class TaskSubmissionComponent implements OnInit {
    */
   readonly form: FormGroup<SubmitForm>;
 
+  readonly showEditorOptions = {
+    language: 'html',
+    scrollBeyondLastLine: false,
+    minimap: {enabled: false},
+    automaticLayout: true,
+    readOnly: true,
+    wordWrap: 'on'
+  };
   /**
    * The editor options.
    */
@@ -77,6 +87,12 @@ export class TaskSubmissionComponent implements OnInit {
   loading: boolean;
 
   /**
+   * The task description.
+   */
+  descriptionDe: string;
+  descriptionEn: string;
+
+  /**
    * Whether the task is a simple input task.
    */
   readonly isSimpleInput: boolean;
@@ -90,6 +106,9 @@ export class TaskSubmissionComponent implements OnInit {
    * The error result.
    */
   errorResult?: string;
+
+
+  description: string;
 
   /**
    * Creates a new instance of class TaskSubmissionComponent.
@@ -105,6 +124,8 @@ export class TaskSubmissionComponent implements OnInit {
       feedbackLevel: new FormControl<number | null>(3, [Validators.required]),
       submission: new FormControl<string | null>(TaskTypeRegistry.getSubmissionTemplate(this.dialogConf.data.taskType) ?? '{"submission": ""}', [Validators.required])
     });
+    this.descriptionDe = this.dialogConf.data.descriptionDe;
+    this.descriptionEn = this.dialogConf.data.descriptionEn;
     this.loading = false;
     this.languages = [];
     this.feedbackLevels = [];
@@ -112,6 +133,15 @@ export class TaskSubmissionComponent implements OnInit {
     const inputLang = TaskTypeRegistry.getSubmissionInputLanguage(this.dialogConf.data.taskType);
     this.isSimpleInput = inputLang !== undefined;
     this.editorOptions.language = inputLang ?? 'json';
+    if(this.form.get("language")?.value === 'de'){
+      this.description = this.descriptionDe;
+    }
+    else if(this.form.get("language")?.value === 'en') {
+      this.description = this.descriptionEn
+    }
+    else {
+      this.description = this.descriptionEn;
+    }
   }
 
   /**

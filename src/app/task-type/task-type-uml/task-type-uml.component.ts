@@ -129,6 +129,19 @@ export class TaskTypeUmlComponent extends TaskTypeFormComponent<TaskTypeForm> {
   }
 
 
+  copyUmlBlockAlt(i: number, j: number) {
+    //get the umlaltText from the editor and set it to the value then delete all [] and copy to clipboard
+
+    const value = this.umlSolution.at(i).get('umlBlock')?.value[j];
+    if (value) {
+      const umlBlockAlt = value.umlBlockAlt;
+      if (umlBlockAlt) {
+        const umlBlockAltText = umlBlockAlt;
+        const umlBlockAltTextWithoutBrackets = umlBlockAltText.replace(/\[.*?\]/g, '');
+        navigator.clipboard.writeText(umlBlockAltTextWithoutBrackets);
+      }
+    }
+  }
 }
 
 interface TaskTypeForm {
