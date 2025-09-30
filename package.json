@@ -1,6 +1,6 @@
 {
   "name": "task-administration-ui",
-  "version": "1.4.1",
+  "version": "1.5.0",
   "scripts": {
     "ng": "ng",
     "start": "npm run version && ng serve",
