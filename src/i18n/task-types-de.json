@@ -184,6 +184,17 @@
 
 
       }
+    },
+    "mdx": {
+      "title": "MDX",
+      "fields": {
+        "solution": "Lösung",
+        "wrongOrderPenalty": "Falsche Sortierung: Punkteabzug",
+        "superfluousColumnsPenalty": "Überflüssige Spalte: Punkteabzug"
+      },
+      "descriptions": {
+        "penalty": "Ein Punkteabzug von -1 bedeutet, dass die Abgabe mit 0 Punkten bewertet wird."
+      }
     }
   }
 }
