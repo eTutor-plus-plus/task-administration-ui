@@ -10,6 +10,7 @@ import { TaskTypeSqlComponent } from './task-type-sql/task-type-sql.component';
 import { TaskTypeRelalgComponent } from './task-type-relalg/task-type-relalg.component';
 import { TaskTypeFanfComponent } from './task-type-fanf/task-type-fanf.component';
 import { TaskTypeUmlComponent } from './task-type-uml/task-type-uml.component';
+import { TaskTypeIntensionalSchemaComponent } from './task-type-intensional-schema/task-type-intensional-schema.component';
 
 
 /**
@@ -104,9 +105,15 @@ return $d`,
       submissionTemplate: '',
       supportsDescriptionGeneration: false,
       submissionInputLanguage: 'uml'
-
+    },
+    {
+      name: 'intensional-schema',
+      supportedTaskGroupTypes: ['intensional-schema'],
+      component: TaskTypeIntensionalSchemaComponent,
+      submissionTemplate: '',
+      supportsDescriptionGeneration: false,
+      submissionInputLanguage: 'sql'
     }
-
   ];
 
   /**

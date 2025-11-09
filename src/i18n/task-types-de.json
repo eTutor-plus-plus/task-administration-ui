@@ -181,10 +181,20 @@
         "associationPoints": "Punkte pro richtiger Assoziation",
         "associationClassPoints": "Punkte pro richtiger Zuordnung einer Assoziationsklasse",
         "constraintPoints": "Punkte pro richtiger Constraint"
-
-
+      }
+    },
+    "intensional-schema": {
+      "title": "Intensionales Schema",
+      "fields": {
+        "sqlDDL": "Intensionales Schema",
+        "solution": "Lösung",
+        "tablePoints": "Punkte pro Tabelle",
+        "columnPoints": "Punkte pro Spalte",
+        "typePoints": "Punkte pro Typ",
+        "memberFunctionPoints": "Punkte pro Member Function",
+        "procedurePoints": "Punkte pro Procedure",
+        "refPoints": "Punkte pro Referenz"
       }
     }
   }
 }
-

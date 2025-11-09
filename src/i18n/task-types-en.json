@@ -178,7 +178,20 @@
         "relationshipPoints": "Points per correct Association",
         "associationPoints": "Points per correct assignment to Association Class",
         "constraintPoints": "Points per correct Constraint"
-
+      }
+    },
+    "intensional-schema": {
+      "title": "Intensional Schema",
+      "fields": {
+        "sqlDDL": "Intensional Schema",
+        "solution": "Solution",
+        "insertStatements": "Insert Statement",
+        "tablePoints": "Points per Table",
+        "columnPoints": "Points per Column",
+        "typePoints": "Points per Type",
+        "memberFunctionPoints": "Points per Member Function",
+        "procedurePoints": "Points per Procedure",
+        "refPoints": "Points per Reference"
       }
     }
   }

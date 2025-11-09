@@ -31,6 +31,12 @@
         "diagnoseDmlStatements": "INSERT INTO Statements (Diagnose)",
         "submitDmlStatements": "INSERT INTO Statements (Submission)"
       }
+    },
+    "intensional-schema": {
+      "title": "Intensional Schema",
+      "fields": {
+        "createStmt": "Maximum achievable points"
+      }
     }
   }
 }
