@@ -1,0 +1,73 @@
+<div [formGroup]="form">
+  <div class="surface-card p-4 shadow-2 border-round p-fluid mb-4">
+    <div class="grid formgrid p-fluid">
+      <div class="field mb-4 col-12">
+        <label for="solution" transloco="taskTypes.intensional-schema.fields.solution"></label>
+        <ngx-monaco-editor id="solution" formControlName="solution" [options]="editorOptions" style="height: 300px;"/>
+        @if (form.controls.solution.dirty || form.controls.solution.touched) {
+          <small class="block mt-1 p-error">
+            {{ getError(form.controls.solution, 'taskTypes.sql.fields.solution') }}
+          </small>
+        }
+      </div>
+
+      <div class="field mb-4 col-12">
+        <label for="tablePoints" [transloco]="'taskTypes.intensional-schema.fields.tablePoints'"></label>
+        <input id="tablePoints" type="number" pInputText formControlName="tablePoints" autocomplete="off">
+        @if (form.controls.tablePoints.dirty || form.controls.tablePoints.touched) {
+          <small class="block mt-1 p-error">
+            {{ getError(form.controls.tablePoints, 'taksTypes.intensional-schema.fields.tablePoints') }}
+          </small>
+        }
+      </div>
+
+      <div class="field mb-4 col-12">
+        <label for="columnPoints" [transloco]="'taskTypes.intensional-schema.fields.columnPoints'"></label>
+        <input id="columnPoints" type="number" pInputText formControlName="columnPoints" autocomplete="off">
+        @if (form.controls.columnPoints.dirty || form.controls.columnPoints.touched) {
+          <small class="block mt-1 p-error">
+            {{ getError(form.controls.columnPoints, 'taksTypes.intensional-schema.fields.columnPoints') }}
+          </small>
+        }
+      </div>
+      <div class="field mb-4 col-12">
+        <label for="typePoints" [transloco]="'taskTypes.intensional-schema.fields.typePoints'"></label>
+        <input id="typePoints" type="number" pInputText formControlName="typePoints" autocomplete="off">
+        @if (form.controls.typePoints.dirty || form.controls.typePoints.touched) {
+          <small class="block mt-1 p-error">
+            {{ getError(form.controls.typePoints, 'taksTypes.intensional-schema.fields.typePoints') }}
+          </small>
+        }
+      </div>
+      <div class="field mb-4 col-12">
+        <label for="memberFunctionPoints" [transloco]="'taskTypes.intensional-schema.fields.memberFunctionPoints'"></label>
+        <input id="memberFunctionPoints" type="number" pInputText formControlName="memberFunctionPoints" autocomplete="off">
+        @if (form.controls.memberFunctionPoints.dirty || form.controls.memberFunctionPoints.touched) {
+          <small class="block mt-1 p-error">
+            {{ getError(form.controls.memberFunctionPoints, 'taksTypes.intensional-schema.fields.memberFunctionPoints') }}
+          </small>
+        }
+      </div>
+      <div class="field mb-4 col-12">
+        <label for="procedurePoints" [transloco]="'taskTypes.intensional-schema.fields.procedurePoints'"></label>
+        <input id="procedurePoints" type="number" pInputText formControlName="procedurePoints" autocomplete="off">
+        @if (form.controls.procedurePoints.dirty || form.controls.procedurePoints.touched) {
+          <small class="block mt-1 p-error">
+            {{ getError(form.controls.procedurePoints, 'taksTypes.intensional-schema.fields.procedurePoints') }}
+          </small>
+        }
+      </div>
+      <div class="field mb-4 col-12">
+        <label for="refPoints" [transloco]="'taskTypes.intensional-schema.fields.refPoints'"></label>
+        <input id="refPoints" type="number" pInputText formControlName="refPoints" autocomplete="off">
+        @if (form.controls.refPoints.dirty || form.controls.refPoints.touched) {
+          <small class="block mt-1 p-error">
+            {{ getError(form.controls.refPoints, 'taksTypes.intensional-schema.fields.refPoints') }}
+          </small>
+        }
+      </div>
+    </div>
+  </div>
+  <div>
+  </div>
+</div>

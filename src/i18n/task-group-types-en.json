@@ -35,7 +35,7 @@
     "intensional-schema": {
       "title": "Intensional Schema",
       "fields": {
-        "createStmt": "Maximum achievable points"
+        "maxPoints": "Maximum achievable points"
       }
     }
   }

@@ -191,8 +191,8 @@
         "tablePoints": "Punkte pro Tabelle",
         "columnPoints": "Punkte pro Spalte",
         "typePoints": "Punkte pro Typ",
-        "memberFunctionPoints": "Punkte pro Member Function",
-        "procedurePoints": "Punkte pro Procedure",
+        "memberFunctionPoints": "Punkte pro Member Funktion",
+        "procedurePoints": "Punkte pro Prozedur",
         "refPoints": "Punkte pro Referenz"
       }
     }
