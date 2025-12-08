@@ -6,7 +6,7 @@ import { InputNumberModule } from 'primeng/inputnumber';
 import { PaginatorModule } from 'primeng/paginator';
 
 import { TaskTypeFormComponent } from '../task-type-form.component';
-import { TaskGroupService, TaskService } from '../../api';
+import { TaskDetailsDto, TaskGroupService, TaskService } from '../../api';
 import { EditorComponent } from 'ngx-monaco-editor-v2';
 import { InputTextModule } from 'primeng/inputtext';
 import { editor } from 'monaco-editor';
@@ -33,7 +33,7 @@ import { ButtonModule } from 'primeng/button';
   templateUrl: './task-type-intensional-schema.component.html',
   styleUrl: './task-type-intensional-schema.component.scss'
 })
-export class TaskTypeIntensionalSchemaComponent extends TaskTypeFormComponent<TaskTypeForm> implements OnChanges, OnDestroy, OnInit{
+export class TaskTypeIntensionalSchemaComponent extends TaskTypeFormComponent<TaskTypeForm> implements OnChanges, OnDestroy, OnInit {
 
   readonly editorOptions: editor.IStandaloneEditorConstructionOptions = {
     language: 'sql'
@@ -68,22 +68,18 @@ export class TaskTypeIntensionalSchemaComponent extends TaskTypeFormComponent<Ta
   }
 
   ngOnInit(): void {
-    //this.sub?.unsubscribe();
-    // load any pre-existing solution aspects from the parent form's additionalData
-    // try {
-    //   this.loadSolutionAspects(this.parentForm?.controls.additionalData);
-    // } catch (e) {
-      // ignore
-   // }
     const taskGroupId = this.parentForm?.controls.taskGroupId.value;
     if (taskGroupId != null) {
       const tg = this.taskGroupService.get(taskGroupId);
-      const task = this.taskService.get(69);
-      console.log("Task Group loaded: ", tg);
-      console.log("Task loaded: ", task);
-      this.loadSolutionAspects(task.then(t => t.additionalData));
+      const task = this.taskService.get(69).then(
+        (td: TaskDetailsDto) => {
+          console.log("TaskDetailsDto", td)
+          this.loadSolutionAspects(td.additionalData)
+        }
+      ); // Example task ID, replace with actual logic
+      console.log('Task Group loaded: ', tg);
+      console.log('Task loaded: ', task);
     }
-
   }
 
   private createAspect(): FormGroup {
@@ -104,7 +100,7 @@ export class TaskTypeIntensionalSchemaComponent extends TaskTypeFormComponent<Ta
   }
 
   private loadSolutionAspects(additionalData: any): void {
-    console.log("Loading solution aspects from additional data: ", additionalData?.solutionAspects);
+    console.log('Loading solution aspects from additional data: ', additionalData);
     if (!additionalData?.solutionAspects) return;
 
     this.solutionAspects.clear();
@@ -150,10 +146,10 @@ export class TaskTypeIntensionalSchemaComponent extends TaskTypeFormComponent<Ta
 
   toggleSolutionEval(i: number): void {
     const grp = this.solutionAspects.at(i);
-    const evals = grp.get("taskSolutionAspects") as FormArray;
+    const evals = grp.get('taskSolutionAspects') as FormArray;
 
-    const current = grp.get("showEval")?.value;
-    grp.get("showEval")?.setValue(!current);
+    const current = grp.get('showEval')?.value;
+    grp.get('showEval')?.setValue(!current);
 
     // When enabling, ensure at least one evaluation row exists
     if (!current && evals.length === 0) {
@@ -169,50 +165,6 @@ export class TaskTypeIntensionalSchemaComponent extends TaskTypeFormComponent<Ta
   public removeEvaluation(aspectIndex: number, evalIndex: number): void {
     this.getEvaluations(aspectIndex).removeAt(evalIndex);
   }
-
-  // toggleSolutionEval(i: number): void {
-  //   const grp = this.solutionAspects.at(i);
-  //   const evals = grp.get('taskSolutionAspects') as FormArray;
-  //
-  //   const current = grp.get('showEval')?.value;
-  //   grp.get('showEval')?.setValue(!current);
-  //
-  //   // When enabling, ensure at least one evaluation row exists
-  //   if (!current && evals.length === 0) {
-  //     evals.push(this.createEvaluation());
-  //   }
-  // }
-
-  // public toggleSolutionEval(index: number): void {
-  //   const aspect = this.solutionAspects.at(index) as FormGroup;
-  //   const current = !!aspect.get('showEval')?.value;
-  //   aspect.get('showEval')?.setValue(!current);
-  //
-  //   const evals = aspect.get('taskSolutionAspects') as FormArray;
-  //   if (!current) {
-  //     // enabling evaluations: ensure at least one evaluation exists and make it required
-  //     if (evals.length === 0) {
-  //       evals.push(this.createEvaluation());
-  //     }
-  //     const first = evals.at(0) as FormGroup;
-  //     first.get('solutionAspectName')?.setValidators([Validators.required]);
-  //     first.get('solutionAspectPoints')?.setValidators([Validators.min(0)]);
-  //     first.get('solutionAspectName')?.updateValueAndValidity();
-  //     first.get('solutionAspectPoints')?.updateValueAndValidity();
-  //   } else {
-  //     // disabling: clear validators and remove all evaluations
-  //     evals.controls.forEach(c => {
-  //       const fg = c as FormGroup;
-  //       fg.get('solutionAspectName')?.clearValidators();
-  //       fg.get('solutionAspectPoints')?.clearValidators();
-  //       fg.get('solutionAspectName')?.setValue('');
-  //       fg.get('solutionAspectPoints')?.setValue(0);
-  //       fg.get('solutionAspectName')?.updateValueAndValidity();
-  //       fg.get('solutionAspectPoints')?.updateValueAndValidity();
-  //     });
-  //     evals.clear();
-  //   }
-  // }
 
   /**
    * Listens to input changes.
@@ -234,42 +186,6 @@ export class TaskTypeIntensionalSchemaComponent extends TaskTypeFormComponent<Ta
       // ignore
     }
   }
-
-  // reads additionalData.solutionAspects from the parent form and populates the local FormArray
-  // private loadSolutionAspects(additionalData: any): void {
-  //   if (!additionalData?.solutionAspects) return;
-  //
-  //   this.solutionAspects.clear();
-  //
-  //   for (const sol of additionalData.solutionAspects) {
-  //     const grp = this.createAspect();
-  //
-  //     grp.patchValue({
-  //       solutionName: sol.solutionName,
-  //       solutionMaxPoints: sol.solutionMaxPoints,
-  //       solution: sol.solution,
-  //     });
-  //
-  //     this.solutionAspects.push(grp);
-  //     const index = this.solutionAspects.length - 1;
-  //
-  //     // Load nested evaluations
-  //     if (Array.isArray(sol.taskSolutionAspects) && sol.taskSolutionAspects.length > 0) {
-  //       grp.get("showEval")?.setValue(true);
-  //       const evals = this.getEvaluations(index);
-  //
-  //       for (const ev of sol.taskSolutionAspects) {
-  //         const egroup = this.createEvaluation();
-  //         egroup.patchValue({
-  //           solutionAspectName: ev.solutionAspectName,
-  //           solutionAspectPoints: ev.solutionAspectPoints,
-  //         });
-  //         evals.push(egroup);
-  //       }
-  //     }
-  //   }
-  // }
-
 
   /**
    * Unsubscribes from all subscriptions.
