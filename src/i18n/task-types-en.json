@@ -191,7 +191,11 @@
         "typePoints": "Points per Type",
         "memberFunctionPoints": "Points per Member Function",
         "procedurePoints": "Points per Procedure",
-        "refPoints": "Points per Reference"
+        "refPoints": "Points per Reference",
+        "solutionName": "Solution Name",
+        "solutionMaxPoints": "Max. Solution Points",
+        "solutionAspectName": "Solution Evaluation Aspect Names",
+        "solutionAspectPoints": "Solution Evaluation Aspect Points"
       }
     }
   }

@@ -187,13 +187,17 @@
       "title": "Intensionales Schema",
       "fields": {
         "sqlDDL": "Intensionales Schema",
-        "solution": "Lösung",
         "tablePoints": "Punkte pro Tabelle",
         "columnPoints": "Punkte pro Spalte",
         "typePoints": "Punkte pro Typ",
         "memberFunctionPoints": "Punkte pro Member Funktion",
         "procedurePoints": "Punkte pro Prozedur",
-        "refPoints": "Punkte pro Referenz"
+        "refPoints": "Punkte pro Referenz",
+        "solutionName": "Name der Lösung",
+        "solutionMaxPoints": "Max. Punkte",
+        "solutionAspectName": "Name des Lösungsaspekts",
+        "solutionAspectPoints": "Punkte des Lösungsaspekts",
+        "solution": "Lösung"
       }
     }
   }

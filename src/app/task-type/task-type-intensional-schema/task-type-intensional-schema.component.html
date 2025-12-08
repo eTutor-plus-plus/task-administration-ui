@@ -1,73 +1,106 @@
 <div [formGroup]="form">
   <div class="surface-card p-4 shadow-2 border-round p-fluid mb-4">
     <div class="grid formgrid p-fluid">
-      <div class="field mb-4 col-12">
-        <label for="solution" transloco="taskTypes.intensional-schema.fields.solution"></label>
-        <ngx-monaco-editor id="solution" formControlName="solution" [options]="editorOptions" style="height: 300px;"/>
-        @if (form.controls.solution.dirty || form.controls.solution.touched) {
-          <small class="block mt-1 p-error">
-            {{ getError(form.controls.solution, 'taskTypes.sql.fields.solution') }}
-          </small>
-        }
-      </div>
 
-      <div class="field mb-4 col-12">
-        <label for="tablePoints" [transloco]="'taskTypes.intensional-schema.fields.tablePoints'"></label>
-        <input id="tablePoints" type="number" pInputText formControlName="tablePoints" autocomplete="off">
-        @if (form.controls.tablePoints.dirty || form.controls.tablePoints.touched) {
-          <small class="block mt-1 p-error">
-            {{ getError(form.controls.tablePoints, 'taksTypes.intensional-schema.fields.tablePoints') }}
-          </small>
-        }
-      </div>
+      <div formArrayName="solutionAspects" class="col-12">
+        <div *ngFor="let aspect of solutionAspects.controls; let i = index" [formGroupName]="i" class="grid">
+          <div class="field mb-4 col-12 md:col-6">
+            <label for="solutionName-{{i}}" transloco="taskTypes.intensional-schema.fields.solutionName"></label>
+            <input id="solutionName-{{i}}" type="text" pInputText formControlName="solutionName" autocomplete="off">
+            <small class="block mt-1 p-error" *ngIf="aspect.get('solutionName')?.dirty || aspect.get('solutionName')?.touched">
+              {{ getError(asFormControl(aspect.get('solutionName')), 'taskTypes.intensional-schema.fields.solutionName') }}
+            </small>
+          </div>
 
-      <div class="field mb-4 col-12">
-        <label for="columnPoints" [transloco]="'taskTypes.intensional-schema.fields.columnPoints'"></label>
-        <input id="columnPoints" type="number" pInputText formControlName="columnPoints" autocomplete="off">
-        @if (form.controls.columnPoints.dirty || form.controls.columnPoints.touched) {
-          <small class="block mt-1 p-error">
-            {{ getError(form.controls.columnPoints, 'taksTypes.intensional-schema.fields.columnPoints') }}
-          </small>
-        }
-      </div>
-      <div class="field mb-4 col-12">
-        <label for="typePoints" [transloco]="'taskTypes.intensional-schema.fields.typePoints'"></label>
-        <input id="typePoints" type="number" pInputText formControlName="typePoints" autocomplete="off">
-        @if (form.controls.typePoints.dirty || form.controls.typePoints.touched) {
-          <small class="block mt-1 p-error">
-            {{ getError(form.controls.typePoints, 'taksTypes.intensional-schema.fields.typePoints') }}
-          </small>
-        }
-      </div>
-      <div class="field mb-4 col-12">
-        <label for="memberFunctionPoints" [transloco]="'taskTypes.intensional-schema.fields.memberFunctionPoints'"></label>
-        <input id="memberFunctionPoints" type="number" pInputText formControlName="memberFunctionPoints" autocomplete="off">
-        @if (form.controls.memberFunctionPoints.dirty || form.controls.memberFunctionPoints.touched) {
-          <small class="block mt-1 p-error">
-            {{ getError(form.controls.memberFunctionPoints, 'taksTypes.intensional-schema.fields.memberFunctionPoints') }}
-          </small>
-        }
-      </div>
-      <div class="field mb-4 col-12">
-        <label for="procedurePoints" [transloco]="'taskTypes.intensional-schema.fields.procedurePoints'"></label>
-        <input id="procedurePoints" type="number" pInputText formControlName="procedurePoints" autocomplete="off">
-        @if (form.controls.procedurePoints.dirty || form.controls.procedurePoints.touched) {
-          <small class="block mt-1 p-error">
-            {{ getError(form.controls.procedurePoints, 'taksTypes.intensional-schema.fields.procedurePoints') }}
-          </small>
-        }
-      </div>
-      <div class="field mb-4 col-12">
-        <label for="refPoints" [transloco]="'taskTypes.intensional-schema.fields.refPoints'"></label>
-        <input id="refPoints" type="number" pInputText formControlName="refPoints" autocomplete="off">
-        @if (form.controls.refPoints.dirty || form.controls.refPoints.touched) {
-          <small class="block mt-1 p-error">
-            {{ getError(form.controls.refPoints, 'taksTypes.intensional-schema.fields.refPoints') }}
-          </small>
-        }
+          <div class="field mb-4 col-12 md:col-3">
+            <label for="solutionMaxPoints-{{i}}" [transloco]="'taskTypes.intensional-schema.fields.solutionMaxPoints'"></label>
+            <input id="solutionMaxPoints-{{i}}" type="number" pInputText formControlName="solutionMaxPoints" autocomplete="off">
+            <small class="block mt-1 p-error" *ngIf="aspect.get('solutionMaxPoints')?.dirty || aspect.get('solutionMaxPoints')?.touched">
+              {{ getError(asFormControl(aspect.get('solutionMaxPoints')), 'taskTypes.intensional-schema.fields.solutionMaxPoints') }}
+            </small>
+          </div>
+
+          <div class="field mb-4 col-12 md:col-6">
+            <label for="solution-{{i}}" transloco="taskTypes.intensional-schema.fields.solution"></label>
+            <ngx-monaco-editor id="solution-{{i}}" formControlName="solution" [options]="editorOptions"
+                               style="height: 300px;"></ngx-monaco-editor>
+            <small class="block mt-1 p-error" *ngIf="aspect.get('solution')?.dirty || aspect.get('solution')?.touched">
+              {{ getError(asFormControl(aspect.get('solution')), 'taskTypes.intensional-schema.fields.solution') }}
+            </small>
+          </div>
+
+          <div class="mt-3">
+            <button type="button"
+                    pButton
+                    icon="pi pi-check-square"
+                    label="Evaluate Solution"
+                    (click)="toggleSolutionEval(i)"
+                    class="p-button-text">
+            </button>
+          </div>
+
+          <div class="field mb-4 col-12 md:col-4">
+            <div class="grid">
+              <div class="col-8">
+                <label for="solutionAspectName-{{i}}" transloco="taskTypes.intensional-schema.fields.solutionAspectName"></label>
+              </div>
+              <div class="col-4">
+                <label for="solutionAspectPoints-{{i}}" transloco="taskTypes.intensional-schema.fields.solutionAspectPoints"></label>
+              </div>
+            </div>
+
+            <ng-container *ngIf="aspect.get('showEval')?.value">
+              <div formArrayName="taskSolutionAspects">
+                <div *ngFor="let eval of getEvaluations(i).controls; let j = index" [formGroupName]="j" class="mb-2">
+
+                  <div class="grid formgrid p-fluid">
+                    <div class="field mb-4 col-12 md:col-8">
+                      <input id="solutionAspectName-{{i}}-{{j}}" type="text" pInputText formControlName="solutionAspectName" autocomplete="off">
+                      <small class="block mt-1 p-error"
+                             *ngIf="eval.get('solutionAspectName')?.dirty || eval.get('solutionAspectName')?.touched">
+                        {{ getError(asFormControl(form.controls.solutionAspectName), 'taskTypes.intensional-schema.fields.solutionAspectName') }}
+                      </small>
+                    </div>
+
+                    <div class="field mb-4 col-12 md:col-4">
+                      <input id="solutionAspectPoints-{{i}}-{{j}}" type="number" pInputText formControlName="solutionAspectPoints" autocomplete="off">
+                      <small class="block mt-1 p-error"
+                             *ngIf="eval.get('solutionAspectPoints')?.dirty || eval.get('solutionAspectPoints')?.touched">
+                        {{ getError(asFormControl(form.controls.solutionAspectPoints), 'taskTypes.intensional-schema.fields.solutionAspectPoints') }}
+                      </small>
+                    </div>
+                  </div>
+
+                  <div class="mt-2">
+                    <button pButton type="button" class="p-button-text p-button-danger" (click)="removeEvaluation(i, j)">Remove evaluation</button>
+                  </div>
+                </div>
+
+                <div class="mt-2">
+                  <button type="button" class="p-button p-button-text" (click)="addEvaluation(i)">Add evaluation</button>
+                </div>
+              </div>
+            </ng-container>
+
+<!--            <ng-template #addEvalBtn>-->
+<!--              <button type="button" class="p-button p-button-text" (click)="toggleSolutionEval(i)">Add evaluation</button>-->
+<!--            </ng-template>-->
+          </div>
+
+          <div class="col-12 flex align-items-center">
+            <button pButton type="button" class="p-button-text p-button-danger" (click)="removeAspect(i)">Remove</button>
+          </div>
+
+          <hr class="col-12"/>
+        </div>
+
+        <div class="col-12">
+          <button pButton type="button" label="Add Aspect" (click)="addAspect()"></button>
+        </div>
       </div>
     </div>
   </div>
   <div>
   </div>
 </div>
+
