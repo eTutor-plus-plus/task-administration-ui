@@ -57,12 +57,10 @@ export class TaskTypeIntensionalSchemaComponent extends TaskTypeFormComponent<Ta
     this.form.addControl('solutionAspects', this.fb.array<FormGroup>([]));
   }
 
-  // getter for template access
   get solutionAspects(): FormArray<FormGroup> {
     return this.form.get('solutionAspects') as FormArray<FormGroup>;
   }
 
-  // access evaluations FormArray for an aspect by index
   public getEvaluations(aspectIndex: number): FormArray<FormGroup> {
     return this.solutionAspects.at(aspectIndex).get('taskSolutionAspects') as FormArray<FormGroup>;
   }
@@ -70,14 +68,13 @@ export class TaskTypeIntensionalSchemaComponent extends TaskTypeFormComponent<Ta
   ngOnInit(): void {
     const taskGroupId = this.parentForm?.controls.taskGroupId.value;
     if (taskGroupId != null) {
-      const tg = this.taskGroupService.get(taskGroupId);
-      const task = this.taskService.get(69).then(
+      const taskId = this.task?.id as number
+      const task = this.taskService.get(taskId).then(
         (td: TaskDetailsDto) => {
           console.log("TaskDetailsDto", td)
           this.loadSolutionAspects(td.additionalData)
         }
-      ); // Example task ID, replace with actual logic
-      console.log('Task Group loaded: ', tg);
+      );
       console.log('Task loaded: ', task);
     }
   }
@@ -134,12 +131,10 @@ export class TaskTypeIntensionalSchemaComponent extends TaskTypeFormComponent<Ta
     }
   }
 
-  // called from template to add a new aspect
   addAspect(): void {
     this.solutionAspects.push(this.createAspect());
   }
 
-  // called from template to remove an aspect by index
   removeAspect(index: number): void {
     this.solutionAspects.removeAt(index);
   }
@@ -151,13 +146,11 @@ export class TaskTypeIntensionalSchemaComponent extends TaskTypeFormComponent<Ta
     const current = grp.get('showEval')?.value;
     grp.get('showEval')?.setValue(!current);
 
-    // When enabling, ensure at least one evaluation row exists
     if (!current && evals.length === 0) {
       evals.push(this.createEvaluation());
     }
   }
 
-  // add/remove evaluation entries inside an aspect
   public addEvaluation(aspectIndex: number): void {
     this.getEvaluations(aspectIndex).push(this.createEvaluation());
   }

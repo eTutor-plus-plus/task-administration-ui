@@ -195,9 +195,12 @@
         "refPoints": "Punkte pro Referenz",
         "solutionName": "Name der Lösung",
         "solutionMaxPoints": "Max. Punkte",
-        "solutionAspectName": "Name des Lösungsaspekts",
-        "solutionAspectPoints": "Punkte des Lösungsaspekts",
-        "solution": "Lösung"
+        "solutionAspectName": "Lösungsaspekt Name",
+        "solutionAspectPoints": "Lösungsaspekt Punkte",
+        "solution": "Lösung",
+        "addSolution": "Lösung hinzufügen",
+        "removeSolution": "Lösung entfernen",
+        "showAspects": "Aspekte anzeigen"
       }
     }
   }

@@ -4,7 +4,7 @@
 
       <div formArrayName="solutionAspects" class="col-12">
         <div *ngFor="let aspect of solutionAspects.controls; let i = index" [formGroupName]="i" class="grid">
-          <div class="field mb-4 col-12 md:col-6">
+          <div class="field mb-4 col-12 md:col-8">
             <label for="solutionName-{{i}}" transloco="taskTypes.intensional-schema.fields.solutionName"></label>
             <input id="solutionName-{{i}}" type="text" pInputText formControlName="solutionName" autocomplete="off">
             <small class="block mt-1 p-error" *ngIf="aspect.get('solutionName')?.dirty || aspect.get('solutionName')?.touched">
@@ -12,7 +12,7 @@
             </small>
           </div>
 
-          <div class="field mb-4 col-12 md:col-3">
+          <div class="field mb-4 col-12 md:col-2">
             <label for="solutionMaxPoints-{{i}}" [transloco]="'taskTypes.intensional-schema.fields.solutionMaxPoints'"></label>
             <input id="solutionMaxPoints-{{i}}" type="number" pInputText formControlName="solutionMaxPoints" autocomplete="off">
             <small class="block mt-1 p-error" *ngIf="aspect.get('solutionMaxPoints')?.dirty || aspect.get('solutionMaxPoints')?.touched">
@@ -20,7 +20,14 @@
             </small>
           </div>
 
-          <div class="field mb-4 col-12 md:col-6">
+          <div class="field mt-4 mb-4 col-12 md:col-2">
+            <p-button
+              icon="pi pi-check-square"
+              label="Show Evaluation Aspects"
+              (click)="toggleSolutionEval(i)"/>
+          </div>
+
+          <div class="field mb-4 col-12 md:col-8">
             <label for="solution-{{i}}" transloco="taskTypes.intensional-schema.fields.solution"></label>
             <ngx-monaco-editor id="solution-{{i}}" formControlName="solution" [options]="editorOptions"
                                style="height: 300px;"></ngx-monaco-editor>
@@ -29,27 +36,17 @@
             </small>
           </div>
 
-          <div class="mt-3">
-            <button type="button"
-                    pButton
-                    icon="pi pi-check-square"
-                    label="Evaluate Solution"
-                    (click)="toggleSolutionEval(i)"
-                    class="p-button-text">
-            </button>
-          </div>
-
           <div class="field mb-4 col-12 md:col-4">
-            <div class="grid">
-              <div class="col-8">
-                <label for="solutionAspectName-{{i}}" transloco="taskTypes.intensional-schema.fields.solutionAspectName"></label>
-              </div>
-              <div class="col-4">
-                <label for="solutionAspectPoints-{{i}}" transloco="taskTypes.intensional-schema.fields.solutionAspectPoints"></label>
-              </div>
-            </div>
-
             <ng-container *ngIf="aspect.get('showEval')?.value">
+              <div class="grid mt-2 mb-2">
+                <div class="col-8">
+                  <label for="solutionAspectName-{{i}}" transloco="taskTypes.intensional-schema.fields.solutionAspectName"></label>
+                </div>
+                <div class="col-4">
+                  <label for="solutionAspectPoints-{{i}}" transloco="taskTypes.intensional-schema.fields.solutionAspectPoints"></label>
+                </div>
+              </div>
+
               <div formArrayName="taskSolutionAspects">
                 <div *ngFor="let eval of getEvaluations(i).controls; let j = index" [formGroupName]="j" class="mb-2">
 
@@ -62,40 +59,42 @@
                       </small>
                     </div>
 
-                    <div class="field mb-4 col-12 md:col-4">
+                    <div class="field mb-4 col-12 md:col-2">
                       <input id="solutionAspectPoints-{{i}}-{{j}}" type="number" pInputText formControlName="solutionAspectPoints" autocomplete="off">
                       <small class="block mt-1 p-error"
                              *ngIf="eval.get('solutionAspectPoints')?.dirty || eval.get('solutionAspectPoints')?.touched">
                         {{ getError(asFormControl(form.controls.solutionAspectPoints), 'taskTypes.intensional-schema.fields.solutionAspectPoints') }}
                       </small>
                     </div>
-                  </div>
 
-                  <div class="mt-2">
-                    <button pButton type="button" class="p-button-text p-button-danger" (click)="removeEvaluation(i, j)">Remove evaluation</button>
+                    <div class="field mb-4 col-12 md:col-2">
+                      <p-button icon="pi pi-trash" (click)="removeEvaluation(i, j)"/>
+                    </div>
                   </div>
                 </div>
 
-                <div class="mt-2">
-                  <button type="button" class="p-button p-button-text" (click)="addEvaluation(i)">Add evaluation</button>
+                <div class="col-12 md:col-10 mt-2">
+                  <button pButton type="button" icon="pi pi-plus" (click)="addEvaluation(i)"
+                          style="width:100%; display:flex; align-items:center; justify-content:center;"></button>
                 </div>
               </div>
             </ng-container>
-
-<!--            <ng-template #addEvalBtn>-->
-<!--              <button type="button" class="p-button p-button-text" (click)="toggleSolutionEval(i)">Add evaluation</button>-->
-<!--            </ng-template>-->
           </div>
 
-          <div class="col-12 flex align-items-center">
-            <button pButton type="button" class="p-button-text p-button-danger" (click)="removeAspect(i)">Remove</button>
+          <div class="col-12 flex align-items-center justify-content-center">
+            <button pButton (click)="removeAspect(i)" label="Remove"
+                    style="display:flex; align-items:center; justify-content:center;">
+            </button>
           </div>
-
-          <hr class="col-12"/>
+          <div class="w-full md:w-2/12">
+            <hr style="color:gray; background-color:gray"/>
+          </div>
         </div>
 
-        <div class="col-12">
-          <button pButton type="button" label="Add Aspect" (click)="addAspect()"></button>
+        <div class="col-12 flex align-items-center justify-content-center">
+          <button pButton (click)="addAspect()" label="Add Aspect"
+                  style="display:flex; align-items:center; justify-content:center;">
+          </button>
         </div>
       </div>
     </div>

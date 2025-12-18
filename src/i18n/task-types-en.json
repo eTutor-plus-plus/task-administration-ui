@@ -194,8 +194,11 @@
         "refPoints": "Points per Reference",
         "solutionName": "Solution Name",
         "solutionMaxPoints": "Max. Solution Points",
-        "solutionAspectName": "Solution Evaluation Aspect Names",
-        "solutionAspectPoints": "Solution Evaluation Aspect Points"
+        "solutionAspectName": "Evaluation Aspect Names",
+        "solutionAspectPoints": "Evaluation Aspect Points",
+        "addSolution": "Add Solution",
+        "removeSolution": "Remove Solution",
+        "showAspects": "Show Aspects"
       }
     }
   }
