@@ -1,12 +1,20 @@
 import { Component } from '@angular/core';
 import { TaskGroupTypeFormComponent } from '../task-group-type-form.component';
 import { editor } from 'monaco-editor';
-import { FormControl, Validators } from '@angular/forms';
+import { FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
+import { EditorComponent } from 'ngx-monaco-editor-v2';
+import { PaginatorModule } from 'primeng/paginator';
+import { TranslocoDirective } from '@ngneat/transloco';
 
 @Component({
   selector: 'dke-task-group-type-mdx',
   standalone: true,
-  imports: [],
+  imports: [
+    EditorComponent,
+    PaginatorModule,
+    ReactiveFormsModule,
+    TranslocoDirective
+  ],
   templateUrl: './task-group-type-mdx.component.html',
   styleUrl: './task-group-type-mdx.component.scss'
 })
@@ -27,7 +35,7 @@ export class TaskGroupTypeMdxComponent extends TaskGroupTypeFormComponent<TaskGr
   }
 
   protected override initForm(): void {
-    this.form.addControl('ddlStatements', new FormControl<string | null>(null, [Validators.required, Validators.minLength(10)]));
+    this.form.addControl('ddlStatements', new FormControl<string | null>(null, [Validators.required, Validators.minLength(8)]));
     this.form.addControl('diagnoseDmlStatements', new FormControl<string | null>(null, [Validators.required, Validators.minLength(10)]));
     this.form.addControl('submitDmlStatements', new FormControl<string | null>(null, [Validators.required, Validators.minLength(10)]));
     this.form.addControl('submitOlapSchema', new FormControl<string | null>(null, [Validators.required, Validators.minLength(10)]));

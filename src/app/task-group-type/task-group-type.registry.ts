@@ -19,7 +19,7 @@ export class TaskGroupTypeRegistry {
     {name: 'xquery', component: TaskGroupTypeXqueryComponent, supportsDescriptionGeneration: true},
     {name: 'datalog', component: TaskGroupTypeDatalogComponent, supportsDescriptionGeneration: true},
     {name: 'sql', component: TaskGroupTypeSqlComponent, supportsDescriptionGeneration: true},
-    {name: 'mdx', component: TaskGroupTypeMdxComponent, supportsDescriptionGeneration: true}
+    {name: 'mdx', component: TaskGroupTypeMdxComponent, supportsDescriptionGeneration: false}
   ];
 
   /**

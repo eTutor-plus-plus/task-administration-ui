@@ -1,1 +1,43 @@
-<p>task-group-type-mdx works!</p>
+<div class="surface-card p-4 shadow-2 border-round p-fluid mb-4" [formGroup]="form">
+  <div class="grid formgrid p-fluid">
+    <div class="field mb-4 col-12">
+      <label for="ddlStatements" transloco="taskGroupTypes.mdx.fields.ddlStatements"></label>
+      <ngx-monaco-editor id="ddlStatements" formControlName="ddlStatements" [options]="editorOptions" style="height: 500px;"/>
+      @if (form.controls.ddlStatements.dirty || form.controls.ddlStatements.touched) {
+        <small class="block mt-1 p-error">
+          {{ getError(form.controls.ddlStatements, 'taskGroupTypes.mdx.fields.ddlStatements') }}
+        </small>
+      }
+    </div>
+
+    <div class="field mb-4 col-12">
+      <label for="diagnoseDmlStatements" transloco="taskGroupTypes.mdx.fields.diagnoseDmlStatements"></label>
+      <ngx-monaco-editor id="diagnoseDmlStatements" formControlName="diagnoseDmlStatements" [options]="editorOptions" style="height: 300px;"/>
+      @if (form.controls.diagnoseDmlStatements.dirty || form.controls.diagnoseDmlStatements.touched) {
+        <small class="block mt-1 p-error">
+          {{ getError(form.controls.diagnoseDmlStatements, 'taskGroupTypes.mdx.fields.diagnoseDmlStatements') }}
+        </small>
+      }
+    </div>
+
+    <div class="field mb-4 col-12">
+      <label for="submitDmlStatements" transloco="taskGroupTypes.mdx.fields.submitDmlStatements"></label>
+      <ngx-monaco-editor id="submitDmlStatements" formControlName="submitDmlStatements" [options]="editorOptions" style="height: 300px;"/>
+      @if (form.controls.submitDmlStatements.dirty || form.controls.submitDmlStatements.touched) {
+        <small class="block mt-1 p-error">
+          {{ getError(form.controls.submitDmlStatements, 'taskGroupTypes.mdx.fields.submitDmlStatements') }}
+        </small>
+      }
+    </div>
+    <div class="field mb-4 col-12">
+      <label for="submitOlapSchema" transloco="taskGroupTypes.mdx.fields.submitOlapSchema"></label>
+      <ngx-monaco-editor id="submitOlapSchema" formControlName="submitOlapSchema" [options]="editorOptions" style="height: 300px;"/>
+      @if (form.controls.submitOlapSchema.dirty || form.controls.submitOlapSchema.touched) {
+        <small class="block mt-1 p-error">
+          {{ getError(form.controls.submitOlapSchema, 'taskGroupTypes.mdx.fields.submitOlapSchema') }}
+        </small>
+      }
+    </div>
+  </div>
+</div>
+

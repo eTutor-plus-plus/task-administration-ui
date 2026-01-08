@@ -1,1 +1,56 @@
-<p>task-type-mdx works!</p>
+<div [formGroup]="form">
+    <div class="surface-card p-4 shadow-2 border-round p-fluid mb-4">
+      <div class="flex justify-content-between mb-4">
+      <p class="font-bold">Lösung</p>
+      <p-button label="Lösung hinzufügen"
+                icon="pi pi-plus"
+                (onClick)="addSolution()"
+                class="w-auto"
+                size="small">
+      </p-button>
+      </div>
+      <div formArrayName="solutions">
+        <div *ngFor="let sol of solutions.controls; let i = index" [formGroupName]="i" class="surface-card p-4 border-round mb-4">
+          <div class="field mb-2">
+            <label transloco="taskTypes.mdx.fields.solutionName"> </label>
+            <input pInputText formControlName="name"/>
+          </div>
+
+          <div class="field mb-2">
+            <label transloco="taskTypes.mdx.fields.points"> </label>
+            <p-inputNumber formControlName="points" mode="decimal"></p-inputNumber>
+          </div>
+
+          <div class="field mb-2">
+            <label transloco="taskTypes.mdx.fields.mdx"> </label>
+            <ngx-monaco-editor formControlName="mdx" [options]="editorOptions" style="height:220px"></ngx-monaco-editor>
+          </div>
+
+          <button pButton icon="pi pi-trash" class="p-button-danger" (click)="removeSolution(i)"></button>
+        </div>
+      </div>
+
+      <div class="surface-card p-4 shadow-2 border-round p-fluid mb-4">
+        <div class="grid formgrid p-fluid">
+          <div class="field mb-4 col-12 md:col-6">
+            <label for="wrongOrderPenalty" transloco="taskTypes.mdx.fields.wrongOrderPenalty"></label>
+            <p-inputNumber inputId="wrongOrderPenalty" formControlName="wrongOrderPenalty" mode="decimal" [maxFractionDigits]="2" [min]="-1"/>
+            @if (form.controls.wrongOrderPenalty.dirty || form.controls.wrongOrderPenalty.touched) {
+              <small class="block mt-1 p-error">
+                {{ getError(form.controls.wrongOrderPenalty, 'taskTypes.mdx.fields.wrongOrderPenalty') }}
+              </small>
+            }
+          </div>
+          <div class="field mb-4 col-12 md:col-6">
+            <label for="wrongFormatPenalty" transloco="taskTypes.mdx.fields.wrongFormatPenalty"></label>
+            <p-inputNumber inputId="wrongFormatPenalty" formControlName="wrongFormatPenalty" mode="decimal" [maxFractionDigits]="2" [min]="-1"/>
+            @if (form.controls.wrongFormatPenalty.dirty || form.controls.wrongFormatPenalty.touched) {
+              <small class="block mt-1 p-error">
+                {{ getError(form.controls.wrongFormatPenalty, 'taskTypes.mdx.fields.wrongFormatPenalty') }}
+              </small>
+            }
+          </div>
+        </div>
+      </div>
+    </div>
+</div>

@@ -184,12 +184,11 @@
     "mdx": {
       "title": "MDX",
       "fields": {
-        "solution": "Solution",
+        "solutionName": "Name of solution",
+        "points": "Points",
+        "mdx": "Solution",
         "wrongOrderPenalty": "Wrong Sorting: Penalty",
-        "superfluousColumnsPenalty": "Superfluous Column: Penalty"
-      },
-      "descriptions": {
-        "penalty": "A point deduction of -1 means that the submission is awarded 0 points."
+        "wrongFormatPenalty": "Wrong Format: Penalty"
       }
     }
   }
