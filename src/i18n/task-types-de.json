@@ -184,6 +184,41 @@
 
 
       }
+    },
+    "clustering": {
+      "title": "Clustering",
+      "parameters": "Parameter für Beispielgenerierung",
+       "confirmDeleteDesc": {
+      "message": "Möchten Sie die Beschreibung wirklich löschen?",
+      "header": "Löschung bestätigen",
+      "accept": "Ja",
+      "reject": "Nein"
+    },
+      "fields": {
+        "numberOfClusters": "k-Wert (Anzahl der Cluster) (2-5)",
+        "numberOfDataPoints": "Anzahl der Datenpunkte (2-20)",
+        "distanceMetric": "Distanzmetrik",
+        "taskLength": "Beispiellänge",
+        "solutionShow": "Lösung anzeigen",
+        "solutionHide": "Lösung verstecken",
+        "deleteDesc": "Beschreibung löschen"
+      },
+      "taskLengthTooltip": "Kurz: 5–8 Datenpunkte, zufällige Zentroide\nMittel: 8–12 Datenpunkte, zentralste Zentroide\nLang: 12–16 Datenpunkte, zentralste Zentroide",
+      "deductions": {
+        "title": "Punkteabzüge",
+        "wrongClusters": "Falsche Anzahl an Clustern/Iterationen",
+        "wrongLabels": "Falsche Zuordnung von Datenpunkten",
+        "wrongCentroids": "Falsche Koordinaten der Zentroide"
+      },
+      "metric": {
+        "euclidean": "Euklidische Distanz",
+        "manhattan": "Manhattan Distanz"
+      },
+      "taskLength": {
+        "short": "Kurz",
+        "medium": "Mittel",
+        "long": "Lang"
+      }
     }
   }
 }
