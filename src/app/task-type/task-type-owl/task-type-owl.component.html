@@ -1,11 +1,41 @@
 <div class="surface-card p-4 shadow-2 border-round p-fluid mb-4" [formGroup]="form">
+  <div class="field mb-4 col-12 md:col-6">
+    <label for="pointsPerRedundantAxiom" transloco="taskTypes.owl.fields.pointsPerRedundantAxiom"></label>
+    <p-inputNumber
+      inputId="pointsPerRedundantAxiom"
+      formControlName="pointsPerRedundantAxiom"
+      mode="decimal"
+      [maxFractionDigits]="2"
+      [min]="0"/>
+    @if (form.controls.pointsPerRedundantAxiom.dirty || form.controls.pointsPerRedundantAxiom.touched) {
+      <small class="block mt-1 p-error">
+        {{ getError(form.controls.pointsPerRedundantAxiom, 'taskTypes.owl.fields.pointsPerRedundantAxiom') }}
+      </small>
+    }
+  </div>
+  <div class="field mb-4">
+    <label for="pointsPerClass" transloco="taskTypes.owl.fields.pointsPerClass"></label>
+    <textarea
+      id="pointsPerClass"
+      pInputTextarea
+      formControlName="pointsPerClass"
+      placeholder="Format: ClassName=Points, ....., IndividualName=Points, .....       Example: Person=1, Student=2, ....."
+      [rows]="10"
+      class="w-full">
+    </textarea>
+    @if (form.controls.pointsPerClass.dirty || form.controls.pointsPerClass.touched) {
+      <small class="block mt-1 p-error">
+        {{ getError(form.controls.pointsPerClass, 'taskTypes.owl.fields.pointsPerClass') }}
+      </small>
+    }
+  </div>
   <div class="field mb-4">
     <label for="solution" transloco="taskTypes.owl.fields.solution"></label>
     <textarea
       id="solution"
       pInputTextarea
       formControlName="solution"
-      [rows]="10"
+      [rows]="30"
       class="w-full">
     </textarea>
     @if (form.controls.solution.dirty || form.controls.solution.touched) {

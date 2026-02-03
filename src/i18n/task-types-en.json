@@ -184,7 +184,9 @@
     "owl": {
       "title": "OWL",
       "fields": {
-        "solution": "Solution Ontology"
+        "solution": "Solution Ontology",
+        "pointsPerClass": "Points deducted per wrong class/individual",
+        "pointsPerRedundantAxiom": "Points deducted per redundant axiom"
       }
     }
   }
