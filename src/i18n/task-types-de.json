@@ -193,6 +193,9 @@
         "mdx": "Lösung",
         "wrongOrderPenalty": "Falsche Sortierung: Punkteabzug",
         "wrongFormatPenalty": "Falsches Format: Punkteabzug"
+      },
+      "descriptions": {
+        "mustHaveMaxPointsSolution": "Hinweis: Es muss eine Lösung existieren, die die maximalen Punkte der Aufgabe erreicht."
       }
     }
   }

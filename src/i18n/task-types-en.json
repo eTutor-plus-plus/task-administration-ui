@@ -189,6 +189,9 @@
         "mdx": "Solution",
         "wrongOrderPenalty": "Wrong Sorting: Penalty",
         "wrongFormatPenalty": "Wrong Format: Penalty"
+      },
+      "descriptions": {
+        "mustHaveMaxPointsSolution": "Note: One solution must exist that achieves the maximum points of the task."
       }
     }
   }
