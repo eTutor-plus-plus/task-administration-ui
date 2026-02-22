@@ -1,6 +1,6 @@
 import { Component, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
-import { AbstractControl, FormArray, FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { TranslocoDirective } from '@ngneat/transloco';
+import { AbstractControl, FormArray, FormBuilder, FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import {TranslocoDirective, TranslocoPipe} from '@ngneat/transloco';
 import { distinctUntilChanged, Subscription } from 'rxjs';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { PaginatorModule } from 'primeng/paginator';
@@ -19,17 +19,18 @@ import { ButtonModule } from 'primeng/button';
 @Component({
   selector: 'dke-task-type-intensional-schema',
   standalone: true,
-  imports: [
-    InputNumberModule,
-    PaginatorModule,
-    ReactiveFormsModule,
-    TranslocoDirective,
-    EditorComponent,
-    InputTextModule,
-    NgForOf,
-    ButtonModule,
-    NgIf
-  ],
+    imports: [
+        InputNumberModule,
+        PaginatorModule,
+        ReactiveFormsModule,
+        TranslocoDirective,
+        EditorComponent,
+        InputTextModule,
+        NgForOf,
+        ButtonModule,
+        NgIf,
+        TranslocoPipe
+    ],
   templateUrl: './task-type-intensional-schema.component.html',
   styleUrl: './task-type-intensional-schema.component.scss'
 })
@@ -40,6 +41,7 @@ export class TaskTypeIntensionalSchemaComponent extends TaskTypeFormComponent<Ta
   };
 
   private sub?: Subscription;
+  solutionType: Array<{ id: number; name: string }> = [];
 
   /**
    * Creates a new instance of class TaskTypeIntensionalSchemaComponent.
@@ -49,11 +51,6 @@ export class TaskTypeIntensionalSchemaComponent extends TaskTypeFormComponent<Ta
   }
 
   protected override initForm(): void {
-    this.form.addControl('solutionName', new FormControl<string | null>(null));
-    this.form.addControl('solutionMaxPoints', new FormControl<number | null>(null));
-    this.form.addControl('solution', new FormControl<string | null>(null));
-    this.form.addControl('solutionAspectName', new FormControl<string | null>(null));
-    this.form.addControl('solutionAspectPoints', new FormControl<number | null>(null));
     this.form.addControl('solutionAspects', this.fb.array<FormGroup>([]));
   }
 
@@ -67,21 +64,22 @@ export class TaskTypeIntensionalSchemaComponent extends TaskTypeFormComponent<Ta
 
   ngOnInit(): void {
     const taskGroupId = this.parentForm?.controls.taskGroupId.value;
+    this.solutionType = [ { id: 1, name: 'Type Object' }, { id: 2, name: 'Type Body' } ];
+
     if (taskGroupId != null) {
       const taskId = this.task?.id as number
       const task = this.taskService.get(taskId).then(
         (td: TaskDetailsDto) => {
-          console.log("TaskDetailsDto", td)
           this.loadSolutionAspects(td.additionalData)
         }
       );
-      console.log('Task loaded: ', task);
     }
   }
 
   private createAspect(): FormGroup {
     return this.fb.group({
       solutionName: new FormControl<string | null>(null),
+      solutionType: new FormControl<string | null>(this.solutionType[0]?.name ?? null),
       solutionMaxPoints: new FormControl<number | null>(null),
       solution: new FormControl<string | null>(null),
       showEval: new FormControl<boolean>(false),
@@ -97,7 +95,6 @@ export class TaskTypeIntensionalSchemaComponent extends TaskTypeFormComponent<Ta
   }
 
   private loadSolutionAspects(additionalData: any): void {
-    console.log('Loading solution aspects from additional data: ', additionalData);
     if (!additionalData?.solutionAspects) return;
 
     this.solutionAspects.clear();
@@ -111,10 +108,22 @@ export class TaskTypeIntensionalSchemaComponent extends TaskTypeFormComponent<Ta
         solution: sol.solution,
       });
 
+      let mappedName: string | null = null;
+      if (sol.solutionType != null && Array.isArray(this.solutionType) && this.solutionType.length > 0) {
+        if (typeof sol.solutionType === 'object') {
+          mappedName = sol.solutionType.name ?? (this.solutionType.find(s => s.id === sol.solutionType.id)?.name ?? null);
+        } else if (typeof sol.solutionType === 'number') {
+          mappedName = this.solutionType.find(s => s.id === sol.solutionType)?.name ?? null;
+        } else if (typeof sol.solutionType === 'string') {
+          mappedName = this.solutionType.find(s => s.name === sol.solutionType)?.name ?? sol.solutionType;
+        }
+      }
+
+      grp.get('solutionType')?.setValue(mappedName);
+
       this.solutionAspects.push(grp);
       const index = this.solutionAspects.length - 1;
 
-      // Load nested evaluations
       if (Array.isArray(sol.taskSolutionAspects) && sol.taskSolutionAspects.length > 0) {
         grp.get('showEval')?.setValue(true);
         const evals = this.getEvaluations(index);
@@ -131,11 +140,11 @@ export class TaskTypeIntensionalSchemaComponent extends TaskTypeFormComponent<Ta
     }
   }
 
-  addAspect(): void {
+  addSolution(): void {
     this.solutionAspects.push(this.createAspect());
   }
 
-  removeAspect(index: number): void {
+  removeSolution(index: number): void {
     this.solutionAspects.removeAt(index);
   }
 
@@ -172,7 +181,6 @@ export class TaskTypeIntensionalSchemaComponent extends TaskTypeFormComponent<Ta
     this.sub = changes['parentForm'].currentValue.controls.taskGroupId.valueChanges
       .pipe(distinctUntilChanged()).subscribe((val: number | null) => this.updateValidator(val));
 
-    // load any pre-existing solution aspects from the parent form's additionalData
     try {
       this.loadSolutionAspects(changes['parentForm'].currentValue);
     } catch (e) {
@@ -189,28 +197,21 @@ export class TaskTypeIntensionalSchemaComponent extends TaskTypeFormComponent<Ta
 
   private async updateValidator(taskGroupId: number | null): Promise<void> {
     if (!taskGroupId) {
-      console.info('updateValidator: ' + taskGroupId);
       return;
     }
 
     this.form.controls.solution.clearValidators();
-    // this.form.controls.solution.addValidators(Validators.required);
     try {
       const tg = await this.taskGroupService.get(taskGroupId);
       if (!tg.additionalData || tg.dto.taskGroupType !== 'intensional-schema')
         return;
 
-      const min = tg.additionalData['minNumber'] as number;
-      const max = tg.additionalData['maxNumber'] as number;
-      this.form.controls.solution.addValidators(Validators.min(min));
-      this.form.controls.solution.addValidators(Validators.max(max));
       this.form.controls.solution.updateValueAndValidity();
     } catch (err) {
       // ignore
     }
   }
 
-  // helper used from template to ensure AbstractControl is treated as FormControl
   public asFormControl(control: AbstractControl | null): FormControl {
     return control as FormControl;
   }
@@ -218,7 +219,6 @@ export class TaskTypeIntensionalSchemaComponent extends TaskTypeFormComponent<Ta
 
 interface TaskTypeForm {
   solutionName: FormControl<string | null>;
-  solutionMaxPoints: FormControl<number | null>;
   solution: FormControl<string | null>;
   solutionAspectName: FormControl<string | null>;
   solutionAspectPoints: FormControl<number | null>;

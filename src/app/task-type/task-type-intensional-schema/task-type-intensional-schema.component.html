@@ -4,12 +4,21 @@
 
       <div formArrayName="solutionAspects" class="col-12">
         <div *ngFor="let aspect of solutionAspects.controls; let i = index" [formGroupName]="i" class="grid">
-          <div class="field mb-4 col-12 md:col-8">
+          <div class="field mb-4 col-12 md:col-6">
             <label for="solutionName-{{i}}" transloco="taskTypes.intensional-schema.fields.solutionName"></label>
             <input id="solutionName-{{i}}" type="text" pInputText formControlName="solutionName" autocomplete="off">
             <small class="block mt-1 p-error" *ngIf="aspect.get('solutionName')?.dirty || aspect.get('solutionName')?.touched">
               {{ getError(asFormControl(aspect.get('solutionName')), 'taskTypes.intensional-schema.fields.solutionName') }}
             </small>
+          </div>
+
+          <div class="field mt-4 mb-4 col-12 md:col-2">
+            <p-dropdown
+              formControlName="solutionType"
+              [options]="solutionType"
+              optionLabel="name"
+              optionValue="name"
+              placeholder="Select a Solution Type"/>
           </div>
 
           <div class="field mb-4 col-12 md:col-2">
@@ -23,7 +32,7 @@
           <div class="field mt-4 mb-4 col-12 md:col-2">
             <p-button
               icon="pi pi-check-square"
-              label="Show Evaluation Aspects"
+              [label]="'taskTypes.intensional-schema.fields.showAspects' | transloco"
               (click)="toggleSolutionEval(i)"/>
           </div>
 
@@ -82,7 +91,8 @@
           </div>
 
           <div class="col-12 flex align-items-center justify-content-center">
-            <button pButton (click)="removeAspect(i)" label="Remove"
+            <button pButton (click)="removeSolution(i)"
+                    [label]="'taskTypes.intensional-schema.fields.removeSolution' | transloco"
                     style="display:flex; align-items:center; justify-content:center;">
             </button>
           </div>
@@ -92,7 +102,8 @@
         </div>
 
         <div class="col-12 flex align-items-center justify-content-center">
-          <button pButton (click)="addAspect()" label="Add Aspect"
+          <button pButton (click)="addSolution()"
+                  [label]="'taskTypes.intensional-schema.fields.addSolution' | transloco"
                   style="display:flex; align-items:center; justify-content:center;">
           </button>
         </div>
@@ -102,4 +113,3 @@
   <div>
   </div>
 </div>
-

@@ -184,23 +184,17 @@
       }
     },
     "intensional-schema": {
-      "title": "Intensionales Schema",
+      "title": "Intensional Schema",
       "fields": {
-        "sqlDDL": "Intensionales Schema",
-        "tablePoints": "Punkte pro Tabelle",
-        "columnPoints": "Punkte pro Spalte",
-        "typePoints": "Punkte pro Typ",
-        "memberFunctionPoints": "Punkte pro Member Funktion",
-        "procedurePoints": "Punkte pro Prozedur",
-        "refPoints": "Punkte pro Referenz",
         "solutionName": "Name der Lösung",
-        "solutionMaxPoints": "Max. Punkte",
-        "solutionAspectName": "Lösungsaspekt Name",
-        "solutionAspectPoints": "Lösungsaspekt Punkte",
+        "solutionMaxPoints": "Max. Lösungspunkte",
         "solution": "Lösung",
+        "solutionAspectName": "Name des Bewertungsaspekts",
+        "solutionAspectPoints": "Punkte pro Bewertungsaspekt",
+        "showAspects": "Aspekte anzeigen",
+        "addSolutionAspect": "Bewertungsaspekt hinzufügen",
         "addSolution": "Lösung hinzufügen",
-        "removeSolution": "Lösung entfernen",
-        "showAspects": "Aspekte anzeigen"
+        "removeSolution": "Lösung entfernen"
       }
     }
   }
