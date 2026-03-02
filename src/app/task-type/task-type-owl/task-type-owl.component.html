@@ -13,6 +13,20 @@
       </small>
     }
   </div>
+  <div class="field mb-4 col-12 md:col-6">
+    <label for="pointsPerUndefinedClass" transloco="taskTypes.owl.fields.pointsPerUndefinedClass"></label>
+    <p-inputNumber
+      inputId="pointsPerUndefinedClass"
+      formControlName="pointsPerUndefinedClass"
+      mode="decimal"
+      [maxFractionDigits]="2"
+      [min]="0"/>
+    @if (form.controls.pointsPerUndefinedClass.dirty || form.controls.pointsPerUndefinedClass.touched) {
+      <small class="block mt-1 p-error">
+        {{ getError(form.controls.pointsPerUndefinedClass, 'taskTypes.owl.fields.pointsPerUndefinedClass') }}
+      </small>
+    }
+  </div>
   <div class="field mb-4">
     <label for="pointsPerClass" transloco="taskTypes.owl.fields.pointsPerClass"></label>
     <textarea

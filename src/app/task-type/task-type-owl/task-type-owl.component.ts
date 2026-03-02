@@ -9,6 +9,7 @@ interface TaskTypeForm {
   solution: FormControl<string | null>;
   pointsPerClass: FormControl<string | null>;
   pointsPerRedundantAxiom: FormControl<number | null>;
+  pointsPerUndefinedClass: FormControl<number | null>;
 }
 
 @Component({
@@ -38,6 +39,10 @@ export class TaskTypeOwlComponent extends TaskTypeFormComponent<TaskTypeForm> {
       Validators.minLength(1)
     ]));
     this.form.addControl('pointsPerRedundantAxiom', new FormControl<number | null>(0, [
+      Validators.required,
+      Validators.minLength(1)
+    ]));
+    this.form.addControl('pointsPerUndefinedClass', new FormControl<number | null>(0, [
       Validators.required,
       Validators.minLength(1)
     ]));

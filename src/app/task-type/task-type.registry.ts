@@ -108,10 +108,10 @@ return $d`,
 
     }, {
       name: 'owl',
-      supportedTaskGroupTypes: ['owl'],
+      supportedTaskGroupTypes: [],
       component: TaskTypeOwlComponent,
       submissionTemplate: '',
-      supportsDescriptionGeneration: false,
+      supportsDescriptionGeneration: true,
       submissionInputLanguage: 'owl'
     }
 
