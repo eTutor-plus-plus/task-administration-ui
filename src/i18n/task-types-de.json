@@ -191,7 +191,8 @@
         "solution": "Lösungs Ontologie",
         "pointsPerClass": "Abgezogene Punkte für falsche Klassen & Individuen (Syntax:",
         "pointsPerRedundantAxiom": "Abgezogene Punkte für redundante Axiome",
-        "pointsPerUndefinedClass": "Abgezogene Punkte für undefinierte Klassen & Individuen"
+        "pointsPerUndefinedClass": "Abgezogene Punkte für undefinierte Klassen & Individuen",
+        "pointsPerAxiomWithoutEntity": "Abgezogene Punkte für falsche oder fehlende Axiome ohne Klasse oder Individuum"
       }
     }
   }

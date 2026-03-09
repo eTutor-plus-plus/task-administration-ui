@@ -187,7 +187,8 @@
         "solution": "Solution Ontology",
         "pointsPerClass": "Points deducted per wrong class or individual",
         "pointsPerRedundantAxiom": "Points deducted per redundant axiom",
-        "pointsPerUndefinedClass": "Points deducted per undefined class or individual"
+        "pointsPerUndefinedClass": "Points deducted per undefined class or individual",
+        "pointsPerAxiomWithoutEntity": "Points deducted per wrong or missing axiom without class or individual"
       }
     }
   }

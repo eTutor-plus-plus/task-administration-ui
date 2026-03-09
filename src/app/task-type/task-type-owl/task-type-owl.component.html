@@ -14,6 +14,20 @@
     }
   </div>
   <div class="field mb-4 col-12 md:col-6">
+    <label for="pointsPerAxiomWithoutEntity" transloco="taskTypes.owl.fields.pointsPerAxiomWithoutEntity"></label>
+    <p-inputNumber
+      inputId="pointsPerAxiomWithoutEntity"
+      formControlName="pointsPerAxiomWithoutEntity"
+      mode="decimal"
+      [maxFractionDigits]="2"
+      [min]="0"/>
+    @if (form.controls.pointsPerAxiomWithoutEntity.dirty || form.controls.pointsPerAxiomWithoutEntity.touched) {
+      <small class="block mt-1 p-error">
+        {{ getError(form.controls.pointsPerAxiomWithoutEntity, 'taskTypes.owl.fields.pointsPerAxiomWithoutEntity') }}
+      </small>
+    }
+  </div>
+  <div class="field mb-4 col-12 md:col-6">
     <label for="pointsPerUndefinedClass" transloco="taskTypes.owl.fields.pointsPerUndefinedClass"></label>
     <p-inputNumber
       inputId="pointsPerUndefinedClass"

@@ -10,6 +10,7 @@ interface TaskTypeForm {
   pointsPerClass: FormControl<string | null>;
   pointsPerRedundantAxiom: FormControl<number | null>;
   pointsPerUndefinedClass: FormControl<number | null>;
+  pointsPerAxiomWithoutEntity: FormControl<number | null>;
 }
 
 @Component({
@@ -43,6 +44,10 @@ export class TaskTypeOwlComponent extends TaskTypeFormComponent<TaskTypeForm> {
       Validators.minLength(1)
     ]));
     this.form.addControl('pointsPerUndefinedClass', new FormControl<number | null>(0, [
+      Validators.required,
+      Validators.minLength(1)
+    ]));
+    this.form.addControl('pointsPerAxiomWithoutEntity', new FormControl<number | null>(0, [
       Validators.required,
       Validators.minLength(1)
     ]));
