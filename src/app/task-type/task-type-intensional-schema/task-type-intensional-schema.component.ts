@@ -1,17 +1,16 @@
-import { Component, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
+import { Component } from '@angular/core';
 import { AbstractControl, FormArray, FormBuilder, FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
-import {TranslocoDirective, TranslocoPipe} from '@ngneat/transloco';
-import { distinctUntilChanged, Subscription } from 'rxjs';
+import { TranslocoDirective, TranslocoPipe } from '@ngneat/transloco';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { PaginatorModule } from 'primeng/paginator';
 
 import { TaskTypeFormComponent } from '../task-type-form.component';
-import { TaskDetailsDto, TaskGroupService, TaskService } from '../../api';
 import { EditorComponent } from 'ngx-monaco-editor-v2';
 import { InputTextModule } from 'primeng/inputtext';
 import { editor } from 'monaco-editor';
 import { NgForOf, NgIf } from '@angular/common';
 import { ButtonModule } from 'primeng/button';
+import { DividerModule } from 'primeng/divider';
 
 /**
  * Task Type Form: Intensional Schema
@@ -19,38 +18,44 @@ import { ButtonModule } from 'primeng/button';
 @Component({
   selector: 'dke-task-type-intensional-schema',
   standalone: true,
-    imports: [
-        InputNumberModule,
-        PaginatorModule,
-        ReactiveFormsModule,
-        TranslocoDirective,
-        EditorComponent,
-        InputTextModule,
-        NgForOf,
-        ButtonModule,
-        NgIf,
-        TranslocoPipe
-    ],
+  imports: [
+    InputNumberModule,
+    PaginatorModule,
+    ReactiveFormsModule,
+    TranslocoDirective,
+    EditorComponent,
+    InputTextModule,
+    NgForOf,
+    ButtonModule,
+    NgIf,
+    TranslocoPipe,
+    DividerModule
+  ],
   templateUrl: './task-type-intensional-schema.component.html',
   styleUrl: './task-type-intensional-schema.component.scss'
 })
-export class TaskTypeIntensionalSchemaComponent extends TaskTypeFormComponent<TaskTypeForm> implements OnChanges, OnDestroy, OnInit {
+export class TaskTypeIntensionalSchemaComponent extends TaskTypeFormComponent<TaskTypeForm> {
 
   readonly editorOptions: editor.IStandaloneEditorConstructionOptions = {
     language: 'sql'
   };
 
-  private sub?: Subscription;
-  solutionType: Array<{ id: number; name: string }> = [];
+  solutionType: Array<{ id: number; name: string }> = [
+    { id: 1, name: 'Type Specification' },
+    { id: 2, name: 'Type Body' }
+  ];
 
   /**
    * Creates a new instance of class TaskTypeIntensionalSchemaComponent.
    */
-  constructor(private readonly taskGroupService: TaskGroupService, private readonly taskService: TaskService, private readonly fb: FormBuilder) {
+  constructor(private readonly fb: FormBuilder) {
     super();
   }
 
   protected override initForm(): void {
+    this.form.addControl('dmlStatements', new FormControl<string | null>(null));
+    this.form.addControl('diagnoseDmlStatements', new FormControl<string | null>(null));
+    this.form.addControl('submitDmlStatements', new FormControl<string | null>(null));
     this.form.addControl('solutionAspects', this.fb.array<FormGroup>([]));
   }
 
@@ -62,20 +67,6 @@ export class TaskTypeIntensionalSchemaComponent extends TaskTypeFormComponent<Ta
     return this.solutionAspects.at(aspectIndex).get('taskSolutionAspects') as FormArray<FormGroup>;
   }
 
-  ngOnInit(): void {
-    const taskGroupId = this.parentForm?.controls.taskGroupId.value;
-    this.solutionType = [ { id: 1, name: 'Type Object' }, { id: 2, name: 'Type Body' } ];
-
-    if (taskGroupId != null) {
-      const taskId = this.task?.id as number
-      const task = this.taskService.get(taskId).then(
-        (td: TaskDetailsDto) => {
-          this.loadSolutionAspects(td.additionalData)
-        }
-      );
-    }
-  }
-
   private createAspect(): FormGroup {
     return this.fb.group({
       solutionName: new FormControl<string | null>(null),
@@ -83,8 +74,29 @@ export class TaskTypeIntensionalSchemaComponent extends TaskTypeFormComponent<Ta
       solutionMaxPoints: new FormControl<number | null>(null),
       solution: new FormControl<string | null>(null),
       showEval: new FormControl<boolean>(false),
-      taskSolutionAspects: this.fb.array<FormGroup>([])
+      taskSolutionAspects: this.fb.array<FormGroup>([]),
+      typeBodyEntries: this.fb.array<FormGroup>([])
     });
+  }
+
+  private createTypeBodyEntry(): FormGroup {
+    return this.fb.group({
+      methodName: new FormControl<string | null>(null),
+      targetTable: new FormControl<string | null>(null),
+      declareStatement: new FormControl<string | null>(null)
+    });
+  }
+
+  public getTypeBodyEntries(aspectIndex: number): FormArray<FormGroup> {
+    return this.solutionAspects.at(aspectIndex).get('typeBodyEntries') as FormArray<FormGroup>;
+  }
+
+  public addTypeBodyEntry(aspectIndex: number): void {
+    this.getTypeBodyEntries(aspectIndex).push(this.createTypeBodyEntry());
+  }
+
+  public removeTypeBodyEntry(aspectIndex: number, entryIndex: number): void {
+    this.getTypeBodyEntries(aspectIndex).removeAt(entryIndex);
   }
 
   private createEvaluation(): FormGroup {
@@ -92,6 +104,10 @@ export class TaskTypeIntensionalSchemaComponent extends TaskTypeFormComponent<Ta
       solutionAspectName: new FormControl<string | null>(null),
       solutionAspectPoints: new FormControl<number | null>(null),
     });
+  }
+
+  protected override onOriginalDataChanged(originalData: unknown): void {
+    this.loadSolutionAspects(originalData);
   }
 
   private loadSolutionAspects(additionalData: any): void {
@@ -123,6 +139,19 @@ export class TaskTypeIntensionalSchemaComponent extends TaskTypeFormComponent<Ta
 
       this.solutionAspects.push(grp);
       const index = this.solutionAspects.length - 1;
+
+      if (Array.isArray(sol.typeBodyEntries) && sol.typeBodyEntries.length > 0) {
+        const entries = this.getTypeBodyEntries(index);
+        for (const entry of sol.typeBodyEntries) {
+          const eg = this.createTypeBodyEntry();
+          eg.patchValue({
+            methodName: entry.methodName ?? null,
+            targetTable: entry.targetTable ?? null,
+            declareStatement: entry.declareStatement ?? null,
+          });
+          entries.push(eg);
+        }
+      }
 
       if (Array.isArray(sol.taskSolutionAspects) && sol.taskSolutionAspects.length > 0) {
         grp.get('showEval')?.setValue(true);
@@ -168,48 +197,8 @@ export class TaskTypeIntensionalSchemaComponent extends TaskTypeFormComponent<Ta
     this.getEvaluations(aspectIndex).removeAt(evalIndex);
   }
 
-  /**
-   * Listens to input changes.
-   *
-   * @param changes The changes.
-   */
-  ngOnChanges(changes: SimpleChanges): void {
-    if (!('parentForm' in changes))
-      return;
-
-    this.sub?.unsubscribe();
-    this.sub = changes['parentForm'].currentValue.controls.taskGroupId.valueChanges
-      .pipe(distinctUntilChanged()).subscribe((val: number | null) => this.updateValidator(val));
-
-    try {
-      this.loadSolutionAspects(changes['parentForm'].currentValue);
-    } catch (e) {
-      // ignore
-    }
-  }
-
-  /**
-   * Unsubscribes from all subscriptions.
-   */
-  ngOnDestroy(): void {
-    this.sub?.unsubscribe();
-  }
-
-  private async updateValidator(taskGroupId: number | null): Promise<void> {
-    if (!taskGroupId) {
-      return;
-    }
-
-    this.form.controls.solution.clearValidators();
-    try {
-      const tg = await this.taskGroupService.get(taskGroupId);
-      if (!tg.additionalData || tg.dto.taskGroupType !== 'intensional-schema')
-        return;
-
-      this.form.controls.solution.updateValueAndValidity();
-    } catch (err) {
-      // ignore
-    }
+  public isTypeBody(aspectIndex: number): boolean {
+    return this.solutionAspects.at(aspectIndex).get('solutionType')?.value === 'Type Body';
   }
 
   public asFormControl(control: AbstractControl | null): FormControl {
@@ -218,9 +207,8 @@ export class TaskTypeIntensionalSchemaComponent extends TaskTypeFormComponent<Ta
 }
 
 interface TaskTypeForm {
-  solutionName: FormControl<string | null>;
-  solution: FormControl<string | null>;
-  solutionAspectName: FormControl<string | null>;
-  solutionAspectPoints: FormControl<number | null>;
+  dmlStatements: FormControl<string | null>;
+  diagnoseDmlStatements: FormControl<string | null>;
+  submitDmlStatements: FormControl<string | null>;
   solutionAspects: FormArray<FormGroup>;
 }

@@ -194,7 +194,14 @@
         "showAspects": "Aspekte anzeigen",
         "addSolutionAspect": "Bewertungsaspekt hinzufügen",
         "addSolution": "Lösung hinzufügen",
-        "removeSolution": "Lösung entfernen"
+        "removeSolution": "Lösung entfernen",
+        "dmlStatements": "Extensional Schema",
+        "diagnoseDmlStatements": "Diagnostic Data Set",
+        "submitDmlStatements": "Submission Data Set",
+        "addTypeBodyEntry": "DECLARE Statement hinzufügen",
+        "methodName": "Methodenname",
+        "targetTable": "Zieltabelle",
+        "declareStatement": "DECLARE Statement"
       }
     }
   }

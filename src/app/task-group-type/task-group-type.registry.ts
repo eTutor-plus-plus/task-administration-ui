@@ -4,8 +4,6 @@ import { TaskGroupTypeBinarySearchComponent } from './task-group-type-binary-sea
 import { TaskGroupTypeXqueryComponent } from './task-group-type-xquery/task-group-type-xquery.component';
 import { TaskGroupTypeDatalogComponent } from './task-group-type-datalog/task-group-type-datalog.component';
 import { TaskGroupTypeSqlComponent } from './task-group-type-sql/task-group-type-sql.component';
-import { TaskGroupTypeIntensionalSchemaComponent } from './task-group-type-intensional-schema/task-group-type-intensional-schema.component';
-
 /**
  * Registry for task group types.
  */
@@ -18,8 +16,7 @@ export class TaskGroupTypeRegistry {
     {name: 'binary-search', component: TaskGroupTypeBinarySearchComponent, supportsDescriptionGeneration: true},
     {name: 'xquery', component: TaskGroupTypeXqueryComponent, supportsDescriptionGeneration: true},
     {name: 'datalog', component: TaskGroupTypeDatalogComponent, supportsDescriptionGeneration: true},
-    {name: 'sql', component: TaskGroupTypeSqlComponent, supportsDescriptionGeneration: true},
-    {name: 'intensional-schema', component: TaskGroupTypeIntensionalSchemaComponent, supportsDescriptionGeneration: true}
+    {name: 'sql', component: TaskGroupTypeSqlComponent, supportsDescriptionGeneration: true}
   ];
 
   /**

@@ -108,7 +108,7 @@ return $d`,
     },
     {
       name: 'intensional-schema',
-      supportedTaskGroupTypes: ['intensional-schema'],
+      supportedTaskGroupTypes: [],
       component: TaskTypeIntensionalSchemaComponent,
       submissionTemplate: '',
       supportsDescriptionGeneration: false,
