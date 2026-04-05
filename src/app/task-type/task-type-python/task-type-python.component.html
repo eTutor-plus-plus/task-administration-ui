@@ -1,0 +1,103 @@
+<div [formGroup]="form">
+
+  <div class="surface-card p-4 shadow-2 border-round p-fluid mb-4">
+    <div class="grid formgrid p-fluid">
+      <div class="field mb-4 col-12">
+        <label for="diagnoseData" transloco="taskTypes.python.fields.diagnoseData"></label>
+        <ngx-monaco-editor id="diagnoseData" formControlName="diagnoseData" [options]="editorOptions" style="height: 250px;"/>
+        @if (form.controls.diagnoseData.dirty || form.controls.diagnoseData.touched) {
+          <small class="block mt-1 p-error">
+            {{ getError(form.controls.diagnoseData, 'taskTypes.python.fields.diagnoseData') }}
+          </small>
+        }
+      </div>
+    </div>
+  </div>
+
+  <div class="surface-card p-4 shadow-2 border-round p-fluid mb-4">
+    <div class="grid formgrid p-fluid">
+      <div class="field mb-4 col-12">
+        <label for="submitData" transloco="taskTypes.python.fields.submitData"></label>
+        <ngx-monaco-editor id="submitData" formControlName="submitData" [options]="editorOptions" style="height: 250px;"/>
+        @if (form.controls.submitData.dirty || form.controls.submitData.touched) {
+          <small class="block mt-1 p-error">
+            {{ getError(form.controls.submitData, 'taskTypes.python.fields.submitData') }}
+          </small>
+        }
+      </div>
+    </div>
+  </div>
+
+  <div class="surface-card p-4 shadow-2 border-round p-fluid mb-4">
+    <div class="grid formgrid p-fluid">
+      <div class="field mb-4 col-12">
+        <label transloco="taskTypes.python.fields.packages"></label>
+        <p-multiSelect
+          [options]="libraryOptions"
+          formControlName="packages"
+          optionLabel="label"
+          optionValue="value"
+          placeholder="Select libraries">
+        </p-multiSelect>
+      </div>
+    </div>
+  </div>
+
+  <div class="surface-card p-4 shadow-2 border-round p-fluid mb-4">
+    <div class="grid formgrid p-fluid">
+      <div class="field mb-4 col-12">
+        <label for="solution" transloco="taskTypes.python.fields.solution"></label>
+        <ngx-monaco-editor id="solution" formControlName="solution" [options]="editorOptions" style="height: 350px;"/>
+        @if (form.controls.solution.dirty || form.controls.solution.touched) {
+          <small class="block mt-1 p-error">
+             {{ getError(form.controls.solution, 'taskTypes.python.fields.solution') }}
+          </small>
+        }
+       </div>
+    </div>
+  </div>
+
+  <div class="surface-card p-4 shadow-2 border-round p-fluid mb-4">
+
+    <div class="flex justify-content-between align-items-center mb-3">
+      <label transloco="taskTypes.python.fields.checks"></label>
+      <p-button label="+" severity="success" size="small" (click)="addCheck()" ></p-button>
+    </div>
+
+    <div formArrayName="checks">
+      <div *ngFor="let check of checks.controls; let i = index" [formGroupName]="i" class = "mb-4 p-3 border-1 border-round surface-border">
+
+        <div class="flex justify-content-between align-items-center mb-2">
+          <span class="font-semibold">Check {{ i + 1 }}</span>
+          <p-button
+            icon="pi pi-trash"
+            severity="danger"
+            size="small"
+            (click)="removeCheck(i)">
+          </p-button>
+        </div>
+
+        <div class="grid formgrid p-fluid">
+
+          <div class="field col-12">
+            <label>Name</label>
+            <input pInputText class="p-inputtext" formControlName="name">
+          </div>
+
+          <div class="field col-12">
+            <label>Points</label>
+            <p-inputNumber formControlName="points"></p-inputNumber>
+          </div>
+
+          <div class="field col-12">
+            <label>Check</label>
+            <ngx-monaco-editor formControlName="check" [options]="editorOptions"   style="height: 40px;"></ngx-monaco-editor>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+</div>
+

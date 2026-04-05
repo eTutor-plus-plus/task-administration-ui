@@ -184,6 +184,16 @@
 
 
       }
+    },
+    "python": {
+      "title": "Python",
+      "fields": {
+        "solution": "Lösung",
+        "checks": "Checks",
+        "packages": "Python-Bibliotheken",
+        "submitData": "Submission-Daten",
+        "diagnoseData": "Diagnose-Daten"
+      }
     }
   }
 }

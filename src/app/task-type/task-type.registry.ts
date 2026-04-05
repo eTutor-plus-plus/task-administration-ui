@@ -10,6 +10,7 @@ import { TaskTypeSqlComponent } from './task-type-sql/task-type-sql.component';
 import { TaskTypeRelalgComponent } from './task-type-relalg/task-type-relalg.component';
 import { TaskTypeFanfComponent } from './task-type-fanf/task-type-fanf.component';
 import { TaskTypeUmlComponent } from './task-type-uml/task-type-uml.component';
+import { TaskTypePythonComponent } from './task-type-python/task-type-python.component';
 
 
 /**
@@ -105,6 +106,14 @@ return $d`,
       supportsDescriptionGeneration: false,
       submissionInputLanguage: 'uml'
 
+    },
+    {
+      name: 'python',
+      supportedTaskGroupTypes: [],
+      component: TaskTypePythonComponent,
+      submissionTemplate: '',
+      supportsDescriptionGeneration: false,
+      submissionInputLanguage: 'python'
     }
 
   ];

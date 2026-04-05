@@ -180,6 +180,16 @@
         "constraintPoints": "Points per correct Constraint"
 
       }
+    },
+    "python": {
+      "title": "Python",
+      "fields": {
+        "solution": "Solution",
+        "checks": "Checks",
+        "packages": "Python Libraries",
+        "submitData": "Submission Data",
+        "diagnoseData": "Diagnose Data"
+      }
     }
   }
 }
