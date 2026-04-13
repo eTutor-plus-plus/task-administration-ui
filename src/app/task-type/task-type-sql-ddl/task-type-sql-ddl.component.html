@@ -12,11 +12,11 @@
       </div>
 
       <div class="field mb-4 col-12">
-        <label for="insertStatements" transloco="taskTypes.sql-ddl.fields.insertStatements"></label>
-        <ngx-monaco-editor id="insertStatements" formControlName="insertStatements" [options]="editorOptions" style="height: 200px;"/>
-        @if (form.controls.insertStatements.dirty || form.controls.insertStatements.touched) {
+        <label for="whitelist" transloco="taskTypes.sql-ddl.fields.whitelist"></label>
+        <textarea id="whitelist" pInputTextarea formControlName="whitelist" rows="4" autocomplete="off"></textarea>
+        @if (form.controls.whitelist.dirty || form.controls.whitelist.touched) {
           <small class="block mt-1 p-error">
-            {{ getError(form.controls.insertStatements, 'taskTypes.drools.fields.insertStatement') }}
+            {{ getError(form.controls.whitelist, 'taskTypes.sql-ddl.fields.whitelist') }}
           </small>
         }
       </div>
@@ -31,15 +31,6 @@
         }
       </div>
 
-      <div class="field mb-4 col-12">
-        <label for="columnPoints" [transloco]="'taskTypes.sql-ddl.fields.columnPoints'"></label>
-        <input id="columnPoints" type="number" pInputText formControlName="columnPoints" autocomplete="off">
-        @if (form.controls.columnPoints.dirty || form.controls.columnPoints.touched) {
-          <small class="block mt-1 p-error">
-            {{ getError(form.controls.columnPoints, 'taksTypes.sql-ddl.fields.columnPoints') }}
-          </small>
-        }
-      </div>
       <div class="field mb-4 col-12">
         <label for="primaryKeyPoints" [transloco]="'taskTypes.sql-ddl.fields.primaryKeyPoints'"></label>
         <input id="primaryKeyPoints" type="number" pInputText formControlName="primaryKeyPoints" autocomplete="off">
@@ -69,10 +60,30 @@
       </div>
 
 
-
     </div>
   </div>
-  <div>
-
+  <div class="surface-card p-4 shadow-2 border-round p-fluid mb-4">
+    <div class="flex justify-content-between mb-4">
+      <p class="font-bold" transloco="taskTypes.sql-ddl.fields.insertStatements"></p>
+      <p-button [label]="'taskTypes.sql-ddl.fields.insertStatementsAdd' | transloco" (onClick)="addInsertStatement()"
+                [disabled]="loading" class="w-auto" size="small"/>
+    </div>
+    <div formArrayName="insertStatements">
+      <div *ngFor="let entry of insertStatements.controls; let i = index" [formGroupName]="i">
+        <div class="grid formgrid p-fluid">
+          <div class="field col-3 mb-4">
+            <label [for]="'insertName-' + i" transloco="taskTypes.sql-ddl.fields.insertStatementsName"></label>
+            <input [id]="'insertName-' + i" type="text" pInputText formControlName="name" autocomplete="off">
+          </div>
+          <div class="field col-8 mb-4">
+            <label [for]="'insertStatements-' + i" transloco="taskTypes.sql-ddl.fields.insertStatements"></label>
+            <ngx-monaco-editor [id]="'insertStatements-' + i" formControlName="insertStatements" [options]="editorOptions" style="height: 200px;"/>
+          </div>
+          <div class="field col-1 mb-4 flex align-items-end">
+            <p-button icon="pi pi-trash" severity="danger" (onClick)="removeInsertStatement(i)"></p-button>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </div>

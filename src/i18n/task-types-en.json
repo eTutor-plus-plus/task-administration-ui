@@ -90,8 +90,10 @@
           "sqlDDL": "SQL DDL",
           "solution": "Solution",
           "insertStatements": "Insert Statement",
-          "tablePoints": "Points for Table",
-          "columnPoints": "Points for Column",
+          "insertStatementsAdd": "Add Insert Statement",
+          "insertStatementsName": "Name",
+          "whitelist": "Whitelist",
+          "tablePoints": "Points for Table and Column",
           "constraintPoints": "Points for Constraint",
           "primaryKeyPoints": "Points for Primary Key",
           "foreignKeyPoints": "Points for Foreign Key"
@@ -183,4 +185,3 @@
     }
   }
 }
-
