@@ -69,18 +69,24 @@
                 [disabled]="loading" class="w-auto" size="small"/>
     </div>
     <div formArrayName="insertStatements">
-      <div *ngFor="let entry of insertStatements.controls; let i = index" [formGroupName]="i">
-        <div class="grid formgrid p-fluid">
-          <div class="field col-3 mb-4">
+      <div *ngFor="let entry of insertStatements.controls; let i = index" [formGroupName]="i" class="insertStatementsWrapper mb-4">
+        <div class="grid formgrid">
+          <div class="field col-6 mb-4">
             <label [for]="'insertName-' + i" transloco="taskTypes.sql-ddl.fields.insertStatementsName"></label>
-            <input [id]="'insertName-' + i" type="text" pInputText formControlName="name" autocomplete="off">
+            <input [id]="'insertName-' + i" type="text" pInputText formControlName="checkDefinition" autocomplete="off">
           </div>
-          <div class="field col-8 mb-4">
-            <label [for]="'insertStatements-' + i" transloco="taskTypes.sql-ddl.fields.insertStatements"></label>
-            <ngx-monaco-editor [id]="'insertStatements-' + i" formControlName="insertStatements" [options]="editorOptions" style="height: 200px;"/>
-          </div>
-          <div class="field col-1 mb-4 flex align-items-end">
+          <div class="field col-6 mb-4 flex align-items-end justify-content-end">
             <p-button icon="pi pi-trash" severity="danger" (onClick)="removeInsertStatement(i)"></p-button>
+          </div>
+        </div>
+        <div class="grid formgrid p-fluid">
+          <div class="field col-6 mb-4">
+            <label [for]="'successfulStatements-' + i" transloco="taskTypes.sql-ddl.fields.successfulStatements"></label>
+            <ngx-monaco-editor [id]="'successfulStatements-' + i" formControlName="successfulStatements" [options]="editorOptions" style="height: 200px;"/>
+          </div>
+          <div class="field col-6 mb-4">
+            <label [for]="'unsuccessfulStatements-' + i" transloco="taskTypes.sql-ddl.fields.unsuccessfulStatements"></label>
+            <ngx-monaco-editor [id]="'unsuccessfulStatements-' + i" formControlName="unsuccessfulStatements" [options]="editorOptions" style="height: 200px;"/>
           </div>
         </div>
       </div>

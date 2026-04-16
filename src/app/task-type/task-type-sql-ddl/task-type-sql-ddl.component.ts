@@ -35,7 +35,11 @@ export class TaskTypeSqlDdlComponent extends TaskTypeFormComponent<TaskTypeForm>
   readonly editorOptions: editor.IStandaloneEditorConstructionOptions = {
     language: 'sql'
   };
-  insertStatements = new FormArray<FormGroup<{ name: FormControl<string | null>, insertStatements: FormControl<string | null> }>>([]);
+  insertStatements = new FormArray<FormGroup<{
+    checkDefinition: FormControl<string | null>,
+    successfulStatements: FormControl<string | null>,
+    unsuccessfulStatements: FormControl<string | null>
+  }>>([]);
 
   constructor() {
     super();
@@ -58,8 +62,9 @@ export class TaskTypeSqlDdlComponent extends TaskTypeFormComponent<TaskTypeForm>
 
   addInsertStatement() {
     this.insertStatements.push(new FormGroup({
-      name: new FormControl<string | null>(''),
-      insertStatements: new FormControl<string | null>('')
+      checkDefinition: new FormControl<string | null>(''),
+      successfulStatements: new FormControl<string | null>(''),
+      unsuccessfulStatements: new FormControl<string | null>('')
     }));
   }
 
@@ -76,8 +81,9 @@ export class TaskTypeSqlDdlComponent extends TaskTypeFormComponent<TaskTypeForm>
     if (Array.isArray(insertStatements)) {
       insertStatements.forEach((entry: any) => {
         this.insertStatements.push(new FormGroup({
-          name: new FormControl<string | null>(entry?.name ?? ''),
-          insertStatements: new FormControl<string | null>(entry?.insertStatements ?? '')
+          checkDefinition: new FormControl<string | null>(entry?.checkDefinition ?? ''),
+          successfulStatements: new FormControl<string | null>(entry?.successfulStatements ?? entry?.insertStatements ?? ''),
+          unsuccessfulStatements: new FormControl<string | null>(entry?.unsuccessfulStatements ?? '')
         }));
       });
       return;
@@ -86,8 +92,9 @@ export class TaskTypeSqlDdlComponent extends TaskTypeFormComponent<TaskTypeForm>
     //relevant if you want to load old tasks where insertStatements was a string not an array
     if (typeof insertStatements === 'string') {
       this.insertStatements.push(new FormGroup({
-        name: new FormControl<string | null>(''),
-        insertStatements: new FormControl<string | null>(insertStatements)
+        checkDefinition: new FormControl<string | null>(''),
+        successfulStatements: new FormControl<string | null>(insertStatements),
+        unsuccessfulStatements: new FormControl<string | null>('')
       }));
     }
   }
@@ -98,7 +105,11 @@ export class TaskTypeSqlDdlComponent extends TaskTypeFormComponent<TaskTypeForm>
 interface TaskTypeForm {
   solution: FormControl<string | null>;
   whitelist: FormControl<string | null>;
-  insertStatements: FormArray<FormGroup<{ name: FormControl<string | null>, insertStatements: FormControl<string | null> }>>;
+  insertStatements: FormArray<FormGroup<{
+    checkDefinition: FormControl<string | null>,
+    successfulStatements: FormControl<string | null>,
+    unsuccessfulStatements: FormControl<string | null>
+  }>>;
   tablePoints: FormControl<number | null>;
   primaryKeyPoints: FormControl<number | null>;
   foreignKeyPoints: FormControl<number | null>;

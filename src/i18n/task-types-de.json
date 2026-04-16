@@ -94,6 +94,8 @@
         "insertStatements": "Insert Statement",
         "insertStatementsAdd": "Insert Statement hinzufügen",
         "insertStatementsName": "Name",
+        "successfulStatements": "Erfolgreiche Statements",
+        "unsuccessfulStatements": "Fehlerhafte Statements",
         "whitelist": "Whitelist",
         "tablePoints": "Punkte pro Tabelle und Spalte",
         "constraintPoints": "Punkte pro Constraint",
