@@ -90,7 +90,7 @@
           "sqlDDL": "SQL DDL",
           "solution": "Solution",
           "insertStatements": "Insert Statements for Check Constraints",
-          "insertStatementsDescription": "For each check constraint included in the solution, corresponding INSERT statements must be provided for verification. Since each input field is executed separately during validation, referenced records required via foreign keys must be created separately for each input field.",
+          "insertStatementsDescription": "For each check constraint included in the solution, corresponding INSERT statements must be provided for verification. Since each input group (Name, Successful Statements, Unsuccessful Statements) is validated independently, any records referenced via foreign keys must first be created in the Successful Statements section. Only after that can these records be used or referenced in the Unsuccessful Statements section.",
           "insertStatementsAdd": "Add Insert Statement",
           "insertStatementsName": "Name",
           "successfulStatements": "Successful Statements",

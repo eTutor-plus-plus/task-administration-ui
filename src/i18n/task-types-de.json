@@ -92,7 +92,7 @@
         "sqlDDL": "SQL DDL",
         "solution": "Lösung",
         "insertStatements": "Insert Statement für Check Constraints",
-        "insertStatementsDescription": "Für jeden in der Lösung enthaltenen Check-Constraint müssen entsprechende INSERT-Statements zur Überprüfung angegeben werden. Da jedes Eingabefeld bei der Überprüfung separat ausgeführt wird, müssen referenzierte Datensätze, die durch Fremdschlüssel benötigt werden, für jedes Eingabefeld jeweils separat angelegt werden.",
+        "insertStatementsDescription": "Für jeden in der Lösung enthaltenen Check-Constraint müssen entsprechende INSERT-Statements zur Überprüfung angegeben werden. Da jede Eingabegruppe (Name, Erfolgreiche Statements, Fehlerhafte Statements) unabhängig geprüft wird, müssen Datensätze, auf die über Fremdschlüssel verwiesen wird, zunächst im Abschnitt Erfolgreiche Statements erstellt werden. Erst danach können diese Datensätze im Abschnitt Fehlerhafte Statements verwendet bzw. referenziert werden.",
         "insertStatementsAdd": "Insert Statement hinzufügen",
         "insertStatementsName": "Name",
         "successfulStatements": "Erfolgreiche Statements",
