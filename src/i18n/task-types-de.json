@@ -91,7 +91,8 @@
       "fields": {
         "sqlDDL": "SQL DDL",
         "solution": "Lösung",
-        "insertStatements": "Insert Statement",
+        "insertStatements": "Insert Statement für Check Constraints",
+        "insertStatementsDescription": "Für jeden in der Lösung enthaltenen Check-Constraint müssen entsprechende INSERT-Statements zur Überprüfung angegeben werden. Da jedes Eingabefeld bei der Überprüfung separat ausgeführt wird, müssen referenzierte Datensätze, die durch Fremdschlüssel benötigt werden, für jedes Eingabefeld jeweils separat angelegt werden.",
         "insertStatementsAdd": "Insert Statement hinzufügen",
         "insertStatementsName": "Name",
         "successfulStatements": "Erfolgreiche Statements",
