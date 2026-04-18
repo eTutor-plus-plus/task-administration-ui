@@ -36,17 +36,13 @@ export class TaskTypePythonComponent extends TaskTypeFormComponent<TaskTypeForm>
     language: 'python'
   };
 
-  /**
-   * Dummy list of libraries.
-   * It will later be read from backend.
-   * */
-  readonly libraryOptions = [
-    { label: 'Pandas', value: 'pandas' },
-    { label: 'NumPy', value: 'numpy' },
-    { label: 'Scikit-learn', value: 'sklearn' },
-    { label: 'SciPy', value: 'scipy' },
-    { label: 'Matplotlib', value: 'matplotlib' }
-  ]
+  readonly allowedLibraries: string[] = [
+    'pandas',
+    'numpy',
+    'matplotlib',
+    'scipy',
+    'sklearn'
+  ];
 
    checks = new FormArray<FormGroup>([])
 
@@ -58,9 +54,9 @@ export class TaskTypePythonComponent extends TaskTypeFormComponent<TaskTypeForm>
   }
 
   protected override initForm(): void {
+    this.form.addControl("imports", new FormControl<string | null>(""))
     this.form.addControl("diagnoseData", new FormControl<string | null>("", [Validators.required]));
     this.form.addControl("submitData", new FormControl<string | null>("", [Validators.required]));
-    this.form.addControl("packages", new FormControl<string[] | null>([]));
     this.form.addControl("solution", new FormControl<string | null>("", [Validators.required]));
     this.form.addControl("checks", this.checks);
     console.log(this.checks?.controls.length);
@@ -83,9 +79,9 @@ export class TaskTypePythonComponent extends TaskTypeFormComponent<TaskTypeForm>
 }
 
 interface TaskTypeForm {
+  imports: FormControl<string | null>;
   diagnoseData: FormControl<string | null>;
   submitData: FormControl<string | null>,
-  packages: FormControl<string[] | null>,
   solution: FormControl<string | null>,
   checks: FormArray<FormGroup<CheckForm>>
 }

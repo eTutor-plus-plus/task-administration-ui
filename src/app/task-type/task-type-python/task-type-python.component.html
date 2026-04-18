@@ -1,4 +1,27 @@
 <div [formGroup]="form">
+  <div class="surface-card p-4 shadow-2 border-round p-fluid mb-4">
+    <div class="grid formgrid p-fluid">
+      <div class="field col-12">
+        <label>Available Libraries</label>
+
+        <div class="flex flex-wrap gap-2 mt-2">
+          <span
+            *ngFor="let lib of allowedLibraries"
+            class="px-3 py-2 border-round-xl text-sm font-medium surface-100 border-1 border-300 shadow-1">
+            {{ lib }}
+          </span>
+        </div>
+      </div>
+      <div class="field col-12">
+        <label>Imports</label>
+        <ngx-monaco-editor
+          formControlName="imports"
+          [options]="editorOptions"
+          style="height: 120px;">
+        </ngx-monaco-editor>
+      </div>
+    </div>
+  </div>
 
   <div class="surface-card p-4 shadow-2 border-round p-fluid mb-4">
     <div class="grid formgrid p-fluid">
@@ -24,21 +47,6 @@
             {{ getError(form.controls.submitData, 'taskTypes.python.fields.submitData') }}
           </small>
         }
-      </div>
-    </div>
-  </div>
-
-  <div class="surface-card p-4 shadow-2 border-round p-fluid mb-4">
-    <div class="grid formgrid p-fluid">
-      <div class="field mb-4 col-12">
-        <label transloco="taskTypes.python.fields.packages"></label>
-        <p-multiSelect
-          [options]="libraryOptions"
-          formControlName="packages"
-          optionLabel="label"
-          optionValue="value"
-          placeholder="Select libraries">
-        </p-multiSelect>
       </div>
     </div>
   </div>
