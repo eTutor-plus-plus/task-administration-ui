@@ -137,10 +137,9 @@ export class TaskSubmissionComponent implements OnInit {
     if(inputLang == 'jdbc'){
       this.editorOptions.language = 'java'
     }
-    else{
+    else {
       this.editorOptions.language = inputLang ?? 'json';
-
-    this.editorOptions.language = inputLang ?? 'json';
+    }
     if(this.form.get("language")?.value === 'de'){
       this.description = this.descriptionDe;
     }
