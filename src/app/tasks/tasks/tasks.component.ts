@@ -19,6 +19,7 @@ import { AuthService, Role } from '../../auth';
 import { TableOverviewComponent } from '../../layout';
 import { OrganizationalUnitDto, OrganizationalUnitService, StatusEnum, TaskDto, TaskGroupDto, TaskGroupService, TaskService } from '../../api';
 import { convertStringToSeverity } from '../helpers';
+import { CheckboxModule } from 'primeng/checkbox';
 
 /**
  * Page: Tasks Overview
@@ -39,7 +40,8 @@ import { convertStringToSeverity } from '../helpers';
     NgClass,
     InputNumberModule,
     FormsModule,
-    DropdownModule
+    DropdownModule,
+    CheckboxModule
   ],
   providers: [ConfirmationService],
   templateUrl: './tasks.component.html',
@@ -280,4 +282,8 @@ export class TasksComponent extends TableOverviewComponent<TaskDto, TaskService>
   }
 
   public readonly convertStringToSeverity = convertStringToSeverity;
+
+  examChanged() {
+    
+  }
 }

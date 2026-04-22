@@ -10,7 +10,11 @@ import { TaskTypeSqlComponent } from './task-type-sql/task-type-sql.component';
 import { TaskTypeRelalgComponent } from './task-type-relalg/task-type-relalg.component';
 import { TaskTypeFanfComponent } from './task-type-fanf/task-type-fanf.component';
 import { TaskTypeUmlComponent } from './task-type-uml/task-type-uml.component';
+
 import { TaskTypeJDBCComponent } from './task-type-jdbc/task-type-jdbc.component';
+
+import { TaskTypeOwlComponent } from './task-type-owl/task-type-owl.component';
+
 
 
 /**
@@ -106,6 +110,7 @@ return $d`,
       supportsDescriptionGeneration: false,
       submissionInputLanguage: 'uml'
 
+
     },
     {
       name: 'jdbc',
@@ -114,6 +119,15 @@ return $d`,
       submissionTemplate: '',
       supportsDescriptionGeneration: false,
       submissionInputLanguage: 'jdbc'
+
+
+    }, {
+      name: 'owl',
+      supportedTaskGroupTypes: [],
+      component: TaskTypeOwlComponent,
+      submissionTemplate: '',
+      supportsDescriptionGeneration: true,
+      submissionInputLanguage: 'owl'
 
     }
 

@@ -189,6 +189,7 @@
       "language": "Language",
       "mode": "Evaluation Mode",
       "feedbackLevel": "Feedback Level",
+      "description": "Description",
       "submission": "Submission",
       "result": "Result",
       "maxPoints": "Max. Points",
