@@ -9,6 +9,22 @@
         "solution": "Gesuchte Zahl"
       }
     },
+    "jdbc": {
+      "title": "JDBC",
+      "fields": {
+        "solution": "Lösung",
+        "tables": "Zu prüfende Tabellen",
+        "wrongOutputPenalty": "Punkteabzug fehlerhafte Ausgabe",
+        "exceptionHandlingPenalty": "Punkteabzug Exception Handling",
+        "wrongDbContentPenalty": "Punkteabzug falscher DB-Inhalt",
+        "checkAutocommit": "Autocommit prüfen",
+        "autocommitPenalty": "Punkteabzug Autocommit",
+        "variables": "Variablen (optional)"
+      },
+      "errors": {
+        "tables": "tabelle1, tabelle2, tabelle3"
+      }
+    },
     "xquery": {
       "title": "XQuery",
       "fields": {
