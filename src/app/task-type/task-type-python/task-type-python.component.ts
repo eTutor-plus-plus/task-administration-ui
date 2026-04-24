@@ -44,7 +44,7 @@ export class TaskTypePythonComponent extends TaskTypeFormComponent<TaskTypeForm>
     'sklearn'
   ];
 
-   checks = new FormArray<FormGroup>([])
+  checks = new FormArray<FormGroup<CheckForm>>([]);
 
   /**
    * Creates a new instance of class TaskTypePythonComponent.
@@ -59,21 +59,34 @@ export class TaskTypePythonComponent extends TaskTypeFormComponent<TaskTypeForm>
     this.form.addControl("submitData", new FormControl<string | null>("", [Validators.required]));
     this.form.addControl("solution", new FormControl<string | null>("", [Validators.required]));
     this.form.addControl("checks", this.checks);
-    console.log(this.checks?.controls.length);
-    this.addCheck();
   }
 
-
   addCheck(): void {
-    this.checks.push(new FormGroup({
-      name: new FormControl('', Validators.required),
-      points: new FormControl(0, Validators.required),
-      check: new FormControl('', Validators.required)
-    }));
+    this.checks.push(this.createCheck());
+  }
+
+  createCheck(c?: any): FormGroup<CheckForm> {
+    return new FormGroup<CheckForm>({
+      name: new FormControl(c?.name ?? '', { nonNullable: true, validators: [Validators.required] }),
+      points: new FormControl(c?.points ?? 0, { nonNullable: true, validators: [Validators.required] }),
+      check: new FormControl(c?.check ?? '', { nonNullable: true, validators: [Validators.required] })
+    });
   }
 
   removeCheck(index: number): void {
     this.checks.removeAt(index);
+  }
+
+  protected override onOriginalDataChanged(originalData: any): void {
+    this.checks.clear();
+
+    if (originalData?.checks?.length) {
+      originalData.checks.forEach((c: any) => {
+        this.checks.push(this.createCheck(c));
+      });
+    } else {
+      this.addCheck();
+    }
   }
 
 }
