@@ -103,6 +103,13 @@
           </div>
         </div>
       </div>
+
+      @if (showPointsMismatch()) {
+        <small class="block mt-2 p-error">
+          Sum of check points must equal max points
+        </small>
+      }
+
     </div>
 
   </div>

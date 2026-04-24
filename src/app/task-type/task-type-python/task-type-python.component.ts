@@ -59,22 +59,20 @@ export class TaskTypePythonComponent extends TaskTypeFormComponent<TaskTypeForm>
     this.form.addControl("submitData", new FormControl<string | null>("", [Validators.required]));
     this.form.addControl("solution", new FormControl<string | null>("", [Validators.required]));
     this.form.addControl("checks", this.checks);
+
+    this.form.valueChanges.subscribe(() => {
+      this.validateCheckPointsSum();
+    });
   }
 
   addCheck(): void {
     this.checks.push(this.createCheck());
-  }
-
-  createCheck(c?: any): FormGroup<CheckForm> {
-    return new FormGroup<CheckForm>({
-      name: new FormControl(c?.name ?? '', { nonNullable: true, validators: [Validators.required] }),
-      points: new FormControl(c?.points ?? 0, { nonNullable: true, validators: [Validators.required] }),
-      check: new FormControl(c?.check ?? '', { nonNullable: true, validators: [Validators.required] })
-    });
+    this.validateCheckPointsSum();
   }
 
   removeCheck(index: number): void {
     this.checks.removeAt(index);
+    this.validateCheckPointsSum();
   }
 
   protected override onOriginalDataChanged(originalData: any): void {
@@ -87,6 +85,49 @@ export class TaskTypePythonComponent extends TaskTypeFormComponent<TaskTypeForm>
     } else {
       this.addCheck();
     }
+
+    this.validateCheckPointsSum();
+  }
+
+  private validateCheckPointsSum(): void {
+    const checks = this.checks.controls;
+
+    const maxPoints = this.parentForm?.controls?.maxPoints?.value;
+
+    if (maxPoints == null) {
+      this.form.setErrors(null);
+      return;
+    }
+
+    const allZero = checks.every(c => (c.value.points ?? 0) === 0);
+    if (allZero) {
+      this.form.setErrors(null);
+      return;
+    }
+
+    const sum = checks.reduce((acc, c) => acc + (c.value.points ?? 0), 0);
+
+    const errors = this.form.errors || {};
+
+    if (sum !== maxPoints) {
+      errors['pointsMismatch'] = true;
+    } else {
+      delete errors['pointsMismatch'];
+    }
+
+    this.form.setErrors(Object.keys(errors).length ? errors : null);
+  }
+
+  createCheck(c?: any): FormGroup<CheckForm> {
+    return new FormGroup<CheckForm>({
+      name: new FormControl(c?.name ?? '', { nonNullable: true, validators: [Validators.required] }),
+      points: new FormControl(c?.points ?? 0, { nonNullable: true, validators: [Validators.required] }),
+      check: new FormControl(c?.check ?? '', { nonNullable: true, validators: [Validators.required] })
+    });
+  }
+
+  showPointsMismatch(): boolean {
+    return !!this.form.errors?.['pointsMismatch'];
   }
 
 }
