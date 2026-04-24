@@ -9,6 +9,12 @@
         "solution": "Gesuchte Zahl"
       }
     },
+    "cypher": {
+      "title": "Cypher",
+      "fields": {
+        "solution": "Cypher Query"
+      }
+    },
     "xquery": {
       "title": "XQuery",
       "fields": {
@@ -85,7 +91,6 @@
         "droolsIsCEP": "Ist dieser Task ein CEP Task?"
       }
     },
-
     "sql-ddl": {
       "title": "SQL DDL",
       "fields": {
@@ -97,7 +102,8 @@
         "constraintPoints": "Punkte pro Constraint",
         "primaryKeyPoints": "Punkte pro Primary Key",
         "foreignKeyPoints": "Punkte pro Foreign Key"
-  }},
+      }
+    },
     "sql": {
       "title": "SQL",
       "fields": {
@@ -155,7 +161,6 @@
         "normalizationPenaltyPerMissingKey": "Punktabzug pro fehlendem Schlüssel",
         "normalizationPenaltyPerIncorrectKey": "Punktabzug pro falschem Schlüssel",
         "normalizationPenaltyPerIncorrectNFRelation": "Punktabzug pro falscher Normalform-Relation"
-
       },
       "descriptions": {
         "penalty": "Ein Punkteabzug von -1 bedeutet, dass die Abgabe mit 0 Punkten bewertet wird."
@@ -166,7 +171,6 @@
         "minimalCover": "Minimale Überdeckung",
         "normalFormDetermination": "Normalformen bestimmen",
         "normalization": "Normalisierung"
-
       }
     },
     "uml": {
@@ -181,8 +185,6 @@
         "associationPoints": "Punkte pro richtiger Assoziation",
         "associationClassPoints": "Punkte pro richtiger Zuordnung einer Assoziationsklasse",
         "constraintPoints": "Punkte pro richtiger Constraint"
-
-
       }
     },
     "owl": {
@@ -197,4 +199,3 @@
     }
   }
 }
-

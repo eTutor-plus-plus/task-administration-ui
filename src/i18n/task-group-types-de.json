@@ -3,6 +3,13 @@
     "none": {
       "title": "Kein Typ"
     },
+    "cypher": {
+      "title": "Cypher",
+      "fields": {
+        "minNumber": "Kleinster Wert",
+        "maxNumber": "Größter Wert"
+      }
+    },
     "binary-search": {
       "title": "Binärsuche",
       "fields": {
@@ -40,4 +47,3 @@
     }
   }
 }
-

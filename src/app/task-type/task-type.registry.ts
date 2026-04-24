@@ -11,6 +11,7 @@ import { TaskTypeRelalgComponent } from './task-type-relalg/task-type-relalg.com
 import { TaskTypeFanfComponent } from './task-type-fanf/task-type-fanf.component';
 import { TaskTypeUmlComponent } from './task-type-uml/task-type-uml.component';
 import { TaskTypeOwlComponent } from './task-type-owl/task-type-owl.component';
+import { TaskTypeCypherComponent } from './task-type-cypher/task-type-cypher.component';
 
 
 /**
@@ -29,93 +30,101 @@ export class TaskTypeRegistry {
     supportsDescriptionGeneration?: boolean,
     submissionInputLanguage?: string // set the monaco language if the submission data have following format {"input": "<USER INPUT>"}, otherwise leave this undefined
   }[] = [
-    {
-      name: 'binary-search',
-      supportedTaskGroupTypes: ['binary-search'],
-      component: TaskTypeBinarySearchComponent,
-      submissionTemplate: '0',
-      supportsDescriptionGeneration: true,
-      submissionInputLanguage: 'plaintext'
-    }, {
-      name: 'xquery',
-      supportedTaskGroupTypes: ['xquery'],
-      component: TaskTypeXqueryComponent,
-      submissionTemplate: `let $d := doc('etutor.xml')
+      {
+        name: 'binary-search',
+        supportedTaskGroupTypes: ['binary-search'],
+        component: TaskTypeBinarySearchComponent,
+        submissionTemplate: '0',
+        supportsDescriptionGeneration: true,
+        submissionInputLanguage: 'plaintext'
+      }, {
+        name: 'xquery',
+        supportedTaskGroupTypes: ['xquery'],
+        component: TaskTypeXqueryComponent,
+        submissionTemplate: `let $d := doc('etutor.xml')
 return $d`,
-      supportsDescriptionGeneration: false,
-      submissionInputLanguage: 'xquery'
-    }, {
-      name: 'datalog',
-      supportedTaskGroupTypes: ['datalog'],
-      component: TaskTypeDatalogComponent,
-      submissionTemplate: '',
-      supportsDescriptionGeneration: false,
-      submissionInputLanguage: 'datalog'
-    }, {
-      name: 'asp',
-      supportedTaskGroupTypes: ['datalog'],
-      component: TaskTypeAspComponent,
-      submissionTemplate: '',
-      supportsDescriptionGeneration: false,
-      submissionInputLanguage: 'datalog'
-    }, {
-      name: 'drools',
-      supportedTaskGroupTypes: [],
-      component: TaskTypeDroolsComponent,
-      submissionTemplate: '',
-      supportsDescriptionGeneration: false,
-      submissionInputLanguage: 'drools'
+        supportsDescriptionGeneration: false,
+        submissionInputLanguage: 'xquery'
+      }, {
+        name: 'datalog',
+        supportedTaskGroupTypes: ['datalog'],
+        component: TaskTypeDatalogComponent,
+        submissionTemplate: '',
+        supportsDescriptionGeneration: false,
+        submissionInputLanguage: 'datalog'
+      }, {
+        name: 'asp',
+        supportedTaskGroupTypes: ['datalog'],
+        component: TaskTypeAspComponent,
+        submissionTemplate: '',
+        supportsDescriptionGeneration: false,
+        submissionInputLanguage: 'datalog'
+      }, {
+        name: 'drools',
+        supportedTaskGroupTypes: [],
+        component: TaskTypeDroolsComponent,
+        submissionTemplate: '',
+        supportsDescriptionGeneration: false,
+        submissionInputLanguage: 'drools'
 
-    },
-    {
-      name: 'sql-ddl',
-      supportedTaskGroupTypes: [],
-      component: TaskTypeSqlDdlComponent,
-      submissionTemplate: '',
-      supportsDescriptionGeneration: false,
-      submissionInputLanguage: 'sql'
+      },
+      {
+        name: 'sql-ddl',
+        supportedTaskGroupTypes: [],
+        component: TaskTypeSqlDdlComponent,
+        submissionTemplate: '',
+        supportsDescriptionGeneration: false,
+        submissionInputLanguage: 'sql'
 
-    }, {
-      name: 'sql',
-      supportedTaskGroupTypes: ['sql'],
-      component: TaskTypeSqlComponent,
-      submissionTemplate: '',
-      supportsDescriptionGeneration: false,
-      submissionInputLanguage: 'sql'
-    }, {
-      name: 'relalg',
-      supportedTaskGroupTypes: ['sql'],
-      component: TaskTypeRelalgComponent,
-      submissionTemplate: '',
-      supportsDescriptionGeneration: false,
-      submissionInputLanguage: 'relalg'
+      }, {
+        name: 'sql',
+        supportedTaskGroupTypes: ['sql'],
+        component: TaskTypeSqlComponent,
+        submissionTemplate: '',
+        supportsDescriptionGeneration: false,
+        submissionInputLanguage: 'sql'
+      }, {
+        name: 'relalg',
+        supportedTaskGroupTypes: ['sql'],
+        component: TaskTypeRelalgComponent,
+        submissionTemplate: '',
+        supportsDescriptionGeneration: false,
+        submissionInputLanguage: 'relalg'
 
-    }, {
-      name: 'fanf',
-      supportedTaskGroupTypes: [],
-      component: TaskTypeFanfComponent,
-      submissionTemplate: '',
-      supportsDescriptionGeneration: true,
-      submissionInputLanguage: 'fanf'
-    },
-    {
-      name: 'uml',
-      supportedTaskGroupTypes: [],
-      component: TaskTypeUmlComponent,
-      submissionTemplate: '',
-      supportsDescriptionGeneration: false,
-      submissionInputLanguage: 'uml'
+      }, {
+        name: 'fanf',
+        supportedTaskGroupTypes: [],
+        component: TaskTypeFanfComponent,
+        submissionTemplate: '',
+        supportsDescriptionGeneration: true,
+        submissionInputLanguage: 'fanf'
+      },
+      {
+        name: 'uml',
+        supportedTaskGroupTypes: [],
+        component: TaskTypeUmlComponent,
+        submissionTemplate: '',
+        supportsDescriptionGeneration: false,
+        submissionInputLanguage: 'uml'
 
-    }, {
-      name: 'owl',
-      supportedTaskGroupTypes: [],
-      component: TaskTypeOwlComponent,
-      submissionTemplate: '',
-      supportsDescriptionGeneration: true,
-      submissionInputLanguage: 'owl'
-    }
+      }, {
+        name: 'owl',
+        supportedTaskGroupTypes: [],
+        component: TaskTypeOwlComponent,
+        submissionTemplate: '',
+        supportsDescriptionGeneration: true,
+        submissionInputLanguage: 'owl'
+      },
+      {
+        name: 'cypher',
+        supportedTaskGroupTypes: ['cypher'],
+        component: TaskTypeCypherComponent,
+        submissionTemplate: '0',
+        supportsDescriptionGeneration: true,
+        submissionInputLanguage: 'plaintext'
+      },
 
-  ];
+    ];
 
   /**
    * Returns the supported task types.

@@ -1,10 +1,11 @@
 import { Type } from '@angular/core';
-import { TaskGroupTypeFormComponent } from './task-group-type-form.component';
 import { TaskGroupTypeBinarySearchComponent } from './task-group-type-binary-search/task-group-type-binary-search.component';
-import { TaskGroupTypeXqueryComponent } from './task-group-type-xquery/task-group-type-xquery.component';
+import { TaskGroupTypeCypherComponent } from './task-group-type-cypher/task-group-type-cypher.component';
 import { TaskGroupTypeDatalogComponent } from './task-group-type-datalog/task-group-type-datalog.component';
-import { TaskGroupTypeSqlComponent } from './task-group-type-sql/task-group-type-sql.component';
+import { TaskGroupTypeFormComponent } from './task-group-type-form.component';
 import { TaskGroupTypeOwlComponent } from './task-group-type-owl/task-group-type-owl.component';
+import { TaskGroupTypeSqlComponent } from './task-group-type-sql/task-group-type-sql.component';
+import { TaskGroupTypeXqueryComponent } from './task-group-type-xquery/task-group-type-xquery.component';
 
 /**
  * Registry for task group types.
@@ -15,12 +16,12 @@ export class TaskGroupTypeRegistry {
   }
 
   private static readonly taskTypes: { name: string, component?: Type<TaskGroupTypeFormComponent<any>>, supportsDescriptionGeneration?: boolean }[] = [
-    {name: 'binary-search', component: TaskGroupTypeBinarySearchComponent, supportsDescriptionGeneration: true},
-    {name: 'xquery', component: TaskGroupTypeXqueryComponent, supportsDescriptionGeneration: true},
-    {name: 'datalog', component: TaskGroupTypeDatalogComponent, supportsDescriptionGeneration: true},
-    {name: 'sql', component: TaskGroupTypeSqlComponent, supportsDescriptionGeneration: true},
-    {name: 'owl', component: TaskGroupTypeOwlComponent, supportsDescriptionGeneration: false},
-
+    { name: 'binary-search', component: TaskGroupTypeBinarySearchComponent, supportsDescriptionGeneration: true },
+    { name: 'xquery', component: TaskGroupTypeXqueryComponent, supportsDescriptionGeneration: true },
+    { name: 'datalog', component: TaskGroupTypeDatalogComponent, supportsDescriptionGeneration: true },
+    { name: 'sql', component: TaskGroupTypeSqlComponent, supportsDescriptionGeneration: true },
+    { name: 'owl', component: TaskGroupTypeOwlComponent, supportsDescriptionGeneration: false },
+    { name: 'cypher', component: TaskGroupTypeCypherComponent, supportsDescriptionGeneration: true },
   ];
 
   /**
