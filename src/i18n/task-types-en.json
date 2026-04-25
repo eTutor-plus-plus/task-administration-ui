@@ -190,6 +190,12 @@
         "pointsPerUndefinedClass": "Points deducted per undefined class or individual",
         "pointsPerAxiomWithoutEntity": "Points deducted per wrong or missing axiom without class or individual"
       }
+    },
+    "hierarchical-clustering": {
+      "title": "Hierarchical Clustering",
+      "fields": {
+        "nDataPoints": "The number of data points for the distance matrix"
+      }
     }
   }
 }

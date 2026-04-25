@@ -194,6 +194,12 @@
         "pointsPerUndefinedClass": "Abgezogene Punkte für undefinierte Klassen & Individuen",
         "pointsPerAxiomWithoutEntity": "Abgezogene Punkte für falsche oder fehlende Axiome ohne Klasse oder Individuum"
       }
+    },
+    "hierarchical-clustering": {
+      "title": "Hierarchische Clusteranalyse",
+      "fields": {
+        "nDataPoints": "Die Anzahl an Datenpunkten für die Distanzmatrix"
+      }
     }
   }
 }

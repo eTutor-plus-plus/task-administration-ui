@@ -11,6 +11,7 @@ import { TaskTypeRelalgComponent } from './task-type-relalg/task-type-relalg.com
 import { TaskTypeFanfComponent } from './task-type-fanf/task-type-fanf.component';
 import { TaskTypeUmlComponent } from './task-type-uml/task-type-uml.component';
 import { TaskTypeOwlComponent } from './task-type-owl/task-type-owl.component';
+import { TaskTypeHierarchicalClusteringComponent } from './task-type-hierarchical-clustering/task-type-hierarchical-clustering.component';
 
 
 /**
@@ -113,6 +114,13 @@ return $d`,
       submissionTemplate: '',
       supportsDescriptionGeneration: true,
       submissionInputLanguage: 'owl'
+    }, {
+      name: 'hierarchical-clustering',
+      supportedTaskGroupTypes: [],
+      component: TaskTypeHierarchicalClusteringComponent,
+      submissionTemplate: '',
+      supportsDescriptionGeneration: true,
+      submissionInputLanguage: 'plaintext'
     }
 
   ];
