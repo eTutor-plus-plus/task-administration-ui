@@ -8,6 +8,9 @@ import { TranslocoDirective } from '@ngneat/transloco';
 import { MultiSelectModule } from 'primeng/multiselect';
 import { CommonModule } from '@angular/common';
 import { Button } from 'primeng/button';
+import { DropdownModule } from 'primeng/dropdown';
+import { MenuItem } from 'primeng/api';
+import { MenuModule } from 'primeng/menu';
 
 /**
  * Task Type Form: Python
@@ -22,7 +25,9 @@ import { Button } from 'primeng/button';
     TranslocoDirective,
     MultiSelectModule,
     CommonModule,
-    Button
+    Button,
+    DropdownModule,
+    MenuModule
   ],
   templateUrl: './task-type-python.component.html',
   styleUrl: './task-type-python.component.scss'
@@ -46,6 +51,48 @@ export class TaskTypePythonComponent extends TaskTypeFormComponent<TaskTypeForm>
 
   checks = new FormArray<FormGroup<CheckForm>>([]);
 
+  readonly checkTemplates = [
+    {
+      name: 'Correct shape',
+      check: 'tuple(result_ist.shape) == tuple(result_soll.shape)'
+    },
+    {
+      name: 'Correct length',
+      check: 'len(result_ist) == len(result_soll)'
+    },
+    {
+      name: 'Correct content',
+      check: "result_ist.sort_values(by='value').reset_index(drop=True).equals(result_soll.sort_values(by='value').reset_index(drop=True))"
+    },
+    {
+      name: 'Correct sorting',
+      check: "result_ist['value'].is_monotonic_increasing"
+    }
+  ];
+
+  menuItems: MenuItem[] = [
+    {
+      label: 'Custom',
+      command: () => this.addCheck()
+    },
+    {
+      label: 'Shape',
+      command: () => this.addCheckWithTemplate(this.checkTemplates[0])
+    },
+    {
+      label: 'Length',
+      command: () => this.addCheckWithTemplate(this.checkTemplates[1])
+    },
+    {
+      label: 'Inhalt',
+      command: () => this.addCheckWithTemplate(this.checkTemplates[2])
+    },
+    {
+      label: 'Sortierung',
+      command: () => this.addCheckWithTemplate(this.checkTemplates[3])
+    }
+  ];
+
   /**
    * Creates a new instance of class TaskTypePythonComponent.
    */
@@ -63,6 +110,12 @@ export class TaskTypePythonComponent extends TaskTypeFormComponent<TaskTypeForm>
     this.form.valueChanges.subscribe(() => {
       this.validateCheckPointsSum();
     });
+
+    setTimeout(() => {
+      this.parentForm?.controls?.maxPoints?.valueChanges.subscribe(() => {
+        this.validateCheckPointsSum();
+      });
+    });
   }
 
   addCheck(): void {
@@ -74,6 +127,17 @@ export class TaskTypePythonComponent extends TaskTypeFormComponent<TaskTypeForm>
     this.checks.removeAt(index);
     this.validateCheckPointsSum();
   }
+
+  addCheckWithTemplate(template: any): void {
+    this.checks.push(new FormGroup<CheckForm>({
+      name: new FormControl(template.name, { nonNullable: true, validators: [Validators.required] }),
+      points: new FormControl(0, { nonNullable: true, validators: [Validators.required] }),
+      check: new FormControl(template.check, { nonNullable: true, validators: [Validators.required] })
+    }));
+
+    this.validateCheckPointsSum();
+  }
+
 
   protected override onOriginalDataChanged(originalData: any): void {
     this.checks.clear();

@@ -69,7 +69,16 @@
 
     <div class="flex justify-content-between align-items-center mb-3">
       <label transloco="taskTypes.python.fields.checks"></label>
-      <p-button label="+" severity="success" size="small" (click)="addCheck()" ></p-button>
+
+      <div class="flex gap-2">
+        <p-menu #menu [model]="menuItems" [popup]="true"></p-menu>
+
+        <p-button
+          icon="pi pi-plus"
+          severity="success"
+          (click)="menu.toggle($event)">
+        </p-button>
+      </div>
     </div>
 
     <div formArrayName="checks">
