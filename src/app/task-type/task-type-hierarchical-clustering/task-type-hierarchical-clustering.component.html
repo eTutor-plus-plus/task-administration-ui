@@ -9,5 +9,43 @@
         </small>
       }
     </div>
+
+    @if (labelsArray.length > 0) {
+      <div class="col-12 overflow-x-auto" [formGroup]="distanceMatrixGroup">
+        <table class="distance-matrix-table w-full">
+          <thead>
+          <tr>
+            <th class="matrix-corner"></th>
+            @for (label of labelsArray.controls; track $index) {
+              <th class="matrix-header text-center">
+                <span class="text-sm font-medium text-600">{{ label.value }}</span>
+              </th>
+            }
+          </tr>
+          </thead>
+          <tbody formArrayName="distances">
+            @for (row of distancesArray.controls; track $index; let rowIndex = $index) {
+              <tr formArrayName="{{ rowIndex }}">
+                <td class="label-cell pr-2">
+                  <span class="font-medium text-600">{{ labelsArray.controls[rowIndex].value }}</span>
+                </td>
+                @for (cell of getRow(rowIndex).controls; track $index; let colIndex = $index) {
+                  <td class="distance-cell p-1">
+                    <p-inputNumber
+                      [formControlName]="colIndex"
+                      [minFractionDigits]="0"
+                      [maxFractionDigits]="4"
+                      [inputStyle]="rowIndex === colIndex ? {'pointer-events': 'none', 'background': 'var(--surface-200)', 'opacity': '0.7'} : {}"
+                      inputStyleClass="text-center w-full"
+                    />
+                  </td>
+                }
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    }
+
   </div>
 </div>
