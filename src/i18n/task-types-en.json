@@ -89,17 +89,21 @@
         "fields": {
           "sqlDDL": "SQL DDL",
           "solution": "Solution",
-          "insertStatements": "Insert Statements for Check Constraints",
-          "insertStatementsDescription": "For each check constraint included in the solution, corresponding INSERT statements must be provided for verification. Since each input group (Name, Successful Statements, Unsuccessful Statements) is validated independently, any records referenced via foreign keys must first be created in the Successful Statements section. Only after that can these records be used or referenced in the Unsuccessful Statements section.",
-          "insertStatementsAdd": "Add Insert Statement",
-          "insertStatementsName": "Name",
+          "checkConstraintStatements": "Check Constraint Verification",
+          "checkConstraintStatementsDescription": "For each check constraint included in the solution, corresponding INSERT statements must be provided for verification. Since each input group (Name, Successful Statements, Unsuccessful Statements) is validated independently, any records referenced via foreign keys must first be created in the Successful Statements section. Only after that can these records be used or referenced in the Unsuccessful Statements section.",
+          "checkConstraintStatementsAdd": "Add Check Constraint Verification",
+          "assertionStatements": "Assertion Verification",
+          "assertionStatementsDescription": "For each assertion included in the solution, corresponding INSERT statements must be provided for verification. Since each input group (Name, Successful Statements, Unsuccessful Statements) is validated independently, any records referenced via foreign keys must first be created in the Successful Statements section. Only after that can these records be used or referenced in the Unsuccessful Statements section.",
+          "assertionStatementsAdd": "Add Assertion Verification",
+          "statementName": "Name",
           "successfulStatements": "Successful Statements",
           "unsuccessfulStatements": "Unsuccessful Statements",
           "whitelist": "Whitelist",
-          "tablePoints": "Points for Table and Column",
-          "constraintPoints": "Points for Constraint",
-          "primaryKeyPoints": "Points for Primary Key",
-          "foreignKeyPoints": "Points for Foreign Key"
+          "tablePoints": "Points per entire table including columns",
+          "constraintPoints": "Points per constraint",
+          "assertionPoints": "Points per assertion",
+          "primaryKeyPoints": "Points per primary key",
+          "foreignKeyPoints": "Points per foreign key"
         }
       },
     "sql": {

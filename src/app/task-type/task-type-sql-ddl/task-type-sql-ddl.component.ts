@@ -35,11 +35,8 @@ export class TaskTypeSqlDdlComponent extends TaskTypeFormComponent<TaskTypeForm>
   readonly editorOptions: editor.IStandaloneEditorConstructionOptions = {
     language: 'sql'
   };
-  insertStatements = new FormArray<FormGroup<{
-    checkDefinition: FormControl<string | null>,
-    successfulStatements: FormControl<string | null>,
-    unsuccessfulStatements: FormControl<string | null>
-  }>>([]);
+  insertStatements = new FormArray<StatementFormGroup>([]);
+  assertionStatements = new FormArray<StatementFormGroup>([]);
 
   constructor() {
     super();
@@ -54,64 +51,74 @@ export class TaskTypeSqlDdlComponent extends TaskTypeFormComponent<TaskTypeForm>
     this.form.addControl('solution', new FormControl<string | null>(null));
     this.form.addControl('whitelist', new FormControl<string | null>(null));
     this.form.addControl('insertStatements', this.insertStatements);
+    this.form.addControl('assertionStatements', this.assertionStatements);
     this.form.addControl('tablePoints', new FormControl<number | null>(null));
     this.form.addControl('primaryKeyPoints', new FormControl<number | null>(null));
     this.form.addControl('foreignKeyPoints', new FormControl<number | null>(null));
     this.form.addControl('constraintPoints', new FormControl<number | null>(null));
+    this.form.addControl('assertionPoints', new FormControl<number | null>(null));
   }
 
   addInsertStatement() {
-    this.insertStatements.push(new FormGroup({
-      checkDefinition: new FormControl<string | null>(''),
-      successfulStatements: new FormControl<string | null>(''),
-      unsuccessfulStatements: new FormControl<string | null>('')
-    }));
+    this.insertStatements.push(this.createStatementGroup());
+  }
+
+  addAssertionStatement() {
+    this.assertionStatements.push(this.createStatementGroup());
   }
 
   removeInsertStatement(index: number) {
     this.insertStatements.removeAt(index);
   }
 
+  removeAssertionStatement(index: number) {
+    this.assertionStatements.removeAt(index);
+  }
+
   private setSqlDdlData(dto: any) {
-    while (this.insertStatements.length !== 0) {
-      this.insertStatements.removeAt(0);
+    this.setStatementData(this.insertStatements, dto?.insertStatements, true);
+    this.setStatementData(this.assertionStatements, dto?.assertionStatements);
+  }
+
+  private createStatementGroup(entry?: any): StatementFormGroup {
+    return new FormGroup({
+      definition: new FormControl<string | null>(entry?.definition ?? ''),
+      successfulStatements: new FormControl<string | null>(entry?.successfulStatements ?? entry?.insertStatements ?? ''),
+      unsuccessfulStatements: new FormControl<string | null>(entry?.unsuccessfulStatements ?? '')
+    });
+  }
+
+  private setStatementData(target: FormArray<StatementFormGroup>, data: unknown, allowLegacyString = false) {
+    while (target.length !== 0) {
+      target.removeAt(0);
     }
 
-    const insertStatements = dto?.insertStatements;
-    if (Array.isArray(insertStatements)) {
-      insertStatements.forEach((entry: any) => {
-        this.insertStatements.push(new FormGroup({
-          checkDefinition: new FormControl<string | null>(entry?.checkDefinition ?? ''),
-          successfulStatements: new FormControl<string | null>(entry?.successfulStatements ?? entry?.insertStatements ?? ''),
-          unsuccessfulStatements: new FormControl<string | null>(entry?.unsuccessfulStatements ?? '')
-        }));
-      });
+    if (Array.isArray(data)) {
+      data.forEach((entry: any) => target.push(this.createStatementGroup(entry)));
       return;
     }
 
-    //relevant if you want to load old tasks where insertStatements was a string not an array
-    if (typeof insertStatements === 'string') {
-      this.insertStatements.push(new FormGroup({
-        checkDefinition: new FormControl<string | null>(''),
-        successfulStatements: new FormControl<string | null>(insertStatements),
-        unsuccessfulStatements: new FormControl<string | null>('')
-      }));
+    // Relevant for loading old tasks where insertStatements was a string instead of an array.
+    if (allowLegacyString && typeof data === 'string') {
+      target.push(this.createStatementGroup({successfulStatements: data}));
     }
   }
-
 }
 
+type StatementFormGroup = FormGroup<{
+  definition: FormControl<string | null>,
+  successfulStatements: FormControl<string | null>,
+  unsuccessfulStatements: FormControl<string | null>
+}>;
 
 interface TaskTypeForm {
   solution: FormControl<string | null>;
   whitelist: FormControl<string | null>;
-  insertStatements: FormArray<FormGroup<{
-    checkDefinition: FormControl<string | null>,
-    successfulStatements: FormControl<string | null>,
-    unsuccessfulStatements: FormControl<string | null>
-  }>>;
+  insertStatements: FormArray<StatementFormGroup>;
+  assertionStatements: FormArray<StatementFormGroup>;
   tablePoints: FormControl<number | null>;
   primaryKeyPoints: FormControl<number | null>;
   foreignKeyPoints: FormControl<number | null>;
   constraintPoints: FormControl<number | null>;
+  assertionPoints: FormControl<number | null>;
 }
