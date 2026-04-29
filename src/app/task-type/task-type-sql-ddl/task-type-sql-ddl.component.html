@@ -117,7 +117,7 @@
       <div *ngFor="let entry of assertionStatements.controls; let i = index" [formGroupName]="i" class="insertStatementsWrapper mb-4">
         <div class="grid formgrid">
           <div class="field col-6 mb-4">
-            <label [for]="'assertionName-' + i" transloco="taskTypes.sql-ddl.fields.statementName"></label>
+            <label [for]="'assertionName-' + i" transloco="taskTypes.sql-ddl.fields.assertionName"></label>
             <input [id]="'assertionName-' + i" type="text" pInputText formControlName="definition" autocomplete="off">
           </div>
           <div class="field col-6 mb-4 flex align-items-end justify-content-end">
