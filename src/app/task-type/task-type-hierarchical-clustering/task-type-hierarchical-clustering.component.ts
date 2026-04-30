@@ -4,6 +4,7 @@ import { FormArray, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Va
 import { InputNumberModule } from 'primeng/inputnumber';
 import { TranslocoDirective } from '@ngneat/transloco';
 import { Subscription } from 'rxjs';
+import { RadioButtonModule } from 'primeng/radiobutton';
 
 @Component({
   selector: 'dke-task-type-hierarchical-clustering',
@@ -12,7 +13,8 @@ import { Subscription } from 'rxjs';
     FormsModule,
     InputNumberModule,
     ReactiveFormsModule,
-    TranslocoDirective
+    TranslocoDirective,
+    RadioButtonModule
   ],
   templateUrl: './task-type-hierarchical-clustering.component.html',
   styleUrl: './task-type-hierarchical-clustering.component.scss'
@@ -20,11 +22,14 @@ import { Subscription } from 'rxjs';
 export class TaskTypeHierarchicalClusteringComponent extends TaskTypeFormComponent<TaskTypeForm> {
   protected override initForm(): void {
     this.form.addControl('nDataPoints', new FormControl<number | null>(null, [Validators.required]));
+    this.form.addControl('linkageMethod', new FormControl<LinkageMethod | null>(LinkageMethod.SINGLE, [Validators.required]));
     this.form.addControl('distanceMatrix', new FormGroup({
       labels: new FormArray<FormControl<string | null>>([]),
       distances: new FormArray<FormArray<FormControl<number | null>>>([])
     }));
   }
+
+  protected readonly LinkageMethod = LinkageMethod;
 
     constructor() {
     super();
@@ -94,7 +99,6 @@ export class TaskTypeHierarchicalClusteringComponent extends TaskTypeFormCompone
   ngOnDestroy(): void {
     this.symmetrySubscriptions.forEach(s => s.unsubscribe());
   }
-
 }
 
 interface TaskTypeForm {
@@ -103,4 +107,11 @@ interface TaskTypeForm {
     labels: FormArray<FormControl<string | null>>;
     distances: FormArray<FormArray<FormControl<number | null>>>;
   }>;
+  linkageMethod: FormControl<LinkageMethod | null>;
+}
+
+enum LinkageMethod {
+  // with "labels" for backend compatibility
+  SINGLE = 'SINGLE',
+  COMPLETE = 'COMPLETE'
 }

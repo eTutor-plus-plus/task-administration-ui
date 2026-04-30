@@ -10,6 +10,32 @@
       }
     </div>
 
+    <div class="field mb-4 col-12">
+      <label transloco="taskTypes.hierarchical-clustering.fields.linkageMethod"></label>
+      <div class="flex flex-row gap-4">
+        <p-radioButton
+          name="linkageMethod"
+          [value]="LinkageMethod.SINGLE"
+          formControlName="linkageMethod"
+          inputId="linkageSingle"
+        ></p-radioButton>
+        <label for="linkageSingle" transloco="taskTypes.hierarchical-clustering.fields.linkage.single"></label>
+
+        <p-radioButton
+          name="linkageMethod"
+          [value]="LinkageMethod.COMPLETE"
+          formControlName="linkageMethod"
+          inputId="linkageComplete"
+        ></p-radioButton>
+        <label for="linkageComplete"  transloco="taskTypes.hierarchical-clustering.fields.linkage.complete"></label>
+      </div>
+      @if (form.controls.linkageMethod.dirty || form.controls.linkageMethod.touched) {
+        <small class="block mt-1 p-error">
+          {{ getError(form.controls.linkageMethod, 'taskTypes.hierarchical-clustering.fields.linkageMethod') }}
+        </small>
+      }
+    </div>
+
     @if (labelsArray.length > 0) {
       <div class="col-12 overflow-x-auto" [formGroup]="distanceMatrixGroup">
         <table class="distance-matrix-table w-full">

@@ -194,7 +194,12 @@
     "hierarchical-clustering": {
       "title": "Hierarchical Clustering",
       "fields": {
-        "nDataPoints": "The number of data points for the distance matrix"
+        "nDataPoints": "Number of points for clustering",
+        "linkageMethod": "Linkage Method",
+        "linkage": {
+          "single": "Single (minimum distance)",
+          "complete": "Complete (maximum distance)"
+        }
       }
     }
   }
