@@ -198,6 +198,16 @@
     "hierarchical-clustering": {
       "title": "Hierarchische Clusteranalyse",
       "fields": {
+        "generationStrategy": "Art der Aufgabe",
+        "strategy": {
+          "coordinates": "Aus Koordinatenliste",
+          "matrix": "Aus Distanzmatrix"
+        },
+        "distanceMetric": "Distanzmaß",
+        "metric": {
+          "euclidean": "Euklidisch",
+          "manhattan": "Manhattan"
+        },
         "nDataPoints": "Anzahl der zu clusternden Punkte",
         "linkageMethod": "Linkage-Methode",
         "linkage": {

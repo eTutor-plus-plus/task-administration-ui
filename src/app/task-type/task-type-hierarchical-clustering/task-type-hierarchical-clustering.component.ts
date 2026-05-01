@@ -21,6 +21,8 @@ import { RadioButtonModule } from 'primeng/radiobutton';
 })
 export class TaskTypeHierarchicalClusteringComponent extends TaskTypeFormComponent<TaskTypeForm> {
   protected override initForm(): void {
+    this.form.addControl('generationStrategy', new FormControl<GenerationStrategy | null>(GenerationStrategy.COORDINATES, [Validators.required]));
+    this.form.addControl('distanceMetric', new FormControl<DistanceMetric | null>(DistanceMetric.EUCLIDEAN, [Validators.required]));
     this.form.addControl('nDataPoints', new FormControl<number | null>(null, [Validators.required]));
     this.form.addControl('linkageMethod', new FormControl<LinkageMethod | null>(LinkageMethod.SINGLE, [Validators.required]));
     this.form.addControl('distanceMatrix', new FormGroup({
@@ -29,9 +31,11 @@ export class TaskTypeHierarchicalClusteringComponent extends TaskTypeFormCompone
     }));
   }
 
+  protected readonly GenerationStrategy = GenerationStrategy;
+  protected readonly DistanceMetric = DistanceMetric;
   protected readonly LinkageMethod = LinkageMethod;
 
-    constructor() {
+  constructor() {
     super();
   }
 
@@ -102,6 +106,8 @@ export class TaskTypeHierarchicalClusteringComponent extends TaskTypeFormCompone
 }
 
 interface TaskTypeForm {
+  generationStrategy: FormControl<GenerationStrategy | null>
+  distanceMetric: FormControl<DistanceMetric | null>
   nDataPoints: FormControl<number | null>;
   distanceMatrix: FormGroup<{
     labels: FormArray<FormControl<string | null>>;
@@ -110,8 +116,18 @@ interface TaskTypeForm {
   linkageMethod: FormControl<LinkageMethod | null>;
 }
 
+// enums with "labels" for backend compatibility
+enum GenerationStrategy {
+  COORDINATES = 'COORDINATES',
+  MATRIX = 'MATRIX'
+}
+
+enum DistanceMetric {
+  EUCLIDEAN = 'EUCLIDEAN',
+  MANHATTAN = 'MANHATTAN'
+}
+
 enum LinkageMethod {
-  // with "labels" for backend compatibility
   SINGLE = 'SINGLE',
   COMPLETE = 'COMPLETE'
 }

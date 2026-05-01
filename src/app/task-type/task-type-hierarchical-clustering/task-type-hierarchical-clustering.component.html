@@ -1,5 +1,60 @@
 <div class="surface-card p-4 shadow-2 border-round p-fluid mb-4" [formGroup]="form">
   <div class="grid formgrid p-fluid">
+
+    <div class="field mb-4 col-12">
+      <label transloco="taskTypes.hierarchical-clustering.fields.generationStrategy"></label>
+      <div class="flex flex-row gap-4">
+        <p-radioButton
+          name="generationStrategy"
+          [value]="GenerationStrategy.COORDINATES"
+          formControlName="generationStrategy"
+          inputId="stratCoords"
+        ></p-radioButton>
+        <label for="stratCoords" transloco="taskTypes.hierarchical-clustering.fields.strategy.coordinates"></label>
+
+        <p-radioButton
+          name="generationStrategy"
+          [value]="GenerationStrategy.MATRIX"
+          formControlName="generationStrategy"
+          inputId="stratMatrix"
+        ></p-radioButton>
+        <label for="stratMatrix"  transloco="taskTypes.hierarchical-clustering.fields.strategy.matrix"></label>
+      </div>
+      @if (form.controls.generationStrategy.dirty || form.controls.generationStrategy.touched) {
+        <small class="block mt-1 p-error">
+          {{ getError(form.controls.generationStrategy, 'taskTypes.hierarchical-clustering.fields.generationStrategy') }}
+        </small>
+      }
+    </div>
+
+    @if (form.controls.generationStrategy.getRawValue() === GenerationStrategy.COORDINATES) {
+      <div class="field mb-4 col-12">
+        <label transloco="taskTypes.hierarchical-clustering.fields.distanceMetric"></label>
+        <div class="flex flex-row gap-4">
+          <p-radioButton
+            name="distanceMetric"
+            [value]="DistanceMetric.EUCLIDEAN"
+            formControlName="distanceMetric"
+            inputId="euclidean"
+          ></p-radioButton>
+          <label for="euclidean" transloco="taskTypes.hierarchical-clustering.fields.metric.euclidean"></label>
+
+          <p-radioButton
+            name="distanceMetric"
+            [value]="DistanceMetric.MANHATTAN"
+            formControlName="distanceMetric"
+            inputId="manhattan"
+          ></p-radioButton>
+          <label for="manhattan"  transloco="taskTypes.hierarchical-clustering.fields.metric.manhattan"></label>
+        </div>
+        @if (form.controls.distanceMetric.dirty || form.controls.distanceMetric.touched) {
+          <small class="block mt-1 p-error">
+            {{ getError(form.controls.distanceMetric, 'taskTypes.hierarchical-clustering.fields.distanceMetric') }}
+          </small>
+        }
+      </div>
+    }
+
     <div class="field mb-4 col-12 md:col-6">
       <label for="solution" transloco="taskTypes.hierarchical-clustering.fields.nDataPoints"></label>
       <p-inputNumber inputId="nDataPoints" formControlName="nDataPoints" [maxFractionDigits]="0" />
