@@ -194,7 +194,7 @@
     "hierarchical-clustering": {
       "title": "Hierarchical Clustering",
       "fields": {
-        "generationStrategy": "Type of task",
+        "assignmentType": "Type of assignment",
         "strategy": {
           "coordinates": "From list of coordinates",
           "matrix": "From distance matrix"
@@ -209,7 +209,9 @@
         "linkage": {
           "single": "Single (minimum distance)",
           "complete": "Complete (maximum distance)"
-        }
+        },
+        "pointsPerCorrectCluster": "Points per correct cluster",
+        "wrongOrderPenalty": "Fixed penalty for wrong order (of distances)"
       }
     }
   }

@@ -3,7 +3,7 @@ import { TaskTypeFormComponent } from '../task-type-form.component';
 import { FormArray, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { TranslocoDirective } from '@ngneat/transloco';
-import { Subscription } from 'rxjs';
+import { combineLatest, startWith, Subscription } from 'rxjs';
 import { RadioButtonModule } from 'primeng/radiobutton';
 
 @Component({
@@ -21,17 +21,43 @@ import { RadioButtonModule } from 'primeng/radiobutton';
 })
 export class TaskTypeHierarchicalClusteringComponent extends TaskTypeFormComponent<TaskTypeForm> {
   protected override initForm(): void {
-    this.form.addControl('generationStrategy', new FormControl<GenerationStrategy | null>(GenerationStrategy.COORDINATES, [Validators.required]));
+    this.form.addControl('assignmentType', new FormControl<AssignmentType | null>(AssignmentType.COORDINATES, [Validators.required]));
     this.form.addControl('distanceMetric', new FormControl<DistanceMetric | null>(DistanceMetric.EUCLIDEAN, [Validators.required]));
-    this.form.addControl('nDataPoints', new FormControl<number | null>(null, [Validators.required]));
+    this.form.get('assignmentType')!.valueChanges.subscribe(value => {
+      const distanceControl = this.form.get('distanceMetric');
+
+      if (value === AssignmentType.COORDINATES) {
+        distanceControl?.setValidators([Validators.required]);
+      } else {
+        distanceControl?.clearValidators();
+        distanceControl?.setValue(null);
+      }
+    });
+    this.form.addControl('nDataPoints', new FormControl<number | null>(null));
     this.form.addControl('linkageMethod', new FormControl<LinkageMethod | null>(LinkageMethod.SINGLE, [Validators.required]));
+    this.form.addControl('pointsPerCorrectCluster', new FormControl<number | null>(null, [Validators.required]));
+    this.form.addControl('wrongOrderPenalty', new FormControl<number | null>(null));
+    const nDataPointsControl = this.form.get('nDataPoints') as FormControl<number | null>;
+    const pointsPerClusterControl = this.form.get('pointsPerCorrectCluster') as FormControl<number | null>;
+
+    combineLatest([
+      nDataPointsControl.valueChanges.pipe(startWith(nDataPointsControl.value)),
+      pointsPerClusterControl.valueChanges.pipe(startWith(pointsPerClusterControl.value))
+    ]).subscribe(([nDataPoints, pointsPerCluster]) => {
+      if (nDataPointsControl.valid && pointsPerClusterControl.valid && nDataPoints != null && pointsPerCluster != null) {
+        const maxPoints = (nDataPoints - 1) * pointsPerCluster;
+        this.parentForm?.controls.maxPoints.setValue(maxPoints);
+      } else {
+        this.parentForm?.controls.maxPoints.setValue(null);
+      }
+    });
     this.form.addControl('distanceMatrix', new FormGroup({
       labels: new FormArray<FormControl<string | null>>([]),
       distances: new FormArray<FormArray<FormControl<number | null>>>([])
     }));
   }
 
-  protected readonly GenerationStrategy = GenerationStrategy;
+  protected readonly AssignmentType = AssignmentType;
   protected readonly DistanceMetric = DistanceMetric;
   protected readonly LinkageMethod = LinkageMethod;
 
@@ -75,7 +101,9 @@ export class TaskTypeHierarchicalClusteringComponent extends TaskTypeFormCompone
       this.distancesArray.push(rowArray);
     }
 
-    this.syncSymmetry();
+    setTimeout(() => this.syncSymmetry());
+
+    this.distanceMatrixGroup.updateValueAndValidity();
   }
 
   private symmetrySubscriptions: Subscription[] = [];
@@ -106,18 +134,20 @@ export class TaskTypeHierarchicalClusteringComponent extends TaskTypeFormCompone
 }
 
 interface TaskTypeForm {
-  generationStrategy: FormControl<GenerationStrategy | null>
+  assignmentType: FormControl<AssignmentType | null>
   distanceMetric: FormControl<DistanceMetric | null>
   nDataPoints: FormControl<number | null>;
+  linkageMethod: FormControl<LinkageMethod | null>;
+  pointsPerCorrectCluster: FormControl<number | null>;
+  wrongOrderPenalty: FormControl<number | null>;
   distanceMatrix: FormGroup<{
     labels: FormArray<FormControl<string | null>>;
     distances: FormArray<FormArray<FormControl<number | null>>>;
   }>;
-  linkageMethod: FormControl<LinkageMethod | null>;
 }
 
 // enums with "labels" for backend compatibility
-enum GenerationStrategy {
+enum AssignmentType {
   COORDINATES = 'COORDINATES',
   MATRIX = 'MATRIX'
 }

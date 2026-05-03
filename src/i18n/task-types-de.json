@@ -198,7 +198,7 @@
     "hierarchical-clustering": {
       "title": "Hierarchische Clusteranalyse",
       "fields": {
-        "generationStrategy": "Art der Aufgabe",
+        "assignmentType": "Art der Aufgabe",
         "strategy": {
           "coordinates": "Aus Koordinatenliste",
           "matrix": "Aus Distanzmatrix"
@@ -213,7 +213,9 @@
         "linkage": {
           "single": "Single (minimale Distanz)",
           "complete": "Complete (maximale Distanz)"
-        }
+        },
+        "pointsPerCorrectCluster": "Punkte pro korrektem Cluster",
+        "wrongOrderPenalty": "Fixer Punkteabzug für falsche Reihenfolge (der Distanzen)"
       }
     }
   }

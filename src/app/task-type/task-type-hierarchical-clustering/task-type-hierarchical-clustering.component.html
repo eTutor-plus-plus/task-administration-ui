@@ -2,32 +2,32 @@
   <div class="grid formgrid p-fluid">
 
     <div class="field mb-4 col-12">
-      <label transloco="taskTypes.hierarchical-clustering.fields.generationStrategy"></label>
+      <label transloco="taskTypes.hierarchical-clustering.fields.assignmentType"></label>
       <div class="flex flex-row gap-4">
         <p-radioButton
-          name="generationStrategy"
-          [value]="GenerationStrategy.COORDINATES"
-          formControlName="generationStrategy"
+          name="assignmentType"
+          [value]="AssignmentType.COORDINATES"
+          formControlName="assignmentType"
           inputId="stratCoords"
         ></p-radioButton>
         <label for="stratCoords" transloco="taskTypes.hierarchical-clustering.fields.strategy.coordinates"></label>
 
         <p-radioButton
-          name="generationStrategy"
-          [value]="GenerationStrategy.MATRIX"
-          formControlName="generationStrategy"
+          name="assignmentType"
+          [value]="AssignmentType.MATRIX"
+          formControlName="assignmentType"
           inputId="stratMatrix"
         ></p-radioButton>
         <label for="stratMatrix"  transloco="taskTypes.hierarchical-clustering.fields.strategy.matrix"></label>
       </div>
-      @if (form.controls.generationStrategy.dirty || form.controls.generationStrategy.touched) {
+      @if (form.controls.assignmentType.dirty || form.controls.assignmentType.touched) {
         <small class="block mt-1 p-error">
-          {{ getError(form.controls.generationStrategy, 'taskTypes.hierarchical-clustering.fields.generationStrategy') }}
+          {{ getError(form.controls.assignmentType, 'taskTypes.hierarchical-clustering.fields.assignmentType') }}
         </small>
       }
     </div>
 
-    @if (form.controls.generationStrategy.getRawValue() === GenerationStrategy.COORDINATES) {
+    @if (form.controls.assignmentType.getRawValue() === AssignmentType.COORDINATES) {
       <div class="field mb-4 col-12">
         <label transloco="taskTypes.hierarchical-clustering.fields.distanceMetric"></label>
         <div class="flex flex-row gap-4">
@@ -56,7 +56,7 @@
     }
 
     <div class="field mb-4 col-12 md:col-6">
-      <label for="solution" transloco="taskTypes.hierarchical-clustering.fields.nDataPoints"></label>
+      <label for="nDataPoints" transloco="taskTypes.hierarchical-clustering.fields.nDataPoints"></label>
       <p-inputNumber inputId="nDataPoints" formControlName="nDataPoints" [maxFractionDigits]="0" />
       @if (form.controls.nDataPoints.dirty || form.controls.nDataPoints.touched) {
         <small class="block mt-1 p-error">
@@ -87,6 +87,26 @@
       @if (form.controls.linkageMethod.dirty || form.controls.linkageMethod.touched) {
         <small class="block mt-1 p-error">
           {{ getError(form.controls.linkageMethod, 'taskTypes.hierarchical-clustering.fields.linkageMethod') }}
+        </small>
+      }
+    </div>
+
+    <div class="field mb-4 col-12 md:col-6">
+      <label for="pointsPerCorrectCluster" transloco="taskTypes.hierarchical-clustering.fields.pointsPerCorrectCluster"></label>
+      <p-inputNumber inputId="pointsPerCorrectCluster" formControlName="pointsPerCorrectCluster" [maxFractionDigits]="2" />
+      @if (form.controls.pointsPerCorrectCluster.dirty || form.controls.pointsPerCorrectCluster.touched) {
+        <small class="block mt-1 p-error">
+          {{ getError(form.controls.pointsPerCorrectCluster, 'taskTypes.hierarchical-clustering.fields.pointsPerCorrectCluster') }}
+        </small>
+      }
+    </div>
+
+    <div class="field mb-4 col-12 md:col-6">
+      <label for="wrongOrderPenalty" transloco="taskTypes.hierarchical-clustering.fields.wrongOrderPenalty"></label>
+      <p-inputNumber inputId="wrongOrderPenalty" formControlName="wrongOrderPenalty" [maxFractionDigits]="2" />
+      @if (form.controls.wrongOrderPenalty.dirty || form.controls.wrongOrderPenalty.touched) {
+        <small class="block mt-1 p-error">
+          {{ getError(form.controls.wrongOrderPenalty, 'taskTypes.hierarchical-clustering.fields.wrongOrderPenalty') }}
         </small>
       }
     </div>
