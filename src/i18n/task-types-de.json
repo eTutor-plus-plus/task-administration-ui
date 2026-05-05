@@ -215,7 +215,10 @@
           "complete": "Complete (maximale Distanz)"
         },
         "pointsPerCorrectCluster": "Punkte pro korrektem Cluster",
-        "wrongOrderPenalty": "Fixer Punkteabzug für falsche Reihenfolge (der Distanzen)"
+        "wrongOrderPenalty": "Fixer Punkteabzug für falsche Reihenfolge (der Distanzen)",
+
+        "coordinatePoints": "Koordinatenliste",
+        "distanceMatrix": "Distanzmatrix"
       }
     }
   }

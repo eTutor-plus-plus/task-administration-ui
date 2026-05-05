@@ -51,6 +51,12 @@ export class TaskTypeHierarchicalClusteringComponent extends TaskTypeFormCompone
         this.parentForm?.controls.maxPoints.setValue(null);
       }
     });
+
+    this.form.addControl('coordinatePoints', new FormArray<FormGroup<{
+        label: FormControl<string | null>;
+        x: FormControl<number | null>;
+        y: FormControl<number | null>;
+    }>>([]));
     this.form.addControl('distanceMatrix', new FormGroup({
       labels: new FormArray<FormControl<string | null>>([]),
       distances: new FormArray<FormArray<FormControl<number | null>>>([])
@@ -63,6 +69,14 @@ export class TaskTypeHierarchicalClusteringComponent extends TaskTypeFormCompone
 
   constructor() {
     super();
+  }
+
+  get coordinatePoints(): FormArray<FormGroup<{
+      label: FormControl<string | null>;
+      x: FormControl<number | null>;
+      y: FormControl<number | null>;
+    }>> {
+    return this.form.get('coordinatePoints') as any;
   }
 
   get distanceMatrixGroup(): FormGroup {
@@ -82,26 +96,55 @@ export class TaskTypeHierarchicalClusteringComponent extends TaskTypeFormCompone
   }
 
   protected override onOriginalDataChanged(data: unknown): void {
-    const typedData = data as { distanceMatrix?: { labels?: string[], distances?: number[][] } };
+    const typedData = data as {
+      distanceMatrix?: { labels?: string[], distances?: number[][] },
+      coordinatePoints?: { label: string; x: number; y: number }[]
+    };
+
     const matrix = typedData?.distanceMatrix;
+    const coordinates = typedData?.coordinatePoints;
 
-    if (!matrix?.labels || !matrix?.distances || !this.form) return;
+    if (!this.form) return;
 
-    this.labelsArray.clear();
-    this.distancesArray.clear();
-
-    for (const label of matrix.labels) {
-      this.labelsArray.push(new FormControl<string | null>(label, [Validators.required]));
-    }
-
-    for (const row of matrix.distances) {
-      const rowArray = new FormArray<FormControl<number | null>>(
-        row.map(value => new FormControl<number | null>(value, [Validators.required]))
+    if (coordinates && coordinates.length > 0) {
+      const coordinateArray = new FormArray(
+        coordinates.map(point =>
+          new FormGroup({
+            label: new FormControl(point.label, [Validators.required]),
+            x: new FormControl(point.x, [Validators.required]),
+            y: new FormControl(point.y, [Validators.required]),
+          })
+        )
       );
-      this.distancesArray.push(rowArray);
+
+      this.form.setControl('coordinatePoints', coordinateArray);
+    } else {
+      // completely clear coordinate list if it is null
+      this.form.setControl('coordinatePoints', new FormArray<FormGroup<{
+          label: FormControl<string | null>;
+          x: FormControl<number | null>;
+          y: FormControl<number | null>;
+        }>>([]));
     }
 
-    setTimeout(() => this.syncSymmetry());
+    if (matrix?.labels && matrix?.distances) {
+      const labels = new FormArray(
+        matrix.labels.map(l => new FormControl(l, [Validators.required]))
+      );
+
+      const distances = new FormArray(
+        matrix.distances.map(row =>
+          new FormArray(
+            row.map(v => new FormControl(v, [Validators.required]))
+          )
+        )
+      );
+
+      this.distanceMatrixGroup.setControl('labels', labels);
+      this.distanceMatrixGroup.setControl('distances', distances);
+
+      setTimeout(() => this.syncSymmetry());
+    }
 
     this.distanceMatrixGroup.updateValueAndValidity();
   }
@@ -140,6 +183,11 @@ interface TaskTypeForm {
   linkageMethod: FormControl<LinkageMethod | null>;
   pointsPerCorrectCluster: FormControl<number | null>;
   wrongOrderPenalty: FormControl<number | null>;
+  coordinatePoints: FormArray<FormGroup<{
+    label: FormControl<string | null>;
+    x: FormControl<number | null>;
+    y: FormControl<number | null>;
+  }>>;
   distanceMatrix: FormGroup<{
     labels: FormArray<FormControl<string | null>>;
     distances: FormArray<FormArray<FormControl<number | null>>>;

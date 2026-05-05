@@ -211,7 +211,10 @@
           "complete": "Complete (maximum distance)"
         },
         "pointsPerCorrectCluster": "Points per correct cluster",
-        "wrongOrderPenalty": "Fixed penalty for wrong order (of distances)"
+        "wrongOrderPenalty": "Fixed penalty for wrong order (of distances)",
+
+        "coordinatePoints": "Coordinate list",
+        "distanceMatrix": "Distance matrix"
       }
     }
   }
