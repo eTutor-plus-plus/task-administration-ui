@@ -13,6 +13,11 @@
       <p-dropdown inputId="feedbackLevel" [options]="feedbackLevels" formControlName="feedbackLevel"/>
     </div>
   </div>
+  <div class="field mb-4" >
+    <label for="description" [transloco]="'submission.fields.description'"></label>
+    <dke-editor id="description" [(ngModel)]="description" [ngModelOptions]="{standalone: true}" aria-readonly="true" [disabled]="true"/>
+  </div>
+
 
   <div class="field mb-4">
     <label for="submission" [transloco]="'submission.fields.submission'"></label>

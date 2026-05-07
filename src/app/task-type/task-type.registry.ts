@@ -12,6 +12,12 @@ import { TaskTypeFanfComponent } from './task-type-fanf/task-type-fanf.component
 import { TaskTypeUmlComponent } from './task-type-uml/task-type-uml.component';
 import { TaskTypeKnnComponent } from './task-type-knn/task-type-knn.component';
 
+import { TaskTypeJDBCComponent } from './task-type-jdbc/task-type-jdbc.component';
+
+import { TaskTypeOwlComponent } from './task-type-owl/task-type-owl.component';
+
+
+
 /**
  * Registry for task types.
  */
@@ -113,6 +119,25 @@ return $d`,
       submissionTemplate: '',
       supportsDescriptionGeneration: true,
       submissionInputLanguage: 'plaintext'
+
+    },
+    {
+      name: 'jdbc',
+      supportedTaskGroupTypes: ['jdbc'],
+      component: TaskTypeJDBCComponent,
+      submissionTemplate: '',
+      supportsDescriptionGeneration: false,
+      submissionInputLanguage: 'jdbc'
+
+
+    }, {
+      name: 'owl',
+      supportedTaskGroupTypes: [],
+      component: TaskTypeOwlComponent,
+      submissionTemplate: '',
+      supportsDescriptionGeneration: true,
+      submissionInputLanguage: 'owl'
+
     }
 
   ];

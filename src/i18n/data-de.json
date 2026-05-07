@@ -188,6 +188,7 @@
       "language": "Sprache",
       "mode": "Auswertungsmodus",
       "feedbackLevel": "Feedback-Level",
+      "description": "Beschreibung",
       "submission": "Abgabe",
       "result": "Ergebnis",
       "maxPoints": "Max. Punkte",

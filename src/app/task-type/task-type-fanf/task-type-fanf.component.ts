@@ -78,7 +78,7 @@ export class TaskTypeFanfComponent extends TaskTypeFormComponent<TaskTypeForm> {
     this.form.addControl('minimalCoverPenaltyPerRedundantDependency', new FormControl<number | null>(null));
     this.form.addControl('minimalCoverPenaltyPerMissingDependencyVsSolution', new FormControl<number | null>(null));
     this.form.addControl('minimalCoverPenaltyPerIncorrectDependencyVsSolution', new FormControl<number | null>(null));
-  this.form.addControl('normalFormDeterminationPenaltyForIncorrectOverallNormalform', new FormControl<number | null>(null));
+    this.form.addControl('normalFormDeterminationPenaltyForIncorrectOverallNormalform', new FormControl<number | null>(null));
     this.form.addControl('normalFormDeterminationPenaltyPerIncorrectDependencyNormalform', new FormControl<number | null>(null));
     this.form.addControl('normalizationTargetLevel', new FormControl<string | null>(null));
     this.form.addControl('normalizationMaxLostDependencies', new FormControl<number | null>(null));

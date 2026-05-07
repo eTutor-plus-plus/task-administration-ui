@@ -287,7 +287,9 @@ export class TaskFormComponent extends EditFormComponent<TaskDto, TaskService, T
       },
       data: {
         taskId: this.originalEntity.id,
-        taskType: this.originalEntity.taskType
+        taskType: this.originalEntity.taskType,
+        descriptionDe: this.originalEntity.descriptionDe,
+        descriptionEn: this.originalEntity.descriptionEn
       }
     });
   }
@@ -299,6 +301,7 @@ export class TaskFormComponent extends EditFormComponent<TaskDto, TaskService, T
     try {
       const value = this.form.value;
       value.title = value.title + ' (Clone)';
+      value.status = 'DRAFT';
       const result = await this.entityService.create(this.modifyValueBeforeSend(value as any, 'create'));
       this.messageService.add({
         severity: 'success',

@@ -9,6 +9,22 @@
         "solution": "Gesuchte Zahl"
       }
     },
+    "jdbc": {
+      "title": "JDBC",
+      "fields": {
+        "solution": "Lösung",
+        "tables": "Zu prüfende Tabellen",
+        "wrongOutputPenalty": "Punkteabzug fehlerhafte Ausgabe",
+        "exceptionHandlingPenalty": "Punkteabzug Exception Handling",
+        "wrongDbContentPenalty": "Punkteabzug falscher DB-Inhalt",
+        "checkAutocommit": "Autocommit prüfen",
+        "autocommitPenalty": "Punkteabzug Autocommit",
+        "variables": "Variablen (optional)"
+      },
+      "errors": {
+        "tables": "tabelle1, tabelle2, tabelle3"
+      }
+    },
     "xquery": {
       "title": "XQuery",
       "fields": {
@@ -249,6 +265,16 @@
         "min": "Der Wert muss größer als 0 sein"
       }
     } 
+    "owl": {
+      "title": "OWL",
+      "fields": {
+        "solution": "Lösungs Ontologie",
+        "pointsPerClass": "Abgezogene Punkte für falsche Klassen & Individuen (Syntax:",
+        "pointsPerRedundantAxiom": "Abgezogene Punkte für redundante Axiome",
+        "pointsPerUndefinedClass": "Abgezogene Punkte für undefinierte Klassen & Individuen",
+        "pointsPerAxiomWithoutEntity": "Abgezogene Punkte für falsche oder fehlende Axiome ohne Klasse oder Individuum"
+      }
+    }
   }
 }
 
