@@ -10,6 +10,7 @@ import { TaskTypeSqlComponent } from './task-type-sql/task-type-sql.component';
 import { TaskTypeRelalgComponent } from './task-type-relalg/task-type-relalg.component';
 import { TaskTypeFanfComponent } from './task-type-fanf/task-type-fanf.component';
 import { TaskTypeUmlComponent } from './task-type-uml/task-type-uml.component';
+import { TaskTypeKnnComponent } from './task-type-knn/task-type-knn.component';
 
 import { TaskTypeJDBCComponent } from './task-type-jdbc/task-type-jdbc.component';
 
@@ -28,7 +29,7 @@ export class TaskTypeRegistry {
   private static readonly taskTypes: {
     name: string,
     supportedTaskGroupTypes: string[],
-    component?: Type<TaskTypeFormComponent<any>>,
+    component?: Type<any>,
     submissionTemplate?: string,
     supportsDescriptionGeneration?: boolean,
     submissionInputLanguage?: string // set the monaco language if the submission data have following format {"input": "<USER INPUT>"}, otherwise leave this undefined
@@ -110,6 +111,14 @@ return $d`,
       supportsDescriptionGeneration: false,
       submissionInputLanguage: 'uml'
 
+    },
+    { 
+      name: 'knn',
+      supportedTaskGroupTypes: [],
+      component: TaskTypeKnnComponent,
+      submissionTemplate: '',
+      supportsDescriptionGeneration: true,
+      submissionInputLanguage: 'plaintext'
 
     },
     {
