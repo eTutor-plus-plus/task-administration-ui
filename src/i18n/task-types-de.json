@@ -102,6 +102,7 @@
         "successfulStatements": "Erfolgreiche Statements",
         "unsuccessfulStatements": "Fehlerhafte Statements",
         "whitelist": "Whitelist",
+        "whitelistInfo": "Wörter durch Semikolons getrennt eingeben. Alle Wörter, die bereits in der Lösung verwendet wurden, werden automatisch zur Whitelist hinzugefügt.",
         "tablePoints": "Punkte pro gesamter Tabelle inklusive Spalten",
         "constraintPoints": "Punkte pro Constraint",
         "assertionPoints": "Punkte pro Assertion",

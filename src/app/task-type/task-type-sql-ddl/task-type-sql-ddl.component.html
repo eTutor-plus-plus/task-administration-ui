@@ -13,7 +13,9 @@
 
       <div class="field mb-4 col-12">
         <label for="whitelist" transloco="taskTypes.sql-ddl.fields.whitelist"></label>
-        <textarea id="whitelist" pInputTextarea formControlName="whitelist" rows="4" autocomplete="off"></textarea>
+        <br>
+        <small transloco="taskTypes.sql-ddl.fields.whitelistInfo" class="mb-2"></small>
+        <textarea id="whitelist" pInputTextarea formControlName="whitelist" rows="4" autocomplete="off" class="mt-2"></textarea>
         @if (form.controls.whitelist.dirty || form.controls.whitelist.touched) {
           <small class="block mt-1 p-error">
             {{ getError(form.controls.whitelist, 'taskTypes.sql-ddl.fields.whitelist') }}

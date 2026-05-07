@@ -100,6 +100,7 @@
           "successfulStatements": "Successful Statements",
           "unsuccessfulStatements": "Unsuccessful Statements",
           "whitelist": "Whitelist",
+          "whitelistInfo": "Enter the words separated by semicolons. All words that have already been used in the solution are automatically added to the whitelist.",
           "tablePoints": "Points per entire table including columns",
           "constraintPoints": "Points per constraint",
           "assertionPoints": "Points per assertion",
