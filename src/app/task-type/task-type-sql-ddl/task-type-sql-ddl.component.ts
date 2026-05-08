@@ -35,6 +35,7 @@ export class TaskTypeSqlDdlComponent extends TaskTypeFormComponent<TaskTypeForm>
   readonly editorOptions: editor.IStandaloneEditorConstructionOptions = {
     language: 'sql'
   };
+  generatedWhitelist = '';
   insertStatements = new FormArray<StatementFormGroup>([]);
   assertionStatements = new FormArray<StatementFormGroup>([]);
 
@@ -76,8 +77,24 @@ export class TaskTypeSqlDdlComponent extends TaskTypeFormComponent<TaskTypeForm>
   }
 
   private setSqlDdlData(dto: any) {
+    this.generatedWhitelist = this.formatGeneratedWhitelist(dto?.generatedWhitelist);
     this.setStatementData(this.insertStatements, dto?.insertStatements, true);
     this.setStatementData(this.assertionStatements, dto?.assertionStatements);
+  }
+
+  private formatGeneratedWhitelist(value: unknown): string {
+    if (Array.isArray(value)) {
+      return value
+        .filter((entry): entry is string | number => entry !== null && entry !== undefined)
+        .map(entry => String(entry))
+        .join('; ');
+    }
+
+    if (value === null || value === undefined) {
+      return '';
+    }
+
+    return String(value);
   }
 
   private createStatementGroup(entry?: any): StatementFormGroup {

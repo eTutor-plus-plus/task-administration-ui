@@ -1,3 +1,12 @@
 .insertStatementsWrapper {
-    border-bottom: 1px solid lightgray;
+  border-bottom: 1px solid lightgray;
+}
+
+.generatedWhitelistDisplay:disabled {
+  opacity: 1;
+  background-color: var(--surface-100);
+  color: var(--text-color-secondary);
+  border-color: var(--surface-border);
+  cursor: default;
+  pointer-events: none;
 }

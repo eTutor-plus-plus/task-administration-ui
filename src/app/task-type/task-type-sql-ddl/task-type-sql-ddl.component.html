@@ -24,6 +24,14 @@
       </div>
 
       <div class="field mb-4 col-12">
+        <label for="generatedWhitelist" transloco="taskTypes.sql-ddl.fields.generatedWhitelist"></label>
+        <br>
+        <small transloco="taskTypes.sql-ddl.fields.generatedWhitelistInfo" class="mb-2"></small>
+        <textarea id="generatedWhitelist" pInputTextarea [value]="generatedWhitelist" rows="4" autocomplete="off"
+                  class="mt-2 generatedWhitelistDisplay" disabled></textarea>
+      </div>
+
+      <div class="field mb-4 col-12">
         <label for="tablePoints" [transloco]="'taskTypes.sql-ddl.fields.tablePoints'"></label>
         <input id="tablePoints" type="number" pInputText formControlName="tablePoints" autocomplete="off">
         @if (form.controls.tablePoints.dirty || form.controls.tablePoints.touched) {
