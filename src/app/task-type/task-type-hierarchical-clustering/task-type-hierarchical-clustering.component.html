@@ -2,7 +2,7 @@
   <div class="grid formgrid p-fluid">
 
     <div class="field mb-4 col-12">
-      <label transloco="taskTypes.hierarchical-clustering.fields.assignmentType"></label>
+      <label transloco="taskTypes.hierarchical-clustering.fields.assignmentType" class="font-bold"></label>
       <div class="flex flex-row gap-4">
         <p-radioButton
           name="assignmentType"
@@ -29,7 +29,7 @@
 
     @if (form.controls.assignmentType.getRawValue() === AssignmentType.COORDINATES) {
       <div class="field mb-4 col-12">
-        <label transloco="taskTypes.hierarchical-clustering.fields.distanceMetric"></label>
+        <label transloco="taskTypes.hierarchical-clustering.fields.distanceMetric" class="font-bold"></label>
         <div class="flex flex-row gap-4">
           <p-radioButton
             name="distanceMetric"
@@ -56,7 +56,7 @@
     }
 
     <div class="field mb-4 col-12 md:col-6">
-      <label for="nDataPoints" transloco="taskTypes.hierarchical-clustering.fields.nDataPoints"></label>
+      <label for="nDataPoints" transloco="taskTypes.hierarchical-clustering.fields.nDataPoints" class="font-bold"></label>
       <p-inputNumber inputId="nDataPoints" formControlName="nDataPoints" [maxFractionDigits]="0" />
       @if (form.controls.nDataPoints.dirty || form.controls.nDataPoints.touched) {
         <small class="block mt-1 p-error">
@@ -66,7 +66,7 @@
     </div>
 
     <div class="field mb-4 col-12">
-      <label transloco="taskTypes.hierarchical-clustering.fields.linkageMethod"></label>
+      <label transloco="taskTypes.hierarchical-clustering.fields.linkageMethod" class="font-bold"></label>
       <div class="flex flex-row gap-4">
         <p-radioButton
           name="linkageMethod"
@@ -92,7 +92,7 @@
     </div>
 
     <div class="field mb-4 col-12 md:col-6">
-      <label for="pointsPerCorrectCluster" transloco="taskTypes.hierarchical-clustering.fields.pointsPerCorrectCluster"></label>
+      <label for="pointsPerCorrectCluster" transloco="taskTypes.hierarchical-clustering.fields.pointsPerCorrectCluster" class="font-bold"></label>
       <p-inputNumber inputId="pointsPerCorrectCluster" formControlName="pointsPerCorrectCluster" [maxFractionDigits]="2" />
       @if (form.controls.pointsPerCorrectCluster.dirty || form.controls.pointsPerCorrectCluster.touched) {
         <small class="block mt-1 p-error">
@@ -102,7 +102,7 @@
     </div>
 
     <div class="field mb-4 col-12 md:col-6">
-      <label for="wrongOrderPenalty" transloco="taskTypes.hierarchical-clustering.fields.wrongOrderPenalty"></label>
+      <label for="wrongOrderPenalty" transloco="taskTypes.hierarchical-clustering.fields.wrongOrderPenalty" class="font-bold"></label>
       <p-inputNumber inputId="wrongOrderPenalty" formControlName="wrongOrderPenalty" [maxFractionDigits]="2" />
       @if (form.controls.wrongOrderPenalty.dirty || form.controls.wrongOrderPenalty.touched) {
         <small class="block mt-1 p-error">
@@ -114,7 +114,7 @@
     <div class="flex flex-column gap-4">
       @if (coordinatePoints.length > 0) {
         <div class="flex flex-column">
-          <label transloco="taskTypes.hierarchical-clustering.fields.coordinatePoints" class="block mb-2"></label>
+          <label transloco="taskTypes.hierarchical-clustering.fields.coordinatePoints" class="block mb-2 font-bold"></label>
           <div class="inline-block">
             <table class="border-collapse w-auto">
               <thead>
@@ -162,7 +162,7 @@
 
       @if (labelsArray.length > 0) {
         <div class="flex flex-column">
-          <label transloco="taskTypes.hierarchical-clustering.fields.distanceMatrix" class="block mb-2"></label>
+          <label transloco="taskTypes.hierarchical-clustering.fields.distanceMatrix" class="block mb-2 font-bold"></label>
           <div class="col-12 overflow-x-auto" [formGroup]="distanceMatrixGroup">
             <table class="distance-matrix-table w-full">
               <thead>
@@ -198,6 +198,13 @@
               </tbody>
             </table>
           </div>
+        </div>
+      }
+
+      @if (solution) {
+        <div class="field mb-4 col-12 md:col-6">
+          <label for="solution" transloco="taskTypes.hierarchical-clustering.solution" class="font-bold"></label>
+          <div style="white-space: pre-line;">{{ solution }}</div>
         </div>
       }
     </div>

@@ -215,7 +215,8 @@
 
         "coordinatePoints": "Coordinate list",
         "distanceMatrix": "Distance matrix"
-      }
+      },
+      "solution": "Solution"
     }
   }
 }

@@ -20,6 +20,7 @@ import { RadioButtonModule } from 'primeng/radiobutton';
   styleUrl: './task-type-hierarchical-clustering.component.scss'
 })
 export class TaskTypeHierarchicalClusteringComponent extends TaskTypeFormComponent<TaskTypeForm> {
+
   protected override initForm(): void {
     this.form.addControl('assignmentType', new FormControl<AssignmentType | null>(AssignmentType.COORDINATES, [Validators.required]));
     this.form.addControl('distanceMetric', new FormControl<DistanceMetric | null>(DistanceMetric.EUCLIDEAN, [Validators.required]));
@@ -67,6 +68,8 @@ export class TaskTypeHierarchicalClusteringComponent extends TaskTypeFormCompone
   protected readonly DistanceMetric = DistanceMetric;
   protected readonly LinkageMethod = LinkageMethod;
 
+  solution: string | undefined;
+
   constructor() {
     super();
   }
@@ -98,9 +101,11 @@ export class TaskTypeHierarchicalClusteringComponent extends TaskTypeFormCompone
   protected override onOriginalDataChanged(data: unknown): void {
     const typedData = data as {
       distanceMatrix?: { labels?: string[], distances?: number[][] },
-      coordinatePoints?: { label: string; x: number; y: number }[]
+      coordinatePoints?: { label: string; x: number; y: number }[],
+      solution?: string
     };
 
+    this.solution = typedData?.solution;
     const matrix = typedData?.distanceMatrix;
     const coordinates = typedData?.coordinatePoints;
 
@@ -177,8 +182,8 @@ export class TaskTypeHierarchicalClusteringComponent extends TaskTypeFormCompone
 }
 
 interface TaskTypeForm {
-  assignmentType: FormControl<AssignmentType | null>
-  distanceMetric: FormControl<DistanceMetric | null>
+  assignmentType: FormControl<AssignmentType | null>;
+  distanceMetric: FormControl<DistanceMetric | null>;
   nDataPoints: FormControl<number | null>;
   linkageMethod: FormControl<LinkageMethod | null>;
   pointsPerCorrectCluster: FormControl<number | null>;

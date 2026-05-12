@@ -219,7 +219,8 @@
 
         "coordinatePoints": "Koordinatenliste",
         "distanceMatrix": "Distanzmatrix"
-      }
+      },
+      "solution": "Lösung"
     }
   }
 }
