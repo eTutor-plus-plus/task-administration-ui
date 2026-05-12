@@ -207,6 +207,13 @@
           <div style="white-space: pre-line;">{{ solution }}</div>
         </div>
       }
+
+      @if (isDendrogramRendered) {
+        <div>
+          <label for="dendrogram" transloco="taskTypes.hierarchical-clustering.dendrogram" class="font-bold"></label>
+          <div [innerHTML]="dendrogram"></div>
+        </div>
+      }
     </div>
 
   </div>

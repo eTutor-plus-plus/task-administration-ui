@@ -5,6 +5,7 @@ import { InputNumberModule } from 'primeng/inputnumber';
 import { TranslocoDirective } from '@ngneat/transloco';
 import { combineLatest, startWith, Subscription } from 'rxjs';
 import { RadioButtonModule } from 'primeng/radiobutton';
+import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 
 @Component({
   selector: 'dke-task-type-hierarchical-clustering',
@@ -68,9 +69,11 @@ export class TaskTypeHierarchicalClusteringComponent extends TaskTypeFormCompone
   protected readonly DistanceMetric = DistanceMetric;
   protected readonly LinkageMethod = LinkageMethod;
 
-  solution: string | undefined;
+  solution?: string;
+  dendrogram?: SafeHtml;
+  isDendrogramRendered = false;
 
-  constructor() {
+  constructor(private sanitizer: DomSanitizer) {
     super();
   }
 
@@ -102,10 +105,20 @@ export class TaskTypeHierarchicalClusteringComponent extends TaskTypeFormCompone
     const typedData = data as {
       distanceMatrix?: { labels?: string[], distances?: number[][] },
       coordinatePoints?: { label: string; x: number; y: number }[],
-      solution?: string
+      solution?: string,
+      dendrogramSvg?: string
     };
 
     this.solution = typedData?.solution;
+    const svg = typedData?.dendrogramSvg!;
+    if (svg && svg.trim().length > 0) {
+      this.dendrogram = this.sanitizer.bypassSecurityTrustHtml(svg);
+
+      this.isDendrogramRendered = true;
+    } else {
+      this.isDendrogramRendered = false;
+    }
+
     const matrix = typedData?.distanceMatrix;
     const coordinates = typedData?.coordinatePoints;
 

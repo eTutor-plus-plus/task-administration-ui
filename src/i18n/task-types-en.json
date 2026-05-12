@@ -216,7 +216,8 @@
         "coordinatePoints": "Coordinate list",
         "distanceMatrix": "Distance matrix"
       },
-      "solution": "Solution"
+      "solution": "Solution",
+      "dendrogram": "Dendrogram"
     }
   }
 }

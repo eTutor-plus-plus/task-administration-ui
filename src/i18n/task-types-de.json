@@ -220,7 +220,8 @@
         "coordinatePoints": "Koordinatenliste",
         "distanceMatrix": "Distanzmatrix"
       },
-      "solution": "Lösung"
+      "solution": "Lösung",
+      "dendrogram": "Dendrogramm"
     }
   }
 }
