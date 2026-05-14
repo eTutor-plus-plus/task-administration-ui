@@ -1,4 +1,29 @@
 <div [formGroup]="form">
+
+  <div class="surface-card p-4 shadow-2 border-round p-fluid mb-4">
+    <div class="flex justify-content-between align-items-center mb-3">
+      <label class="font-semibold">Grading Variables</label>
+      <p-button icon="pi pi-plus" severity="success" (click)="addVariable()"></p-button>
+    </div>
+
+    <div formArrayName="gradingVariables">
+      <div
+        *ngFor="let variable of gradingVariables.controls; let i = index"
+        [formGroupName]="i"
+        class="mb-2 flex align-items-center gap-2">
+        <input
+          pInputText
+          formControlName="name"
+          class="flex-1">
+        <p-button icon="pi pi-trash" severity="danger" size="small" (click)="removeVariable(i)"></p-button>
+      </div>
+
+      @if (gradingVariables.length === 0) {
+        <small class="text-500">No grading variables defined. Add variables to enable auto-generating checks.</small>
+      }
+    </div>
+  </div>
+
   <div class="surface-card p-4 shadow-2 border-round p-fluid mb-4">
     <div class="grid formgrid p-fluid">
       <div class="field col-12">
@@ -61,6 +86,11 @@
              {{ getError(form.controls.solution, 'taskTypes.python.fields.solution') }}
           </small>
         }
+        @if (missingFromSolution().length > 0) {
+          <small class="block mt-1 p-warning" style="color: var(--yellow-600)">
+            Warning: the following grading variables are not found in the solution: {{ missingFromSolution().join(', ') }}
+          </small>
+        }
        </div>
     </div>
   </div>
@@ -71,18 +101,23 @@
       <label transloco="taskTypes.python.fields.checks"></label>
 
       <div class="flex gap-2">
-        <p-menu #menu [model]="menuItems" [popup]="true"></p-menu>
-
+        <p-button
+          label="Auto-generate"
+          icon="pi pi-sync"
+          severity="secondary"
+          [disabled]="gradingVariables.length === 0"
+          (click)="generateChecksFromVariables()">
+        </p-button>
         <p-button
           icon="pi pi-plus"
           severity="success"
-          (click)="menu.toggle($event)">
+          (click)="addCheck()">
         </p-button>
       </div>
     </div>
 
     <div formArrayName="checks">
-      <div *ngFor="let check of checks.controls; let i = index" [formGroupName]="i" class = "mb-4 p-3 border-1 border-round surface-border">
+      <div *ngFor="let check of checks.controls; let i = index" [formGroupName]="i" class="mb-4 p-3 border-1 border-round surface-border">
 
         <div class="flex justify-content-between align-items-center mb-2">
           <span class="font-semibold">Check {{ i + 1 }}</span>
@@ -108,7 +143,7 @@
 
           <div class="field col-12">
             <label>Check</label>
-            <ngx-monaco-editor formControlName="check" [options]="editorOptions"   style="height: 40px;"></ngx-monaco-editor>
+            <ngx-monaco-editor formControlName="check" [options]="editorOptions" style="height: 40px;"></ngx-monaco-editor>
           </div>
         </div>
       </div>
@@ -124,4 +159,3 @@
   </div>
 
 </div>
-
