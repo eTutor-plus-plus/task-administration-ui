@@ -112,7 +112,7 @@ return $d`,
       supportedTaskGroupTypes: [],
       component: TaskTypePythonComponent,
       submissionTemplate: '',
-      supportsDescriptionGeneration: false,
+      supportsDescriptionGeneration: true,
       submissionInputLanguage: 'python'
     }
 
