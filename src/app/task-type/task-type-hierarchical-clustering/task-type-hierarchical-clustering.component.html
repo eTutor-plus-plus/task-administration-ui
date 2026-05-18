@@ -53,6 +53,26 @@
           </small>
         }
       </div>
+
+      <div class="field mb-4 col-12 md:col-6">
+        <label for="lengthX" transloco="taskTypes.hierarchical-clustering.fields.lengthX" class="font-bold"></label>
+        <p-inputNumber inputId="lengthX" formControlName="lengthX" [maxFractionDigits]="0" />
+        @if (form.controls.lengthX.dirty || form.controls.lengthX.touched) {
+          <small class="block mt-1 p-error">
+            {{ getError(form.controls.lengthX, 'taskTypes.hierarchical-clustering.fields.lengthX') }}
+          </small>
+        }
+      </div>
+
+      <div class="field mb-4 col-12 md:col-6">
+        <label for="lengthY" transloco="taskTypes.hierarchical-clustering.fields.lengthY" class="font-bold"></label>
+        <p-inputNumber inputId="lengthY" formControlName="lengthY" [maxFractionDigits]="0" />
+        @if (form.controls.lengthY.dirty || form.controls.lengthY.touched) {
+          <small class="block mt-1 p-error">
+            {{ getError(form.controls.lengthY, 'taskTypes.hierarchical-clustering.fields.lengthY') }}
+          </small>
+        }
+      </div>
     }
 
     <div class="field mb-4 col-12 md:col-6">

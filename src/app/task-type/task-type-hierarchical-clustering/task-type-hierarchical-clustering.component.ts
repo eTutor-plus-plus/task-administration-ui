@@ -25,20 +25,43 @@ export class TaskTypeHierarchicalClusteringComponent extends TaskTypeFormCompone
   protected override initForm(): void {
     this.form.addControl('assignmentType', new FormControl<AssignmentType | null>(AssignmentType.COORDINATES, [Validators.required]));
     this.form.addControl('distanceMetric', new FormControl<DistanceMetric | null>(DistanceMetric.EUCLIDEAN, [Validators.required]));
-    this.form.get('assignmentType')!.valueChanges.subscribe(value => {
-      const distanceControl = this.form.get('distanceMetric');
-
-      if (value === AssignmentType.COORDINATES) {
-        distanceControl?.setValidators([Validators.required]);
-      } else {
-        distanceControl?.clearValidators();
-        distanceControl?.setValue(null);
-      }
-    });
-    this.form.addControl('nDataPoints', new FormControl<number | null>(null));
+    this.form.addControl('nDataPoints', new FormControl<number | null>(null, [Validators.required]));
     this.form.addControl('linkageMethod', new FormControl<LinkageMethod | null>(LinkageMethod.SINGLE, [Validators.required]));
     this.form.addControl('pointsPerCorrectCluster', new FormControl<number | null>(null, [Validators.required]));
     this.form.addControl('wrongOrderPenalty', new FormControl<number | null>(null));
+    this.form.addControl('lengthX', new FormControl<number | null>(10, [Validators.required]));
+    this.form.addControl('lengthY', new FormControl<number | null>(10, [Validators.required]));
+    this.form.addControl('coordinatePoints', new FormArray<FormGroup<{
+        label: FormControl<string | null>;
+        x: FormControl<number | null>;
+        y: FormControl<number | null>;
+    }>>([]));
+    this.form.addControl('distanceMatrix', new FormGroup({
+      labels: new FormArray<FormControl<string | null>>([]),
+      distances: new FormArray<FormArray<FormControl<number | null>>>([])
+    }));
+
+    // changing validators for type-specific fields
+    this.form.get('assignmentType')!.valueChanges.subscribe(value => {
+      const metricControl = this.form.get('distanceMetric');
+      const lengthXControl = this.form.get('lengthX');
+      const lengthYControl = this.form.get('lengthY');
+
+      if (value === AssignmentType.COORDINATES) {
+        metricControl?.setValidators([Validators.required]);
+        lengthXControl?.setValidators([Validators.required]);
+        lengthYControl?.setValidators([Validators.required]);
+      } else {
+        metricControl?.clearValidators();
+        metricControl?.setValue(null);
+        lengthXControl?.clearValidators();
+        lengthXControl?.setValue(10);
+        lengthYControl?.clearValidators();
+        lengthYControl?.setValue(10);
+      }
+    });
+
+    // automatic max points calculation
     const nDataPointsControl = this.form.get('nDataPoints') as FormControl<number | null>;
     const pointsPerClusterControl = this.form.get('pointsPerCorrectCluster') as FormControl<number | null>;
 
@@ -53,16 +76,6 @@ export class TaskTypeHierarchicalClusteringComponent extends TaskTypeFormCompone
         this.parentForm?.controls.maxPoints.setValue(null);
       }
     });
-
-    this.form.addControl('coordinatePoints', new FormArray<FormGroup<{
-        label: FormControl<string | null>;
-        x: FormControl<number | null>;
-        y: FormControl<number | null>;
-    }>>([]));
-    this.form.addControl('distanceMatrix', new FormGroup({
-      labels: new FormArray<FormControl<string | null>>([]),
-      distances: new FormArray<FormArray<FormControl<number | null>>>([])
-    }));
   }
 
   protected readonly AssignmentType = AssignmentType;
@@ -201,6 +214,8 @@ interface TaskTypeForm {
   linkageMethod: FormControl<LinkageMethod | null>;
   pointsPerCorrectCluster: FormControl<number | null>;
   wrongOrderPenalty: FormControl<number | null>;
+  lengthX: FormControl<number | null>;
+  lengthY: FormControl<number | null>;
   coordinatePoints: FormArray<FormGroup<{
     label: FormControl<string | null>;
     x: FormControl<number | null>;

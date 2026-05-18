@@ -204,6 +204,8 @@
           "euclidean": "Euclidean",
           "manhattan": "Manhattan"
         },
+        "lengthX": "X-axis length",
+        "lengthY": "Y-axis length",
         "nDataPoints": "Number of points for clustering",
         "linkageMethod": "Linkage Method",
         "linkage": {
