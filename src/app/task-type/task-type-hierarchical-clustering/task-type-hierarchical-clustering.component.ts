@@ -6,6 +6,8 @@ import { TranslocoDirective } from '@ngneat/transloco';
 import { combineLatest, startWith, Subscription } from 'rxjs';
 import { RadioButtonModule } from 'primeng/radiobutton';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
+import { TaskService } from '../../api';
+import { Button, ButtonDirective } from 'primeng/button';
 
 @Component({
   selector: 'dke-task-type-hierarchical-clustering',
@@ -15,7 +17,8 @@ import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
     InputNumberModule,
     ReactiveFormsModule,
     TranslocoDirective,
-    RadioButtonModule
+    RadioButtonModule,
+    ButtonDirective
   ],
   templateUrl: './task-type-hierarchical-clustering.component.html',
   styleUrl: './task-type-hierarchical-clustering.component.scss'
@@ -83,10 +86,10 @@ export class TaskTypeHierarchicalClusteringComponent extends TaskTypeFormCompone
   protected readonly LinkageMethod = LinkageMethod;
 
   solution?: string;
-  dendrogram?: SafeHtml;
-  isDendrogramRendered = false;
+  dendrogram?: Blob;
+  dendrogramUrl?: string;
 
-  constructor(private sanitizer: DomSanitizer) {
+  constructor() {
     super();
   }
 
@@ -114,22 +117,43 @@ export class TaskTypeHierarchicalClusteringComponent extends TaskTypeFormCompone
     return this.distancesArray.at(rowIndex) as FormArray<FormControl<number | null>>;
   }
 
+  downloadDendrogram(): void {
+    if (!this.dendrogram || this.dendrogramUrl == null) {
+      return;
+    }
+
+    const a = document.createElement('a');
+    a.href = this.dendrogramUrl;
+    a.download = 'dendrogram.png';
+
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+  }
+
   protected override onOriginalDataChanged(data: unknown): void {
     const typedData = data as {
       distanceMatrix?: { labels?: string[], distances?: number[][] },
       coordinatePoints?: { label: string; x: number; y: number }[],
       solution?: string,
-      dendrogramSvg?: string
+      dendrogram?: string
     };
 
     this.solution = typedData?.solution;
-    const svg = typedData?.dendrogramSvg!;
-    if (svg && svg.trim().length > 0) {
-      this.dendrogram = this.sanitizer.bypassSecurityTrustHtml(svg);
+    const base64 = typedData?.dendrogram;
 
-      this.isDendrogramRendered = true;
-    } else {
-      this.isDendrogramRendered = false;
+    if (base64) {
+      const byteCharacters = atob(base64);
+      const byteNumbers = new Array(byteCharacters.length);
+
+      for (let i = 0; i < byteCharacters.length; i++) {
+        byteNumbers[i] = byteCharacters.charCodeAt(i);
+      }
+
+      const byteArray = new Uint8Array(byteNumbers);
+
+      this.dendrogram = new Blob([byteArray], { type: 'image/png' });
+      this.dendrogramUrl = URL.createObjectURL(this.dendrogram);
     }
 
     const matrix = typedData?.distanceMatrix;
@@ -204,6 +228,9 @@ export class TaskTypeHierarchicalClusteringComponent extends TaskTypeFormCompone
 
   ngOnDestroy(): void {
     this.symmetrySubscriptions.forEach(s => s.unsubscribe());
+    if (this.dendrogramUrl) {
+      URL.revokeObjectURL(this.dendrogramUrl);
+    }
   }
 }
 

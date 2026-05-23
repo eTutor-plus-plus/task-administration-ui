@@ -228,10 +228,21 @@
         </div>
       }
 
-      @if (isDendrogramRendered) {
+      @if (dendrogramUrl) {
         <div>
-          <label for="dendrogram" transloco="taskTypes.hierarchical-clustering.dendrogram" class="font-bold"></label>
-          <div [innerHTML]="dendrogram"></div>
+          <label class="font-bold block min-h-2rem" transloco="taskTypes.hierarchical-clustering.dendrogram"></label>
+          <img [src]="dendrogramUrl" class="top-50" alt="Dendrogram">
+        </div>
+
+        <div class="field mb-4 col-12">
+          <button
+            pButton
+            type="button"
+            icon="pi pi-download"
+            class="p-button-outlined w-auto"
+            style="gap: 0.5rem;"
+            (click)="downloadDendrogram()"
+            transloco="taskTypes.hierarchical-clustering.downloadPng"></button>
         </div>
       }
     </div>

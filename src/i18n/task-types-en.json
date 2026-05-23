@@ -219,7 +219,8 @@
         "distanceMatrix": "Distance matrix"
       },
       "solution": "Solution",
-      "dendrogram": "Dendrogram"
+      "dendrogram": "Dendrogram",
+      "downloadPng": "Download dendrogram as PNG"
     }
   }
 }
