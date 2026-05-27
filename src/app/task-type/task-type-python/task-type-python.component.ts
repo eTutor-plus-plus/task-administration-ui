@@ -37,9 +37,10 @@ export class TaskTypePythonComponent extends TaskTypeFormComponent<TaskTypeForm>
   readonly allowedLibraries: string[] = [
     'pandas',
     'numpy',
-    'matplotlib',
+    'scikit-learn',
     'scipy',
-    'sklearn'
+    'nltk',
+    'mlxtend'
   ];
 
   gradingVariables = new FormArray<FormGroup<GradingVariableForm>>([]);
@@ -69,9 +70,13 @@ export class TaskTypePythonComponent extends TaskTypeFormComponent<TaskTypeForm>
   }
 
   addVariable(): void {
-    this.gradingVariables.push(new FormGroup<GradingVariableForm>({
-      name: new FormControl('', { nonNullable: true, validators: [Validators.required] })
-    }));
+    this.gradingVariables.push(this.createVariableGroup());
+  }
+
+  private createVariableGroup(name: string = ''): FormGroup<GradingVariableForm> {
+    const ctrl = new FormControl(name.trim(), { nonNullable: true, validators: [Validators.required] });
+    ctrl.valueChanges.subscribe(v => { if (v !== v.trim()) ctrl.setValue(v.trim(), { emitEvent: false }); });
+    return new FormGroup<GradingVariableForm>({ name: ctrl });
   }
 
   removeVariable(index: number): void {
@@ -110,9 +115,7 @@ export class TaskTypePythonComponent extends TaskTypeFormComponent<TaskTypeForm>
 
     if (originalData?.gradingVariables?.length) {
       originalData.gradingVariables.forEach((v: any) => {
-        this.gradingVariables.push(new FormGroup<GradingVariableForm>({
-          name: new FormControl(v.name ?? '', { nonNullable: true, validators: [Validators.required] })
-        }));
+        this.gradingVariables.push(this.createVariableGroup(v.name ?? ''));
       });
     }
 
@@ -120,8 +123,6 @@ export class TaskTypePythonComponent extends TaskTypeFormComponent<TaskTypeForm>
       originalData.checks.forEach((c: any) => {
         this.checks.push(this.createCheck(c));
       });
-    } else {
-      this.addCheck();
     }
 
     this.validateCheckPointsSum();
