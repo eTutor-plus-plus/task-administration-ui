@@ -27,7 +27,7 @@
       }
     </div>
 
-    @if (form.controls.assignmentType.getRawValue() === AssignmentType.COORDINATES) {
+    @if (form.controls.assignmentType.value === AssignmentType.COORDINATES) {
       <div class="field mb-4 col-12">
         <label transloco="taskTypes.hierarchical-clustering.fields.distanceMetric" class="font-bold"></label>
         <div class="flex flex-row gap-4">
@@ -54,25 +54,47 @@
         }
       </div>
 
-      <div class="field mb-4 col-12 md:col-6">
-        <label for="lengthX" transloco="taskTypes.hierarchical-clustering.fields.lengthX" class="font-bold"></label>
-        <p-inputNumber inputId="lengthX" formControlName="lengthX" [maxFractionDigits]="0" />
-        @if (form.controls.lengthX.dirty || form.controls.lengthX.touched) {
-          <small class="block mt-1 p-error">
-            {{ getError(form.controls.lengthX, 'taskTypes.hierarchical-clustering.fields.lengthX') }}
-          </small>
-        }
-      </div>
+      <ng-container [formGroup]="coordinateSystem">
+        <div class="field mb-4 col-12 md:col-3">
+          <label for="minX" transloco="taskTypes.hierarchical-clustering.fields.coordinateSystem.minX" class="font-bold"></label>
+          <p-inputNumber inputId="minX" formControlName="minX" [maxFractionDigits]="0" />
+          @if (minXControl.dirty || minXControl.touched) {
+            <small class="block mt-1 p-error">
+              {{ getError(minXControl, 'taskTypes.hierarchical-clustering.fields.coordinateSystem.minX') }}
+            </small>
+          }
+        </div>
 
-      <div class="field mb-4 col-12 md:col-6">
-        <label for="lengthY" transloco="taskTypes.hierarchical-clustering.fields.lengthY" class="font-bold"></label>
-        <p-inputNumber inputId="lengthY" formControlName="lengthY" [maxFractionDigits]="0" />
-        @if (form.controls.lengthY.dirty || form.controls.lengthY.touched) {
-          <small class="block mt-1 p-error">
-            {{ getError(form.controls.lengthY, 'taskTypes.hierarchical-clustering.fields.lengthY') }}
-          </small>
-        }
-      </div>
+        <div class="field mb-4 col-12 md:col-3">
+          <label for="maxX" transloco="taskTypes.hierarchical-clustering.fields.coordinateSystem.maxX" class="font-bold"></label>
+          <p-inputNumber inputId="maxX" formControlName="maxX" [maxFractionDigits]="0" />
+          @if (maxXControl.dirty || maxXControl.touched) {
+            <small class="block mt-1 p-error">
+              {{ getError(maxXControl, 'taskTypes.hierarchical-clustering.fields.coordinateSystem.maxX') }}
+            </small>
+          }
+        </div>
+
+        <div class="field mb-4 col-12 md:col-3">
+          <label for="minY" transloco="taskTypes.hierarchical-clustering.fields.coordinateSystem.minY" class="font-bold"></label>
+          <p-inputNumber inputId="minY" formControlName="minY" [maxFractionDigits]="0" />
+          @if (minYControl.dirty || minYControl.touched) {
+            <small class="block mt-1 p-error">
+              {{ getError(minYControl, 'taskTypes.hierarchical-clustering.fields.coordinateSystem.minY') }}
+            </small>
+          }
+        </div>
+
+        <div class="field mb-4 col-12 md:col-3">
+          <label for="maxY" transloco="taskTypes.hierarchical-clustering.fields.coordinateSystem.maxY" class="font-bold"></label>
+          <p-inputNumber inputId="maxY" formControlName="maxY" [maxFractionDigits]="0" />
+          @if (maxYControl.dirty || maxYControl.touched) {
+            <small class="block mt-1 p-error">
+              {{ getError(maxYControl, 'taskTypes.hierarchical-clustering.fields.coordinateSystem.maxY') }}
+            </small>
+          }
+        </div>
+      </ng-container>
     }
 
     <div class="field mb-4 col-12 md:col-6">
@@ -113,7 +135,7 @@
 
     <div class="field mb-4 col-12 md:col-6">
       <label for="pointsPerCorrectCluster" transloco="taskTypes.hierarchical-clustering.fields.pointsPerCorrectCluster" class="font-bold"></label>
-      <p-inputNumber inputId="pointsPerCorrectCluster" formControlName="pointsPerCorrectCluster" [maxFractionDigits]="2" />
+      <p-inputNumber inputId="pointsPerCorrectCluster" formControlName="pointsPerCorrectCluster" [maxFractionDigits]="4" />
       @if (form.controls.pointsPerCorrectCluster.dirty || form.controls.pointsPerCorrectCluster.touched) {
         <small class="block mt-1 p-error">
           {{ getError(form.controls.pointsPerCorrectCluster, 'taskTypes.hierarchical-clustering.fields.pointsPerCorrectCluster') }}
@@ -132,64 +154,66 @@
     </div>
 
     <div class="flex flex-column gap-4">
-      @if (coordinatePoints.length > 0) {
-        <div class="flex flex-column">
-          <label transloco="taskTypes.hierarchical-clustering.fields.coordinatePoints" class="block mb-2 font-bold"></label>
-          <div class="inline-block">
-            <table class="border-collapse w-auto">
-              <thead>
-              <tr>
-                <th></th>
-                <th class="px-3 py-2 text-sm font-medium text-600 text-center whitespace-nowrap">
-                  X
-                </th>
-                <th class="px-3 py-2 text-sm font-medium text-600 text-center whitespace-nowrap">
-                  Y
-                </th>
-              </tr>
-              </thead>
-              <tbody formArrayName="coordinatePoints">
-                @for (control of coordinatePoints.controls; track i; let i = $index) {
-                  <tr [formGroupName]="i">
-                    <th scope="row" class="px-3 py-1 text-sm text-600 text-left whitespace-nowrap">
-                      {{ control.value?.label }}
-                    </th>
+      @if (coordinateList.length > 0) {
+        <ng-container [formGroup]="coordinateSystem">
+          <div class="flex flex-column">
+            <label transloco="taskTypes.hierarchical-clustering.fields.coordinatePoints" class="block mb-2 font-bold"></label>
+            <div class="inline-block">
+              <table class="border-collapse w-auto">
+                <thead>
+                <tr>
+                  <th></th>
+                  <th class="px-3 py-2 text-sm font-medium text-600 text-center whitespace-nowrap">
+                    X
+                  </th>
+                  <th class="px-3 py-2 text-sm font-medium text-600 text-center whitespace-nowrap">
+                    Y
+                  </th>
+                </tr>
+                </thead>
+                <tbody formArrayName="coordinateList">
+                  @for (control of coordinateList.controls; track i; let i = $index) {
+                    <tr [formGroupName]="i">
+                      <th scope="row" class="px-3 py-1 text-sm text-600 text-left whitespace-nowrap">
+                        {{ control.value?.label }}
+                      </th>
 
-                    <td class="px-2 py-1">
-                      <p-inputNumber
-                        formControlName="x"
-                        [minFractionDigits]="0"
-                        [maxFractionDigits]="1"
-                        inputStyleClass="text-center w-full"
-                      />
-                    </td>
+                      <td class="px-2 py-1">
+                        <p-inputNumber
+                          formControlName="x"
+                          [minFractionDigits]="0"
+                          [maxFractionDigits]="1"
+                          inputStyleClass="text-center w-full"
+                        />
+                      </td>
 
-                    <td class="px-2 py-1">
-                      <p-inputNumber
-                        formControlName="y"
-                        [minFractionDigits]="0"
-                        [maxFractionDigits]="1"
-                        inputStyleClass="text-center w-full"
-                      />
-                    </td>
-                  </tr>
-                }
-              </tbody>
-            </table>
+                      <td class="px-2 py-1">
+                        <p-inputNumber
+                          formControlName="y"
+                          [minFractionDigits]="0"
+                          [maxFractionDigits]="1"
+                          inputStyleClass="text-center w-full"
+                        />
+                      </td>
+                    </tr>
+                  }
+                </tbody>
+              </table>
+            </div>
           </div>
-        </div>
+        </ng-container>
       }
 
       @if (labelsArray.length > 0) {
         <div class="flex flex-column">
           <label transloco="taskTypes.hierarchical-clustering.fields.distanceMatrix" class="block mb-2 font-bold"></label>
           <div class="col-12 overflow-x-auto" [formGroup]="distanceMatrixGroup">
-            <table class="distance-matrix-table w-full">
+            <table class="w-full">
               <thead>
               <tr>
-                <th class="matrix-corner"></th>
+                <th></th>
                 @for (label of labelsArray.controls; track $index) {
-                  <th class="matrix-header text-center">
+                  <th class="text-center">
                     <span class="text-sm font-medium text-600">{{ label.value }}</span>
                   </th>
                 }
@@ -198,20 +222,22 @@
               <tbody formArrayName="distances">
                 @for (row of distancesArray.controls; track $index; let rowIndex = $index) {
                   <tr formArrayName="{{ rowIndex }}">
-                    <td class="label-cell pr-2">
+                    <td class="pr-2">
                       <span class="text-sm font-medium text-600">{{ labelsArray.controls[rowIndex].value }}</span>
                     </td>
                     @for (cell of getRow(rowIndex).controls; track $index; let colIndex = $index) {
-                      <td class="distance-cell p-1">
-                        <p-inputNumber
-                          [formControlName]="colIndex"
-                          [minFractionDigits]="0"
-                          [maxFractionDigits]="4"
-                          [inputStyle]="form.controls.assignmentType.value === AssignmentType.COORDINATES || rowIndex <= colIndex ?
-                            {'pointer-events': 'none', 'background': 'var(--surface-200)', 'opacity': '0.7'} : {}"
-                          inputStyleClass="text-center w-full"
-                        />
-                      </td>
+                      @if (rowIndex >= colIndex) { <!-- only display lower triangle -->
+                        <td class="p-1">
+                          <p-inputNumber
+                            [formControlName]="colIndex"
+                            [minFractionDigits]="0"
+                            [maxFractionDigits]="4"
+                            [inputStyle]="form.controls.assignmentType.value === AssignmentType.COORDINATES || rowIndex == colIndex ?
+                              {'pointer-events': 'none', 'background': 'var(--surface-200)', 'opacity': '0.7'} : {}"
+                            inputStyleClass="text-center w-full"
+                          />
+                        </td>
+                      }
                     }
                   </tr>
                 }
@@ -224,7 +250,7 @@
       @if (solution) {
         <div class="field mb-4 col-12 md:col-6">
           <label for="solution" transloco="taskTypes.hierarchical-clustering.solution" class="font-bold"></label>
-          <div style="white-space: pre-line;">{{ solution }}</div>
+          <div style="white-space: pre-wrap">{{ solution }}</div>
         </div>
       }
 

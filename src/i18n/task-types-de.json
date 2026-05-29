@@ -197,31 +197,41 @@
     },
     "hierarchical-clustering": {
       "title": "Hierarchische Clusteranalyse",
+
       "fields": {
-        "assignmentType": "Art der Aufgabe",
+        "assignmentType": "Art der Angabe",
         "strategy": {
-          "coordinates": "Aus Koordinatenliste",
-          "matrix": "Aus Distanzmatrix"
+          "coordinates": "Koordinatenliste",
+          "matrix": "Distanzmatrix"
         },
+
+        "coordinateSystem": {
+          "minX": "Minimum der X-Achse",
+          "maxX": "Maximum der X-Achse",
+          "minY": "Minimum der Y-Achse",
+          "maxY": "Maximum der Y-Achse"
+        },
+
         "distanceMetric": "Distanzmaß",
         "metric": {
           "euclidean": "Euklidisch",
           "manhattan": "Manhattan"
         },
-        "lengthX": "Länge der X-Achse",
-        "lengthY": "Länge der Y-Achse",
+
         "nDataPoints": "Anzahl der zu clusternden Punkte",
         "linkageMethod": "Linkage-Methode",
         "linkage": {
           "single": "Single (minimale Distanz)",
           "complete": "Complete (maximale Distanz)"
         },
+
         "pointsPerCorrectCluster": "Punkte pro korrektem Cluster",
         "wrongOrderPenalty": "Fixer Punkteabzug für falsche Reihenfolge (der Distanzen)",
 
         "coordinatePoints": "Koordinatenliste",
         "distanceMatrix": "Distanzmatrix"
       },
+
       "solution": "Lösung",
       "dendrogram": "Dendrogramm",
       "downloadPng": "Dendrogramm als PNG herunterladen"

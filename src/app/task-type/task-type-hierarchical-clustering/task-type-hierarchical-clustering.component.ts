@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { ChangeDetectorRef, Component } from '@angular/core';
 import { TaskTypeFormComponent } from '../task-type-form.component';
 import { FormArray, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { InputNumberModule } from 'primeng/inputnumber';
@@ -26,19 +26,24 @@ import { Button, ButtonDirective } from 'primeng/button';
 export class TaskTypeHierarchicalClusteringComponent extends TaskTypeFormComponent<TaskTypeForm> {
 
   protected override initForm(): void {
+    // add controls
     this.form.addControl('assignmentType', new FormControl<AssignmentType | null>(AssignmentType.COORDINATES, [Validators.required]));
     this.form.addControl('distanceMetric', new FormControl<DistanceMetric | null>(DistanceMetric.EUCLIDEAN, [Validators.required]));
     this.form.addControl('nDataPoints', new FormControl<number | null>(null, [Validators.required]));
     this.form.addControl('linkageMethod', new FormControl<LinkageMethod | null>(LinkageMethod.SINGLE, [Validators.required]));
     this.form.addControl('pointsPerCorrectCluster', new FormControl<number | null>(null, [Validators.required]));
     this.form.addControl('wrongOrderPenalty', new FormControl<number | null>(null));
-    this.form.addControl('lengthX', new FormControl<number | null>(10, [Validators.required]));
-    this.form.addControl('lengthY', new FormControl<number | null>(10, [Validators.required]));
-    this.form.addControl('coordinatePoints', new FormArray<FormGroup<{
-        label: FormControl<string | null>;
-        x: FormControl<number | null>;
-        y: FormControl<number | null>;
-    }>>([]));
+    this.form.addControl('coordinateSystem', new FormGroup({
+        minX: new FormControl<number | null>(0),
+        maxX: new FormControl<number | null>(10),
+        minY: new FormControl<number | null>(0),
+        maxY: new FormControl<number | null>(10),
+        coordinateList: new FormArray<FormGroup<{
+            label: FormControl<string | null>;
+            x: FormControl<number | null>;
+            y: FormControl<number |null>;
+        }>>([])
+    }));
     this.form.addControl('distanceMatrix', new FormGroup({
       labels: new FormArray<FormControl<string | null>>([]),
       distances: new FormArray<FormArray<FormControl<number | null>>>([])
@@ -47,20 +52,23 @@ export class TaskTypeHierarchicalClusteringComponent extends TaskTypeFormCompone
     // changing validators for type-specific fields
     this.form.get('assignmentType')!.valueChanges.subscribe(value => {
       const metricControl = this.form.get('distanceMetric');
-      const lengthXControl = this.form.get('lengthX');
-      const lengthYControl = this.form.get('lengthY');
+      const minXControl = this.minXControl;
+      const maxXControl = this.maxXControl;
+      const minYControl = this.minYControl;
+      const maxYControl = this.maxYControl;
 
       if (value === AssignmentType.COORDINATES) {
         metricControl?.setValidators([Validators.required]);
-        lengthXControl?.setValidators([Validators.required]);
-        lengthYControl?.setValidators([Validators.required]);
+        minXControl?.setValidators([Validators.required]);
+        maxXControl?.setValidators([Validators.required]);
+        minYControl?.setValidators([Validators.required]);
+        maxYControl?.setValidators([Validators.required]);
       } else {
         metricControl?.clearValidators();
-        metricControl?.setValue(null);
-        lengthXControl?.clearValidators();
-        lengthXControl?.setValue(10);
-        lengthYControl?.clearValidators();
-        lengthYControl?.setValue(10);
+        minXControl?.clearValidators();
+        maxXControl?.clearValidators();
+        minYControl?.clearValidators();
+        maxYControl?.clearValidators();
       }
     });
 
@@ -81,6 +89,8 @@ export class TaskTypeHierarchicalClusteringComponent extends TaskTypeFormCompone
     });
   }
 
+
+
   protected readonly AssignmentType = AssignmentType;
   protected readonly DistanceMetric = DistanceMetric;
   protected readonly LinkageMethod = LinkageMethod;
@@ -93,12 +103,37 @@ export class TaskTypeHierarchicalClusteringComponent extends TaskTypeFormCompone
     super();
   }
 
-  get coordinatePoints(): FormArray<FormGroup<{
+  // getters
+  get coordinateSystem(): FormGroup {
+    return this.form.get('coordinateSystem') as FormGroup;
+  }
+
+  get minXControl(): FormControl<number | null> {
+    return this.coordinateSystem.get('minX') as FormControl<number | null>;
+  }
+
+  get maxXControl(): FormControl<number | null> {
+    return this.coordinateSystem.get('maxX') as FormControl<number | null>;
+  }
+
+  get minYControl(): FormControl<number | null> {
+    return this.coordinateSystem.get('minY') as FormControl<number | null>;
+  }
+
+  get maxYControl(): FormControl<number | null> {
+    return this.coordinateSystem.get('maxY') as FormControl<number | null>;
+  }
+
+  get coordinateList(): FormArray<FormGroup<{
       label: FormControl<string | null>;
       x: FormControl<number | null>;
       y: FormControl<number | null>;
     }>> {
-    return this.form.get('coordinatePoints') as any;
+    return this.coordinateSystem.get('coordinateList') as FormArray<FormGroup<{
+      label: FormControl<string | null>;
+      x: FormControl<number | null>;
+      y: FormControl<number | null>;
+    }>>;
   }
 
   get distanceMatrixGroup(): FormGroup {
@@ -117,6 +152,8 @@ export class TaskTypeHierarchicalClusteringComponent extends TaskTypeFormCompone
     return this.distancesArray.at(rowIndex) as FormArray<FormControl<number | null>>;
   }
 
+
+
   downloadDendrogram(): void {
     if (!this.dendrogram || this.dendrogramUrl == null) {
       return;
@@ -131,10 +168,16 @@ export class TaskTypeHierarchicalClusteringComponent extends TaskTypeFormCompone
     document.body.removeChild(a);
   }
 
+
+
   protected override onOriginalDataChanged(data: unknown): void {
     const typedData = data as {
       distanceMatrix?: { labels?: string[], distances?: number[][] },
-      coordinatePoints?: { label: string; x: number; y: number }[],
+      coordinateSystem?: {
+        minX: number; maxX: number;
+        minY: number; maxY: number;
+        coordinateList: { label: string; x: number; y: number; }[];
+      },
       solution?: string,
       dendrogram?: string
     };
@@ -142,6 +185,7 @@ export class TaskTypeHierarchicalClusteringComponent extends TaskTypeFormCompone
     this.solution = typedData?.solution;
     const base64 = typedData?.dendrogram;
 
+    // convert from base64 to image/url
     if (base64) {
       const byteCharacters = atob(base64);
       const byteNumbers = new Array(byteCharacters.length);
@@ -156,31 +200,49 @@ export class TaskTypeHierarchicalClusteringComponent extends TaskTypeFormCompone
       this.dendrogramUrl = URL.createObjectURL(this.dendrogram);
     }
 
-    const matrix = typedData?.distanceMatrix;
-    const coordinates = typedData?.coordinatePoints;
 
     if (!this.form) return;
 
-    if (coordinates && coordinates.length > 0) {
-      const coordinateArray = new FormArray(
-        coordinates.map(point =>
+    // parse coordinate data to form controls
+    const coordinateSystem = typedData?.coordinateSystem;
+    const coordinateSystemGroup = this.coordinateSystem;
+
+    if (coordinateSystem) {
+      coordinateSystemGroup.patchValue({
+        minX: coordinateSystem.minX,
+        maxX: coordinateSystem.maxX,
+        minY: coordinateSystem.minY,
+        maxY: coordinateSystem.maxY,
+      });
+
+      const coordinateList = this.coordinateList;
+
+      coordinateList.clear();
+
+      coordinateSystem.coordinateList?.forEach(point => {
+        coordinateList.push(
           new FormGroup({
             label: new FormControl(point.label, [Validators.required]),
             x: new FormControl(point.x, [Validators.required]),
             y: new FormControl(point.y, [Validators.required]),
           })
-        )
-      );
+        );
+      });
 
-      this.form.setControl('coordinatePoints', coordinateArray);
     } else {
-      // completely clear coordinate list if it is null
-      this.form.setControl('coordinatePoints', new FormArray<FormGroup<{
-          label: FormControl<string | null>;
-          x: FormControl<number | null>;
-          y: FormControl<number | null>;
-        }>>([]));
+      coordinateSystemGroup.patchValue({
+        minX: 0,
+        maxX: 10,
+        minY: 0,
+        maxY: 10,
+      });
+
+      this.coordinateList.clear();
     }
+
+
+    // parse distance matrix data to form controls
+    const matrix = typedData?.distanceMatrix;
 
     if (matrix?.labels && matrix?.distances) {
       const labels = new FormArray(
@@ -201,11 +263,15 @@ export class TaskTypeHierarchicalClusteringComponent extends TaskTypeFormCompone
       setTimeout(() => this.syncSymmetry());
     }
 
+    // ensure that data gets updated/reloaded
     this.distanceMatrixGroup.updateValueAndValidity();
+    this.coordinateSystem.updateValueAndValidity();
   }
+
 
   private symmetrySubscriptions: Subscription[] = [];
 
+  // matrix synchronization to ensure symmetry
   private syncSymmetry(): void {
     this.symmetrySubscriptions.forEach(s => s.unsubscribe());
     this.symmetrySubscriptions = [];
@@ -226,6 +292,7 @@ export class TaskTypeHierarchicalClusteringComponent extends TaskTypeFormCompone
     }
   }
 
+
   ngOnDestroy(): void {
     this.symmetrySubscriptions.forEach(s => s.unsubscribe());
     if (this.dendrogramUrl) {
@@ -234,6 +301,7 @@ export class TaskTypeHierarchicalClusteringComponent extends TaskTypeFormCompone
   }
 }
 
+
 interface TaskTypeForm {
   assignmentType: FormControl<AssignmentType | null>;
   distanceMetric: FormControl<DistanceMetric | null>;
@@ -241,13 +309,17 @@ interface TaskTypeForm {
   linkageMethod: FormControl<LinkageMethod | null>;
   pointsPerCorrectCluster: FormControl<number | null>;
   wrongOrderPenalty: FormControl<number | null>;
-  lengthX: FormControl<number | null>;
-  lengthY: FormControl<number | null>;
-  coordinatePoints: FormArray<FormGroup<{
-    label: FormControl<string | null>;
-    x: FormControl<number | null>;
-    y: FormControl<number | null>;
-  }>>;
+  coordinateSystem: FormGroup<{
+    minX: FormControl<number | null>;
+    maxX: FormControl<number | null>;
+    minY: FormControl<number | null>;
+    maxY: FormControl<number | null>;
+    coordinateList: FormArray<FormGroup<{
+      label: FormControl<string | null>;
+      x: FormControl<number | null>;
+      y: FormControl<number | null>;
+    }>>
+  }>;
   distanceMatrix: FormGroup<{
     labels: FormArray<FormControl<string | null>>;
     distances: FormArray<FormArray<FormControl<number | null>>>;

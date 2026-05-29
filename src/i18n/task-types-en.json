@@ -193,31 +193,41 @@
     },
     "hierarchical-clustering": {
       "title": "Hierarchical Clustering",
+
       "fields": {
         "assignmentType": "Type of assignment",
         "strategy": {
-          "coordinates": "From list of coordinates",
-          "matrix": "From distance matrix"
+          "coordinates": "List of coordinates",
+          "matrix": "Distance matrix"
         },
+
+        "coordinateSystem": {
+          "minX": "X-axis minimum",
+          "maxX": "X-axis maximum",
+          "minY": "Y-axis minimum",
+          "maxY": "Y-axis maximum"
+        },
+
         "distanceMetric": "Distance metric",
         "metric": {
           "euclidean": "Euclidean",
           "manhattan": "Manhattan"
         },
-        "lengthX": "X-axis length",
-        "lengthY": "Y-axis length",
+
         "nDataPoints": "Number of points for clustering",
         "linkageMethod": "Linkage Method",
         "linkage": {
           "single": "Single (minimum distance)",
           "complete": "Complete (maximum distance)"
         },
+
         "pointsPerCorrectCluster": "Points per correct cluster",
         "wrongOrderPenalty": "Fixed penalty for wrong order (of distances)",
 
         "coordinatePoints": "Coordinate list",
         "distanceMatrix": "Distance matrix"
       },
+
       "solution": "Solution",
       "dendrogram": "Dendrogram",
       "downloadPng": "Download dendrogram as PNG"
