@@ -75,13 +75,16 @@
     "drools": {
       "title": "Drools",
       "fields": {
+        "modelDrl": "Model DRL",
         "droolsSolution": "Solution",
         "droolsObjects": "Objects",
-        "droolsClasses": "Classes",
-        "droolsValidationClassname": "Validation Classname",
-        "droolsErrorWeighting": "Error Weighting",
-        "droolsAddClass": "Add Class",
-        "droolsIsCEP": "Is this a CEP Task?"
+        "visibleTestCases": "Run/Diagnosis Test Cases",
+        "hiddenTestCases": "Submit Test Cases",
+        "feedbackLevel": "Feedback Level",
+        "droolsIsCEP": "Is this a CEP task?"
+      },
+      "messages": {
+        "testCasePointsExceedMaxPoints": "The points of one test case group ({{testCasePoints}}) exceed the task's maximum points ({{maxPoints}}). Please adjust the @points values or the maximum points."
       }
     },
       "sql-ddl": {

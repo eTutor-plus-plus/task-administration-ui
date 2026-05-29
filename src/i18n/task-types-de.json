@@ -75,14 +75,16 @@
     "drools": {
       "title": "Drools",
       "fields": {
+        "modelDrl": "Model DRL",
         "droolsSolution": "Lösung",
-        "droolsClasses": "Klassen",
         "droolsObjects": "Objekte",
-        "droolsErrorWeighting": "Fehlergewichtung",
-        "droolsValidationClassname": "Validierungsklasse",
-        "droolsAddClass": "Klasse hinzufügen",
-        "droolsClassesName": "Klassen",
-        "droolsIsCEP": "Ist dieser Task ein CEP Task?"
+        "visibleTestCases": "RUN-/DIAGNOSE-Testfälle",
+        "hiddenTestCases": "SUBMIT-Testfälle",
+        "feedbackLevel": "Feedback-Level",
+        "droolsIsCEP": "Ist dies eine CEP-Aufgabe?"
+      },
+      "messages": {
+        "testCasePointsExceedMaxPoints": "Die Punkte einer Testfallgruppe ({{testCasePoints}}) überschreiten die maximalen Punkte der Aufgabe ({{maxPoints}}). Bitte passe die @points-Werte oder die maximalen Punkte an."
       }
     },
 

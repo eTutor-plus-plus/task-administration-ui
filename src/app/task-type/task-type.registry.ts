@@ -59,7 +59,7 @@ return $d`,
       submissionInputLanguage: 'datalog'
     }, {
       name: 'drools',
-      supportedTaskGroupTypes: [],
+      supportedTaskGroupTypes: ['drools'],
       component: TaskTypeDroolsComponent,
       submissionTemplate: '',
       supportsDescriptionGeneration: false,
