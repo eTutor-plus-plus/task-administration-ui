@@ -1,13 +1,144 @@
-<div class="surface-card p-4 shadow-2 border-round p-fluid mb-4" [formGroup]="form">
-  <div class="grid formgrid p-fluid">
-    <div class="field mb-4 col-12 md:col-6">
-      <label for="solution" transloco="taskTypes.cypher.fields.solution"></label>
-      <p-inputNumber inputId="solution" formControlName="solution" [maxFractionDigits]="0" />
-      @if (form.controls.solution.dirty || form.controls.solution.touched) {
-      <small class="block mt-1 p-error">
-        {{ getError(form.controls.solution, 'taskTypes.cypher.fields.solution') }}
-      </small>
-      }
+<div [formGroup]="form">
+  <div class="surface-card p-4 shadow-2 border-round p-fluid mb-4">
+    <div class="field mb-0">
+      <label for="evaluationMode" transloco="taskTypes.cypher.fields.evaluationMode"></label>
+      <p-selectButton inputId="evaluationMode" [options]="modeOptions" formControlName="evaluationMode" optionLabel="label" optionValue="value" [allowEmpty]="false"/>
+      <small transloco="taskTypes.cypher.descriptions.evaluationMode" class="text-color-secondary block mt-2"></small>
     </div>
   </div>
+
+  @if (!isMultiSolution) {
+    <div class="surface-card p-4 shadow-2 border-round p-fluid mb-4">
+      <div class="grid formgrid p-fluid">
+        <div class="field mb-4 col-12">
+          <label for="solution" transloco="taskTypes.cypher.fields.solution"></label>
+          <ngx-monaco-editor id="solution" formControlName="solution" [options]="editorOptions" style="height: 300px;"/>
+          @if (form.controls.solution.dirty || form.controls.solution.touched) {
+            <small class="block mt-1 p-error">
+              {{ getError(form.controls.solution, 'taskTypes.cypher.fields.solution') }}
+            </small>
+          }
+        </div>
+      </div>
+    </div>
+  }
+
+  <div class="surface-card p-4 shadow-2 border-round p-fluid mb-4">
+    <div class="grid formgrid p-fluid">
+      <div class="field mb-0 col-12">
+        <label for="expectedColumnNames" transloco="taskTypes.cypher.fields.expectedColumnNames"></label>
+        <input pInputText id="expectedColumnNames" formControlName="expectedColumnNames" autocomplete="off">
+        <small transloco="taskTypes.cypher.descriptions.expectedColumnNames" class="text-color-secondary block mt-1"></small>
+      </div>
+    </div>
+  </div>
+
+  @if (isMultiSolution) {
+    <div class="surface-card p-4 shadow-2 border-round p-fluid mb-4">
+      <div class="flex align-items-center justify-content-between mb-3">
+        <label class="m-0 text-lg" transloco="taskTypes.cypher.fields.alternativeSolutions"></label>
+        <button pButton type="button" icon="pi pi-plus" class="p-button-sm" (click)="addAlternative()"
+                [label]="'taskTypes.cypher.actions.addAlternative' | transloco"></button>
+      </div>
+
+      @if (alternativesError) {
+        <small class="p-error block mb-3">{{ alternativesError }}</small>
+      }
+
+      @if (alternativeSolutions.length === 0) {
+        <small class="text-color-secondary block" transloco="taskTypes.cypher.descriptions.alternativesEmpty"></small>
+      }
+
+      <div formArrayName="alternativeSolutions">
+        @for (item of alternativeSolutions.controls; track $index) {
+          <div [formGroupName]="$index" class="border-1 surface-border border-round p-3 mb-3">
+            <div class="flex align-items-center justify-content-between mb-2">
+              <span class="text-color-secondary">
+                {{ 'taskTypes.cypher.fields.alternativeSolution.stage' | transloco:{ index: $index + 1 } }}
+              </span>
+              <span>
+                <button pButton type="button" icon="pi pi-arrow-up" class="p-button-text p-button-sm"
+                        [disabled]="$index === 0"
+                        (click)="moveAlternative($index, -1)"
+                        [attr.aria-label]="'taskTypes.cypher.actions.moveUp' | transloco"></button>
+                <button pButton type="button" icon="pi pi-arrow-down" class="p-button-text p-button-sm"
+                        [disabled]="$index === alternativeSolutions.length - 1"
+                        (click)="moveAlternative($index, 1)"
+                        [attr.aria-label]="'taskTypes.cypher.actions.moveDown' | transloco"></button>
+                <button pButton type="button" icon="pi pi-times" class="p-button-text p-button-sm p-button-danger"
+                        (click)="removeAlternative($index)"
+                        [attr.aria-label]="'taskTypes.cypher.actions.removeAlternative' | transloco"></button>
+              </span>
+            </div>
+
+            <div class="field mb-3">
+              <label transloco="taskTypes.cypher.fields.alternativeSolution.points"></label>
+              <p-inputNumber formControlName="pointsPercent" mode="decimal" [maxFractionDigits]="2" [min]="0" [max]="100" suffix=" %"/>
+              @if (item.controls.pointsPercent.dirty || item.controls.pointsPercent.touched) {
+                <small class="block mt-1 p-error">
+                  {{ getError(item.controls.pointsPercent, 'taskTypes.cypher.fields.alternativeSolution.points') }}
+                </small>
+              }
+            </div>
+
+            <div class="field mb-0">
+              <label transloco="taskTypes.cypher.fields.alternativeSolution.solution"></label>
+              <ngx-monaco-editor formControlName="solution" [options]="editorOptions" style="height: 220px;"/>
+              @if (item.controls.solution.dirty || item.controls.solution.touched) {
+                <small class="block mt-1 p-error">
+                  {{ getError(item.controls.solution, 'taskTypes.cypher.fields.alternativeSolution.solution') }}
+                </small>
+              }
+            </div>
+          </div>
+        }
+      </div>
+
+      <small transloco="taskTypes.cypher.descriptions.alternatives" class="text-color-secondary block mt-2"></small>
+    </div>
+  }
+
+  @if (!isMultiSolution) {
+    <div class="surface-card p-4 shadow-2 border-round p-fluid mb-4">
+      <div class="grid formgrid p-fluid">
+        <div class="field mb-4 col-12 md:col-6">
+          <label for="superfluousColumnsPenalty" transloco="taskTypes.cypher.fields.superfluousColumnsPenalty"></label>
+          <p-inputNumber inputId="superfluousColumnsPenalty" formControlName="superfluousColumnsPenalty" mode="decimal" [maxFractionDigits]="2" [min]="0" [max]="100" suffix=" %"/>
+          @if (form.controls.superfluousColumnsPenalty.dirty || form.controls.superfluousColumnsPenalty.touched) {
+            <small class="block mt-1 p-error">
+              {{ getError(form.controls.superfluousColumnsPenalty, 'taskTypes.cypher.fields.superfluousColumnsPenalty') }}
+            </small>
+          }
+        </div>
+        <div class="field mb-4 col-12 md:col-6">
+          <label for="missingRowsPenalty" transloco="taskTypes.cypher.fields.missingRowsPenalty"></label>
+          <p-inputNumber inputId="missingRowsPenalty" formControlName="missingRowsPenalty" mode="decimal" [maxFractionDigits]="2" [min]="0" [max]="100" suffix=" %"/>
+          @if (form.controls.missingRowsPenalty.dirty || form.controls.missingRowsPenalty.touched) {
+            <small class="block mt-1 p-error">
+              {{ getError(form.controls.missingRowsPenalty, 'taskTypes.cypher.fields.missingRowsPenalty') }}
+            </small>
+          }
+        </div>
+        <div class="field mb-4 col-12 md:col-6">
+          <label for="superfluousRowsPenalty" transloco="taskTypes.cypher.fields.superfluousRowsPenalty"></label>
+          <p-inputNumber inputId="superfluousRowsPenalty" formControlName="superfluousRowsPenalty" mode="decimal" [maxFractionDigits]="2" [min]="0" [max]="100" suffix=" %"/>
+          @if (form.controls.superfluousRowsPenalty.dirty || form.controls.superfluousRowsPenalty.touched) {
+            <small class="block mt-1 p-error">
+              {{ getError(form.controls.superfluousRowsPenalty, 'taskTypes.cypher.fields.superfluousRowsPenalty') }}
+            </small>
+          }
+        </div>
+        <div class="field mb-4 col-12 md:col-6">
+          <label for="wrongOrderPenalty" transloco="taskTypes.cypher.fields.wrongOrderPenalty"></label>
+          <p-inputNumber inputId="wrongOrderPenalty" formControlName="wrongOrderPenalty" mode="decimal" [maxFractionDigits]="2" [min]="0" [max]="100" suffix=" %"/>
+          @if (form.controls.wrongOrderPenalty.dirty || form.controls.wrongOrderPenalty.touched) {
+            <small class="block mt-1 p-error">
+              {{ getError(form.controls.wrongOrderPenalty, 'taskTypes.cypher.fields.wrongOrderPenalty') }}
+            </small>
+          }
+        </div>
+      </div>
+      <small transloco="taskTypes.cypher.descriptions.penalty" class="text-color-secondary block mt-1"></small>
+    </div>
+  }
 </div>

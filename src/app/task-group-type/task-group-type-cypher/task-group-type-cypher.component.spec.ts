@@ -1,26 +1,23 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { UntypedFormGroup } from '@angular/forms';
 import { provideTransloco } from '@ngneat/transloco';
+import { MonacoEditorModule } from 'ngx-monaco-editor-v2';
 
 import { TaskGroupTypeCypherComponent } from './task-group-type-cypher.component';
-import { CypherService } from './cypher.service';
 import { translocoTestConfig } from '../../translation-loader.service.spec';
 
 describe('TaskGroupTypeCypherComponent', () => {
   let component: TaskGroupTypeCypherComponent;
   let fixture: ComponentFixture<TaskGroupTypeCypherComponent>;
 
-  const randomFn = jest.fn();
-
   beforeEach(async () => {
-    randomFn.mockClear();
-    randomFn.mockResolvedValue({ min: 1, max: 10 });
-
     await TestBed.configureTestingModule({
-      imports: [TaskGroupTypeCypherComponent],
+      imports: [
+        TaskGroupTypeCypherComponent,
+        MonacoEditorModule.forRoot({})
+      ],
       providers: [
-        provideTransloco(translocoTestConfig),
-        { provide: CypherService, useValue: { loadNewRandomNumbers: randomFn } }
+        provideTransloco(translocoTestConfig)
       ]
     }).compileComponents();
 
@@ -32,72 +29,28 @@ describe('TaskGroupTypeCypherComponent', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
-    expect(Object.keys(component.form.controls)).toHaveLength(2);
+    expect(Object.keys(component.form.controls)).toEqual(['setupStatements', 'secondarySetupStatements']);
   });
 
-  it('should load numbers', async () => {
-    // Act
-    await component.loadNumbers();
-
-    // Assert
-    expect(component.form.value.minNumber).toBe(1);
-    expect(component.form.value.maxNumber).toBe(10);
-    expect(component.loading).toBe(false);
+  it('should be invalid when setupStatements is empty', () => {
+    expect(component.form.controls.setupStatements.invalid).toBe(true);
   });
 
-  it('should not fail on failed number loading', async () => {
-    // Act
-    randomFn.mockRejectedValueOnce('some error');
-
-    // Act
-    await component.loadNumbers();
-
-    // Assert
-    expect(component.form.value.minNumber).toBeNull();
-    expect(component.form.value.minNumber).toBeNull();
-    expect(component.loading).toBe(false);
+  it('should be valid when both setup fields are set', () => {
+    component.form.controls.setupStatements.setValue("CREATE (:Person {name: 'Alice'});");
+    component.form.controls.secondarySetupStatements.setValue("CREATE (:Person {name: 'Carol'});");
+    expect(component.form.valid).toBe(true);
   });
 
-  it('should show error if minNumber is empty', () => {
-    // Arrange
-    component.form.controls.minNumber.markAsDirty();
+  it('should be invalid when secondarySetupStatements is empty', () => {
+    component.form.controls.setupStatements.setValue("CREATE (:Person {name: 'Alice'});");
+    expect(component.form.controls.secondarySetupStatements.invalid).toBe(true);
+  });
 
-    // Act
+  it('should show error if setupStatements is empty and dirty', () => {
+    component.form.controls.setupStatements.markAsDirty();
     fixture.detectChanges();
 
-    // Assert
-    expect(component.form.controls.minNumber.invalid).toBe(true);
-    const elem: HTMLElement = fixture.nativeElement;
-    const msg: HTMLElement | null = elem.querySelector('.p-error');
-    expect(msg).toBeTruthy();
-    expect(msg?.innerText.trim()).not.toHaveLength(0);
-  });
-
-  it('should show error if maxNumber is empty', () => {
-    // Arrange
-    component.form.controls.maxNumber.markAsDirty();
-
-    // Act
-    fixture.detectChanges();
-
-    // Assert
-    expect(component.form.controls.maxNumber.invalid).toBe(true);
-    const elem: HTMLElement = fixture.nativeElement;
-    const msg: HTMLElement | null = elem.querySelector('.p-error');
-    expect(msg).toBeTruthy();
-    expect(msg?.innerText.trim()).not.toHaveLength(0);
-  });
-
-  it('should show error if maxNumber < minNumber', () => {
-    // Arrange
-    component.form.patchValue({ minNumber: 100, maxNumber: 99 });
-    component.form.controls.maxNumber.markAsDirty();
-
-    // Act
-    fixture.detectChanges();
-
-    // Assert
-    expect(component.form.invalid).toBe(true);
     const elem: HTMLElement = fixture.nativeElement;
     const msg: HTMLElement | null = elem.querySelector('.p-error');
     expect(msg).toBeTruthy();

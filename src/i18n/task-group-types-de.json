@@ -6,8 +6,9 @@
     "cypher": {
       "title": "Cypher",
       "fields": {
-        "minNumber": "Kleinster Wert",
-        "maxNumber": "Größter Wert"
+        "setupStatements": "Setup-Statements (Cypher)",
+        "secondarySetupStatements": "Verifizierungs-Setup (verborgen)",
+        "secondarySetupStatementsHelp": "Wird ausschließlich zur Bewertung verwendet und ist für Studierende nicht sichtbar. Verwende einen strukturell ähnlichen, aber inhaltlich abweichenden Graphen, damit hartkodierte Lösungen erkannt werden."
       }
     },
     "binary-search": {

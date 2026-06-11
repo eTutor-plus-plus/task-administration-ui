@@ -119,9 +119,9 @@ return $d`,
         name: 'cypher',
         supportedTaskGroupTypes: ['cypher'],
         component: TaskTypeCypherComponent,
-        submissionTemplate: '0',
+        submissionTemplate: 'MATCH (n) RETURN n',
         supportsDescriptionGeneration: true,
-        submissionInputLanguage: 'plaintext'
+        submissionInputLanguage: 'cypher'
       },
 
     ];

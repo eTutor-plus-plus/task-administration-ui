@@ -6,8 +6,9 @@
     "cypher": {
       "title": "Cypher",
       "fields": {
-        "minNumber": "Minimum Value",
-        "maxNumber": "Maximum Value"
+        "setupStatements": "Setup Statements (Cypher)",
+        "secondarySetupStatements": "Verification Setup (hidden)",
+        "secondarySetupStatementsHelp": "Used only for grading and never shown to students. Provide a structurally similar graph with different data so that hardcoded answers can be detected."
       }
     },
     "binary-search": {

@@ -1,26 +1,23 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { SimpleChange } from '@angular/core';
-import { FormControl, FormGroup, UntypedFormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 import { provideTransloco } from '@ngneat/transloco';
+import { MonacoEditorModule } from 'ngx-monaco-editor-v2';
 
 import { TaskTypeCypherComponent } from './task-type-cypher.component';
 import { translocoTestConfig } from '../../translation-loader.service.spec';
-import { TaskGroupService } from '../../api';
-import { TaskForm } from '../task.form';
 
 describe('TaskTypeCypherComponent', () => {
   let component: TaskTypeCypherComponent;
   let fixture: ComponentFixture<TaskTypeCypherComponent>;
-  const tgFn = jest.fn();
 
   beforeEach(async () => {
-    tgFn.mockClear();
-
     await TestBed.configureTestingModule({
-      imports: [TaskTypeCypherComponent],
+      imports: [
+        TaskTypeCypherComponent,
+        MonacoEditorModule.forRoot({})
+      ],
       providers: [
-        provideTransloco(translocoTestConfig),
-        { provide: TaskGroupService, useValue: { get: tgFn } }
+        provideTransloco(translocoTestConfig)
       ]
     }).compileComponents();
 
@@ -32,111 +29,131 @@ describe('TaskTypeCypherComponent', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
-    expect(Object.keys(component.form.controls)).toHaveLength(1);
+    expect(Object.keys(component.form.controls)).toEqual([
+      'evaluationMode',
+      'solution',
+      'superfluousColumnsPenalty',
+      'missingRowsPenalty',
+      'superfluousRowsPenalty',
+      'wrongOrderPenalty',
+      'expectedColumnNames',
+      'alternativeSolutions'
+    ]);
   });
 
-  it('should show error if solution is empty', () => {
-    // Arrange
-    component.form.controls.solution.markAsDirty();
+  it('should default to PENALTY mode with 100 % penalties', () => {
+    component.formData = undefined;
 
-    // Act
-    fixture.detectChanges();
+    expect(component.form.value.evaluationMode).toBe('PENALTY');
+    expect(component.isMultiSolution).toBe(false);
+    expect(component.form.value.superfluousColumnsPenalty).toBe(100);
+    expect(component.form.value.missingRowsPenalty).toBe(100);
+    expect(component.form.value.superfluousRowsPenalty).toBe(100);
+    expect(component.form.value.wrongOrderPenalty).toBe(100);
+    expect(component.alternativeSolutions.length).toBe(0);
+  });
 
-    // Assert
+  it('PENALTY mode: solution is required', () => {
+    component.formData = undefined;
     expect(component.form.controls.solution.invalid).toBe(true);
-    const elem: HTMLElement = fixture.nativeElement;
-    const msg: HTMLElement | null = elem.querySelector('.p-error');
-    expect(msg).toBeTruthy();
-    expect(msg?.innerText.trim()).not.toHaveLength(0);
+
+    component.form.controls.solution.setValue('MATCH (p:Person) RETURN p.name');
+    expect(component.form.valid).toBe(true);
   });
 
-  it('should show error if solution out of bounds', async () => {
-    // Arrange
-    tgFn.mockResolvedValue({
-      additionalData: {
-        minNumber: 1,
-        maxNumber: 100
-      },
-      dto: {
-        taskGroupType: 'binary-search'
-      }
-    });
-    const parentForm: FormGroup<TaskForm> = new UntypedFormGroup({
-      taskGroupId: new FormControl<number | null>(null)
-    });
-    component.parentForm = parentForm;
-    component.ngOnChanges({
-      parentForm: new SimpleChange(undefined, parentForm, true)
-    });// not called automatically during tests.
-    parentForm.patchValue({ taskGroupId: 2 });
-    await new Promise(f => setTimeout(f, 500)); // wait for task group data to load
-
-    component.form.controls.solution.setValue(300);
-    component.form.controls.solution.markAsDirty();
-
-    // Act
-    fixture.detectChanges();
-
-    // Assert
-    expect(component.form.controls.solution.invalid).toBe(true);
-    const elem: HTMLElement = fixture.nativeElement;
-    const msg: HTMLElement | null = elem.querySelector('.p-error');
-    expect(msg).toBeTruthy();
-    expect(msg?.innerText.trim()).not.toHaveLength(0);
+  it('PENALTY mode: rejects penalties outside 0..100', () => {
+    component.form.controls.missingRowsPenalty.setValue(-1);
+    expect(component.form.controls.missingRowsPenalty.invalid).toBe(true);
+    component.form.controls.missingRowsPenalty.setValue(101);
+    expect(component.form.controls.missingRowsPenalty.invalid).toBe(true);
   });
 
-  it('should not show error if task group is invalid', () => {
-    // Arrange
-    tgFn.mockResolvedValue({
-      additionalData: {},
-      dto: {
-        taskGroupType: 'sql'
-      }
-    });
-    const parentForm: FormGroup<TaskForm> = new UntypedFormGroup({
-      taskGroupId: new FormControl<number | null>(null)
-    });
-    component.parentForm = parentForm;
-    component.ngOnChanges({
-      parentForm: new SimpleChange(undefined, parentForm, true)
-    });// not called automatically during tests.
-    parentForm.patchValue({ taskGroupId: 2 });
-    component.form.controls.solution.setValue(300);
-    component.form.controls.solution.markAsDirty();
-
-    // Act
-    fixture.detectChanges();
-
-    // Assert
+  it('switching to MULTI_SOLUTION drops the solution-required validator', () => {
+    component.formData = undefined;
+    component.form.controls.evaluationMode.setValue('MULTI_SOLUTION');
+    // solution may stay null without invalidating the form (alternatives take its place)
     expect(component.form.controls.solution.invalid).toBe(false);
-    const elem: HTMLElement = fixture.nativeElement;
-    const msg: HTMLElement | null = elem.querySelector('.p-error');
-    expect(msg).toBeDefined();
-    expect(msg?.innerText.trim()).toHaveLength(0);
+    // but the array-level validator now demands at least one alternative
+    expect(component.alternativeSolutions.errors).toEqual({ alternativesEmpty: true });
   });
 
-  it('should not show error if task group could not be loaded', () => {
-    // Arrange
-    tgFn.mockResolvedValue('some error');
-    const parentForm: FormGroup<TaskForm> = new UntypedFormGroup({
-      taskGroupId: new FormControl<number | null>(null)
-    });
-    component.parentForm = parentForm;
-    component.ngOnChanges({
-      parentForm: new SimpleChange(undefined, parentForm, true)
-    });// not called automatically during tests.
-    parentForm.patchValue({ taskGroupId: 2 });
-    component.form.controls.solution.setValue(300);
-    component.form.controls.solution.markAsDirty();
+  it('MULTI_SOLUTION: addAlternative seeds 100 % for the first entry', () => {
+    component.formData = undefined;
+    component.form.controls.evaluationMode.setValue('MULTI_SOLUTION');
+    component.addAlternative();
 
-    // Act
-    fixture.detectChanges();
+    expect(component.alternativeSolutions.length).toBe(1);
+    expect(component.alternativeAt(0).controls.pointsPercent.value).toBe(100);
+    // still missing the solution text — list itself is now valid, but the inner control is not
+    expect(component.alternativeAt(0).controls.solution.invalid).toBe(true);
+  });
 
-    // Assert
-    expect(component.form.controls.solution.invalid).toBe(false);
-    const elem: HTMLElement = fixture.nativeElement;
-    const msg: HTMLElement | null = elem.querySelector('.p-error');
-    expect(msg).toBeDefined();
-    expect(msg?.innerText.trim()).toHaveLength(0);
+  it('MULTI_SOLUTION: accepts entries in any order (backend re-sorts by points)', () => {
+    component.formData = undefined;
+    component.form.controls.evaluationMode.setValue('MULTI_SOLUTION');
+    component.addAlternative();
+    component.addAlternative();
+    // Lower-value entry first — the order is irrelevant as long as a 100 % entry exists.
+    component.alternativeAt(0).patchValue({ solution: 'MATCH (p) RETURN p.name', pointsPercent: 60 });
+    component.alternativeAt(1).patchValue({ solution: 'MATCH (p) RETURN p', pointsPercent: 100 });
+
+    expect(component.alternativeSolutions.errors).toBeNull();
+    expect(component.form.valid).toBe(true);
+  });
+
+  it('MULTI_SOLUTION: rejects when no entry awards 100 %', () => {
+    component.formData = undefined;
+    component.form.controls.evaluationMode.setValue('MULTI_SOLUTION');
+    component.addAlternative();
+    component.alternativeAt(0).patchValue({ solution: 'MATCH (p) RETURN p', pointsPercent: 90 });
+
+    expect(component.alternativeSolutions.errors).toEqual({ alternativesNoHundred: true });
+  });
+
+  it('MULTI_SOLUTION: accepts duplicate 100 % entries', () => {
+    component.formData = undefined;
+    component.form.controls.evaluationMode.setValue('MULTI_SOLUTION');
+    component.addAlternative();
+    component.addAlternative();
+    component.alternativeAt(0).patchValue({ solution: 'MATCH (p) RETURN p.name', pointsPercent: 100 });
+    component.alternativeAt(1).patchValue({ solution: 'MATCH (p) RETURN p.age', pointsPercent: 100 });
+
+    expect(component.alternativeSolutions.errors).toBeNull();
+    expect(component.form.valid).toBe(true);
+  });
+
+  it('removeAlternative and moveAlternative manipulate the array correctly', () => {
+    component.formData = undefined;
+    component.form.controls.evaluationMode.setValue('MULTI_SOLUTION');
+    component.addAlternative();
+    component.addAlternative();
+    component.addAlternative();
+    component.alternativeAt(0).patchValue({ solution: 'A', pointsPercent: 100 });
+    component.alternativeAt(1).patchValue({ solution: 'B', pointsPercent: 60 });
+    component.alternativeAt(2).patchValue({ solution: 'C', pointsPercent: 30 });
+
+    component.moveAlternative(1, 1);
+    expect(component.alternativeAt(0).value.solution).toBe('A');
+    expect(component.alternativeAt(1).value.solution).toBe('C');
+    expect(component.alternativeAt(2).value.solution).toBe('B');
+
+    component.removeAlternative(2);
+    expect(component.alternativeSolutions.length).toBe(2);
+    expect(component.alternativeAt(1).value.solution).toBe('C');
+  });
+
+  it('formData restores existing alternatives', () => {
+    component.form.controls.evaluationMode.setValue('MULTI_SOLUTION');
+    component.formData = {
+      evaluationMode: 'MULTI_SOLUTION',
+      alternativeSolutions: [
+        { solution: 'MATCH (p) RETURN p.name, p.age', pointsPercent: 100 },
+        { solution: 'MATCH (p) RETURN p.name', pointsPercent: 50 }
+      ]
+    };
+
+    expect(component.alternativeSolutions.length).toBe(2);
+    expect(component.alternativeAt(0).value.pointsPercent).toBe(100);
+    expect(component.alternativeAt(1).value.solution).toBe('MATCH (p) RETURN p.name');
   });
 });

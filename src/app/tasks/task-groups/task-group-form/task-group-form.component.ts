@@ -190,10 +190,20 @@ export class TaskGroupFormComponent extends EditFormComponent<TaskGroupDto, Task
   }
 
   override modifyValueBeforeSend(data: Partial<{ [K in keyof TaskGroupForm]: any }>, type: 'create' | 'update'): any {
+    let descriptionDe = data.descriptionDe ?? '';
+    let descriptionEn = data.descriptionEn ?? '';
+
+    if (type === 'update' && this.supportsDescriptionGeneration && this.form.controls.additionalData.dirty) {
+      if (!this.form.controls.descriptionDe.dirty)
+        descriptionDe = '';
+      if (!this.form.controls.descriptionEn.dirty)
+        descriptionEn = '';
+    }
+
     return {
       ...data,
-      descriptionDe: data.descriptionDe ?? '',
-      descriptionEn: data.descriptionEn ?? ''
+      descriptionDe,
+      descriptionEn
     };
   }
 
