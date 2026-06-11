@@ -32,6 +32,16 @@
         "submitDmlStatements": "INSERT INTO Statements (Submission)"
       }
     },
+    "or-view": {
+      "title": "Object-Relational Views",
+      "fields": {
+        "extensionalSchema": "Extensional Schema",
+        "intensionalSchema": "Intensional Schema",
+        "submitInserts": "INSERT INTO Statements (Submission)",
+        "diagnoseInserts": "INSERT INTO Statements (Diagnose)"
+
+      }
+    },
     "owl": {
       "title": "OWL",
       "fields": {

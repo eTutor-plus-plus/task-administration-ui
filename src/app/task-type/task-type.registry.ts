@@ -11,6 +11,7 @@ import { TaskTypeRelalgComponent } from './task-type-relalg/task-type-relalg.com
 import { TaskTypeFanfComponent } from './task-type-fanf/task-type-fanf.component';
 import { TaskTypeUmlComponent } from './task-type-uml/task-type-uml.component';
 import { TaskTypeOwlComponent } from './task-type-owl/task-type-owl.component';
+import { TaskTypeOrViewsComponent } from './task-type-or-view/task-type-or-view.component';
 
 
 /**
@@ -113,6 +114,14 @@ return $d`,
       submissionTemplate: '',
       supportsDescriptionGeneration: true,
       submissionInputLanguage: 'owl'
+    },
+    {
+      name: 'or-view',
+      supportedTaskGroupTypes: ['or-view'],
+      component: TaskTypeOrViewsComponent,
+      submissionTemplate: '',
+      supportsDescriptionGeneration: false,
+      submissionInputLanguage: 'orview'
     }
 
   ];

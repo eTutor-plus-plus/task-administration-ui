@@ -37,6 +37,15 @@
       "fields": {
         "ontology": "Ontologie"
       }
+    },
+    "or-view": {
+      "title": "Object-Relational Views",
+      "fields": {
+        "extensionalSchema": "Extensionales Schema",
+        "intensionalSchema": "Intensionales Schema",
+        "submitInserts": "INSERT INTO Statements (Abgabe)",
+        "diagnoseInserts": "INSERT INTO Statements (Diagnose)"
+      }
     }
   }
 }

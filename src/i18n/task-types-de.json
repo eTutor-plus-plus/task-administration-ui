@@ -85,7 +85,6 @@
         "droolsIsCEP": "Ist dieser Task ein CEP Task?"
       }
     },
-
     "sql-ddl": {
       "title": "SQL DDL",
       "fields": {
@@ -97,7 +96,8 @@
         "constraintPoints": "Punkte pro Constraint",
         "primaryKeyPoints": "Punkte pro Primary Key",
         "foreignKeyPoints": "Punkte pro Foreign Key"
-  }},
+      }
+    },
     "sql": {
       "title": "SQL",
       "fields": {
@@ -155,7 +155,6 @@
         "normalizationPenaltyPerMissingKey": "Punktabzug pro fehlendem Schlüssel",
         "normalizationPenaltyPerIncorrectKey": "Punktabzug pro falschem Schlüssel",
         "normalizationPenaltyPerIncorrectNFRelation": "Punktabzug pro falscher Normalform-Relation"
-
       },
       "descriptions": {
         "penalty": "Ein Punkteabzug von -1 bedeutet, dass die Abgabe mit 0 Punkten bewertet wird."
@@ -166,7 +165,6 @@
         "minimalCover": "Minimale Überdeckung",
         "normalFormDetermination": "Normalformen bestimmen",
         "normalization": "Normalisierung"
-
       }
     },
     "uml": {
@@ -194,7 +192,30 @@
         "pointsPerUndefinedClass": "Abgezogene Punkte für undefinierte Klassen & Individuen",
         "pointsPerAxiomWithoutEntity": "Abgezogene Punkte für falsche oder fehlende Axiome ohne Klasse oder Individuum"
       }
+    },
+    "or-view": {
+      "title": "Object-Relational Views",
+      "fields": {
+        "solution": "Lösung",
+        "testQuery": "Validierungsabfrage",
+        "superviewInheritance": "Superview (Vererbung)",
+        "superviewRef": "Superview (MAKE_REF)"
+      },
+      "penalties": {
+        "title": "Punkteabzüge",
+        "description": "Optionale Punkteabzüge pro Fehlerkategorie. Wird kein Wert eingetragen und der entsprechende Fehler tritt auf, werden keine Punkte abgezogen.",
+        "optional": "Kein Abzug",
+        "missingPrimitiveField": "Fehlendes/falsches/überflüssiges primitives Feld: Punkteabzug",
+        "missingObjectField": "Fehlendes/falsches Objektfeld (Konstruktorargument, MAKE_REF): Punkteabzug",
+        "missingNestedTable": "Fehlende verschachtelte Tabelle (CAST/MULTISET): Punkteabzug",
+        "wrongNestedTableType": "Falscher Typ in der verschachtelten Tabelle: Punkteabzug",
+        "wrongViewObjectType": "Falscher View-Objekttyp (OF-Klausel): Punkteabzug",
+        "wrongOid": "Falsche/fehlende Objekt-ID (WITH OBJECT IDENTIFIER): Punkteabzug",
+        "wrongContent": "Falscher Inhalt (falsche Zeilen, z.B. falscher JOIN, WHERE-Bedingung): Punkteabzug",
+        "wrongColumnOrder": "Falsche Spaltenreihenfolge (inkompatible Datentypen): Punkteabzug",
+        "wrongSuperview": "Fehlende/falsche UNDER-Beziehung: Punkteabzug"
+      },
+      "descriptions": {}
     }
   }
 }
-

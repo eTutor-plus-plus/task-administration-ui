@@ -1,0 +1,256 @@
+<div [formGroup]="form">
+  <div class="surface-card p-4 shadow-2 border-round p-fluid mb-4">
+    <div class="grid formgrid p-fluid">
+      <div class="field mb-4 col-12 flex align-items-center">
+        <p-checkbox
+          formControlName="hasUnderSuperview"
+          binary="true"
+          inputId="hasUnderSuperview">
+        </p-checkbox>
+        <label for="hasUnderSuperview"
+               class="ml-2"
+               transloco="taskTypes.or-view.fields.superviewInheritance">
+        </label>
+      </div>
+
+      @if (form.controls.hasUnderSuperview.value) {
+        <div class="field mb-4 col-12">
+          <label for="underSuperview"
+                 transloco="taskTypes.or-view.fields.superviewInheritance"></label>
+          <ngx-monaco-editor
+            id="underSuperview"
+            formControlName="underSuperview"
+            [options]="editorOptions"
+            style="height: 200px;">
+          </ngx-monaco-editor>
+          @if (form.controls.underSuperview.dirty || form.controls.underSuperview.touched) {
+            <small class="block mt-1 p-error">
+              {{ getError(form.controls.underSuperview, 'taskTypes.or-view.fields.superviewInheritance') }}
+            </small>
+          }
+        </div>
+      }
+
+      <div class="field mb-4 col-12 flex align-items-center">
+        <p-checkbox
+          formControlName="hasRefSuperview"
+          binary="true"
+          inputId="hasRefSuperview">
+        </p-checkbox>
+        <label for="hasRefSuperview"
+               class="ml-2"
+               transloco="taskTypes.or-view.fields.superviewRef">
+        </label>
+      </div>
+
+      @if (form.controls.hasRefSuperview.value) {
+        <div class="field mb-4 col-12">
+          <label for="refSuperview"
+                 transloco="taskTypes.or-view.fields.superviewRef"></label>
+          <ngx-monaco-editor
+            id="refSuperview"
+            formControlName="refSuperview"
+            [options]="editorOptions"
+            style="height: 200px;">
+          </ngx-monaco-editor>
+          @if (form.controls.refSuperview.dirty || form.controls.refSuperview.touched) {
+            <small class="block mt-1 p-error">
+              {{ getError(form.controls.refSuperview, 'taskTypes.or-view.fields.superviewRef') }}
+            </small>
+          }
+        </div>
+      }
+
+      <div class="field mb-4 col-12">
+        <label for="solution" transloco="taskTypes.or-view.fields.solution"></label>
+        <ngx-monaco-editor
+          id="solution"
+          formControlName="solution"
+          [options]="editorOptions"
+          style="height: 250px;">
+        </ngx-monaco-editor>
+        @if (form.controls.solution.dirty || form.controls.solution.touched) {
+          <small class="block mt-1 p-error">
+            {{ getError(form.controls.solution, 'taskTypes.or-view.fields.solution') }}
+          </small>
+        }
+      </div>
+
+      <div class="field mb-4 col-12">
+        <label for="testQuery" transloco="taskTypes.or-view.fields.testQuery"></label>
+        <ngx-monaco-editor
+          id="testQuery"
+          formControlName="testQuery"
+          [options]="editorOptions"
+          style="height: 250px;">
+        </ngx-monaco-editor>
+        @if (form.controls.testQuery.dirty || form.controls.testQuery.touched) {
+          <small class="block mt-1 p-error">
+            {{ getError(form.controls.testQuery, 'taskTypes.or-view.fields.testQuery') }}
+          </small>
+        }
+      </div>
+
+    </div>
+  </div>
+
+  <div class="surface-card p-4 shadow-2 border-round p-fluid mb-4">
+    <div class="grid formgrid p-fluid">
+
+      <div class="field mb-4 col-12 md:col-6">
+        <label for="missingPrimitiveFieldPenalty"
+               transloco="taskTypes.or-view.penalties.missingPrimitiveField"></label>
+        <p-inputNumber
+          inputId="missingPrimitiveFieldPenalty"
+          formControlName="missingPrimitiveFieldPenalty"
+          mode="decimal"
+          [maxFractionDigits]="2"
+          [min]="0">
+        </p-inputNumber>
+        @if (form.controls.missingPrimitiveFieldPenalty.dirty || form.controls.missingPrimitiveFieldPenalty.touched) {
+          <small class="block mt-1 p-error">
+            {{ getError(form.controls.missingPrimitiveFieldPenalty, 'taskTypes.or-view.penalties.missingPrimitiveField') }}
+          </small>
+        }
+      </div>
+
+      <div class="field mb-4 col-12 md:col-6">
+        <label for="missingObjectFieldPenalty"
+               transloco="taskTypes.or-view.penalties.missingObjectField"></label>
+        <p-inputNumber
+          inputId="missingObjectFieldPenalty"
+          formControlName="missingObjectFieldPenalty"
+          mode="decimal"
+          [maxFractionDigits]="2"
+          [min]="0">
+        </p-inputNumber>
+        @if (form.controls.missingObjectFieldPenalty.dirty || form.controls.missingObjectFieldPenalty.touched) {
+          <small class="block mt-1 p-error">
+            {{ getError(form.controls.missingObjectFieldPenalty, 'taskTypes.or-view.penalties.missingObjectField') }}
+          </small>
+        }
+      </div>
+
+      <div class="field mb-4 col-12 md:col-6">
+        <label for="missingNestedTablePenalty"
+               transloco="taskTypes.or-view.penalties.missingNestedTable"></label>
+        <p-inputNumber
+          inputId="missingNestedTablePenalty"
+          formControlName="missingNestedTablePenalty"
+          mode="decimal"
+          [maxFractionDigits]="2"
+          [min]="0">
+        </p-inputNumber>
+        @if (form.controls.missingNestedTablePenalty.dirty || form.controls.missingNestedTablePenalty.touched) {
+          <small class="block mt-1 p-error">
+            {{ getError(form.controls.missingNestedTablePenalty, 'taskTypes.or-view.penalties.missingNestedTable') }}
+          </small>
+        }
+      </div>
+
+      <div class="field mb-4 col-12 md:col-6">
+        <label for="wrongNestedTableTypePenalty"
+               transloco="taskTypes.or-view.penalties.wrongNestedTableType"></label>
+        <p-inputNumber
+          inputId="wrongNestedTableTypePenalty"
+          formControlName="wrongNestedTableTypePenalty"
+          mode="decimal"
+          [maxFractionDigits]="2"
+          [min]="0">
+        </p-inputNumber>
+        @if (form.controls.wrongNestedTableTypePenalty.dirty || form.controls.wrongNestedTableTypePenalty.touched) {
+          <small class="block mt-1 p-error">
+            {{ getError(form.controls.wrongNestedTableTypePenalty, 'taskTypes.or-view.penalties.wrongNestedTableType') }}
+          </small>
+        }
+      </div>
+
+      <div class="field mb-4 col-12 md:col-6">
+        <label for="wrongViewObjectTypePenalty"
+               transloco="taskTypes.or-view.penalties.wrongViewObjectType"></label>
+        <p-inputNumber
+          inputId="wrongViewObjectTypePenalty"
+          formControlName="wrongViewObjectTypePenalty"
+          mode="decimal"
+          [maxFractionDigits]="2"
+          [min]="0">
+        </p-inputNumber>
+        @if (form.controls.wrongViewObjectTypePenalty.dirty || form.controls.wrongViewObjectTypePenalty.touched) {
+          <small class="block mt-1 p-error">
+            {{ getError(form.controls.wrongViewObjectTypePenalty, 'taskTypes.or-view.penalties.wrongViewObjectType') }}
+          </small>
+        }
+      </div>
+
+      <div class="field mb-4 col-12 md:col-6">
+        <label for="wrongOidPenalty"
+               transloco="taskTypes.or-view.penalties.wrongOid"></label>
+        <p-inputNumber
+          inputId="wrongOidPenalty"
+          formControlName="wrongOidPenalty"
+          mode="decimal"
+          [maxFractionDigits]="2"
+          [min]="0">
+        </p-inputNumber>
+        @if (form.controls.wrongOidPenalty.dirty || form.controls.wrongOidPenalty.touched) {
+          <small class="block mt-1 p-error">
+            {{ getError(form.controls.wrongOidPenalty, 'taskTypes.or-view.penalties.wrongOid') }}
+          </small>
+        }
+      </div>
+
+      <div class="field mb-4 col-12 md:col-6">
+        <label for="wrongContentPenalty"
+               transloco="taskTypes.or-view.penalties.wrongContent"></label>
+        <p-inputNumber
+          inputId="wrongContentPenalty"
+          formControlName="wrongContentPenalty"
+          mode="decimal"
+          [maxFractionDigits]="2"
+          [min]="0">
+        </p-inputNumber>
+        @if (form.controls.wrongContentPenalty.dirty || form.controls.wrongContentPenalty.touched) {
+          <small class="block mt-1 p-error">
+            {{ getError(form.controls.wrongContentPenalty, 'taskTypes.or-view.penalties.wrongContent') }}
+          </small>
+        }
+      </div>
+
+      <div class="field mb-4 col-12 md:col-6">
+        <label for="wrongColumnOrderPenalty"
+               transloco="taskTypes.or-view.penalties.wrongColumnOrder"></label>
+        <p-inputNumber
+          inputId="wrongColumnOrderPenalty"
+          formControlName="wrongColumnOrderPenalty"
+          mode="decimal"
+          [maxFractionDigits]="2"
+          [min]="0">
+        </p-inputNumber>
+        @if (form.controls.wrongColumnOrderPenalty.dirty || form.controls.wrongColumnOrderPenalty.touched) {
+          <small class="block mt-1 p-error">
+            {{ getError(form.controls.wrongColumnOrderPenalty, 'taskTypes.or-view.penalties.wrongColumnOrder') }}
+          </small>
+        }
+      </div>
+
+      <div class="field mb-4 col-12 md:col-6">
+        <label for="wrongSuperviewPenalty"
+               transloco="taskTypes.or-view.penalties.wrongSuperview"></label>
+        <p-inputNumber
+          inputId="wrongSuperviewPenalty"
+          formControlName="wrongSuperviewPenalty"
+          mode="decimal"
+          [maxFractionDigits]="2"
+          [min]="0">
+        </p-inputNumber>
+        @if (form.controls.wrongSuperviewPenalty.dirty || form.controls.wrongSuperviewPenalty.touched) {
+          <small class="block mt-1 p-error">
+            {{ getError(form.controls.wrongSuperviewPenalty, 'taskTypes.or-view.penalties.wrongSuperview') }}
+          </small>
+        }
+      </div>
+
+    </div>
+    <small transloco="taskTypes.or-view.penalties.description" class="text-color-secondary block mt-1"></small>
+  </div>
+</div>

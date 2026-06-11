@@ -1,0 +1,79 @@
+<div class="surface-card p-4 shadow-2 border-round p-fluid mb-4" [formGroup]="form">
+  <div class="grid formgrid p-fluid">
+
+    <!-- Extensional Schema -->
+    <div class="field mb-4 col-12">
+      <label for="extensionalSchema"
+             transloco="taskGroupTypes.or-view.fields.extensionalSchema"></label>
+
+      <ngx-monaco-editor
+        id="extensionalSchema"
+        formControlName="extensionalSchema"
+        [options]="editorOptions"
+        style="height: 400px;" />
+
+      @if (form.controls.extensionalSchema.dirty || form.controls.extensionalSchema.touched) {
+        <small class="block mt-1 p-error">
+          {{ getError(form.controls.extensionalSchema, 'taskGroupTypes.or-view.fields.extensionalSchema') }}
+        </small>
+      }
+    </div>
+
+    <!-- Intensional Schema -->
+    <div class="field mb-4 col-12">
+      <label for="intensionalSchema"
+             transloco="taskGroupTypes.or-view.fields.intensionalSchema"></label>
+
+      <ngx-monaco-editor
+        id="intensionalSchema"
+        formControlName="intensionalSchema"
+        [options]="editorOptions"
+        style="height: 400px;" />
+
+      @if (form.controls.intensionalSchema.dirty || form.controls.intensionalSchema.touched) {
+        <small class="block mt-1 p-error">
+          {{ getError(form.controls.intensionalSchema, 'taskGroupTypes.or-view.fields.intensionalSchema') }}
+        </small>
+      }
+    </div>
+
+
+
+    <!-- Submit Inserts -->
+    <div class="field mb-4 col-12">
+      <label for="submitInserts"
+             transloco="taskGroupTypes.or-view.fields.submitInserts"></label>
+
+      <ngx-monaco-editor
+        id="submitInserts"
+        formControlName="submitInserts"
+        [options]="editorOptions"
+        style="height: 300px;" />
+
+      @if (form.controls.submitInserts.dirty || form.controls.submitInserts.touched) {
+        <small class="block mt-1 p-error">
+          {{ getError(form.controls.submitInserts, 'taskGroupTypes.or-view.fields.submitInserts') }}
+        </small>
+      }
+    </div>
+
+    <!-- Diagnose Inserts -->
+    <div class="field mb-4 col-12">
+      <label for="diagnoseInserts"
+             transloco="taskGroupTypes.or-view.fields.diagnoseInserts"></label>
+
+      <ngx-monaco-editor
+        id="diagnoseInserts"
+        formControlName="diagnoseInserts"
+        [options]="editorOptions"
+        style="height: 300px;" />
+
+      @if (form.controls.diagnoseInserts.dirty || form.controls.diagnoseInserts.touched) {
+        <small class="block mt-1 p-error">
+          {{ getError(form.controls.diagnoseInserts, 'taskGroupTypes.or-view.fields.diagnoseInserts') }}
+        </small>
+      }
+    </div>
+
+  </div>
+</div>
