@@ -25,31 +25,36 @@ import { Button, ButtonDirective } from 'primeng/button';
 })
 export class TaskTypeHierarchicalClusteringComponent extends TaskTypeFormComponent<TaskTypeForm> {
 
+  /**
+   * Initializes the clustering assignment form, configures type-dependent
+   * validation, and automatically updates the maximum achievable points.
+   */
   protected override initForm(): void {
-    // add controls
     this.form.addControl('assignmentType', new FormControl<AssignmentType | null>(AssignmentType.COORDINATES, [Validators.required]));
     this.form.addControl('distanceMetric', new FormControl<DistanceMetric | null>(DistanceMetric.EUCLIDEAN, [Validators.required]));
     this.form.addControl('nDataPoints', new FormControl<number | null>(null, [Validators.required]));
     this.form.addControl('linkageMethod', new FormControl<LinkageMethod | null>(LinkageMethod.SINGLE, [Validators.required]));
     this.form.addControl('pointsPerCorrectCluster', new FormControl<number | null>(null, [Validators.required]));
     this.form.addControl('wrongOrderPenalty', new FormControl<number | null>(null));
+
     this.form.addControl('coordinateSystem', new FormGroup({
-        minX: new FormControl<number | null>(0),
-        maxX: new FormControl<number | null>(10),
-        minY: new FormControl<number | null>(0),
-        maxY: new FormControl<number | null>(10),
-        coordinateList: new FormArray<FormGroup<{
-            label: FormControl<string | null>;
-            x: FormControl<number | null>;
-            y: FormControl<number |null>;
-        }>>([])
+      minX: new FormControl<number | null>(0),
+      maxX: new FormControl<number | null>(10),
+      minY: new FormControl<number | null>(0),
+      maxY: new FormControl<number | null>(10),
+      coordinateList: new FormArray<FormGroup<{
+        label: FormControl<string | null>;
+        x: FormControl<number | null>;
+        y: FormControl<number | null>;
+      }>>([])
     }));
+
     this.form.addControl('distanceMatrix', new FormGroup({
       labels: new FormArray<FormControl<string | null>>([]),
       distances: new FormArray<FormArray<FormControl<number | null>>>([])
     }));
 
-    // changing validators for type-specific fields
+    // Toggle validators depending on the selected assignment type.
     this.form.get('assignmentType')!.valueChanges.subscribe(value => {
       const metricControl = this.form.get('distanceMetric');
       const minXControl = this.minXControl;
@@ -72,15 +77,16 @@ export class TaskTypeHierarchicalClusteringComponent extends TaskTypeFormCompone
       }
     });
 
-    // automatic max points calculation
     const nDataPointsControl = this.form.get('nDataPoints') as FormControl<number | null>;
     const pointsPerClusterControl = this.form.get('pointsPerCorrectCluster') as FormControl<number | null>;
 
+    // Recalculate the maximum score whenever either input changes.
     combineLatest([
       nDataPointsControl.valueChanges.pipe(startWith(nDataPointsControl.value)),
       pointsPerClusterControl.valueChanges.pipe(startWith(pointsPerClusterControl.value))
     ]).subscribe(([nDataPoints, pointsPerCluster]) => {
       if (nDataPointsControl.valid && pointsPerClusterControl.valid && nDataPoints != null && pointsPerCluster != null) {
+        // A clustering task with n points requires n - 1 merge operations.
         const maxPoints = (nDataPoints - 1) * pointsPerCluster;
         this.parentForm?.controls.maxPoints.setValue(maxPoints);
       } else {
@@ -88,7 +94,6 @@ export class TaskTypeHierarchicalClusteringComponent extends TaskTypeFormCompone
       }
     });
   }
-
 
 
   protected readonly AssignmentType = AssignmentType;
@@ -99,36 +104,56 @@ export class TaskTypeHierarchicalClusteringComponent extends TaskTypeFormCompone
   dendrogram?: Blob;
   dendrogramUrl?: string;
 
+  /**
+   * Initializes the clustering form component.
+   */
   constructor() {
     super();
   }
 
-  // getters
+  /**
+   * Access the coordinate system group containing min/max values and coordinates.
+   */
   get coordinateSystem(): FormGroup {
     return this.form.get('coordinateSystem') as FormGroup;
   }
 
+  /**
+   * Min X value control
+   */
   get minXControl(): FormControl<number | null> {
     return this.coordinateSystem.get('minX') as FormControl<number | null>;
   }
 
+  /**
+   * Max X value control
+   */
   get maxXControl(): FormControl<number | null> {
     return this.coordinateSystem.get('maxX') as FormControl<number | null>;
   }
 
+  /**
+   * Min Y value control
+   */
   get minYControl(): FormControl<number | null> {
     return this.coordinateSystem.get('minY') as FormControl<number | null>;
   }
 
+  /**
+   * Max Y value control
+   */
   get maxYControl(): FormControl<number | null> {
     return this.coordinateSystem.get('maxY') as FormControl<number | null>;
   }
 
+  /**
+   * Array of coordinate points, each with label, x, and y.
+   */
   get coordinateList(): FormArray<FormGroup<{
-      label: FormControl<string | null>;
-      x: FormControl<number | null>;
-      y: FormControl<number | null>;
-    }>> {
+    label: FormControl<string | null>;
+    x: FormControl<number | null>;
+    y: FormControl<number | null>;
+  }>> {
     return this.coordinateSystem.get('coordinateList') as FormArray<FormGroup<{
       label: FormControl<string | null>;
       x: FormControl<number | null>;
@@ -136,24 +161,40 @@ export class TaskTypeHierarchicalClusteringComponent extends TaskTypeFormCompone
     }>>;
   }
 
+  /**
+   * Distance matrix group containing labels and distances arrays
+   */
   get distanceMatrixGroup(): FormGroup {
     return this.form.controls.distanceMatrix as FormGroup;
   }
 
+  /**
+   * Array of labels for the distance matrix
+   */
   get labelsArray(): FormArray<FormControl<string | null>> {
     return this.distanceMatrixGroup.get('labels') as FormArray<FormControl<string | null>>;
   }
 
+  /**
+   * 2D array of distances between points
+   */
   get distancesArray(): FormArray<FormArray<FormControl<number | null>>> {
     return this.distanceMatrixGroup.get('distances') as FormArray<FormArray<FormControl<number | null>>>;
   }
 
+  /**
+   * Retrieve a specific row from the distance matrix.
+   * @param rowIndex Index of the row to get
+   */
   getRow(rowIndex: number): FormArray<FormControl<number | null>> {
     return this.distancesArray.at(rowIndex) as FormArray<FormControl<number | null>>;
   }
 
 
-
+  /**
+   * Triggers download of the generated dendrogram as a PNG file.
+   * Does nothing if no dendrogram is available.
+   */
   downloadDendrogram(): void {
     if (!this.dendrogram || this.dendrogramUrl == null) {
       return;
@@ -169,23 +210,28 @@ export class TaskTypeHierarchicalClusteringComponent extends TaskTypeFormCompone
   }
 
 
-
+  /**
+   * Loads persisted assignment data into the form and restores the
+   * generated solution and dendrogram preview.
+   */
   protected override onOriginalDataChanged(data: unknown): void {
     const typedData = data as {
-      distanceMatrix?: { labels?: string[], distances?: number[][] },
+      distanceMatrix?: { labels?: string[]; distances?: number[][] };
       coordinateSystem?: {
-        minX: number; maxX: number;
-        minY: number; maxY: number;
-        coordinateList: { label: string; x: number; y: number; }[];
-      },
-      solution?: string,
-      dendrogram?: string
+        minX: number;
+        maxX: number;
+        minY: number;
+        maxY: number;
+        coordinateList: { label: string; x: number; y: number }[];
+      };
+      solution?: string;
+      dendrogram?: string;
     };
 
     this.solution = typedData?.solution;
     const base64 = typedData?.dendrogram;
 
-    // convert from base64 to image/url
+    // Convert the stored Base64 image into a Blob and object URL.
     if (base64) {
       const byteCharacters = atob(base64);
       const byteNumbers = new Array(byteCharacters.length);
@@ -196,14 +242,14 @@ export class TaskTypeHierarchicalClusteringComponent extends TaskTypeFormCompone
 
       const byteArray = new Uint8Array(byteNumbers);
 
-      this.dendrogram = new Blob([byteArray], { type: 'image/png' });
+      this.dendrogram = new Blob([byteArray], {type: 'image/png'});
       this.dendrogramUrl = URL.createObjectURL(this.dendrogram);
     }
 
+    if (!this.form) {
+      return;
+    }
 
-    if (!this.form) return;
-
-    // parse coordinate data to form controls
     const coordinateSystem = typedData?.coordinateSystem;
     const coordinateSystemGroup = this.coordinateSystem;
 
@@ -228,7 +274,6 @@ export class TaskTypeHierarchicalClusteringComponent extends TaskTypeFormCompone
           })
         );
       });
-
     } else {
       coordinateSystemGroup.patchValue({
         minX: 0,
@@ -240,8 +285,6 @@ export class TaskTypeHierarchicalClusteringComponent extends TaskTypeFormCompone
       this.coordinateList.clear();
     }
 
-
-    // parse distance matrix data to form controls
     const matrix = typedData?.distanceMatrix;
 
     if (matrix?.labels && matrix?.distances) {
@@ -263,7 +306,7 @@ export class TaskTypeHierarchicalClusteringComponent extends TaskTypeFormCompone
       setTimeout(() => this.syncSymmetry());
     }
 
-    // ensure that data gets updated/reloaded
+    // Force revalidation after replacing form controls.
     this.distanceMatrixGroup.updateValueAndValidity();
     this.coordinateSystem.updateValueAndValidity();
   }
@@ -271,19 +314,24 @@ export class TaskTypeHierarchicalClusteringComponent extends TaskTypeFormCompone
 
   private symmetrySubscriptions: Subscription[] = [];
 
-  // matrix synchronization to ensure symmetry
+  /**
+   * Sets up two-way synchronization for the distance matrix to enforce symmetry.
+   * Whenever a value at [i][j] changes, the mirrored value at [j][i] is updated.
+   */
   private syncSymmetry(): void {
+    // Unsubscribe previous symmetry subscriptions to avoid duplicate updates.
     this.symmetrySubscriptions.forEach(s => s.unsubscribe());
     this.symmetrySubscriptions = [];
 
     for (let i = 0; i < this.distancesArray.length; i++) {
       for (let j = 0; j < this.getRow(i).length; j++) {
-        if (i === j) continue;
+        if (i === j) continue; // skip diagonal, as it doesn't need mirroring
 
+        // Subscribe to changes and update the mirrored cell without triggering another event
         const sub = this.getRow(i).at(j).valueChanges.subscribe(value => {
           const mirror = this.getRow(j).at(i);
           if (mirror.value !== value) {
-            mirror.setValue(value, { emitEvent: false });
+            mirror.setValue(value, {emitEvent: false});
           }
         });
 
@@ -292,7 +340,11 @@ export class TaskTypeHierarchicalClusteringComponent extends TaskTypeFormCompone
     }
   }
 
-
+  /**
+   * Cleanup routine for the component.
+   * - Unsubscribes all symmetry subscriptions to prevent memory leaks.
+   * - Revokes the dendrogram object URL if one exists.
+   */
   ngOnDestroy(): void {
     this.symmetrySubscriptions.forEach(s => s.unsubscribe());
     if (this.dendrogramUrl) {
