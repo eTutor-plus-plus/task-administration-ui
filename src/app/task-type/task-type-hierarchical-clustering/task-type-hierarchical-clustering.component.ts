@@ -1,13 +1,11 @@
-import { ChangeDetectorRef, Component } from '@angular/core';
+import { Component } from '@angular/core';
 import { TaskTypeFormComponent } from '../task-type-form.component';
 import { FormArray, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { TranslocoDirective } from '@ngneat/transloco';
 import { combineLatest, startWith, Subscription } from 'rxjs';
 import { RadioButtonModule } from 'primeng/radiobutton';
-import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
-import { TaskService } from '../../api';
-import { Button, ButtonDirective } from 'primeng/button';
+import { ButtonDirective } from 'primeng/button';
 
 @Component({
   selector: 'dke-task-type-hierarchical-clustering',
