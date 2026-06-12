@@ -196,7 +196,7 @@
 
       "fields": {
         "assignmentType": "Type of assignment",
-        "strategy": {
+        "type": {
           "coordinates": "List of coordinates",
           "matrix": "Distance matrix"
         },
@@ -214,19 +214,19 @@
           "manhattan": "Manhattan"
         },
 
-        "nDataPoints": "Number of points for clustering",
+        "nDataPoints": "Number of data points",
         "linkageMethod": "Linkage Method",
         "linkage": {
           "single": "Single (minimum distance)",
           "complete": "Complete (maximum distance)"
         },
 
-        "pointsPerCorrectCluster": "Points per correct cluster",
-        "wrongOrderPenalty": "Fixed penalty for wrong order (of distances)",
-
-        "coordinatePoints": "Coordinate list",
-        "distanceMatrix": "Distance matrix"
+        "pointsPerCorrectCluster": "Points per newly formed cluster at a distance",
+        "wrongOrderPenalty": "Fixed penalty for wrong order (of distances)"
       },
+
+      "coordinateList": "Coordinate list",
+      "distanceMatrix": "Distance matrix",
 
       "solution": "Solution",
       "dendrogram": "Dendrogram",

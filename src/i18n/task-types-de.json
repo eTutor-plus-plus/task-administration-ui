@@ -200,7 +200,7 @@
 
       "fields": {
         "assignmentType": "Art der Angabe",
-        "strategy": {
+        "type": {
           "coordinates": "Koordinatenliste",
           "matrix": "Distanzmatrix"
         },
@@ -212,25 +212,25 @@
           "maxY": "Maximum der Y-Achse"
         },
 
-        "distanceMetric": "Distanzmaß",
+        "distanceMetric": "Distanzmetrik",
         "metric": {
           "euclidean": "Euklidisch",
           "manhattan": "Manhattan"
         },
 
-        "nDataPoints": "Anzahl der zu clusternden Punkte",
+        "nDataPoints": "Anzahl der Datenpunkte",
         "linkageMethod": "Linkage-Methode",
         "linkage": {
           "single": "Single (minimale Distanz)",
           "complete": "Complete (maximale Distanz)"
         },
 
-        "pointsPerCorrectCluster": "Punkte pro korrektem Cluster",
-        "wrongOrderPenalty": "Fixer Punkteabzug für falsche Reihenfolge (der Distanzen)",
-
-        "coordinatePoints": "Koordinatenliste",
-        "distanceMatrix": "Distanzmatrix"
+        "pointsPerCorrectCluster": "Punkte pro neu gebildetem Cluster bei einer Distanz",
+        "wrongOrderPenalty": "Fixer Punkteabzug für falsche Reihenfolge (der Distanzen)"
       },
+
+      "coordinateList": "Koordinatenliste",
+      "distanceMatrix": "Distanzmatrix",
 
       "solution": "Lösung",
       "dendrogram": "Dendrogramm",
