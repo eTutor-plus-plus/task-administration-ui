@@ -201,7 +201,7 @@
       },
       "penalties": {
         "title": "Penalty Points",
-        "description": "Optional penalty deductions per error category. If no value is set and the corresponding error occurs, zero points are awarded.",
+        "description": "Optional point deductions per error category. If no value is entered and the corresponding error occurs, no points will be deducted.",
         "optional": "No penalty",
         "missingPrimitiveField": "Missing/wrong/unnecessary primitive field: Penalty",
         "missingObjectField": "Missing/wrong object field (constructor argument, MAKE_REF): Penalty",
