@@ -198,7 +198,8 @@
         "addTypeBodyEntry": "Add DECLARE Statement",
         "methodName": "Method Name",
         "targetTable": "Target Table",
-        "declareStatement": "DECLARE Statement"
+        "declareStatement": "DECLARE Statement",
+        "superfluousPenalty": "Superfluous Attribute: Penalty"
       }
     }
   }

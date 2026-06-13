@@ -17,6 +17,11 @@
         <ngx-monaco-editor formControlName="submitDmlStatements" [options]="editorOptions" style="height: 200px;"></ngx-monaco-editor>
       </div>
 
+      <div class="field mb-4 col-12 md:col-4">
+        <label for="superfluousPenalty" transloco="taskTypes.intensional-schema.fields.superfluousPenalty"></label>
+        <input id="superfluousPenalty" type="number" pInputText formControlName="superfluousPenalty" autocomplete="off" min="0">
+      </div>
+
     </div>
 
     <p-divider type="solid"/>
@@ -43,10 +48,7 @@
 
           <div class="field mt-4 mb-4 col-12 md:col-2">
             <label for="solutionMaxPoints-{{i}}" [transloco]="'taskTypes.intensional-schema.fields.solutionMaxPoints'"></label>
-            <input id="solutionMaxPoints-{{i}}" type="number" pInputText formControlName="solutionMaxPoints" autocomplete="off">
-            <small class="block mt-1 p-error" *ngIf="aspect.get('solutionMaxPoints')?.dirty || aspect.get('solutionMaxPoints')?.touched">
-              {{ getError(asFormControl(aspect.get('solutionMaxPoints')), 'taskTypes.intensional-schema.fields.solutionMaxPoints') }}
-            </small>
+            <input id="solutionMaxPoints-{{i}}" type="number" pInputText formControlName="solutionMaxPoints" autocomplete="off" [readOnly]="true">
           </div>
 
           <div class="field mt-6 mb-4 col-12 md:col-2">
@@ -117,7 +119,7 @@
                     </div>
 
                     <div class="field mb-4 col-12 md:col-2">
-                      <input id="solutionAspectPoints-{{i}}-{{j}}" type="number" pInputText formControlName="solutionAspectPoints" autocomplete="off">
+                      <input id="solutionAspectPoints-{{i}}-{{j}}" type="number" pInputText formControlName="solutionAspectPoints" autocomplete="off" (input)="recalculateMaxPoints(i)">
                       <small class="block mt-1 p-error"
                              *ngIf="eval.get('solutionAspectPoints')?.dirty || eval.get('solutionAspectPoints')?.touched">
                         {{ getError(asFormControl(eval.get('solutionAspectPoints')), 'taskTypes.intensional-schema.fields.solutionAspectPoints') }}

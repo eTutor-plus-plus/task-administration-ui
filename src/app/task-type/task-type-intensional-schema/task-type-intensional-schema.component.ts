@@ -56,6 +56,7 @@ export class TaskTypeIntensionalSchemaComponent extends TaskTypeFormComponent<Ta
     this.form.addControl('dmlStatements', new FormControl<string | null>(null));
     this.form.addControl('diagnoseDmlStatements', new FormControl<string | null>(null));
     this.form.addControl('submitDmlStatements', new FormControl<string | null>(null));
+    this.form.addControl('superfluousPenalty', new FormControl<number | null>(0));
     this.form.addControl('solutionAspects', this.fb.array<FormGroup>([]));
   }
 
@@ -107,6 +108,10 @@ export class TaskTypeIntensionalSchemaComponent extends TaskTypeFormComponent<Ta
   }
 
   protected override onOriginalDataChanged(originalData: unknown): void {
+    const data = originalData as any;
+    if (data?.superfluousPenalty != null) {
+      this.form.get('superfluousPenalty')?.setValue(data.superfluousPenalty);
+    }
     this.loadSolutionAspects(originalData);
   }
 
@@ -191,10 +196,18 @@ export class TaskTypeIntensionalSchemaComponent extends TaskTypeFormComponent<Ta
 
   public addEvaluation(aspectIndex: number): void {
     this.getEvaluations(aspectIndex).push(this.createEvaluation());
+    this.recalculateMaxPoints(aspectIndex);
   }
 
   public removeEvaluation(aspectIndex: number, evalIndex: number): void {
     this.getEvaluations(aspectIndex).removeAt(evalIndex);
+    this.recalculateMaxPoints(aspectIndex);
+  }
+
+  public recalculateMaxPoints(aspectIndex: number): void {
+    const evals = this.getEvaluations(aspectIndex);
+    const sum = evals.controls.reduce((acc, ctrl) => acc + (ctrl.get('solutionAspectPoints')?.value ?? 0), 0);
+    this.solutionAspects.at(aspectIndex).get('solutionMaxPoints')?.setValue(sum);
   }
 
   public isTypeBody(aspectIndex: number): boolean {
@@ -210,5 +223,6 @@ interface TaskTypeForm {
   dmlStatements: FormControl<string | null>;
   diagnoseDmlStatements: FormControl<string | null>;
   submitDmlStatements: FormControl<string | null>;
+  superfluousPenalty: FormControl<number | null>;
   solutionAspects: FormArray<FormGroup>;
 }

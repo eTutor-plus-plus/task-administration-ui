@@ -201,7 +201,8 @@
         "addTypeBodyEntry": "DECLARE Statement hinzufügen",
         "methodName": "Methodenname",
         "targetTable": "Zieltabelle",
-        "declareStatement": "DECLARE Statement"
+        "declareStatement": "DECLARE Statement",
+        "superfluousPenalty": "Überflüssiges Attribut: Punkteabzug"
       }
     }
   }
