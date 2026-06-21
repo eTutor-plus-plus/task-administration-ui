@@ -209,8 +209,8 @@ export class TaskTypeHierarchicalClusteringComponent extends TaskTypeFormCompone
 
 
   /**
-   * Loads persisted assignment data into the form and restores the
-   * generated solution and dendrogram preview.
+   * Loads specific persisted assignment data into the form and restores the
+   * generated solution and dendrogram.
    */
   protected override onOriginalDataChanged(data: unknown): void {
     const typedData = data as {
@@ -315,6 +315,9 @@ export class TaskTypeHierarchicalClusteringComponent extends TaskTypeFormCompone
   /**
    * Sets up two-way synchronization for the distance matrix to enforce symmetry.
    * Whenever a value at [i][j] changes, the mirrored value at [j][i] is updated.
+   *
+   * The synchronization of symmetry is needed for validity of a matrix as well as
+   * to ensure consistent behavior of calculations.
    */
   private syncSymmetry(): void {
     // Unsubscribe previous symmetry subscriptions to avoid duplicate updates.

@@ -226,7 +226,7 @@
         },
 
         "pointsPerCorrectCluster": "Punkte pro neu gebildetem Cluster bei einer Distanz",
-        "wrongOrderPenalty": "Fixer Punkteabzug für falsche Reihenfolge (der Distanzen)"
+        "wrongOrderPenalty": "Fixer Punkteabzug für falsche Reihenfolge der Distanzen"
       },
 
       "coordinateList": "Koordinatenliste",

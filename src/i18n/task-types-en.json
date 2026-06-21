@@ -221,8 +221,8 @@
           "complete": "Complete (maximum distance)"
         },
 
-        "pointsPerCorrectCluster": "Points per newly formed cluster at a distance",
-        "wrongOrderPenalty": "Fixed penalty for wrong order (of distances)"
+        "pointsPerCorrectCluster": "Points per newly formed clusters at a distance",
+        "wrongOrderPenalty": "Fixed penalty for wrong order of distances"
       },
 
       "coordinateList": "Coordinate list",
