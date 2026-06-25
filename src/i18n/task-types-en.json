@@ -210,7 +210,7 @@
         "wrongViewObjectType": "Wrong view object type (OF clause): Penalty",
         "wrongOid": "Wrong/missing object identifier (WITH OBJECT IDENTIFIER): Penalty",
         "wrongContent": "Wrong content (incorrect rows, e.g. wrong JOIN, WHERE condition): Penalty",
-        "wrongColumnOrder": "Wrong column order (incompatible data types): Penalty",
+        "wrongColumnOrder": "Wrong column order (SELECT clause): Penalty",
         "wrongSuperview": "Missing/wrong UNDER relationship: Penalty"
       },
       "descriptions": {}

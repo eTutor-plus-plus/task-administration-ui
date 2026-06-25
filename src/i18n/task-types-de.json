@@ -212,7 +212,7 @@
         "wrongViewObjectType": "Falscher View-Objekttyp (OF-Klausel): Punkteabzug",
         "wrongOid": "Falsche/fehlende Objekt-ID (WITH OBJECT IDENTIFIER): Punkteabzug",
         "wrongContent": "Falscher Inhalt (falsche Zeilen, z.B. falscher JOIN, WHERE-Bedingung): Punkteabzug",
-        "wrongColumnOrder": "Falsche Spaltenreihenfolge (inkompatible Datentypen): Punkteabzug",
+        "wrongColumnOrder": "Falsche Spaltenreihenfolge (SELECT-Klausel): Punkteabzug",
         "wrongSuperview": "Fehlende/falsche UNDER-Beziehung: Punkteabzug"
       },
       "descriptions": {}
