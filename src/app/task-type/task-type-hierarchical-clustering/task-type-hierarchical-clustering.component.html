@@ -4,10 +4,7 @@
     <div class="col-12 mb-4">
       <div class="flex align-items-start gap-2 p-3 border-1 border-300 border-round border-left-3 border-primary">
         <i class="pi pi-info-circle mt-1 text-primary"></i>
-        <span
-          transloco="taskTypes.hierarchical-clustering.hint"
-          class="text-sm line-height-3 text-color">
-    </span>
+        <span transloco="taskTypes.hierarchical-clustering.hint" class="text-sm line-height-3 text-color"></span>
       </div>
     </div>
 
@@ -182,7 +179,7 @@
                 </tr>
                 </thead>
                 <tbody formArrayName="coordinateList">
-                  @for (control of coordinateList.controls; track i; let i = $index) {
+                  @for (control of coordinateList.controls; track control; let i = $index) {
                     <tr [formGroupName]="i">
                       <th scope="row" class="px-3 py-1 text-sm text-600 text-left whitespace-nowrap">
                         {{ control.value.label }}
@@ -222,7 +219,7 @@
               <thead>
               <tr>
                 <th></th>
-                @for (label of labelsArray.controls; track $index) {
+                @for (label of labelsArray.controls; track label) {
                   <th class="text-center">
                     <span class="text-sm font-medium text-600">{{ label.value }}</span>
                   </th>
@@ -230,12 +227,12 @@
               </tr>
               </thead>
               <tbody formArrayName="distances">
-                @for (row of distancesArray.controls; track $index; let rowIndex = $index) {
+                @for (row of distancesArray.controls; track row; let rowIndex = $index) {
                   <tr formArrayName="{{ rowIndex }}">
                     <td class="pr-2">
                       <span class="text-sm font-medium text-600">{{ labelsArray.controls[rowIndex].value }}</span>
                     </td>
-                    @for (cell of getRow(rowIndex).controls; track $index; let colIndex = $index) {
+                    @for (cell of getRow(rowIndex).controls; track cell; let colIndex = $index) {
                       @if (rowIndex >= colIndex) { <!-- only display lower triangle -->
                         <td class="p-1">
                           <p-inputNumber

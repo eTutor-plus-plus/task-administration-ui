@@ -211,6 +211,14 @@ export class TaskTypeHierarchicalClusteringComponent extends TaskTypeFormCompone
   /**
    * Loads specific persisted assignment data into the form and restores the
    * generated solution and dendrogram.
+   * <p>
+   * The dendrogram is loaded as a byte array reflecting an image in PNG format.
+   * Additionally, an image URL is created for display and download.
+   * <p>
+   * The new values of the coordinate system and distance matrix are patched in
+   * place of the old values. For that purpose, the arrays are resized if necessary.
+   * This approach ensures that the new values are loaded in a way that changes are
+   * reflected correctly in the UI after saving a task.
    */
   protected override onOriginalDataChanged(data: unknown): void {
     const typedData = data as {
@@ -229,7 +237,7 @@ export class TaskTypeHierarchicalClusteringComponent extends TaskTypeFormCompone
     this.solution = typedData?.solution;
     const base64 = typedData?.dendrogram;
 
-    // Convert the stored Base64 image into a Blob and object URL.
+    // Convert the stored Base64 image into a Blob and object URL
     if (base64) {
       const byteCharacters = atob(base64);
       const byteNumbers = new Array(byteCharacters.length);
@@ -260,17 +268,28 @@ export class TaskTypeHierarchicalClusteringComponent extends TaskTypeFormCompone
       });
 
       const coordinateList = this.coordinateList;
+      const newPoints = coordinateSystem?.coordinateList ?? [];
 
-      coordinateList.clear();
+      // Resize the coordinate list to match incoming list length
+      while (coordinateList.length > newPoints.length) {
+        coordinateList.removeAt(coordinateList.length - 1);
+      }
 
-      coordinateSystem.coordinateList?.forEach(point => {
-        coordinateList.push(
-          new FormGroup({
-            label: new FormControl(point.label, [Validators.required]),
-            x: new FormControl(point.x, [Validators.required]),
-            y: new FormControl(point.y, [Validators.required]),
-          })
-        );
+      while (coordinateList.length < newPoints.length) {
+        coordinateList.push(new FormGroup({
+          label: new FormControl<string | null>(null, [Validators.required]),
+          x: new FormControl<number | null>(null, [Validators.required]),
+          y: new FormControl<number | null>(null, [Validators.required]),
+        }));
+      }
+
+      // Patch new values
+      newPoints.forEach((point, index) => {
+        coordinateList.at(index).patchValue({
+          label: point.label,
+          x: point.x,
+          y: point.y,
+        });
       });
     } else {
       coordinateSystemGroup.patchValue({
@@ -286,25 +305,54 @@ export class TaskTypeHierarchicalClusteringComponent extends TaskTypeFormCompone
     const matrix = typedData?.distanceMatrix;
 
     if (matrix?.labels && matrix?.distances) {
-      const labels = new FormArray(
-        matrix.labels.map(l => new FormControl(l, [Validators.required]))
-      );
+      // Unsubscribe old symmetry subscriptions so no listeners fire when updating values
+      this.symmetrySubscriptions.forEach(s => s.unsubscribe());
+      this.symmetrySubscriptions = [];
 
-      const distances = new FormArray(
-        matrix.distances.map(row =>
-          new FormArray(
-            row.map(v => new FormControl(v, [Validators.required]))
-          )
-        )
-      );
+      const labels = this.labelsArray;
+      const distances = this.distancesArray;
+      const newLabels = matrix.labels;
+      const newDistances = matrix.distances;
 
-      this.distanceMatrixGroup.setControl('labels', labels);
-      this.distanceMatrixGroup.setControl('distances', distances);
+      // Resize and patch labels array to match incoming data
+      while (labels.length > newLabels.length) {
+        labels.removeAt(labels.length - 1);
+      }
 
-      setTimeout(() => this.syncSymmetry());
+      while (labels.length < newLabels.length) {
+        labels.push(new FormControl<string | null>(null, [Validators.required]));
+      }
+
+      newLabels.forEach((label, i) => labels.at(i).setValue(label));
+
+      // Resize rows to match incoming data
+      while (distances.length > newDistances.length) {
+        distances.removeAt(distances.length - 1);
+      }
+
+      while (distances.length < newDistances.length) {
+        distances.push(new FormArray<FormControl<number | null>>([]));
+      }
+
+      // Resize and patch each row's cells to match incoming data
+      newDistances.forEach((row, i) => {
+        const rowArray = distances.at(i) as FormArray<FormControl<number | null>>;
+
+        while (rowArray.length > row.length) {
+          rowArray.removeAt(rowArray.length - 1);
+        }
+
+        while (rowArray.length < row.length) {
+          rowArray.push(new FormControl<number | null>(null, [Validators.required]));
+        }
+
+        row.forEach((value, j) => rowArray.at(j).setValue(value));
+      });
+
+      this.syncSymmetry();
     }
 
-    // Force revalidation after replacing form controls.
+    // Force revalidation after replacing form controls
     this.distanceMatrixGroup.updateValueAndValidity();
     this.coordinateSystem.updateValueAndValidity();
   }
@@ -320,7 +368,7 @@ export class TaskTypeHierarchicalClusteringComponent extends TaskTypeFormCompone
    * to ensure consistent behavior of calculations.
    */
   private syncSymmetry(): void {
-    // Unsubscribe previous symmetry subscriptions to avoid duplicate updates.
+    // Unsubscribe previous symmetry subscriptions to avoid duplicate updates
     this.symmetrySubscriptions.forEach(s => s.unsubscribe());
     this.symmetrySubscriptions = [];
 
