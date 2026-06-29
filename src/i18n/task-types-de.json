@@ -197,6 +197,7 @@
     },
     "hierarchical-clustering": {
       "title": "Hierarchische Clusteranalyse",
+      "hint": "Hinweis: Unabhängig von der ausgewählten Sprache ist immer ein Komma als Dezimaltrenner zu verwenden.",
 
       "fields": {
         "assignmentType": "Art der Angabe",
