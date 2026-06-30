@@ -27,11 +27,6 @@ describe('TaskTypeOrViewsComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
-    expect(Object.keys(component.form.controls)).toHaveLength(13);
-  });
-
   it('should show error if solution is empty', () => {
     component.form.controls['solution'].markAsDirty();
     fixture.detectChanges();

@@ -9,6 +9,9 @@ import { TaskTypeFormComponent } from '../task-type-form.component';
 import { registerOrViewLanguage } from '../../monaco/or-view';
 import { TranslocoDirective } from '@ngneat/transloco';
 
+/**
+ * Task Type Form: OR-View
+ */
 @Component({
   selector: 'dke-task-type-or-view',
   standalone: true,
@@ -24,12 +27,18 @@ import { TranslocoDirective } from '@ngneat/transloco';
 })
 export class TaskTypeOrViewsComponent extends TaskTypeFormComponent<TaskTypeForm> {
 
+  /**
+   * The editor options.
+   */
   readonly editorOptions: editor.IStandaloneEditorConstructionOptions = {
     language: 'orview',
     automaticLayout: true,
     minimap: { enabled: false }
   };
 
+  /**
+   * Creates a new instance of class TaskTypeOrViewsComponent.
+   */
   constructor() {
     super();
     registerOrViewLanguage();

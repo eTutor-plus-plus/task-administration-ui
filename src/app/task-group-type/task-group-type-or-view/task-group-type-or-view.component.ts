@@ -6,6 +6,9 @@ import { MonacoEditorModule } from 'ngx-monaco-editor-v2';
 
 import { TaskGroupTypeFormComponent } from '../task-group-type-form.component';
 
+/**
+ * Task Group Type Form: OR-View
+ */
 @Component({
   selector: 'dke-task-group-type-or-view',
   standalone: true,
@@ -19,10 +22,16 @@ import { TaskGroupTypeFormComponent } from '../task-group-type-form.component';
 })
 export class TaskGroupTypeOrViewComponent extends TaskGroupTypeFormComponent<TaskGroupTypeForm> {
 
+  /**
+   * The editor options.
+   */
   readonly editorOptions: editor.IStandaloneEditorConstructionOptions = {
     language: 'sql'
   };
 
+  /**
+   * Creates a new instance of class TaskGroupTypeOrViewComponent.
+   */
   constructor() {
     super();
   }
