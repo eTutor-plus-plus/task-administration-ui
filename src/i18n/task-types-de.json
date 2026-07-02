@@ -191,8 +191,11 @@
         "solution": "Lösung",
         "checks": "Checks",
         "packages": "Python-Bibliotheken",
-        "submitData": "Submission-Daten",
-        "diagnoseData": "Diagnose-Daten"
+        "gradingVariables": "Grading-Variablen",
+        "availableLibraries": "Verfügbare Bibliotheken",
+        "checksHint": "Hinweis: An die jeweilige Grading-Variable ist in den Checks das Suffix _soll (für die Musterlösung) bzw. _ist (für die Studierendenabgabe) anzuhängen.",
+        "submitData": "Submit Data",
+        "diagnoseData": "Diagnose Data"
       }
     }
   }

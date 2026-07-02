@@ -2,7 +2,7 @@
 
   <div class="surface-card p-4 shadow-2 border-round p-fluid mb-4">
     <div class="flex justify-content-between align-items-center mb-3">
-      <label class="font-semibold">Grading Variables</label>
+      <label class="font-semibold" transloco="taskTypes.python.fields.gradingVariables"></label>
       <p-button icon="pi pi-plus" severity="success" (click)="addVariable()"></p-button>
     </div>
 
@@ -27,7 +27,7 @@
   <div class="surface-card p-4 shadow-2 border-round p-fluid mb-4">
     <div class="grid formgrid p-fluid">
       <div class="field col-12">
-        <label>Available Libraries</label>
+        <label transloco="taskTypes.python.fields.availableLibraries"></label>
 
         <div class="flex flex-wrap gap-2 mt-2">
           <span
@@ -115,6 +115,8 @@
         </p-button>
       </div>
     </div>
+
+    <small class="block mb-3 text-500" transloco="taskTypes.python.fields.checksHint"></small>
 
     <div formArrayName="checks">
       <div *ngFor="let check of checks.controls; let i = index" [formGroupName]="i" class="mb-4 p-3 border-1 border-round surface-border">
