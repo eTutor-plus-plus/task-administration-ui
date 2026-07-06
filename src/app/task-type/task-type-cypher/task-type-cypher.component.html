@@ -37,8 +37,6 @@
     <div class="surface-card p-4 shadow-2 border-round p-fluid mb-4">
       <div class="flex align-items-center justify-content-between mb-3">
         <label class="m-0 text-lg" transloco="taskTypes.cypher.fields.alternativeSolutions"></label>
-        <button pButton type="button" icon="pi pi-plus" class="p-button-sm" (click)="addAlternative()"
-                [label]="'taskTypes.cypher.actions.addAlternative' | transloco"></button>
       </div>
 
       @if (alternativesError) {
@@ -46,12 +44,12 @@
       }
 
       @if (alternativeSolutions.length === 0) {
-        <small class="text-color-secondary block" transloco="taskTypes.cypher.descriptions.alternativesEmpty"></small>
+        <small class="text-color-secondary block mb-3" transloco="taskTypes.cypher.descriptions.alternativesEmpty"></small>
       }
 
-      <div formArrayName="alternativeSolutions">
-        @for (item of alternativeSolutions.controls; track $index) {
-          <div [formGroupName]="$index" class="border-1 surface-border border-round p-3 mb-3">
+      <div>
+        @for (item of alternativeSolutions.controls; track item) {
+          <div [formGroup]="item" class="border-1 surface-border border-round p-3 mb-3">
             <div class="flex align-items-center justify-content-between mb-2">
               <span class="text-color-secondary">
                 {{ 'taskTypes.cypher.fields.alternativeSolution.stage' | transloco:{ index: $index + 1 } }}
@@ -93,6 +91,9 @@
           </div>
         }
       </div>
+
+      <button pButton type="button" icon="pi pi-plus" class="p-button-sm" (click)="addAlternative()"
+              [label]="'taskTypes.cypher.actions.addAlternative' | transloco"></button>
 
       <small transloco="taskTypes.cypher.descriptions.alternatives" class="text-color-secondary block mt-2"></small>
     </div>

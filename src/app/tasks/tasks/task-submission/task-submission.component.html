@@ -28,14 +28,16 @@
 @if (gradingResult && gradingResult.grading) {
   <div class="surface-border border-top-1 opacity-50 mb-4"></div>
   <table class="result-table mb-3">
-    <tr>
-      <th scope="row" transloco="submission.fields.maxPoints"></th>
-      <td>{{ gradingResult.grading.maxPoints }}</td>
-    </tr>
-    <tr>
-      <th scope="row" transloco="submission.fields.points"></th>
-      <td>{{ gradingResult.grading.points }}</td>
-    </tr>
+    @if (submittedMode !== 'RUN') {
+      <tr>
+        <th scope="row" transloco="submission.fields.maxPoints"></th>
+        <td>{{ gradingResult.grading.maxPoints }}</td>
+      </tr>
+      <tr>
+        <th scope="row" transloco="submission.fields.points"></th>
+        <td>{{ gradingResult.grading.points }}</td>
+      </tr>
+    }
     <tr>
       <th scope="row" transloco="submission.fields.generalFeedback"></th>
       <td [innerHTML]="gradingResult.grading.generalFeedback"></td>

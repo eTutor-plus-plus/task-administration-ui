@@ -103,6 +103,11 @@ export class TaskSubmissionComponent implements OnInit {
   gradingResult?: SubmissionDto;
 
   /**
+   * The mode with which the displayed grading result was requested.
+   */
+  submittedMode?: string;
+
+  /**
    * The error result.
    */
   errorResult?: string;
@@ -176,6 +181,7 @@ export class TaskSubmissionComponent implements OnInit {
 
     this.errorResult = undefined;
     this.gradingResult = undefined;
+    this.submittedMode = this.form.value.mode ?? undefined;
 
     try {
       this.loading = true;
