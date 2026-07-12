@@ -80,7 +80,6 @@
         "droolsObjects": "Objekte",
         "visibleTestCases": "RUN-/DIAGNOSE-Testfälle",
         "hiddenTestCases": "SUBMIT-Testfälle",
-        "feedbackLevel": "Feedback-Level",
         "droolsIsCEP": "Ist dies eine CEP-Aufgabe?"
       },
       "messages": {

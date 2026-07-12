@@ -4,10 +4,10 @@
       "title": "Kein Typ"
     },
     "binary-search": {
-      "title": "Binärsuche",
+      "title": "Bin\u00e4rsuche",
       "fields": {
         "minNumber": "Kleinster Wert",
-        "maxNumber": "Größter Wert"
+        "maxNumber": "Gr\u00f6\u00dfter Wert"
       }
     },
     "xquery": {
@@ -31,11 +31,6 @@
         "diagnoseDmlStatements": "INSERT INTO Statements (Diagnose)",
         "submitDmlStatements": "INSERT INTO Statements (Abgabe)"
       }
-    },
-    "drools": {
-      "title": "Drools",
-      "info": "Für Drools-Aufgabengruppen sind keine zusätzlichen Einstellungen erforderlich."
     }
   }
 }
-

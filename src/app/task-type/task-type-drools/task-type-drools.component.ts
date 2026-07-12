@@ -4,10 +4,9 @@ import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { TaskTypeFormComponent } from '../task-type-form.component';
 import { editor, MarkerSeverity } from 'monaco-editor';
 import { CheckboxModule } from 'primeng/checkbox';
-import { DropdownModule } from 'primeng/dropdown';
 import { debounceTime, merge, Subject, takeUntil } from 'rxjs';
 import { DroolsValidationService } from './drools-validation.service';
-import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@ngneat/transloco';
+import { TranslocoDirective, TranslocoPipe } from '@ngneat/transloco';
 
 
 @Component({
@@ -18,8 +17,7 @@ import { TranslocoDirective, TranslocoPipe, TranslocoService } from '@ngneat/tra
     ReactiveFormsModule,
     TranslocoDirective,
     TranslocoPipe,
-    CheckboxModule,
-    DropdownModule
+    CheckboxModule
   ],
   templateUrl: './task-type-drools.component.html',
   styleUrl: './task-type-drools.component.scss'
@@ -46,12 +44,10 @@ export class TaskTypeDroolsComponent extends TaskTypeFormComponent<TaskTypeForm>
   private readonly destroy$ = new Subject<void>();
   private drlValidationRun = 0;
   private testCaseValidationRun = 0;
-  feedbackLevels: { label: string; value: number }[] = [];
 
 
   constructor(
-    private readonly droolsValidationService: DroolsValidationService,
-    private readonly translocoService: TranslocoService
+    private readonly droolsValidationService: DroolsValidationService
   ) {
     super();
   }
@@ -65,15 +61,7 @@ export class TaskTypeDroolsComponent extends TaskTypeFormComponent<TaskTypeForm>
     this.form.addControl('solutionDrl', new FormControl<string | null>(null));
     this.form.addControl('visibleTestCases', new FormControl<string | null>(null));
     this.form.addControl('hiddenTestCases', new FormControl<string | null>(null));
-    this.form.addControl('feedbackLevel', new FormControl<number | null>(0));
     this.form.addControl('isCEP', new FormControl<boolean | null>(false));
-
-    this.feedbackLevels = [
-      { value: 0, label: this.translocoService.translate('feedbackLevel.0') },
-      { value: 1, label: this.translocoService.translate('feedbackLevel.1') },
-      { value: 2, label: this.translocoService.translate('feedbackLevel.2') },
-      { value: 3, label: this.translocoService.translate('feedbackLevel.3') }
-    ];
 
     merge(
       this.form.controls.modelDrl.valueChanges,
@@ -396,6 +384,5 @@ interface TaskTypeForm {
   solutionDrl: FormControl<string | null>;
   visibleTestCases: FormControl<string | null>;
   hiddenTestCases: FormControl<string | null>;
-  feedbackLevel: FormControl<number | null>;
   isCEP: FormControl<boolean | null>;
 }
