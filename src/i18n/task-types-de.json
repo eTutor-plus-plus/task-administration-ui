@@ -20,7 +20,6 @@
         "missingRowsPenalty": "Fehlende Zeilen: Abzug (%)",
         "superfluousRowsPenalty": "Zu viele Zeilen: Abzug (%)",
         "wrongOrderPenalty": "Falsche Sortierung: Abzug (%)",
-        "expectedColumnNames": "Erwartete Spaltennamen",
         "alternativeSolutions": "Alternative Lösungen",
         "alternativeSolution.stage": "Stufe {{index}}",
         "alternativeSolution.solution": "Cypher Query",
@@ -29,7 +28,6 @@
       "descriptions": {
         "evaluationMode": "Im Modus „Punkteabzug“ werden für jede falsche Eigenschaft Prozentpunkte abgezogen. Im Modus „Mehrere Lösungen“ wird die Abfrage der/des Studierenden gegen die hinterlegten Lösungen (von der höchstwertigen zur niedrigsten) geprüft – die erste 100 %-Übereinstimmung vergibt die zugehörigen Punkte.",
         "penalty": "Punkteabzüge werden als Prozentsatz der Gesamtpunktezahl angegeben (0–100). Beispiel: Bei 10 Gesamtpunkten und 25 % Abzug werden 2,5 Punkte abgezogen. Ein Abzug von 100 % entspricht der vollen Gesamtpunktezahl.",
-        "expectedColumnNames": "Optional. Komma-separierte Liste der Spaltennamen, die in der Aufgabenbeschreibung als geforderte Rückgabe genannt werden. Wird das Feld leer gelassen, werden die Namen automatisch aus der RETURN-Klausel der Lösung (bzw. der ersten alternativen Lösung) abgeleitet.",
         "alternatives": "Lösungen mit ihrer jeweiligen Wertigkeit (Prozent der Gesamtpunktezahl). Die Reihenfolge ist beliebig – die Auswertung sortiert die Lösungen absteigend nach Prozentwert und prüft sie von der höchsten zur niedrigsten; sobald eine 100 %ig passt, werden die Punkte dieser Stufe vergeben und die Auswertung endet. Mindestens eine Lösung muss 100 % vergeben (volle Punktezahl).",
         "alternativesEmpty": "Noch keine Lösung hinzugefügt. Mindestens eine Lösung (100 %) ist erforderlich."
       },

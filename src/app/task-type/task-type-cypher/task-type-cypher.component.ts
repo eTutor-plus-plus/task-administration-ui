@@ -24,7 +24,6 @@ interface TaskTypeForm {
   missingRowsPenalty: FormControl<number | null>;
   superfluousRowsPenalty: FormControl<number | null>;
   wrongOrderPenalty: FormControl<number | null>;
-  expectedColumnNames: FormControl<string | null>;
   alternativeSolutions: FormArray<FormGroup<AlternativeSolutionForm>>;
 }
 
@@ -71,7 +70,6 @@ export class TaskTypeCypherComponent extends TaskTypeFormComponent<TaskTypeForm>
     this.form.addControl('missingRowsPenalty', new FormControl<number | null>(null, percent));
     this.form.addControl('superfluousRowsPenalty', new FormControl<number | null>(null, percent));
     this.form.addControl('wrongOrderPenalty', new FormControl<number | null>(null, percent));
-    this.form.addControl('expectedColumnNames', new FormControl<string | null>(null));
     this.form.addControl('alternativeSolutions', new FormArray<FormGroup<AlternativeSolutionForm>>(
       [],
       multiSolutionListValidator(() => this.form.controls.evaluationMode.value)
@@ -88,7 +86,6 @@ export class TaskTypeCypherComponent extends TaskTypeFormComponent<TaskTypeForm>
       missingRowsPenalty: 100,
       superfluousRowsPenalty: 100,
       wrongOrderPenalty: 100,
-      expectedColumnNames: null,
       alternativeSolutions: []
     };
   }

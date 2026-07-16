@@ -20,7 +20,6 @@
         "missingRowsPenalty": "Missing Rows: Deduction (%)",
         "superfluousRowsPenalty": "Superfluous Rows: Deduction (%)",
         "wrongOrderPenalty": "Wrong Sorting: Deduction (%)",
-        "expectedColumnNames": "Expected column names",
         "alternativeSolutions": "Alternative solutions",
         "alternativeSolution.stage": "Stage {{index}}",
         "alternativeSolution.solution": "Cypher Query",
@@ -29,7 +28,6 @@
       "descriptions": {
         "evaluationMode": "In the 'Deductions' mode points are deducted per failed criterion. In the 'Multiple solutions' mode the student's query is matched against the configured solutions (highest-value first) — the first 100 % match awards the corresponding points and ends the evaluation.",
         "penalty": "Deductions are entered as a percentage of the task's total points (0–100). Example: with a maximum of 10 points and a 25 % deduction, 2.5 points are subtracted. A 100 % deduction equals the full maximum.",
-        "expectedColumnNames": "Optional. Comma-separated list of column names that the task description should announce as the expected result. Leave empty to auto-derive the names from the solution's RETURN clause (or the first alternative solution's).",
         "alternatives": "Solutions with their respective value (percentage of the total points). The order doesn't matter — the evaluation sorts the solutions by points descending and checks them from highest to lowest; the first 100 % match awards its stage's points and stops evaluation. At least one solution must award 100 % (full points).",
         "alternativesEmpty": "No solution added yet. At least one solution (100 %) is required."
       },

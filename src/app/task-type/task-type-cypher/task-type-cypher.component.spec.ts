@@ -36,7 +36,6 @@ describe('TaskTypeCypherComponent', () => {
       'missingRowsPenalty',
       'superfluousRowsPenalty',
       'wrongOrderPenalty',
-      'expectedColumnNames',
       'alternativeSolutions'
     ]);
   });
