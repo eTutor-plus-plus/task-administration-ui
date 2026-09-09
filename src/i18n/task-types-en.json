@@ -229,7 +229,7 @@
       "taskLength": {
         "short": "Short",
         "medium": "Medium",
-        "long": "Long"
+        "long": "Long"}},
     "knn": {
       "title": "K-Nearest-Neighbors",
       "meta": "General Information",
@@ -291,7 +291,7 @@
       },
       "errors": {
         "required": "This field is required",
-        "min": "Value must be greater than 0"
+        "min": "Value must be greater than 0"}},
     "owl": {
       "title": "OWL",
       "fields": {
