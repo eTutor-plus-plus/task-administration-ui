@@ -9,6 +9,22 @@
         "solution": "Solution"
       }
     },
+    "jdbc": {
+      "title": "JDBC",
+      "fields": {
+        "solution": "Solution",
+        "tables": "Tables to be checked",
+        "wrongOutputPenalty": "Penalty wrong output",
+        "exceptionHandlingPenalty": "Penalty exception handling",
+        "wrongDbContentPenalty": "Penalty wrong DB content",
+        "checkAutocommit": "Check Autocommit",
+        "autocommitPenalty": "Penalty Autocommit",
+        "variables": "Variables (optional)"
+      },
+      "errors": {
+        "tables": "table1, table2, table3"
+      }
+    },
     "xquery": {
       "title": "XQuery",
       "fields": {
@@ -181,6 +197,101 @@
 
       }
     },
+    "clustering": {
+      "title": "Clustering",
+      "parameters": "Exercise generation parameters",
+      "confirmDeleteDesc": {
+      "message": "Do you really want to delete the description?",
+      "header": "Confirm Deletion",
+      "accept": "Yes",
+      "reject": "No"
+    },
+      "fields": {
+        "numberOfClusters": "K-Value (Number of Clusters) (2-5)",
+        "numberOfDataPoints": "Number of data points (2-20)",
+        "distanceMetric": "Distance metric",
+        "taskLength": "Task Length",
+        "solutionShow": "Show Solution",
+        "solutionHide": "Hide Solution",
+        "deleteDesc": "Delete Description"
+      },
+      "taskLengthTooltip": "Short: 5-8 data points, random centroids\nMedium: 8-12 data points, most central centroids\nLong: 12-16 data points, most central centroids",
+      "deductions": {
+        "title": "Point Deductions",
+        "wrongClusters": "Wrong Number of Clusters/Iterations",
+        "wrongLabels": "Wrong Data Point Assignment",
+        "wrongCentroids": "Wrong Centroid Coordinates"
+      },
+      "metric": {
+        "euclidean": "Euclidean distance",
+        "manhattan": "Manhattan distance"
+      },
+      "taskLength": {
+        "short": "Short",
+        "medium": "Medium",
+        "long": "Long"
+    "knn": {
+      "title": "K-Nearest-Neighbors",
+      "meta": "General Information",
+      "model": {
+        "knn": "KNN Classifier"
+      },
+      "labels": {
+        "feature": "Feature"
+      },
+      "placeholders": {
+        "taskName": "Enter task name",
+        "descriptionDe": "Markdown / HTML allowed …",
+        "descriptionEn": "Markdown / HTML allowed …"
+      },
+      "fields": {
+        "k": "K-Value",
+        "trainLabels": "Training classes",
+        "trainLabelsAdd": "Add class",
+        "trainLabelsCount": "Classes",
+        "trainLabelsPlaceholder": "e.g. A, B, C …",
+        "trainLabelsError": "Please provide a label for each class (at least 2 classes required).",
+        "trainLabelsErrorMax": "Maximum 7 classes allowed.",
+        "metric": "Distance Metric",
+        "metric.euclidean": "Euclidean",
+        "metric.manhattan": "Manhattan",
+        "metric.minkowski": "Minkowski",
+        "numTrain": "Training Points per Class",
+        "numTest": "Test Points",
+        "featureName": "Feature Name",
+        "featureRange": "Feature Range",
+        "xMin": "X-Axis Min",
+        "xMax": "X-Axis Max",
+        "yMin": "Y-Axis Min",
+        "yMax": "Y-Axis Max",
+        "xLabel": "X-Axis Label",
+        "yLabel": "Y-Axis Label",
+        "tiebreaker": "Tiebreaker Strategy",
+        "tiebreaker.sum": "Sum of distances (alphabetical if still tied)",
+        "tiebreaker.mean": "Mean of distances (alphabetical if still tied)",
+        "tiebreaker.nearest": "Nearest point decides (alphabetical if still tied)",
+        "editTrainPoints": "Edit Training Points",
+        "editTestPoints": "Edit Test Points",
+        "preview": "Preview",
+        "feedbackLevel": "Feedback Level",
+        "feedback.RUN": "Syntax/Format Check Only",
+        "feedback.DIAGNOSE": "Some Feedback",
+        "feedback.SUBMIT": "Full Feedback & Points",
+        "taskName": "Task Name",
+        "organization": "Organisation / Course",
+        "taskGroup": "Task Group",
+        "descriptionDe": "Description (German)",
+        "descriptionEn": "Description (English)",
+        "maxPoints": "Maximum Points",
+        "duplicate": "Duplicate coordinates detected",
+        "previewButtons": {
+          "generateTaskPdf": "Generate Task PDF",
+          "generateSolutionPdf": "Generate Solution PDF"
+        }
+      },
+      "errors": {
+        "required": "This field is required",
+        "min": "Value must be greater than 0"
     "owl": {
       "title": "OWL",
       "fields": {
@@ -193,4 +304,5 @@
     }
   }
 }
+
 
