@@ -233,7 +233,7 @@
       "taskLength": {
         "short": "Kurz",
         "medium": "Mittel",
-        "long": "Lang"
+        "long": "Lang"}},
     "knn": {
       "title": "K-Nächste-Nachbarn",
       "meta": "Allgemeine Angaben",
@@ -297,7 +297,7 @@
         "required": "Dieses Feld ist erforderlich",
         "min": "Der Wert muss größer als 0 sein"
       }
-    } 
+    } ,
     "owl": {
       "title": "OWL",
       "fields": {
