@@ -1,0 +1,88 @@
+<div class="surface-card p-4 shadow-2 border-round p-fluid mb-4" [formGroup]="form">
+  <div class="grid formgrid p-fluid">
+
+    <!-- Point Deductions -->
+    <div class="field mb-4 col-12 md:col-4">
+      <label for="wrongOutputPenalty" transloco="taskTypes.jdbc.fields.wrongOutputPenalty"></label>
+      <p-inputNumber id="wrongOutputPenalty" formControlName="wrongOutputPenalty" [min]="0" [useGrouping]="false"
+        inputStyleClass="w-full" />
+      @if (form.controls.wrongOutputPenalty.dirty || form.controls.wrongOutputPenalty.touched) {
+      <small class="block mt-1 p-error">
+        {{ getError(form.controls.wrongOutputPenalty, 'taskTypes.jdbc.fields.wrongOutputPenalty') }}
+      </small>
+      }
+    </div>
+
+    <div class="field mb-4 col-12 md:col-4">
+      <label for="exceptionHandlingPenalty" transloco="taskTypes.jdbc.fields.exceptionHandlingPenalty"></label>
+      <p-inputNumber id="exceptionHandlingPenalty" formControlName="exceptionHandlingPenalty" [min]="0"
+        [useGrouping]="false" inputStyleClass="w-full" />
+      @if (form.controls.exceptionHandlingPenalty.dirty || form.controls.exceptionHandlingPenalty.touched) {
+      <small class="block mt-1 p-error">
+        {{ getError(form.controls.exceptionHandlingPenalty, 'taskTypes.jdbc.fields.exceptionHandlingPenalty') }}
+      </small>
+      }
+    </div>
+
+    <div class="field mb-4 col-12 md:col-4">
+      <label for="wrongDbContentPenalty" transloco="taskTypes.jdbc.fields.wrongDbContentPenalty"></label>
+      <p-inputNumber id="wrongDbContentPenalty" formControlName="wrongDbContentPenalty" [min]="0" [useGrouping]="false"
+        inputStyleClass="w-full" />
+      @if (form.controls.wrongDbContentPenalty.dirty || form.controls.wrongDbContentPenalty.touched) {
+      <small class="block mt-1 p-error">
+        {{ getError(form.controls.wrongDbContentPenalty, 'taskTypes.jdbc.fields.wrongDbContentPenalty') }}
+      </small>
+      }
+    </div>
+
+    <!-- Checkbox -->
+    <div class="field-checkbox mb-4 col-12">
+      <p-checkbox id="checkAutocommit" binary="true" formControlName="checkAutocommit"></p-checkbox>
+      <label for="checkAutocommit" transloco="taskTypes.jdbc.fields.checkAutocommit"></label>
+    </div>
+
+    <!-- Optional Autocommit field when checkbox enabled -->
+    @if (form.controls.checkAutocommit.value) {
+    <div class="field mb-4 col-12 md:col-4">
+      <label for="autocommitPenalty" transloco="taskTypes.jdbc.fields.autocommitPenalty"></label>
+      <p-inputNumber id="autocommitPenalty" formControlName="autocommitPenalty" [min]="0" [useGrouping]="false"
+        inputStyleClass="w-full" />
+      @if (form.controls.autocommitPenalty.dirty || form.controls.autocommitPenalty.touched) {
+      <small class="block mt-1 p-error">
+        {{ getError(form.controls.autocommitPenalty, 'taskTypes.jdbc.fields.autocommitPenalty') }}
+      </small>
+      }
+    </div>
+    }
+
+    <!-- Tables -->
+    <div class="field mb-4 col-12 md:col-6 w-full">
+      <label for="tables" transloco="taskTypes.jdbc.fields.tables"></label>
+      <input pInputText id="tables" formControlName="tables" />
+      @if (form.controls.tables.dirty || form.controls.tables.touched) {
+      <small class="block mt-1 p-error">
+        {{ getError(form.controls.tables, 'taskTypes.jdbc.fields.tables') }}
+      </small>
+      }
+    </div>
+
+    <!-- Variables -->
+    <div class="field mb-4 col-12 md:col-6 w-full">
+      <label for="variables" transloco="taskTypes.jdbc.fields.variables"></label>
+      <ngx-monaco-editor id="variables" formControlName="variables" [options]="editorOptions"
+        style="height: 120px; width: 100%" />
+    </div>
+
+    <!-- Solution Code -->
+    <div class="field mb-4 col-12 md:col-6 w-full">
+      <label for="solution" transloco="taskTypes.jdbc.fields.solution"></label>
+      <ngx-monaco-editor id="solution" formControlName="solution" [options]="editorOptions"
+        style="height: 300px; width: 100%" />
+      @if (form.controls.solution.dirty || form.controls.solution.touched) {
+      <small class="block mt-1 p-error">
+        {{ getError(form.controls.solution, 'taskTypes.jdbc.fields.solution') }}
+      </small>
+      }
+    </div>
+  </div>
+</div>
