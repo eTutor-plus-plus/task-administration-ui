@@ -107,10 +107,23 @@
       "fields": {
         "sqlDDL": "SQL DDL",
         "solution": "Lösung",
-        "insertStatements": "Insert Statement",
-        "tablePoints": "Punkte pro Tabelle",
-        "columnPoints": "Punkte pro Spalte",
+        "checkConstraintStatements": "Check Constraint Überprüfung",
+        "checkConstraintStatementsDescription": "Für jeden in der Lösung enthaltenen Check-Constraint müssen entsprechende INSERT-Statements zur Überprüfung angegeben werden. Da jede Eingabegruppe (Name, nicht fehlerauslösende Statements, fehlerauslösende Statements) unabhängig geprüft wird, müssen Datensätze, auf die über Fremdschlüssel verwiesen wird, zunächst im Abschnitt nicht fehlerauslösende Statements erstellt werden. Erst danach können diese Datensätze im Abschnitt fehlerauslösende Statements verwendet bzw. referenziert werden.",
+        "checkConstraintStatementsAdd": "Check Constraint Überprüfung hinzufügen",
+        "assertionStatements": "Assertion Überprüfung",
+        "assertionStatementsDescription": "Für jede in der Lösung enthaltene Assertion müssen entsprechende INSERT-Statements zur Überprüfung angegeben werden. Da jede Eingabegruppe (Name, nicht fehlerauslösende Statements, fehlerauslösende Statements) unabhängig geprüft wird, müssen Datensätze, auf die über Fremdschlüssel verwiesen wird, zunächst im Abschnitt nicht fehlerauslösende Statements erstellt werden. Erst danach können diese Datensätze im Abschnitt fehlerauslösende Statements verwendet bzw. referenziert werden.",
+        "assertionStatementsAdd": "Assertion Überprüfung hinzufügen",
+        "statementName": "Bezeichnung des Constraints (wird im Feedback angezeigt)",
+        "assertionName": "Name der Assertion welche im DDL Skript definiert wurde",
+        "successfulStatements": "Nicht fehlerauslösende Statements",
+        "unsuccessfulStatements": "Fehlerauslösende Statements",
+        "whitelist": "Whitelist",
+        "whitelistInfo": "Wörter durch Semikolons getrennt eingeben. Alle Wörter, die bereits in der Lösung verwendet wurden, werden automatisch zur Whitelist hinzugefügt.",
+        "generatedWhitelist": "Vollständige Whitelist",
+        "generatedWhitelistInfo": "Dieses Feld wird automatisch generiert und kann nicht bearbeitet werden.",
+        "tablePoints": "Punkte pro gesamter Tabelle inklusive Spalten",
         "constraintPoints": "Punkte pro Constraint",
+        "assertionPoints": "Punkte pro Assertion",
         "primaryKeyPoints": "Punkte pro Primary Key",
         "foreignKeyPoints": "Punkte pro Foreign Key"
   }},
@@ -310,4 +323,3 @@
     }
   }
 }
-

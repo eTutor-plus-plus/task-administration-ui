@@ -105,12 +105,25 @@
         "fields": {
           "sqlDDL": "SQL DDL",
           "solution": "Solution",
-          "insertStatements": "Insert Statement",
-          "tablePoints": "Points for Table",
-          "columnPoints": "Points for Column",
-          "constraintPoints": "Points for Constraint",
-          "primaryKeyPoints": "Points for Primary Key",
-          "foreignKeyPoints": "Points for Foreign Key"
+          "checkConstraintStatements": "Check Constraint Verification",
+          "checkConstraintStatementsDescription": "For each check constraint included in the solution, corresponding INSERT statements must be provided for verification. Since each input group (Name, Non-Error-Triggering Statements, Error-Triggering Statements) is validated independently, any records referenced via foreign keys must first be created in the Non-Error-Triggering Statements section. Only after that can these records be used or referenced in the Error-Triggering Statements section.",
+          "checkConstraintStatementsAdd": "Add Check Constraint Verification",
+          "assertionStatements": "Assertion Verification",
+          "assertionStatementsDescription": "For each assertion included in the solution, corresponding INSERT statements must be provided for verification. Since each input group (Name, Non-Error-Triggering Statements, Error-Triggering Statements) is validated independently, any records referenced via foreign keys must first be created in the Non-Error-Triggering Statements section. Only after that can these records be used or referenced in the Error-Triggering Statements section.",
+          "assertionStatementsAdd": "Add Assertion Verification",
+          "statementName": "Name of the constraint (is displayed in the feedback)",
+          "assertionName": "Name of the assertion defined in the DDL script",
+          "successfulStatements": "Non-Error-Triggering Statements",
+          "unsuccessfulStatements": "Error-Triggering Statements",
+          "whitelist": "Whitelist",
+          "whitelistInfo": "Enter the words separated by semicolons. All words that have already been used in the solution are automatically added to the whitelist.",
+          "generatedWhitelist": "Complete Whitelist",
+          "generatedWhitelistInfo": "This field is filled automatically and cannot be edited.",
+          "tablePoints": "Points per entire table including columns",
+          "constraintPoints": "Points per constraint",
+          "assertionPoints": "Points per assertion",
+          "primaryKeyPoints": "Points per primary key",
+          "foreignKeyPoints": "Points per foreign key"
         }
       },
     "sql": {
@@ -304,5 +317,3 @@
     }
   }
 }
-
-

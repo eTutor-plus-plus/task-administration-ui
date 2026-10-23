@@ -12,13 +12,23 @@
       </div>
 
       <div class="field mb-4 col-12">
-        <label for="insertStatements" transloco="taskTypes.sql-ddl.fields.insertStatements"></label>
-        <ngx-monaco-editor id="insertStatements" formControlName="insertStatements" [options]="editorOptions" style="height: 200px;"/>
-        @if (form.controls.insertStatements.dirty || form.controls.insertStatements.touched) {
+        <label for="whitelist" transloco="taskTypes.sql-ddl.fields.whitelist"></label>
+        <br>
+        <small transloco="taskTypes.sql-ddl.fields.whitelistInfo" class="mb-2"></small>
+        <textarea id="whitelist" pInputTextarea formControlName="whitelist" rows="4" autocomplete="off" class="mt-2"></textarea>
+        @if (form.controls.whitelist.dirty || form.controls.whitelist.touched) {
           <small class="block mt-1 p-error">
-            {{ getError(form.controls.insertStatements, 'taskTypes.drools.fields.insertStatement') }}
+            {{ getError(form.controls.whitelist, 'taskTypes.sql-ddl.fields.whitelist') }}
           </small>
         }
+      </div>
+
+      <div class="field mb-4 col-12">
+        <label for="generatedWhitelist" transloco="taskTypes.sql-ddl.fields.generatedWhitelist"></label>
+        <br>
+        <small transloco="taskTypes.sql-ddl.fields.generatedWhitelistInfo" class="mb-2"></small>
+        <textarea id="generatedWhitelist" pInputTextarea [value]="generatedWhitelist" rows="4" autocomplete="off"
+                  class="mt-2 generatedWhitelistDisplay" disabled></textarea>
       </div>
 
       <div class="field mb-4 col-12">
@@ -31,15 +41,6 @@
         }
       </div>
 
-      <div class="field mb-4 col-12">
-        <label for="columnPoints" [transloco]="'taskTypes.sql-ddl.fields.columnPoints'"></label>
-        <input id="columnPoints" type="number" pInputText formControlName="columnPoints" autocomplete="off">
-        @if (form.controls.columnPoints.dirty || form.controls.columnPoints.touched) {
-          <small class="block mt-1 p-error">
-            {{ getError(form.controls.columnPoints, 'taksTypes.sql-ddl.fields.columnPoints') }}
-          </small>
-        }
-      </div>
       <div class="field mb-4 col-12">
         <label for="primaryKeyPoints" [transloco]="'taskTypes.sql-ddl.fields.primaryKeyPoints'"></label>
         <input id="primaryKeyPoints" type="number" pInputText formControlName="primaryKeyPoints" autocomplete="off">
@@ -67,12 +68,83 @@
           </small>
         }
       </div>
-
+      <div class="field mb-4 col-12">
+        <label for="assertionPoints" [transloco]="'taskTypes.sql-ddl.fields.assertionPoints'"></label>
+        <input id="assertionPoints" type="number" pInputText formControlName="assertionPoints" autocomplete="off">
+        @if (form.controls.assertionPoints.dirty || form.controls.assertionPoints.touched) {
+          <small class="block mt-1 p-error">
+            {{ getError(form.controls.assertionPoints, 'taksTypes.sql-ddl.fields.assertionPoints') }}
+          </small>
+        }
+      </div>
 
 
     </div>
   </div>
-  <div>
-
+  <div class="surface-card p-4 shadow-2 border-round p-fluid mb-4">
+    <div class="flex justify-content-between mb-4 grid">
+      <div class="col-8">
+        <p class="font-bold" transloco="taskTypes.sql-ddl.fields.checkConstraintStatements"></p>
+        <span transloco="taskTypes.sql-ddl.fields.checkConstraintStatementsDescription"></span>
+      </div>
+      <p-button [label]="'taskTypes.sql-ddl.fields.checkConstraintStatementsAdd' | transloco" (onClick)="addInsertStatement()"
+                [disabled]="loading" class="w-auto" size="small"/>
+    </div>
+    <div formArrayName="insertStatements">
+      <div *ngFor="let entry of insertStatements.controls; let i = index" [formGroupName]="i" class="insertStatementsWrapper mb-4">
+        <div class="grid formgrid">
+          <div class="field col-6 mb-4">
+            <label [for]="'insertName-' + i" transloco="taskTypes.sql-ddl.fields.statementName"></label>
+            <input [id]="'insertName-' + i" type="text" pInputText formControlName="definition" autocomplete="off">
+          </div>
+          <div class="field col-6 mb-4 flex align-items-end justify-content-end">
+            <p-button icon="pi pi-trash" severity="danger" (onClick)="removeInsertStatement(i)"></p-button>
+          </div>
+        </div>
+        <div class="grid formgrid p-fluid">
+          <div class="field col-6 mb-4">
+            <label [for]="'successfulStatements-' + i" transloco="taskTypes.sql-ddl.fields.successfulStatements"></label>
+            <ngx-monaco-editor [id]="'successfulStatements-' + i" formControlName="successfulStatements" [options]="editorOptions" style="height: 200px;"/>
+          </div>
+          <div class="field col-6 mb-4">
+            <label [for]="'unsuccessfulStatements-' + i" transloco="taskTypes.sql-ddl.fields.unsuccessfulStatements"></label>
+            <ngx-monaco-editor [id]="'unsuccessfulStatements-' + i" formControlName="unsuccessfulStatements" [options]="editorOptions" style="height: 200px;"/>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="surface-card p-4 shadow-2 border-round p-fluid mb-4">
+    <div class="flex justify-content-between mb-4 grid">
+      <div class="col-8">
+        <p class="font-bold" transloco="taskTypes.sql-ddl.fields.assertionStatements"></p>
+        <span transloco="taskTypes.sql-ddl.fields.assertionStatementsDescription"></span>
+      </div>
+      <p-button [label]="'taskTypes.sql-ddl.fields.assertionStatementsAdd' | transloco" (onClick)="addAssertionStatement()"
+                [disabled]="loading" class="w-auto" size="small"/>
+    </div>
+    <div formArrayName="assertionStatements">
+      <div *ngFor="let entry of assertionStatements.controls; let i = index" [formGroupName]="i" class="insertStatementsWrapper mb-4">
+        <div class="grid formgrid">
+          <div class="field col-6 mb-4">
+            <label [for]="'assertionName-' + i" transloco="taskTypes.sql-ddl.fields.assertionName"></label>
+            <input [id]="'assertionName-' + i" type="text" pInputText formControlName="definition" autocomplete="off">
+          </div>
+          <div class="field col-6 mb-4 flex align-items-end justify-content-end">
+            <p-button icon="pi pi-trash" severity="danger" (onClick)="removeAssertionStatement(i)"></p-button>
+          </div>
+        </div>
+        <div class="grid formgrid p-fluid">
+          <div class="field col-6 mb-4">
+            <label [for]="'assertionSuccessfulStatements-' + i" transloco="taskTypes.sql-ddl.fields.successfulStatements"></label>
+            <ngx-monaco-editor [id]="'assertionSuccessfulStatements-' + i" formControlName="successfulStatements" [options]="editorOptions" style="height: 200px;"/>
+          </div>
+          <div class="field col-6 mb-4">
+            <label [for]="'assertionUnsuccessfulStatements-' + i" transloco="taskTypes.sql-ddl.fields.unsuccessfulStatements"></label>
+            <ngx-monaco-editor [id]="'assertionUnsuccessfulStatements-' + i" formControlName="unsuccessfulStatements" [options]="editorOptions" style="height: 200px;"/>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
