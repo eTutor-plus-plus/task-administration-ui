@@ -1,1 +1,27 @@
-<p>task-type-dfm works!</p>
+<div class="surface-card p-4 shadow-2 border-round p-fluid mb-4" [formGroup]="form">
+  <p class="m-0" [transloco]="'taskTypes.dfm.description'"></p>
+
+  <div class="field-checkbox mt-4">
+    <p-checkbox inputId="allowGrading" formControlName="allowGrading" [binary]="true"/>
+    <label for="allowGrading" transloco="taskTypes.dfm.fields.allowGrading"></label>
+  </div>
+
+  <div class="field-checkbox">
+    <p-checkbox inputId="checkNames" formControlName="checkNames" [binary]="true"/>
+    <label for="checkNames" transloco="taskTypes.dfm.fields.checkNames"></label>
+  </div>
+
+  <div class="field mt-4">
+    <label for="solution" transloco="taskTypes.dfm.fields.solution"></label>
+    <ngx-monaco-editor
+      id="solution"
+      formControlName="solution"
+      [options]="editorOptions"
+      style="height: 300px; width: 100%"/>
+    @if (form.controls.solution.dirty || form.controls.solution.touched) {
+      <small class="block mt-1 p-error">
+        {{ getError(form.controls.solution, 'taskTypes.dfm.fields.solution') }}
+      </small>
+    }
+  </div>
+</div>

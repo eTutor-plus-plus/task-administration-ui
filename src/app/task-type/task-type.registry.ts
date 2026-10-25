@@ -16,6 +16,7 @@ import { TaskTypeKnnComponent } from './task-type-knn/task-type-knn.component';
 import { TaskTypeJDBCComponent } from './task-type-jdbc/task-type-jdbc.component';
 
 import { TaskTypeOwlComponent } from './task-type-owl/task-type-owl.component';
+import { TaskTypeDfmComponent } from './task-type-dfm/task-type-dfm.component';
 
 
 
@@ -121,7 +122,7 @@ return $d`,
       supportsDescriptionGeneration: false,
       submissionInputLanguage: 'clustering'
     },
-    { 
+    {
       name: 'knn',
       supportedTaskGroupTypes: [],
       component: TaskTypeKnnComponent,
@@ -146,6 +147,14 @@ return $d`,
       submissionTemplate: '',
       supportsDescriptionGeneration: true,
       submissionInputLanguage: 'owl'
+
+    }, {
+      name: 'dfm',
+      supportedTaskGroupTypes: [],
+      component: TaskTypeDfmComponent,
+      submissionTemplate: '',
+      supportsDescriptionGeneration: false,
+      submissionInputLanguage: 'plaintext'
 
     }
 
