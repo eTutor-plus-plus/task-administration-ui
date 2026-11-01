@@ -1,0 +1,12 @@
+<div class="dfm-graph">
+  <div class="dfm-graph-controls">
+    <p-button icon="pi pi-plus" size="small" [text]="true" severity="secondary" styleClass="dfm-editor-action"
+              [ariaLabel]="'taskTypes.dfm.graph.zoomIn' | transloco" (onClick)="changeZoom(1.25)"/>
+    <p-button icon="pi pi-minus" size="small" [text]="true" severity="secondary" styleClass="dfm-editor-action"
+              [ariaLabel]="'taskTypes.dfm.graph.zoomOut' | transloco" (onClick)="changeZoom(0.8)"/>
+    <p-button icon="pi pi-expand" size="small" [text]="true" severity="secondary" styleClass="dfm-editor-action"
+              [ariaLabel]="'taskTypes.dfm.graph.resetZoom' | transloco" (onClick)="resetZoom()"/>
+  </div>
+  <svg #svg [attr.viewBox]="'0 0 900 600'" role="img"
+       [attr.aria-label]="'taskTypes.dfm.graph.label' | transloco"></svg>
+</div>

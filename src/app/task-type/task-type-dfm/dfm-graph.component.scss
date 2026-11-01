@@ -1,0 +1,76 @@
+.dfm-graph {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid #ced4da;
+  background: radial-gradient(#e4e7ec 0.75px, transparent 0.75px) 0 0 / 20px 20px, #fcfcfd;
+
+  svg {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+
+  .dfm-graph-controls {
+    position: absolute;
+    z-index: 1;
+    top: 4px;
+    right: 4px;
+    display: flex;
+  }
+
+  .dfm-edge {
+    stroke: #98a2b3;
+    stroke-width: 1.5;
+  }
+
+  .dfm-optional-edge {
+    stroke: #667085;
+    stroke-width: 1.5;
+  }
+
+  .dfm-node {
+    cursor: grab;
+
+    &:active {
+      cursor: grabbing;
+    }
+
+    rect {
+      fill: #fff;
+      stroke: #1570ef;
+      stroke-width: 2;
+    }
+
+    circle {
+      fill: #fff;
+      stroke: #1570ef;
+      stroke-width: 2;
+    }
+  }
+
+  .dfm-box-label {
+    fill: #1570ef;
+    font-size: 13px;
+    font-weight: 600;
+  }
+
+  .dfm-divider {
+    stroke: #1570ef;
+  }
+
+  .dfm-measure-label {
+    fill: #667085;
+    font-size: 11px;
+  }
+
+  .dfm-node-label {
+    fill: #101828;
+    font-size: 12px;
+  }
+
+  .dfm-descriptive-underline,
+  .dfm-level-optional {
+    stroke: #101828;
+    stroke-width: 1.5;
+  }
+}
