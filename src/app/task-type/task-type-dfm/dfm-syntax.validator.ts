@@ -5,7 +5,14 @@ interface Token {
   value: string;
 }
 
-const TOKEN_PATTERN = /\s+|[\p{L}\p{N}_]+|->|[{};=\-()]/uy;
+// Mirrors the tokenizer of the DFM parser: Java's Character.isWhitespace (no non-breaking spaces)
+// and Character.isLetterOrDigit on UTF-16 characters (letters and decimal digits, no supplementary characters).
+const WHITESPACE = '(?:[\\t\\n\\u000B\\f\\r\\u001C-\\u001F]|(?![\\u00A0\\u2007\\u202F])[\\p{Zs}\\p{Zl}\\p{Zp}])+';
+const WORD = '[\\p{L}\\p{Nd}_]+';
+const TOKEN_PATTERN = new RegExp(`${WHITESPACE}|${WORD}|->|[{};=\\-()]`, 'uy');
+const WORD_PATTERN = new RegExp(`^${WORD}$`, 'u');
+const WHITESPACE_PATTERN = new RegExp(`^${WHITESPACE}$`, 'u');
+const SUPPLEMENTARY_CHARACTER = /[\u{10000}-\u{10FFFF}]/u;
 
 export function isValidDfmSyntax(source: string): boolean {
   if (!source.trim())
@@ -27,13 +34,15 @@ function tokenize(source: string): Token[] | null {
 
     position = TOKEN_PATTERN.lastIndex;
     const value = match[0];
-    if (/^\s+$/u.test(value))
+    if (WHITESPACE_PATTERN.test(value))
       continue;
 
     let kind: TokenKind;
-    if (/^[\p{L}\p{N}_]+$/u.test(value))
+    if (WORD_PATTERN.test(value)) {
+      if (SUPPLEMENTARY_CHARACTER.test(value))
+        return null;
       kind = 'word';
-    else
+    } else
       kind = value as TokenKind;
     tokens.push({kind, value});
   }
@@ -46,7 +55,8 @@ function tokenize(source: string): Token[] | null {
 class DfmSyntaxParser {
   private position = 0;
   private readonly factNames = new Set<string>();
-  private readonly dimensionNames = new Set<string>();
+  // number of declarations per name; the parser consumes one declaration per connection
+  private readonly dimensionDeclarations = new Map<string, number>();
   private readonly connections: Array<{fact: string; dimension: string}> = [];
 
   constructor(private readonly tokens: Token[]) {
@@ -68,8 +78,13 @@ class DfmSyntaxParser {
         return false;
     }
 
-    return this.connections.every(connection =>
-      this.factNames.has(connection.fact) && this.dimensionNames.has(connection.dimension));
+    return this.connections.every(connection => {
+      const remaining = this.dimensionDeclarations.get(connection.dimension) ?? 0;
+      if (!this.factNames.has(connection.fact) || remaining === 0)
+        return false;
+      this.dimensionDeclarations.set(connection.dimension, remaining - 1);
+      return true;
+    });
   }
 
   private parseFact(): boolean {
@@ -95,7 +110,7 @@ class DfmSyntaxParser {
     if (name === null || !this.expect('{'))
       return false;
 
-    this.dimensionNames.add(name);
+    this.dimensionDeclarations.set(name, (this.dimensionDeclarations.get(name) ?? 0) + 1);
     if (this.accept('}'))
       return true;
 

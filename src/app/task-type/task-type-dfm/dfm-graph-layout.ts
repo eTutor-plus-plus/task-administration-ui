@@ -31,6 +31,7 @@ export interface Bounds {
 const LEVEL_GAP = 90;
 const TREE_GAP = 140;
 const PADDING = 14;
+export const MAX_FACT_WIDTH = 320;
 
 /**
  * Approximate rendered width of a node including its label.
@@ -38,11 +39,15 @@ const PADDING = 14;
 export function labelWidth(node: DfmNode): number {
   if (node.type === 'FACT') {
     const longest = Math.max(node.label.length * 8, ...node.details.map(detail => detail.length * 6.5 + 20));
-    return Math.max(130, longest + 24);
+    return Math.min(MAX_FACT_WIDTH, Math.max(130, longest + 24));
   }
   if (node.type === 'DESCRIPTIVE')
     return Math.max(110, node.label.length * 6.6 + 12);
   return Math.max(44, node.label.length * 6.6 + 12);
+}
+
+function factHalfHeight(node: DfmNode): number {
+  return (35 + node.details.length * 20) / 2;
 }
 
 export function collisionRadius(node: DfmNode): number {
@@ -343,6 +348,34 @@ function edgeAvoidanceForce(links: LayoutLink[]): Force<LayoutNode, LayoutLink> 
 }
 
 /**
+ * Facts are wide, flat boxes: a circular collision radius would keep neighbours far away above and below them,
+ * so other nodes are pushed out of the rectangle instead.
+ */
+function factBoxForce(): Force<LayoutNode, LayoutLink> {
+  let simulationNodes: LayoutNode[] = [];
+  const force: Force<LayoutNode, LayoutLink> = () => {
+    for (const fact of simulationNodes.filter(node => node.type === 'FACT')) {
+      for (const node of simulationNodes) {
+        if (node.type === 'FACT')
+          continue;
+        const offsetX = (node.x ?? 0) - (fact.x ?? 0);
+        const offsetY = (node.y ?? 0) - (fact.y ?? 0);
+        const overlapX = labelWidth(fact) / 2 + labelWidth(node) / 2 + 8 - Math.abs(offsetX);
+        const overlapY = factHalfHeight(fact) + 34 - Math.abs(offsetY);
+        if (overlapX <= 0 || overlapY <= 0)
+          continue;
+        if (overlapY < overlapX)
+          node.y = (node.y ?? 0) + (offsetY < 0 ? -overlapY : overlapY);
+        else
+          node.x = (node.x ?? 0) + (offsetX < 0 ? -overlapX : overlapX);
+      }
+    }
+  };
+  force.initialize = nodes => simulationNodes = nodes;
+  return force;
+}
+
+/**
  * Computes the layout. The returned simulation is stopped and already relaxed.
  */
 export function createGraphLayout(nodes: LayoutNode[], links: LayoutLink[]): Simulation<LayoutNode, LayoutLink> {
@@ -362,7 +395,10 @@ export function createGraphLayout(nodes: LayoutNode[], links: LayoutLink[]): Sim
       .distance(link => initialDistances.get(link) ?? LEVEL_GAP)
       .strength(0.25))
     .force('charge', forceManyBody<LayoutNode>().strength(-60))
-    .force('collision', forceCollide<LayoutNode>().radius(collisionRadius).iterations(3))
+    .force('collision', forceCollide<LayoutNode>()
+      .radius(node => node.type === 'FACT' ? factHalfHeight(node) + 20 : collisionRadius(node))
+      .iterations(3))
+    .force('factBox', factBoxForce())
     .force('edgeAvoidance', edgeAvoidanceForce(links));
 
   simulation.stop();

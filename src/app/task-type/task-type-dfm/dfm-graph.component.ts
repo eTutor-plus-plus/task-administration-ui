@@ -12,7 +12,7 @@ import {
 } from 'd3';
 
 import { DfmGraph } from './dfm-graph.model';
-import { createGraphLayout, graphBounds, LayoutLink as SimLink, LayoutNode as SimNode, toLayout } from './dfm-graph-layout';
+import { createGraphLayout, graphBounds, labelWidth, LayoutLink as SimLink, LayoutNode as SimNode, toLayout } from './dfm-graph-layout';
 
 const WIDTH = 900;
 const HEIGHT = 600;
@@ -240,19 +240,25 @@ export class DfmGraphComponent implements AfterViewInit, OnChanges, OnDestroy {
       if (node.type === 'FACT') {
         const measureCount = node.details.length;
         const height = 35 + measureCount * 20;
-        group.append('rect').attr('x', -60).attr('y', -height / 2).attr('width', 120).attr('height', height).attr('rx', 10);
+        const half = labelWidth(node) / 2;
+        const truncate = (text: string, maxChars: number) =>
+          text.length > maxChars ? `${text.slice(0, Math.max(1, maxChars - 1))}…` : text;
+        group.append('rect').attr('x', -half).attr('y', -height / 2).attr('width', half * 2).attr('height', height).attr('rx', 10);
         group.append('text')
           .attr('class', 'dfm-box-label')
           .attr('text-anchor', 'middle')
           .attr('y', -height / 2 + 22)
-          .text(node.label);
+          .text(truncate(node.label, Math.floor((half * 2 - 24) / 8)))
+          .append('title').text(node.label);
         group.append('line')
           .attr('class', 'dfm-divider')
-          .attr('x1', -60).attr('x2', 60)
+          .attr('x1', -half).attr('x2', half)
           .attr('y1', -height / 2 + 30).attr('y2', -height / 2 + 30);
         node.details.forEach((measure, index) => {
           const y = -height / 2 + 50 + index * 20;
-          group.append('text').attr('class', 'dfm-measure-label').attr('x', -50).attr('y', y).text(measure);
+          group.append('text').attr('class', 'dfm-measure-label').attr('x', -half + 10).attr('y', y)
+            .text(truncate(measure, Math.floor((half * 2 - 35) / 6.5)))
+            .append('title').text(measure);
         });
       } else if (node.type === 'LEVEL') {
         group.append('circle').attr('r', 10);

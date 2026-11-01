@@ -1,0 +1,147 @@
+[
+  {
+    "name": "valid minimal model",
+    "dfm": "fact A { x; };\ndimension T { t - u; };\nA - T;\n",
+    "valid": true
+  },
+  {
+    "name": "valid model with unconnected dimension",
+    "dfm": "fact A { x; };\ndimension T { t - u; };\n",
+    "valid": true
+  },
+  {
+    "name": "keywords in upper case",
+    "dfm": "FACT A { x; };\nDIMENSION T { t - u; };\nA - T;\n",
+    "valid": true
+  },
+  {
+    "name": "fact with several dimensions",
+    "dfm": "fact A { x; };\ndimension T { t - u; };\ndimension V { v - w; };\nA - T;\nA - V;\n",
+    "valid": true
+  },
+  {
+    "name": "dimension connected to two facts",
+    "dfm": "fact A { x; };\nfact B { y; };\ndimension T { t - u; };\nA - T;\nB - T;\n",
+    "valid": false
+  },
+  {
+    "name": "dimension connected twice to the same fact",
+    "dfm": "fact A { x; };\ndimension T { t - u; };\nA - T;\nA - T;\n",
+    "valid": false
+  },
+  {
+    "name": "duplicate dimension declarations used by two facts",
+    "dfm": "fact A { x; };\nfact B { y; };\ndimension T { t - u; };\ndimension T { t - u; };\nA - T;\nB - T;\n",
+    "valid": true
+  },
+  {
+    "name": "duplicate dimension declarations used three times",
+    "dfm": "fact A { x; };\nfact B { y; };\nfact C { z; };\ndimension T { t - u; };\ndimension T { t - u; };\nA - T;\nB - T;\nC - T;\n",
+    "valid": false
+  },
+  {
+    "name": "duplicate fact declarations",
+    "dfm": "fact A { x; };\nfact A { y; };\ndimension T { t - u; };\nA - T;\n",
+    "valid": true
+  },
+  {
+    "name": "dangling connector in a hierarchy",
+    "dfm": "fact A { x; };\ndimension T { t - ; };\nA - T;\n",
+    "valid": true
+  },
+  {
+    "name": "empty dimension",
+    "dfm": "fact A { x; };\ndimension T { };\nA - T;\n",
+    "valid": true
+  },
+  {
+    "name": "empty hierarchy",
+    "dfm": "fact A { x; };\ndimension T { ; };\nA - T;\n",
+    "valid": true
+  },
+  {
+    "name": "connection before declarations",
+    "dfm": "A - T;\nfact A { x; };\ndimension T { t - u; };\n",
+    "valid": true
+  },
+  {
+    "name": "non-breaking space as whitespace",
+    "dfm": "fact A { x; };\ndimension T { t - u; };\nA - T;\n",
+    "valid": false
+  },
+  {
+    "name": "narrow no-break space as whitespace",
+    "dfm": "fact A { x; };\ndimension T { t - u; };\nA - T;\n",
+    "valid": false
+  },
+  {
+    "name": "ideographic space as whitespace",
+    "dfm": "fact　A { x; };\ndimension T { t - u; };\nA - T;\n",
+    "valid": true
+  },
+  {
+    "name": "byte order mark at the start",
+    "dfm": "﻿fact A { x; };\ndimension T { t - u; };\nA - T;\n",
+    "valid": false
+  },
+  {
+    "name": "superscript digit in a name",
+    "dfm": "fact A { x²; };\ndimension T { t - u; };\nA - T;\n",
+    "valid": false
+  },
+  {
+    "name": "vulgar fraction in a name",
+    "dfm": "fact A { x½; };\ndimension T { t - u; };\nA - T;\n",
+    "valid": false
+  },
+  {
+    "name": "roman numeral in a name",
+    "dfm": "fact A { xⅣ; };\ndimension T { t - u; };\nA - T;\n",
+    "valid": false
+  },
+  {
+    "name": "letter outside the basic plane",
+    "dfm": "fact A { 𝒜; };\ndimension T { t - u; };\nA - T;\n",
+    "valid": false
+  },
+  {
+    "name": "umlauts in names",
+    "dfm": "fact Bestellung { Menge; };\ndimension Größe { Größe - Maß; };\nBestellung - Größe;\n",
+    "valid": true
+  },
+  {
+    "name": "arrow as fact connection",
+    "dfm": "fact A { x; };\ndimension T { t - u; };\nA -> T;\n",
+    "valid": false
+  },
+  {
+    "name": "equals as fact connection",
+    "dfm": "fact A { x; };\ndimension T { t - u; };\nA = T;\n",
+    "valid": false
+  },
+  {
+    "name": "optional connection without closing parenthesis",
+    "dfm": "fact A { x; };\ndimension T { t ( - u; };\nA - T;\n",
+    "valid": false
+  },
+  {
+    "name": "optional level without closing parenthesis",
+    "dfm": "fact A { x; };\ndimension T { (t - u; };\nA - T;\n",
+    "valid": false
+  },
+  {
+    "name": "descriptive marker without closing brace",
+    "dfm": "fact A { {descriptive x; };\ndimension T { t - u; };\nA - T;\n",
+    "valid": false
+  },
+  {
+    "name": "missing semicolon after dimension",
+    "dfm": "fact A { x; };\ndimension T { t - u; }\nA - T;\n",
+    "valid": false
+  },
+  {
+    "name": "missing semicolon after connection",
+    "dfm": "fact A { x; };\ndimension T { t - u; };\nA - T\n",
+    "valid": false
+  }
+]
