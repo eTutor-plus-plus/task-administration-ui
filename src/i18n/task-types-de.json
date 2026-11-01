@@ -310,13 +310,43 @@
     },
     "dfm": {
       "title": "DFM",
-      "description": "DFM-spezifische Aufgabenfelder können ergänzt werden, sobald das Datenformat der Task-App feststeht.",
       "fields": {
         "allowGrading": "Bewertung zulassen",
-        "checkNames": "Namen überprüfen",
-        "solution": "Lösung"
+        "checkNames": "Attributnamen generell prüfen",
+        "solution": "Lösung",
+        "clearSolution": "Lösung zurücksetzen",
+        "copySolution": "Lösung kopieren",
+        "checkSolution": "DFM-Modell prüfen und visualisieren",
+        "clearSubmodel": "Teilmodell zurücksetzen",
+        "copySubmodel": "Teilmodell kopieren",
+        "checkSubmodel": "Teilmodell prüfen und visualisieren",
+        "evaluationCriteria": "Bewertungskriterien",
+        "addCriterion": "Kriterium hinzufügen",
+        "removeCriterion": "Kriterium entfernen",
+        "criterion": "Kriterium",
+        "name": "Name",
+        "points": "Punkte",
+        "subtree": "DFM-Teilmodell",
+        "partialSolution": "Als Teillösung bewerten",
+        "allowIncorrectFactClass": "Attributnamen prüfen"
+      },
+      "errors": {
+        "invalidSyntax": "Bitte geben Sie ein syntaktisch gültiges DFM-Modell ein.",
+        "pointsTotalMismatch": "Die Summe der Kriterienpunkte muss den maximalen Punkten der Aufgabe entsprechen.",
+        "copyToClipboard": "Der Text konnte nicht in die Zwischenablage kopiert werden.",
+        "preview": "Das DFM-Modell konnte nicht geprüft werden. Bitte versuchen Sie es später erneut.",
+        "downloadPng": "Das DFM-Modell konnte nicht als PNG heruntergeladen werden."
+      },
+      "graph": {
+        "label": "DFM-Diagramm",
+        "zoomIn": "Vergrößern",
+        "zoomOut": "Verkleinern",
+        "resetZoom": "Zoom zurücksetzen",
+        "closePreview": "Vorschau schließen",
+        "downloadPng": "Als PNG herunterladen",
+        "position": "Zeile {{line}}, Spalte {{column}}",
+        "outdated": "Das Diagramm entspricht nicht dem aktuellen Stand. Prüfen Sie das Modell erneut, um es zu aktualisieren."
       }
     }
   }
 }
-

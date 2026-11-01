@@ -1,0 +1,21 @@
+.dfm-preview-container {
+  position: relative;
+  width: 100%;
+}
+
+.dfm-preview-graph {
+  display: block;
+  width: 100%;
+  min-width: 0;
+}
+
+.dfm-preview-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  position: absolute;
+  z-index: 2;
+  top: 0;
+  left: 100%;
+  margin-left: 0.5rem;
+}

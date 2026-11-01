@@ -1,27 +1,258 @@
-<div class="surface-card p-4 shadow-2 border-round p-fluid mb-4" [formGroup]="form">
-  <p class="m-0" [transloco]="'taskTypes.dfm.description'"></p>
+<div [formGroup]="form">
+  <div class="surface-card p-4 shadow-2 border-round p-fluid mb-4">
+    <div class="field">
+      <label for="solution" transloco="taskTypes.dfm.fields.solution"></label>
+      <div class="flex align-items-start gap-2">
+        <div class="flex-grow-1">
+          <ngx-monaco-editor
+            id="solution"
+            formControlName="solution"
+            [options]="editorOptions"
+            style="height: 300px; width: 100%"/>
+          @if (form.controls.solution.dirty || form.controls.solution.touched) {
+            @if (form.controls.solution.hasError('dfmSyntax')) {
+              <small class="block mt-1 p-error" transloco="taskTypes.dfm.errors.invalidSyntax"></small>
+            } @else {
+              <small class="block mt-1 p-error">
+                {{ getError(form.controls.solution, 'taskTypes.dfm.fields.solution') }}
+              </small>
+            }
+          }
+          <ng-container *ngTemplateOutlet="previewTemplate; context: {preview: solutionPreview, current: form.controls.solution.value}"/>
+        </div>
+        <div class="flex flex-column gap-2">
+          <p-button
+            icon="pi pi-refresh"
+            [text]="true"
+            class="w-auto"
+            styleClass="dfm-editor-action dfm-reset-action"
+            [ariaLabel]="'taskTypes.dfm.fields.clearSolution' | transloco"
+            [pTooltip]="'taskTypes.dfm.fields.clearSolution' | transloco"
+            tooltipPosition="left"
+            [showDelay]="500"
+            [disabled]="loading || form.disabled"
+            (onClick)="clearSolution()"/>
+          <p-button
+            icon="pi pi-copy"
+            [text]="true"
+            class="w-auto"
+            styleClass="dfm-editor-action"
+            [ariaLabel]="'taskTypes.dfm.fields.copySolution' | transloco"
+            [pTooltip]="'taskTypes.dfm.fields.copySolution' | transloco"
+            tooltipPosition="left"
+            [showDelay]="500"
+            [disabled]="loading"
+            (onClick)="copySolution()"/>
+          <p-button
+            icon="pi pi-hammer"
+            severity="success"
+            [text]="true"
+            class="w-auto"
+            styleClass="dfm-editor-action"
+            [ariaLabel]="'taskTypes.dfm.fields.checkSolution' | transloco"
+            [pTooltip]="'taskTypes.dfm.fields.checkSolution' | transloco"
+            tooltipPosition="left"
+            [showDelay]="500"
+            [loading]="solutionPreview.loading"
+            [disabled]="loading || solutionPreview.loading || !form.controls.solution.value?.trim()"
+            (onClick)="previewSolution()"/>
+        </div>
+      </div>
+    </div>
 
-  <div class="field-checkbox mt-4">
-    <p-checkbox inputId="allowGrading" formControlName="allowGrading" [binary]="true"/>
-    <label for="allowGrading" transloco="taskTypes.dfm.fields.allowGrading"></label>
+    <div class="flex flex-wrap align-items-center gap-4 mt-4">
+      <div class="field-checkbox mb-0">
+        @if (isExamTask) {
+          <p-checkbox inputId="allowGrading" [ngModel]="true" [ngModelOptions]="{standalone: true}"
+                      [binary]="true" [disabled]="true"/>
+        } @else {
+          <p-checkbox inputId="allowGrading" formControlName="allowGrading" [binary]="true"/>
+        }
+        <label for="allowGrading" transloco="taskTypes.dfm.fields.allowGrading"></label>
+      </div>
+      <div class="field-checkbox mb-0">
+        <p-checkbox inputId="checkNames" formControlName="checkNames" [binary]="true"/>
+        <label for="checkNames" transloco="taskTypes.dfm.fields.checkNames"></label>
+      </div>
+    </div>
   </div>
 
-  <div class="field-checkbox">
-    <p-checkbox inputId="checkNames" formControlName="checkNames" [binary]="true"/>
-    <label for="checkNames" transloco="taskTypes.dfm.fields.checkNames"></label>
-  </div>
+  <div class="surface-card p-4 shadow-2 border-round p-fluid mb-4" formArrayName="evaluationCriteria">
+    <div class="flex justify-content-between align-items-center mb-3">
+      <h3 class="m-0" transloco="taskTypes.dfm.fields.evaluationCriteria"></h3>
+      <p-button
+        [label]="'taskTypes.dfm.fields.addCriterion' | transloco"
+        icon="pi pi-plus"
+        severity="help"
+        size="small"
+        [disabled]="loading || form.disabled"
+        (onClick)="addEvaluationCriterion()"/>
+    </div>
 
-  <div class="field mt-4">
-    <label for="solution" transloco="taskTypes.dfm.fields.solution"></label>
-    <ngx-monaco-editor
-      id="solution"
-      formControlName="solution"
-      [options]="editorOptions"
-      style="height: 300px; width: 100%"/>
-    @if (form.controls.solution.dirty || form.controls.solution.touched) {
-      <small class="block mt-1 p-error">
-        {{ getError(form.controls.solution, 'taskTypes.dfm.fields.solution') }}
-      </small>
+    @for (criterion of evaluationCriteria.controls; track criterion; let index = $index) {
+      <div class="surface-ground p-3 border-round mb-3" [formGroupName]="index">
+        <div class="flex justify-content-between align-items-center mb-3">
+          <h4 class="m-0">{{ 'taskTypes.dfm.fields.criterion' | transloco }} {{ index + 1 }}</h4>
+          <p-button
+            icon="pi pi-trash"
+            severity="danger"
+            [text]="true"
+            [ariaLabel]="'taskTypes.dfm.fields.removeCriterion' | transloco"
+            [disabled]="loading || form.disabled"
+            (onClick)="removeEvaluationCriterion(index)"/>
+        </div>
+
+        <div class="grid formgrid p-fluid">
+          <div class="field col-12 md:col-6">
+            <label [for]="'criterion-name-' + index" transloco="taskTypes.dfm.fields.name"></label>
+            <input [id]="'criterion-name-' + index" type="text" pInputText formControlName="name" maxlength="255">
+            @if (criterion.controls.name.dirty || criterion.controls.name.touched) {
+              <small class="block mt-1 p-error">
+                {{ getError(criterion.controls.name, 'taskTypes.dfm.fields.name') }}
+              </small>
+            }
+          </div>
+
+          <div class="field col-12 md:col-6">
+            <label [for]="'criterion-points-' + index" transloco="taskTypes.dfm.fields.points"></label>
+            <p-inputNumber
+              [inputId]="'criterion-points-' + index"
+              formControlName="points"
+              mode="decimal"
+              [min]="0"
+              [maxFractionDigits]="2"/>
+            @if (criterion.controls.points.dirty || criterion.controls.points.touched) {
+              <small class="block mt-1 p-error">
+                {{ getError(criterion.controls.points, 'taskTypes.dfm.fields.points') }}
+              </small>
+            }
+          </div>
+
+          <div class="field col-12">
+            <label [for]="'criterion-subtree-' + index" transloco="taskTypes.dfm.fields.subtree"></label>
+            <div class="flex align-items-start gap-2">
+              <div class="flex-grow-1">
+                <ngx-monaco-editor
+                  [id]="'criterion-subtree-' + index"
+                  formControlName="subtree"
+                  [options]="editorOptions"
+                  style="height: 200px; width: 100%"/>
+                @if (criterion.controls.subtree.dirty || criterion.controls.subtree.touched) {
+                  @if (criterion.controls.subtree.hasError('dfmSyntax')) {
+                    <small class="block mt-1 p-error" transloco="taskTypes.dfm.errors.invalidSyntax"></small>
+                  } @else {
+                    <small class="block mt-1 p-error">
+                      {{ getError(criterion.controls.subtree, 'taskTypes.dfm.fields.subtree') }}
+                    </small>
+                  }
+                }
+                <ng-container *ngTemplateOutlet="previewTemplate; context: {preview: submodelPreview(criterion.controls.subtree), current: criterion.controls.subtree.value}"/>
+              </div>
+              <div class="flex flex-column gap-2">
+                <p-button
+                  icon="pi pi-refresh"
+                  [text]="true"
+                  class="w-auto"
+                  styleClass="dfm-editor-action dfm-reset-action"
+                  [ariaLabel]="'taskTypes.dfm.fields.clearSubmodel' | transloco"
+                  [pTooltip]="'taskTypes.dfm.fields.clearSubmodel' | transloco"
+                  tooltipPosition="left"
+                  [showDelay]="500"
+                  [disabled]="loading || form.disabled"
+                  (onClick)="clearSubmodel(criterion)"/>
+                <p-button
+                  icon="pi pi-copy"
+                  [text]="true"
+                  class="w-auto"
+                  styleClass="dfm-editor-action"
+                  [ariaLabel]="'taskTypes.dfm.fields.copySubmodel' | transloco"
+                  [pTooltip]="'taskTypes.dfm.fields.copySubmodel' | transloco"
+                  tooltipPosition="left"
+                  [showDelay]="500"
+                  [disabled]="loading"
+                  (onClick)="copySubmodel(criterion.controls.subtree)"/>
+                <p-button
+                  icon="pi pi-hammer"
+                  severity="success"
+                  [text]="true"
+                  class="w-auto"
+                  styleClass="dfm-editor-action"
+                  [ariaLabel]="'taskTypes.dfm.fields.checkSubmodel' | transloco"
+                  [pTooltip]="'taskTypes.dfm.fields.checkSubmodel' | transloco"
+                  tooltipPosition="left"
+                  [showDelay]="500"
+                  [loading]="submodelPreview(criterion.controls.subtree).loading"
+                  [disabled]="loading || submodelPreview(criterion.controls.subtree).loading || !criterion.controls.subtree.value?.trim()"
+                  (onClick)="previewSubmodel(criterion.controls.subtree)"/>
+              </div>
+            </div>
+          </div>
+
+          <div class="field-checkbox col-12 md:col-6">
+            <p-checkbox
+              [inputId]="'criterion-partial-' + index"
+              formControlName="partialSolution"
+              [binary]="true"/>
+            <label [for]="'criterion-partial-' + index" transloco="taskTypes.dfm.fields.partialSolution"></label>
+          </div>
+
+          <div class="field-checkbox col-12 md:col-6">
+            <p-checkbox
+              [inputId]="'criterion-incorrect-class-' + index"
+              formControlName="allowIncorrectFactClass"
+              [binary]="true"/>
+            <label
+              [for]="'criterion-incorrect-class-' + index"
+              transloco="taskTypes.dfm.fields.allowIncorrectFactClass"></label>
+          </div>
+        </div>
+      </div>
+    }
+
+    @if (evaluationCriteria.hasError('pointsTotalMismatch')) {
+      <small class="block mt-1 p-error" transloco="taskTypes.dfm.errors.pointsTotalMismatch"></small>
     }
   </div>
+
+  <ng-template #previewTemplate let-preview="preview" let-current="current">
+    @if (preview.error) {
+      <small class="block mt-2 p-error" role="alert">
+        {{ preview.error.message }}
+        @if (preview.error.line) {
+          ({{ 'taskTypes.dfm.graph.position' | transloco: {line: preview.error.line, column: preview.error.column ?? '?'} }})
+        }
+      </small>
+    }
+    @if (preview.graph) {
+      @if (preview.source !== current) {
+        <small class="block mt-2 text-color-secondary" transloco="taskTypes.dfm.graph.outdated"></small>
+      }
+      <div class="dfm-preview-container mt-2">
+        <dke-dfm-graph #graphComponent class="dfm-preview-graph" [graph]="preview.graph"/>
+        <div class="dfm-preview-actions">
+          <p-button
+            icon="pi pi-trash"
+            severity="danger"
+            [text]="true"
+            size="small"
+            styleClass="dfm-editor-action"
+            [ariaLabel]="'taskTypes.dfm.graph.closePreview' | transloco"
+            [pTooltip]="'taskTypes.dfm.graph.closePreview' | transloco"
+            tooltipPosition="left"
+            [showDelay]="500"
+            (onClick)="dismissPreview(preview)"/>
+          <p-button
+            icon="pi pi-download"
+            [text]="true"
+            size="small"
+            styleClass="dfm-editor-action"
+            [ariaLabel]="'taskTypes.dfm.graph.downloadPng' | transloco"
+            [pTooltip]="'taskTypes.dfm.graph.downloadPng' | transloco"
+            tooltipPosition="left"
+            [showDelay]="500"
+            (onClick)="downloadPreview(graphComponent)"/>
+        </div>
+      </div>
+    }
+  </ng-template>
 </div>

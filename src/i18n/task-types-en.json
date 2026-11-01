@@ -304,14 +304,43 @@
     },
     "dfm": {
       "title": "DFM",
-      "description": "DFM-specific task fields can be added here once the task app data format is defined.",
       "fields": {
         "allowGrading": "Allow grading",
-        "checkNames": "Check names",
-        "solution": "Solution"
+        "checkNames": "Check attribute names generally",
+        "solution": "Solution",
+        "clearSolution": "Clear solution",
+        "copySolution": "Copy solution",
+        "checkSolution": "Check and visualize DFM model",
+        "clearSubmodel": "Clear submodel",
+        "copySubmodel": "Copy submodel",
+        "checkSubmodel": "Check and visualize submodel",
+        "evaluationCriteria": "Evaluation criteria",
+        "addCriterion": "Add criterion",
+        "removeCriterion": "Remove criterion",
+        "criterion": "Criterion",
+        "name": "Name",
+        "points": "Points",
+        "subtree": "DFM submodel",
+        "partialSolution": "Evaluate as partial solution",
+        "allowIncorrectFactClass": "Check attribute names"
+      },
+      "errors": {
+        "invalidSyntax": "Please enter a syntactically valid DFM model.",
+        "pointsTotalMismatch": "The sum of criterion points must equal the task's maximum points.",
+        "copyToClipboard": "The text could not be copied to the clipboard.",
+        "preview": "The DFM model could not be checked. Please try again later.",
+        "downloadPng": "The DFM model could not be downloaded as a PNG."
+      },
+      "graph": {
+        "label": "DFM diagram",
+        "zoomIn": "Zoom in",
+        "zoomOut": "Zoom out",
+        "resetZoom": "Reset zoom",
+        "closePreview": "Close preview",
+        "downloadPng": "Download as PNG",
+        "position": "line {{line}}, column {{column}}",
+        "outdated": "The diagram does not reflect the latest changes. Check the model again to update it."
       }
     }
   }
 }
-
-
