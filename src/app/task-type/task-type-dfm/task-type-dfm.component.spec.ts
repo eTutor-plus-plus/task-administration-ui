@@ -70,6 +70,10 @@ describe('TaskTypeDfmComponent', () => {
     expect(component.form.controls.checkNames).toBeDefined();
   });
 
+  it('should automatically adjust the editors when their size changes', () => {
+    expect(component.editorOptions.automaticLayout).toBe(true);
+  });
+
   it('should clear the solution and mark it as changed', () => {
     component.form.controls.solution.setValue('fact Sales { amount };');
     component.form.controls.solution.markAsPristine();

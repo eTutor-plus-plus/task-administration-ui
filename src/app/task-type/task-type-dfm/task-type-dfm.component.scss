@@ -1,3 +1,18 @@
+.dfm-resizable-editor {
+  width: 100%;
+  min-height: 100px;
+  overflow: hidden;
+  resize: vertical;
+}
+
+.dfm-solution-editor {
+  height: 300px;
+}
+
+.dfm-submodel-editor {
+  height: 200px;
+}
+
 .dfm-preview-container {
   position: relative;
   width: 100%;

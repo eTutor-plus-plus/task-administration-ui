@@ -88,6 +88,7 @@ export class TaskTypeDfmComponent extends TaskTypeFormComponent<TaskTypeForm> im
   readonly editorOptions: editor.IStandaloneEditorConstructionOptions = {
     language: 'plaintext',
     minimap: {enabled: false},
+    automaticLayout: true,
     scrollBeyondLastLine: false,
     wordWrap: 'on'
   };

@@ -8,7 +8,7 @@
             id="solution"
             formControlName="solution"
             [options]="editorOptions"
-            style="height: 300px; width: 100%"/>
+            class="dfm-resizable-editor dfm-solution-editor"/>
           @if (form.controls.solution.dirty || form.controls.solution.touched) {
             @if (form.controls.solution.hasError('dfmSyntax')) {
               <small class="block mt-1 p-error" transloco="taskTypes.dfm.errors.invalidSyntax"></small>
@@ -136,7 +136,7 @@
                   [id]="'criterion-subtree-' + index"
                   formControlName="subtree"
                   [options]="editorOptions"
-                  style="height: 200px; width: 100%"/>
+                  class="dfm-resizable-editor dfm-submodel-editor"/>
                 @if (criterion.controls.subtree.dirty || criterion.controls.subtree.touched) {
                   @if (criterion.controls.subtree.hasError('dfmSyntax')) {
                     <small class="block mt-1 p-error" transloco="taskTypes.dfm.errors.invalidSyntax"></small>
