@@ -4,7 +4,7 @@ import { join } from 'path';
 import { isValidDfmSyntax } from './dfm-syntax.validator';
 
 // The sources belong to the graph fixtures that were produced by the real DFM parser, so they are all valid.
-const FIXTURE_DIRECTORY = join(__dirname, 'dfm-graph-fixtures');
+const FIXTURE_DIRECTORY = join(__dirname, 'testdata', 'graph-fixtures');
 const validModels = readdirSync(FIXTURE_DIRECTORY)
   .filter(file => file.endsWith('.dfm'))
   .map(file => [file.replace(/\.dfm$/, ''), readFileSync(join(FIXTURE_DIRECTORY, file), 'utf8')]);

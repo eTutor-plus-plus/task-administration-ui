@@ -5,7 +5,7 @@ import { DfmGraph } from './dfm-graph.model';
 import { createGraphLayout, graphBounds, LayoutNode, nodeBounds, toLayout } from './dfm-graph-layout';
 
 // The fixtures contain the graphs produced by the real DFM parser for different model constellations.
-const FIXTURE_DIRECTORY = join(__dirname, 'dfm-graph-fixtures');
+const FIXTURE_DIRECTORY = join(__dirname, 'testdata', 'graph-fixtures');
 const scenarios: Record<string, DfmGraph> = Object.fromEntries(readdirSync(FIXTURE_DIRECTORY)
   .filter(file => file.endsWith('.json'))
   .map(file => [file.replace(/\.json$/, ''), JSON.parse(readFileSync(join(FIXTURE_DIRECTORY, file), 'utf8')) as DfmGraph]));

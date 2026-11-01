@@ -1,0 +1,95 @@
+<div class="flex align-items-start gap-2">
+  <div class="flex-grow-1">
+    <ngx-monaco-editor
+      class="dfm-resizable-editor"
+      [id]="inputId"
+      [formControl]="control"
+      [options]="editorOptions"
+      [style.height.px]="height"/>
+    @if (control.dirty || control.touched) {
+      @if (control.hasError('dfmSyntax')) {
+        <small class="block mt-1 p-error" transloco="taskTypes.dfm.errors.invalidSyntax"></small>
+      } @else {
+        <small class="block mt-1 p-error">{{ getError() }}</small>
+      }
+    }
+
+    @if (preview.error) {
+      <small class="block mt-2 p-error" role="alert">
+        {{ preview.error.message }}
+        @if (preview.error.line) {
+          ({{ 'taskTypes.dfm.graph.position' | transloco: {line: preview.error.line, column: preview.error.column ?? '?'} }})
+        }
+      </small>
+    }
+    @if (preview.graph) {
+      @if (preview.source !== control.value) {
+        <small class="block mt-2 text-color-secondary" transloco="taskTypes.dfm.graph.outdated"></small>
+      }
+      <div class="dfm-preview-container mt-2">
+        <dke-dfm-graph #graphComponent class="dfm-preview-graph" [graph]="preview.graph"/>
+        <div class="dfm-preview-actions">
+          <p-button
+            icon="pi pi-trash"
+            severity="danger"
+            [text]="true"
+            size="small"
+            styleClass="dfm-editor-action"
+            [ariaLabel]="'taskTypes.dfm.graph.closePreview' | transloco"
+            [pTooltip]="'taskTypes.dfm.graph.closePreview' | transloco"
+            tooltipPosition="left"
+            [showDelay]="500"
+            (onClick)="dismiss()"/>
+          <p-button
+            icon="pi pi-download"
+            [text]="true"
+            size="small"
+            styleClass="dfm-editor-action"
+            [ariaLabel]="'taskTypes.dfm.graph.downloadPng' | transloco"
+            [pTooltip]="'taskTypes.dfm.graph.downloadPng' | transloco"
+            tooltipPosition="left"
+            [showDelay]="500"
+            (onClick)="download(graphComponent)"/>
+        </div>
+      </div>
+    }
+  </div>
+
+  <div class="flex flex-column gap-2">
+    <p-button
+      icon="pi pi-refresh"
+      [text]="true"
+      class="w-auto"
+      styleClass="dfm-editor-action dfm-reset-action"
+      [ariaLabel]="keys.clear | transloco"
+      [pTooltip]="keys.clear | transloco"
+      tooltipPosition="left"
+      [showDelay]="500"
+      [disabled]="loading || control.disabled"
+      (onClick)="clear()"/>
+    <p-button
+      icon="pi pi-copy"
+      [text]="true"
+      class="w-auto"
+      styleClass="dfm-editor-action"
+      [ariaLabel]="keys.copy | transloco"
+      [pTooltip]="keys.copy | transloco"
+      tooltipPosition="left"
+      [showDelay]="500"
+      [disabled]="loading"
+      (onClick)="copy()"/>
+    <p-button
+      icon="pi pi-hammer"
+      severity="success"
+      [text]="true"
+      class="w-auto"
+      styleClass="dfm-editor-action"
+      [ariaLabel]="keys.check | transloco"
+      [pTooltip]="keys.check | transloco"
+      tooltipPosition="left"
+      [showDelay]="500"
+      [loading]="preview.loading"
+      [disabled]="loading || preview.loading || !control.value?.trim()"
+      (onClick)="check()"/>
+  </div>
+</div>

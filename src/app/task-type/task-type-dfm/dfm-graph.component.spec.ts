@@ -5,7 +5,7 @@ import { DfmGraphComponent } from './dfm-graph.component';
 import { DfmGraph } from './dfm-graph.model';
 import { TranslationLoaderService } from '../../translation-loader.service';
 
-import purchase from './dfm-graph-fixtures/purchase.json';
+import purchase from './testdata/graph-fixtures/purchase.json';
 
 describe('DfmGraphComponent', () => {
   let fixture: ComponentFixture<DfmGraphComponent>;

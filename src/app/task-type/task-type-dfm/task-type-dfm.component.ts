@@ -1,5 +1,4 @@
 import { Component, Input, OnDestroy } from '@angular/core';
-import { NgTemplateOutlet } from '@angular/common';
 import {
   AbstractControl,
   FormArray,
@@ -13,32 +12,15 @@ import {
 } from '@angular/forms';
 import { TranslocoDirective, TranslocoPipe } from '@ngneat/transloco';
 import { Subscription } from 'rxjs';
-import { MessageService } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
 import { CheckboxModule } from 'primeng/checkbox';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { InputTextModule } from 'primeng/inputtext';
-import { TooltipModule } from 'primeng/tooltip';
-import { editor } from 'monaco-editor';
-import { MonacoEditorModule } from 'ngx-monaco-editor-v2';
 
 import { TaskTypeFormComponent } from '../task-type-form.component';
 import { TaskForm } from '../task.form';
 import { isValidDfmSyntax } from './dfm-syntax.validator';
-import { DfmGraph, DfmParseError } from './dfm-graph.model';
-import { DfmGraphComponent } from './dfm-graph.component';
-import { DfmService } from './dfm.service';
-
-/**
- * The state of the graph preview of a DFM editor.
- */
-export interface DfmPreview {
-  loading: boolean;
-  /** The model the preview was created for. */
-  source: string | null;
-  graph: DfmGraph | null;
-  error: { message: string; line: number | null; column: number | null } | null;
-}
+import { DfmModelEditorComponent } from './dfm-model-editor.component';
 
 interface TaskTypeForm {
   allowGrading: FormControl<boolean | null>;
@@ -69,41 +51,24 @@ type EvaluationCriterionForm = FormGroup<{
   imports: [
     ButtonModule,
     CheckboxModule,
-    DfmGraphComponent,
+    DfmModelEditorComponent,
     FormsModule,
     InputNumberModule,
     InputTextModule,
-    MonacoEditorModule,
-    NgTemplateOutlet,
     ReactiveFormsModule,
     TranslocoDirective,
-    TranslocoPipe,
-    TooltipModule
+    TranslocoPipe
   ],
-  templateUrl: './task-type-dfm.component.html',
-  styleUrl: './task-type-dfm.component.scss'
+  templateUrl: './task-type-dfm.component.html'
 })
 export class TaskTypeDfmComponent extends TaskTypeFormComponent<TaskTypeForm> implements OnDestroy {
 
-  readonly editorOptions: editor.IStandaloneEditorConstructionOptions = {
-    language: 'plaintext',
-    minimap: {enabled: false},
-    automaticLayout: true,
-    scrollBeyondLastLine: false,
-    wordWrap: 'on'
-  };
-
   readonly evaluationCriteria = new FormArray<EvaluationCriterionForm>([], [this.pointsTotalValidator()]);
-  readonly solutionPreview: DfmPreview = createPreview();
-  private readonly submodelPreviews = new WeakMap<AbstractControl, DfmPreview>();
   private parentMaxPointsSubscription?: Subscription;
   private examTaskSubscription?: Subscription;
   private gradingBeforeExamTask?: boolean;
 
-  constructor(
-    private readonly messageService: MessageService,
-    private readonly dfmService: DfmService
-  ) {
+  constructor() {
     super();
   }
 
@@ -181,99 +146,6 @@ export class TaskTypeDfmComponent extends TaskTypeFormComponent<TaskTypeForm> im
     this.evaluationCriteria.markAsDirty();
   }
 
-  clearSolution(): void {
-    const solution = this.form.controls.solution;
-    solution.setValue('');
-    solution.markAsDirty();
-    Object.assign(this.solutionPreview, createPreview());
-  }
-
-  async copySolution(): Promise<void> {
-    await this.copyToClipboard(this.form.controls.solution.value);
-  }
-
-  clearSubmodel(criterion: EvaluationCriterionForm): void {
-    const subtree = criterion.controls.subtree;
-    subtree.setValue('');
-    subtree.markAsDirty();
-    Object.assign(this.submodelPreview(subtree), createPreview());
-  }
-
-  /**
-   * Returns the preview state of the submodel editor.
-   *
-   * @param subtree The control of the submodel.
-   */
-  submodelPreview(subtree: AbstractControl): DfmPreview {
-    let preview = this.submodelPreviews.get(subtree);
-    if (!preview) {
-      preview = createPreview();
-      this.submodelPreviews.set(subtree, preview);
-    }
-    return preview;
-  }
-
-  async previewSolution(): Promise<void> {
-    await this.loadPreview(this.form.controls.solution.value, this.solutionPreview);
-  }
-
-  async previewSubmodel(subtree: FormControl<string | null>): Promise<void> {
-    await this.loadPreview(subtree.value, this.submodelPreview(subtree));
-  }
-
-  dismissPreview(preview: DfmPreview): void {
-    Object.assign(preview, createPreview());
-  }
-
-  async downloadPreview(graphComponent: DfmGraphComponent): Promise<void> {
-    try {
-      await graphComponent.downloadPng();
-    } catch (error) {
-      console.error('[TaskTypeDfmComponent] Could not download DFM preview as PNG', error);
-      this.messageService.add({
-        severity: 'error',
-        detail: this.translationService.translate('taskTypes.dfm.errors.downloadPng'),
-        key: 'global'
-      });
-    }
-  }
-
-  private async loadPreview(source: string | null, preview: DfmPreview): Promise<void> {
-    if (!source?.trim() || preview.loading)
-      return;
-
-    preview.loading = true;
-    preview.source = source;
-    preview.error = null;
-    try {
-      preview.graph = await this.dfmService.parse(source);
-    } catch (error) {
-      preview.graph = null;
-      preview.error = error instanceof DfmParseError
-        ? {message: error.message, line: error.line, column: error.column}
-        : {message: this.translationService.translate('taskTypes.dfm.errors.preview'), line: null, column: null};
-    } finally {
-      preview.loading = false;
-    }
-  }
-
-  async copySubmodel(subtree: FormControl<string | null>): Promise<void> {
-    await this.copyToClipboard(subtree.value);
-  }
-
-  private async copyToClipboard(value: string | null): Promise<void> {
-    try {
-      await navigator.clipboard.writeText(value ?? '');
-    } catch (error) {
-      console.error('[TaskTypeDfmComponent] Could not copy text to clipboard', error);
-      this.messageService.add({
-        severity: 'error',
-        detail: this.translationService.translate('taskTypes.dfm.errors.copyToClipboard'),
-        key: 'global'
-      });
-    }
-  }
-
   ngOnDestroy(): void {
     this.parentMaxPointsSubscription?.unsubscribe();
     this.examTaskSubscription?.unsubscribe();
@@ -344,8 +216,4 @@ export class TaskTypeDfmComponent extends TaskTypeFormComponent<TaskTypeForm> im
         : {pointsTotalMismatch: true};
     };
   }
-}
-
-function createPreview(): DfmPreview {
-  return {loading: false, source: null, graph: null, error: null};
 }

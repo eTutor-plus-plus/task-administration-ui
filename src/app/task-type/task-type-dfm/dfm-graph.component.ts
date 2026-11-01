@@ -1,12 +1,10 @@
-import { AfterViewInit, Component, ElementRef, Input, OnChanges, OnDestroy, ViewChild, ViewEncapsulation } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, Input, OnChanges, ViewChild, ViewEncapsulation } from '@angular/core';
 import { TranslocoPipe } from '@ngneat/transloco';
 import { ButtonModule } from 'primeng/button';
 import {
-  drag,
   select,
   zoom,
   zoomIdentity,
-  type Simulation,
   type ZoomBehavior,
   type ZoomTransform
 } from 'd3';
@@ -26,7 +24,7 @@ const EXPORT_STYLE_PROPERTIES = [
 ];
 
 /**
- * Visualizes a DFM graph as an interactive diagram.
+ * Visualizes a DFM graph as a static diagram that can be zoomed and panned.
  */
 @Component({
   selector: 'dke-dfm-graph',
@@ -36,12 +34,11 @@ const EXPORT_STYLE_PROPERTIES = [
   styleUrl: './dfm-graph.component.scss',
   encapsulation: ViewEncapsulation.None
 })
-export class DfmGraphComponent implements AfterViewInit, OnChanges, OnDestroy {
+export class DfmGraphComponent implements AfterViewInit, OnChanges {
   @Input() graph: DfmGraph | null = null;
 
   @ViewChild('svg', {static: true}) private svgRef!: ElementRef<SVGSVGElement>;
 
-  private simulation?: Simulation<SimNode, SimLink>;
   private zoomBehavior?: ZoomBehavior<SVGSVGElement, unknown>;
   private initialTransform: ZoomTransform = zoomIdentity;
   private viewInitialized = false;
@@ -56,10 +53,6 @@ export class DfmGraphComponent implements AfterViewInit, OnChanges, OnDestroy {
   ngOnChanges(): void {
     if (this.viewInitialized)
       this.render();
-  }
-
-  ngOnDestroy(): void {
-    this.simulation?.stop();
   }
 
   changeZoom(scale: number): void {
@@ -171,8 +164,6 @@ export class DfmGraphComponent implements AfterViewInit, OnChanges, OnDestroy {
   }
 
   private render(): void {
-    this.simulation?.stop();
-
     const svg = select(this.svgRef.nativeElement);
     svg.on('.zoom', null);
     svg.selectAll('*').remove();
@@ -299,9 +290,8 @@ export class DfmGraphComponent implements AfterViewInit, OnChanges, OnDestroy {
       nodeSelection.attr('transform', node => `translate(${node.x ?? 0},${node.y ?? 0})`);
     };
 
-    const simulation = createGraphLayout(nodes, links);
-    this.simulation = simulation;
-    simulation.on('tick', updatePositions);
+    // the layout is computed once and the diagram is static, only the view can be zoomed and panned
+    createGraphLayout(nodes, links);
     updatePositions();
 
     const bounds = graphBounds(nodes);
@@ -313,27 +303,5 @@ export class DfmGraphComponent implements AfterViewInit, OnChanges, OnDestroy {
       .scale(scale)
       .translate(-(bounds.left + bounds.right) / 2, -(bounds.top + bounds.bottom) / 2);
     svg.call(this.zoomBehavior.transform, this.initialTransform);
-
-    nodeSelection.call(
-      drag<SVGGElement, SimNode>()
-        .on('start', (event, node) => {
-          if (!event.active)
-            simulation.alphaTarget(0.25).restart();
-          node.fx = node.x;
-          node.fy = node.y;
-        })
-        .on('drag', (event, node) => {
-          node.fx = event.x;
-          node.fy = event.y;
-        })
-        .on('end', (event, node) => {
-          if (!event.active)
-            simulation.alphaTarget(0);
-          if (node.type !== 'FACT') {
-            node.fx = null;
-            node.fy = null;
-          }
-        })
-    );
   }
 }

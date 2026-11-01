@@ -1,4 +1,4 @@
-import cases from './dfm-parser-cases.json';
+import cases from './testdata/parser-cases.json';
 import { isValidDfmSyntax } from './dfm-syntax.validator';
 
 // Each case was run against the real DFM parser (POST /api/dfm/parse); `valid` is the parser's verdict.

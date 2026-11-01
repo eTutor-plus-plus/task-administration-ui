@@ -2,62 +2,12 @@
   <div class="surface-card p-4 shadow-2 border-round p-fluid mb-4">
     <div class="field">
       <label for="solution" transloco="taskTypes.dfm.fields.solution"></label>
-      <div class="flex align-items-start gap-2">
-        <div class="flex-grow-1">
-          <ngx-monaco-editor
-            id="solution"
-            formControlName="solution"
-            [options]="editorOptions"
-            class="dfm-resizable-editor dfm-solution-editor"/>
-          @if (form.controls.solution.dirty || form.controls.solution.touched) {
-            @if (form.controls.solution.hasError('dfmSyntax')) {
-              <small class="block mt-1 p-error" transloco="taskTypes.dfm.errors.invalidSyntax"></small>
-            } @else {
-              <small class="block mt-1 p-error">
-                {{ getError(form.controls.solution, 'taskTypes.dfm.fields.solution') }}
-              </small>
-            }
-          }
-          <ng-container *ngTemplateOutlet="previewTemplate; context: {preview: solutionPreview, current: form.controls.solution.value}"/>
-        </div>
-        <div class="flex flex-column gap-2">
-          <p-button
-            icon="pi pi-refresh"
-            [text]="true"
-            class="w-auto"
-            styleClass="dfm-editor-action dfm-reset-action"
-            [ariaLabel]="'taskTypes.dfm.fields.clearSolution' | transloco"
-            [pTooltip]="'taskTypes.dfm.fields.clearSolution' | transloco"
-            tooltipPosition="left"
-            [showDelay]="500"
-            [disabled]="loading || form.disabled"
-            (onClick)="clearSolution()"/>
-          <p-button
-            icon="pi pi-copy"
-            [text]="true"
-            class="w-auto"
-            styleClass="dfm-editor-action"
-            [ariaLabel]="'taskTypes.dfm.fields.copySolution' | transloco"
-            [pTooltip]="'taskTypes.dfm.fields.copySolution' | transloco"
-            tooltipPosition="left"
-            [showDelay]="500"
-            [disabled]="loading"
-            (onClick)="copySolution()"/>
-          <p-button
-            icon="pi pi-hammer"
-            severity="success"
-            [text]="true"
-            class="w-auto"
-            styleClass="dfm-editor-action"
-            [ariaLabel]="'taskTypes.dfm.fields.checkSolution' | transloco"
-            [pTooltip]="'taskTypes.dfm.fields.checkSolution' | transloco"
-            tooltipPosition="left"
-            [showDelay]="500"
-            [loading]="solutionPreview.loading"
-            [disabled]="loading || solutionPreview.loading || !form.controls.solution.value?.trim()"
-            (onClick)="previewSolution()"/>
-        </div>
-      </div>
+      <dke-dfm-model-editor
+        inputId="solution"
+        kind="solution"
+        [control]="form.controls.solution"
+        [height]="300"
+        [loading]="loading"/>
     </div>
 
     <div class="flex flex-wrap align-items-center gap-4 mt-4">
@@ -130,62 +80,12 @@
 
           <div class="field col-12">
             <label [for]="'criterion-subtree-' + index" transloco="taskTypes.dfm.fields.subtree"></label>
-            <div class="flex align-items-start gap-2">
-              <div class="flex-grow-1">
-                <ngx-monaco-editor
-                  [id]="'criterion-subtree-' + index"
-                  formControlName="subtree"
-                  [options]="editorOptions"
-                  class="dfm-resizable-editor dfm-submodel-editor"/>
-                @if (criterion.controls.subtree.dirty || criterion.controls.subtree.touched) {
-                  @if (criterion.controls.subtree.hasError('dfmSyntax')) {
-                    <small class="block mt-1 p-error" transloco="taskTypes.dfm.errors.invalidSyntax"></small>
-                  } @else {
-                    <small class="block mt-1 p-error">
-                      {{ getError(criterion.controls.subtree, 'taskTypes.dfm.fields.subtree') }}
-                    </small>
-                  }
-                }
-                <ng-container *ngTemplateOutlet="previewTemplate; context: {preview: submodelPreview(criterion.controls.subtree), current: criterion.controls.subtree.value}"/>
-              </div>
-              <div class="flex flex-column gap-2">
-                <p-button
-                  icon="pi pi-refresh"
-                  [text]="true"
-                  class="w-auto"
-                  styleClass="dfm-editor-action dfm-reset-action"
-                  [ariaLabel]="'taskTypes.dfm.fields.clearSubmodel' | transloco"
-                  [pTooltip]="'taskTypes.dfm.fields.clearSubmodel' | transloco"
-                  tooltipPosition="left"
-                  [showDelay]="500"
-                  [disabled]="loading || form.disabled"
-                  (onClick)="clearSubmodel(criterion)"/>
-                <p-button
-                  icon="pi pi-copy"
-                  [text]="true"
-                  class="w-auto"
-                  styleClass="dfm-editor-action"
-                  [ariaLabel]="'taskTypes.dfm.fields.copySubmodel' | transloco"
-                  [pTooltip]="'taskTypes.dfm.fields.copySubmodel' | transloco"
-                  tooltipPosition="left"
-                  [showDelay]="500"
-                  [disabled]="loading"
-                  (onClick)="copySubmodel(criterion.controls.subtree)"/>
-                <p-button
-                  icon="pi pi-hammer"
-                  severity="success"
-                  [text]="true"
-                  class="w-auto"
-                  styleClass="dfm-editor-action"
-                  [ariaLabel]="'taskTypes.dfm.fields.checkSubmodel' | transloco"
-                  [pTooltip]="'taskTypes.dfm.fields.checkSubmodel' | transloco"
-                  tooltipPosition="left"
-                  [showDelay]="500"
-                  [loading]="submodelPreview(criterion.controls.subtree).loading"
-                  [disabled]="loading || submodelPreview(criterion.controls.subtree).loading || !criterion.controls.subtree.value?.trim()"
-                  (onClick)="previewSubmodel(criterion.controls.subtree)"/>
-              </div>
-            </div>
+            <dke-dfm-model-editor
+              kind="submodel"
+              [inputId]="'criterion-subtree-' + index"
+              [control]="criterion.controls.subtree"
+              [height]="200"
+              [loading]="loading"/>
           </div>
 
           <div class="field-checkbox col-12 md:col-6">
@@ -213,46 +113,4 @@
       <small class="block mt-1 p-error" transloco="taskTypes.dfm.errors.pointsTotalMismatch"></small>
     }
   </div>
-
-  <ng-template #previewTemplate let-preview="preview" let-current="current">
-    @if (preview.error) {
-      <small class="block mt-2 p-error" role="alert">
-        {{ preview.error.message }}
-        @if (preview.error.line) {
-          ({{ 'taskTypes.dfm.graph.position' | transloco: {line: preview.error.line, column: preview.error.column ?? '?'} }})
-        }
-      </small>
-    }
-    @if (preview.graph) {
-      @if (preview.source !== current) {
-        <small class="block mt-2 text-color-secondary" transloco="taskTypes.dfm.graph.outdated"></small>
-      }
-      <div class="dfm-preview-container mt-2">
-        <dke-dfm-graph #graphComponent class="dfm-preview-graph" [graph]="preview.graph"/>
-        <div class="dfm-preview-actions">
-          <p-button
-            icon="pi pi-trash"
-            severity="danger"
-            [text]="true"
-            size="small"
-            styleClass="dfm-editor-action"
-            [ariaLabel]="'taskTypes.dfm.graph.closePreview' | transloco"
-            [pTooltip]="'taskTypes.dfm.graph.closePreview' | transloco"
-            tooltipPosition="left"
-            [showDelay]="500"
-            (onClick)="dismissPreview(preview)"/>
-          <p-button
-            icon="pi pi-download"
-            [text]="true"
-            size="small"
-            styleClass="dfm-editor-action"
-            [ariaLabel]="'taskTypes.dfm.graph.downloadPng' | transloco"
-            [pTooltip]="'taskTypes.dfm.graph.downloadPng' | transloco"
-            tooltipPosition="left"
-            [showDelay]="500"
-            (onClick)="downloadPreview(graphComponent)"/>
-        </div>
-      </div>
-    }
-  </ng-template>
 </div>

@@ -29,12 +29,6 @@
   }
 
   .dfm-node {
-    cursor: grab;
-
-    &:active {
-      cursor: grabbing;
-    }
-
     rect {
       fill: #fff;
       stroke: #1570ef;
