@@ -20,8 +20,20 @@ const MAX_PNG_SIZE = 8000;
 const EXPORT_MARGIN = 40;
 // the component styles are not part of the exported SVG, so the relevant ones are inlined
 const EXPORT_STYLE_PROPERTIES = [
-  'fill', 'stroke', 'stroke-width', 'font-family', 'font-size', 'font-weight', 'text-anchor', 'dominant-baseline'
+  'fill', 'stroke', 'stroke-width', 'font-family', 'font-size', 'font-weight', 'text-anchor', 'dominant-baseline',
+  'paint-order'
 ];
+
+// distance from the center of a node to its border in the direction (unitX, unitY)
+function borderDistance(node: SimNode, unitX: number, unitY: number): number {
+  if (node.type === 'LEVEL')
+    return 10;
+  const halfWidth = node.type === 'FACT' ? labelWidth(node) / 2 : 50;
+  const halfHeight = node.type === 'FACT' ? (35 + node.details.length * 20) / 2 : 10;
+  const horizontal = Math.abs(unitX) < 1e-9 ? Infinity : halfWidth / Math.abs(unitX);
+  const vertical = Math.abs(unitY) < 1e-9 ? Infinity : halfHeight / Math.abs(unitY);
+  return Math.min(horizontal, vertical);
+}
 
 /**
  * Visualizes a DFM graph as a static diagram that can be zoomed and panned.
@@ -218,6 +230,12 @@ export class DfmGraphComponent implements AfterViewInit, OnChanges {
         .data(link.optional ? [0] : [])
         .join('line')
         .attr('class', 'dfm-optional-edge');
+      group.selectAll<SVGTextElement, string>('text.dfm-edge-label')
+        .data(link.label ? [link.label] : [])
+        .join('text')
+        .attr('class', 'dfm-edge-label')
+        .attr('text-anchor', 'middle')
+        .text(label => label);
     });
 
     const nodeSelection = content.append('g')
@@ -286,6 +304,35 @@ export class DfmGraphComponent implements AfterViewInit, OnChanges {
         select(this).select('line.dfm-optional-edge')
           .attr('x1', mx + px * 5).attr('y1', my + py * 5)
           .attr('x2', mx - px * 5).attr('y2', my - py * 5);
+
+        // the label belongs to the visible part of the edge (between the node borders); only optional and
+        // convergence edges keep their middle free for the marker or arrow, so the label is shifted there towards
+        // the lower node because node names hang below the nodes
+        const unitX = (tx - sx) / length, unitY = (ty - sy) / length;
+        const startClip = borderDistance(source, unitX, unitY);
+        const endClip = borderDistance(target, -unitX, -unitY);
+        const visibleLength = length - startClip - endClip;
+        const visibleMiddleX = mx + unitX * (startClip - endClip) / 2;
+        const visibleMiddleY = my + unitY * (startClip - endClip) / 2;
+        const labelHalfWidth = (link.label?.length ?? 0) * 6.2 / 2;
+        const labelHalfHeight = 6.5;
+        const dirX = ty < sy ? -unitX : unitX, dirY = Math.abs(unitY);
+        const extent = Math.abs(dirX) * labelHalfWidth + Math.abs(dirY) * labelHalfHeight;
+        const reserveMiddle = link.optional || convergence;
+        let labelX = visibleMiddleX, labelY = visibleMiddleY;
+        if (reserveMiddle && 9 + 2 * extent + 2 <= visibleLength / 2) {
+          labelX = visibleMiddleX + dirX * (extent + 9);
+          labelY = visibleMiddleY + dirY * (extent + 9);
+        } else if (reserveMiddle || 2 * extent + 2 > visibleLength) {
+          // the edge is too short, so the label is placed beside the edge instead
+          const side = py > 0 ? -1 : 1;
+          const offset = 9 + Math.abs(px) * labelHalfWidth + Math.abs(py) * labelHalfHeight;
+          labelX = visibleMiddleX + px * side * offset;
+          labelY = visibleMiddleY + py * side * offset;
+        }
+        select(this).select('text.dfm-edge-label')
+          .attr('x', labelX)
+          .attr('y', labelY + 4);
       });
       nodeSelection.attr('transform', node => `translate(${node.x ?? 0},${node.y ?? 0})`);
     };

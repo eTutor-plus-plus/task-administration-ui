@@ -19,6 +19,7 @@ export interface LayoutLink extends SimulationLinkDatum<LayoutNode> {
   target: string | LayoutNode;
   connectionType: string;
   optional: boolean;
+  label?: string | null;
 }
 
 export interface Bounds {

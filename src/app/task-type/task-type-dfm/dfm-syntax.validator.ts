@@ -1,4 +1,4 @@
-type TokenKind = 'word' | '{' | '}' | ';' | '-' | '=' | '->' | '(' | ')' | 'end';
+type TokenKind = 'word' | '{' | '}' | ';' | '-' | '=' | '->' | '(' | ')' | '[' | ']' | 'end';
 
 interface Token {
   kind: TokenKind;
@@ -10,7 +10,7 @@ interface Token {
 const WHITESPACE = '(?:[\\t\\n\\u000B\\f\\r\\u001C-\\u001F]|(?![\\u00A0\\u2007\\u202F])[\\p{Zs}\\p{Zl}\\p{Zp}])+';
 const WORD = '[\\p{L}\\p{Nd}_]+';
 const COMMENT = '\\/\\/[^\\n]*';
-const TOKEN_PATTERN = new RegExp(`${WHITESPACE}|${COMMENT}|${WORD}|->|[{};=\\-()]`, 'uy');
+const TOKEN_PATTERN = new RegExp(`${WHITESPACE}|${COMMENT}|${WORD}|->|[{};=\\-()\\[\\]]`, 'uy');
 const WORD_PATTERN = new RegExp(`^${WORD}$`, 'u');
 const WHITESPACE_PATTERN = new RegExp(`^${WHITESPACE}$`, 'u');
 const COMMENT_PATTERN = new RegExp(`^${COMMENT}$`, 'u');
@@ -142,7 +142,7 @@ class DfmSyntaxParser {
         return true;
 
       const optionalConnection = this.accept('(');
-      if (!this.accept('-') && !this.accept('=') && !this.accept('->'))
+      if (!this.parseConnector())
         return false;
       if (optionalConnection && !this.expect(')'))
         return false;
@@ -150,9 +150,26 @@ class DfmSyntaxParser {
     return true;
   }
 
+  // a connector is '-', '=' or '->', or a described connection: '-[text]-', '=[text]=' or '-[text]->'
+  private parseConnector(): boolean {
+    if (this.accept('->'))
+      return true;
+    const opening = this.is('-') ? '-' : this.is('=') ? '=' : null;
+    if (opening === null)
+      return false;
+    this.position++;
+    if (!this.accept('['))
+      return true;
+    if (!this.takeWord() || !this.expect(']'))
+      return false;
+    return opening === '=' ? this.accept('=') : this.accept('-') || this.accept('->');
+  }
+
   private parseConnection(): boolean {
     const fact = this.takeWord();
     if (fact === null || !this.expect('-'))
+      return false;
+    if (this.accept('[') && (!this.takeWord() || !this.expect(']') || !this.expect('-')))
       return false;
     const dimension = this.takeWord();
     if (dimension === null)

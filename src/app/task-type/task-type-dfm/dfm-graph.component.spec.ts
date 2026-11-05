@@ -55,6 +55,21 @@ describe('DfmGraphComponent', () => {
     expect(element.querySelectorAll('line.dfm-optional-edge').length).toBe(1);
   });
 
+  it('should render connection descriptions only for described edges', () => {
+    fixture.componentInstance.graph = {
+      ...graph,
+      edges: [
+        {source: 'sales', target: 'salesperson', connectionType: 'SIMPLE', optional: false, label: null},
+        {source: 'sales', target: 'day', connectionType: 'SIMPLE', optional: false, label: 'salesday'}
+      ]
+    };
+    fixture.detectChanges();
+    fixture.componentInstance.ngOnChanges();
+
+    const labels = Array.from((fixture.nativeElement as HTMLElement).querySelectorAll('text.dfm-edge-label'));
+    expect(labels.map(label => label.textContent)).toEqual(['salesday']);
+  });
+
   it('should render a large graph and fit it into the viewport', () => {
     const large = purchase as DfmGraph;
     fixture.componentInstance.graph = large;

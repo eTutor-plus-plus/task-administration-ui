@@ -173,5 +173,110 @@
     "name": "single slash",
     "dfm": "fact A { x; }; / comment\n",
     "valid": false
+  },
+  {
+    "name": "connection descriptions",
+    "dfm": "fact A { x; };\ndimension T { customer -[customercity]- city =[near]= region -[in]-> country (-[opt]-) zone; };\nA - T;\n",
+    "valid": true
+  },
+  {
+    "name": "connection description without spaces",
+    "dfm": "dimension T { a-[x]-b; };\n",
+    "valid": true
+  },
+  {
+    "name": "connection description mixed with plain connections",
+    "dfm": "dimension T { a - b -[x]- c = d; a -[y]-> e; };\n",
+    "valid": true
+  },
+  {
+    "name": "connection description with mismatched connectors",
+    "dfm": "dimension T { a -[x]= b; };\n",
+    "valid": false
+  },
+  {
+    "name": "multiple connection description closed with dash",
+    "dfm": "dimension T { a =[x]- b; };\n",
+    "valid": false
+  },
+  {
+    "name": "arrow before connection description",
+    "dfm": "dimension T { a ->[x]- b; };\n",
+    "valid": false
+  },
+  {
+    "name": "empty connection description",
+    "dfm": "dimension T { a -[]- b; };\n",
+    "valid": false
+  },
+  {
+    "name": "connection description with two words",
+    "dfm": "dimension T { a -[x y]- b; };\n",
+    "valid": false
+  },
+  {
+    "name": "unclosed connection description",
+    "dfm": "dimension T { a -[x - b; };\n",
+    "valid": false
+  },
+  {
+    "name": "connection description without closing connector",
+    "dfm": "dimension T { a -[x]; };\n",
+    "valid": false
+  },
+  {
+    "name": "connection description inside optional connection without closing connector",
+    "dfm": "dimension T { a (-[x]) b; };\n",
+    "valid": false
+  },
+  {
+    "name": "square brackets without connection",
+    "dfm": "dimension T { a [x] b; };\n",
+    "valid": false
+  },
+  {
+    "name": "fact dimension connection description",
+    "dfm": "fact A { x; };\ndimension T { t - u; };\nA -[soldat]- T;\n",
+    "valid": true
+  },
+  {
+    "name": "fact dimension connection description without spaces",
+    "dfm": "fact A { x; };\ndimension T { t - u; };\nA-[soldat]-T;\n",
+    "valid": true
+  },
+  {
+    "name": "fact dimension connection description with unknown dimension",
+    "dfm": "fact A { x; };\ndimension T { t - u; };\nA -[soldat]- V;\n",
+    "valid": false
+  },
+  {
+    "name": "fact dimension connection description closed with arrow",
+    "dfm": "fact A { x; };\ndimension T { t - u; };\nA -[soldat]-> T;\n",
+    "valid": false
+  },
+  {
+    "name": "fact dimension connection description closed with equals",
+    "dfm": "fact A { x; };\ndimension T { t - u; };\nA -[soldat]= T;\n",
+    "valid": false
+  },
+  {
+    "name": "fact dimension connection with multiple connection description",
+    "dfm": "fact A { x; };\ndimension T { t - u; };\nA =[soldat]= T;\n",
+    "valid": false
+  },
+  {
+    "name": "empty fact dimension connection description",
+    "dfm": "fact A { x; };\ndimension T { t - u; };\nA -[]- T;\n",
+    "valid": false
+  },
+  {
+    "name": "fact dimension connection description with two words",
+    "dfm": "fact A { x; };\ndimension T { t - u; };\nA -[sold at]- T;\n",
+    "valid": false
+  },
+  {
+    "name": "fact dimension connection description without closing connector",
+    "dfm": "fact A { x; };\ndimension T { t - u; };\nA -[soldat] T;\n",
+    "valid": false
   }
 ]

@@ -305,7 +305,7 @@
     "dfm": {
       "title": "DFM",
       "fields": {
-        "allowGrading": "Allow grading",
+        "allowGrading": "Automated grading",
         "checkNames": "Check attribute names generally",
         "solution": "Solution",
         "clearSolution": "Clear solution",

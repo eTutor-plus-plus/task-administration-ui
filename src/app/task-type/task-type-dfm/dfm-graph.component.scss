@@ -28,6 +28,15 @@
     stroke-width: 1.5;
   }
 
+  .dfm-edge-label {
+    fill: #344054;
+    font-size: 11px;
+    paint-order: stroke;
+    stroke: #fff;
+    stroke-width: 3px;
+    pointer-events: none;
+  }
+
   .dfm-node {
     rect {
       fill: #fff;
