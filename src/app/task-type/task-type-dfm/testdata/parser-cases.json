@@ -143,5 +143,35 @@
     "name": "missing semicolon after connection",
     "dfm": "fact A { x; };\ndimension T { t - u; };\nA - T\n",
     "valid": false
+  },
+  {
+    "name": "line comments everywhere",
+    "dfm": "// model\nfact A { x; // measure\n};\ndimension T { t - // link\n u; }; //\nA - T; // done",
+    "valid": true
+  },
+  {
+    "name": "comment directly after word",
+    "dfm": "fact A// name\n{ x; };\n",
+    "valid": true
+  },
+  {
+    "name": "statement commented out",
+    "dfm": "fact A { x; };\ndimension T { t - u; };\n// A - T;\n",
+    "valid": true
+  },
+  {
+    "name": "comment swallows terminating semicolon",
+    "dfm": "fact A { x; }; // comment ;\ndimension T { t - u; } // ;\n",
+    "valid": false
+  },
+  {
+    "name": "comment only",
+    "dfm": "// nothing here\n// at all\n",
+    "valid": false
+  },
+  {
+    "name": "single slash",
+    "dfm": "fact A { x; }; / comment\n",
+    "valid": false
   }
 ]

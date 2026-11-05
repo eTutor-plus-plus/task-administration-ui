@@ -9,9 +9,11 @@ interface Token {
 // and Character.isLetterOrDigit on UTF-16 characters (letters and decimal digits, no supplementary characters).
 const WHITESPACE = '(?:[\\t\\n\\u000B\\f\\r\\u001C-\\u001F]|(?![\\u00A0\\u2007\\u202F])[\\p{Zs}\\p{Zl}\\p{Zp}])+';
 const WORD = '[\\p{L}\\p{Nd}_]+';
-const TOKEN_PATTERN = new RegExp(`${WHITESPACE}|${WORD}|->|[{};=\\-()]`, 'uy');
+const COMMENT = '\\/\\/[^\\n]*';
+const TOKEN_PATTERN = new RegExp(`${WHITESPACE}|${COMMENT}|${WORD}|->|[{};=\\-()]`, 'uy');
 const WORD_PATTERN = new RegExp(`^${WORD}$`, 'u');
 const WHITESPACE_PATTERN = new RegExp(`^${WHITESPACE}$`, 'u');
+const COMMENT_PATTERN = new RegExp(`^${COMMENT}$`, 'u');
 const SUPPLEMENTARY_CHARACTER = /[\u{10000}-\u{10FFFF}]/u;
 
 export function isValidDfmSyntax(source: string): boolean {
@@ -19,7 +21,8 @@ export function isValidDfmSyntax(source: string): boolean {
     return false;
 
   const tokens = tokenize(source);
-  return tokens !== null && new DfmSyntaxParser(tokens).parse();
+  // comment-only input contains no declarations and is rejected like empty input
+  return tokens !== null && tokens.length > 1 && new DfmSyntaxParser(tokens).parse();
 }
 
 function tokenize(source: string): Token[] | null {
@@ -34,7 +37,7 @@ function tokenize(source: string): Token[] | null {
 
     position = TOKEN_PATTERN.lastIndex;
     const value = match[0];
-    if (WHITESPACE_PATTERN.test(value))
+    if (WHITESPACE_PATTERN.test(value) || COMMENT_PATTERN.test(value))
       continue;
 
     let kind: TokenKind;
