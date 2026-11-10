@@ -75,8 +75,104 @@ export function nodeBounds(node: LayoutNode): Bounds {
   return {left: x - half, right: x + half, top: y - 12, bottom: y + 12};
 }
 
-export function graphBounds(nodes: LayoutNode[]): Bounds {
+const SELF_LOOP_HEIGHT = 38;
+const SELF_LOOP_HALF_WIDTH = 26;
+const SELF_LOOP_HALF_GAP = 6;
+const MAX_LOOP_CLEARANCE = 70 * Math.PI / 180;
+const LEVEL_RADIUS = 10;
+const LABEL_MARGIN = 9;
+const LABEL_HALF_HEIGHT = 6.5;
+const LABEL_CHAR_WIDTH = 6.2;
+
+type LinkEnd = string | { id: string };
+
+function endId(end: LinkEnd): string {
+  return typeof end === 'string' ? end : end.id;
+}
+
+/**
+ * A self-loop connects a level to itself (recursive hierarchy).
+ */
+export function isSelfLink(link: { source: LinkEnd; target: LinkEnd }): boolean {
+  return endId(link.source) === endId(link.target);
+}
+
+export interface SelfLoopShape {
+  path: string;
+  labelX: number;
+  labelY: number;
+  bounds: Bounds;
+}
+
+/**
+ * Geometry of a self-loop at a positioned node. The loop points upwards (the name of a level hangs below the node)
+ * and as far away from the connected edges as possible.
+ */
+export function selfLoopShape(node: LayoutNode, links: LayoutLink[], label?: string | null): SelfLoopShape {
+  const x = node.x ?? 0;
+  const y = node.y ?? 0;
+
+  const neighborAngles: number[] = [];
+  for (const link of links) {
+    if (isSelfLink(link) || typeof link.source === 'string' || typeof link.target === 'string')
+      continue;
+    const other = link.source === node ? link.target : link.target === node ? link.source : null;
+    if (other)
+      neighborAngles.push(Math.atan2((other.y ?? 0) - y, (other.x ?? 0) - x));
+  }
+
+  // among the upward directions the one with the largest angular distance to all connected edges wins;
+  // without a clear difference the loop points straight up
+  let bestAngle = -Math.PI / 2;
+  let bestScore = -Infinity;
+  for (let degrees = -150; degrees <= -30; degrees += 5) {
+    const angle = degrees * Math.PI / 180;
+    const clearance = Math.min(MAX_LOOP_CLEARANCE, ...neighborAngles.map(other => Math.abs(Math.atan2(Math.sin(angle - other), Math.cos(angle - other)))));
+    const score = clearance - Math.abs(angle + Math.PI / 2) * 0.01;
+    if (score > bestScore) {
+      bestScore = score;
+      bestAngle = angle;
+    }
+  }
+  const dirX = Math.cos(bestAngle);
+  const dirY = Math.sin(bestAngle);
+  const perpX = -dirY;
+  const perpY = dirX;
+
+  const startAlong = Math.sqrt(LEVEL_RADIUS * LEVEL_RADIUS - SELF_LOOP_HALF_GAP * SELF_LOOP_HALF_GAP);
+  const controlAlong = LEVEL_RADIUS + SELF_LOOP_HEIGHT;
+  const point = (across: number, along: number) => ({x: x + perpX * across + dirX * along, y: y + perpY * across + dirY * along});
+  const start = point(-SELF_LOOP_HALF_GAP, startAlong);
+  const end = point(SELF_LOOP_HALF_GAP, startAlong);
+  const first = point(-SELF_LOOP_HALF_WIDTH, controlAlong);
+  const second = point(SELF_LOOP_HALF_WIDTH, controlAlong);
+  const path = `M ${start.x} ${start.y} C ${first.x} ${first.y}, ${second.x} ${second.y}, ${end.x} ${end.y}`;
+
+  const tip = 0.75 * controlAlong + 0.25 * startAlong;
+  const halfWidth = (label?.length ?? 0) * LABEL_CHAR_WIDTH / 2;
+  const extent = Math.abs(dirX) * halfWidth + Math.abs(dirY) * LABEL_HALF_HEIGHT;
+  const labelCenter = point(0, tip + LABEL_MARGIN + extent);
+  const labelHalfHeight = label ? LABEL_HALF_HEIGHT : 0;
+  const xs = [start.x, end.x, first.x, second.x, labelCenter.x - halfWidth, labelCenter.x + halfWidth];
+  const ys = [start.y, end.y, first.y, second.y, labelCenter.y - labelHalfHeight, labelCenter.y + labelHalfHeight];
+
+  return {
+    path,
+    labelX: labelCenter.x,
+    labelY: labelCenter.y,
+    bounds: {left: Math.min(...xs), right: Math.max(...xs), top: Math.min(...ys), bottom: Math.max(...ys)}
+  };
+}
+
+export function graphBounds(nodes: LayoutNode[], links: LayoutLink[] = []): Bounds {
   const boxes = nodes.map(nodeBounds);
+  for (const link of links) {
+    if (!isSelfLink(link))
+      continue;
+    const node = typeof link.source === 'string' ? nodes.find(candidate => candidate.id === link.source) : link.source;
+    if (node)
+      boxes.push(selfLoopShape(node, links, link.label).bounds);
+  }
   return {
     left: Math.min(...boxes.map(box => box.left)),
     top: Math.min(...boxes.map(box => box.top)),
@@ -96,7 +192,9 @@ export function toLayout(graph: DfmGraph): { nodes: LayoutNode[]; links: LayoutL
  * Places the attribute trees radially: facts are the roots, leaves share the outer ring and inner levels sit
  * on rings in between, so tree edges do not need to cross other nodes. Facts are pinned to their position.
  */
-export function placeRadialTrees(nodes: LayoutNode[], edges: { source: string | LayoutNode; target: string | LayoutNode }[]): void {
+export function placeRadialTrees(nodes: LayoutNode[], allEdges: { source: string | LayoutNode; target: string | LayoutNode }[]): void {
+  // self-loops (recursive hierarchies) are not part of the tree structure
+  const edges = allEdges.filter(edge => !isSelfLink(edge));
   const byId = new Map(nodes.map(node => [node.id, node]));
   const id = (end: string | LayoutNode) => typeof end === 'string' ? end : end.id;
   const outgoing = new Map<string, string[]>();
@@ -379,10 +477,19 @@ function factBoxForce(): Force<LayoutNode, LayoutLink> {
 /**
  * Computes the layout. The returned simulation is stopped and already relaxed.
  */
-export function createGraphLayout(nodes: LayoutNode[], links: LayoutLink[]): Simulation<LayoutNode, LayoutLink> {
+export function createGraphLayout(nodes: LayoutNode[], allLinks: LayoutLink[]): Simulation<LayoutNode, LayoutLink> {
+  const byId = new Map(nodes.map(node => [node.id, node]));
+  // self-loops take no part in the simulation; they only need their node resolved
+  const links = allLinks.filter(link => !isSelfLink(link));
+  allLinks.filter(isSelfLink).forEach(link => {
+    const node = byId.get(endId(link.source));
+    if (node) {
+      link.source = node;
+      link.target = node;
+    }
+  });
   placeRadialTrees(nodes, links);
 
-  const byId = new Map(nodes.map(node => [node.id, node]));
   const initialDistances = new Map<LayoutLink, number>(links.map(link => {
     const source = byId.get(link.source as string);
     const target = byId.get(link.target as string);

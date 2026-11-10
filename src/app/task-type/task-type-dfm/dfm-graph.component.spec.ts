@@ -6,6 +6,7 @@ import { DfmGraph } from './dfm-graph.model';
 import { TranslationLoaderService } from '../../translation-loader.service';
 
 import purchase from './testdata/graph-fixtures/purchase.json';
+import recursive from './testdata/graph-fixtures/recursive-hierarchy.json';
 
 describe('DfmGraphComponent', () => {
   let fixture: ComponentFixture<DfmGraphComponent>;
@@ -86,6 +87,20 @@ describe('DfmGraphComponent', () => {
     const scale = Number(/scale\(([^)]+)\)/.exec(transform)?.[1]);
     expect(scale).toBeGreaterThan(0.4);
     expect(scale).toBeLessThanOrEqual(1);
+  });
+
+  it('should render a recursive hierarchy as a self-loop with its role', () => {
+    fixture.componentInstance.graph = recursive as DfmGraph;
+    fixture.detectChanges();
+    fixture.componentInstance.ngOnChanges();
+
+    const element: HTMLElement = fixture.nativeElement;
+    const loop = element.querySelector('path.dfm-edge');
+    expect(loop?.getAttribute('d')).toMatch(/^M [-\d. ]+ C /);
+    expect(loop?.getAttribute('d')).not.toContain('NaN');
+    expect(loop?.getAttribute('marker-end')).toBe('url(#dfm-convergence-arrow)');
+    expect(element.querySelectorAll('line.dfm-edge').length).toBe(2);
+    expect(Array.from(element.querySelectorAll('text.dfm-edge-label')).map(label => label.textContent)).toEqual(['supervisor']);
   });
 
   it('should clear the diagram if there is no graph', () => {

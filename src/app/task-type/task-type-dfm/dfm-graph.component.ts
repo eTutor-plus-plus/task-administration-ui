@@ -10,7 +10,16 @@ import {
 } from 'd3';
 
 import { DfmGraph } from './dfm-graph.model';
-import { createGraphLayout, graphBounds, labelWidth, LayoutLink as SimLink, LayoutNode as SimNode, toLayout } from './dfm-graph-layout';
+import {
+  createGraphLayout,
+  graphBounds,
+  isSelfLink,
+  labelWidth,
+  LayoutLink as SimLink,
+  LayoutNode as SimNode,
+  selfLoopShape,
+  toLayout
+} from './dfm-graph-layout';
 
 const WIDTH = 900;
 const HEIGHT = 600;
@@ -55,6 +64,7 @@ export class DfmGraphComponent implements AfterViewInit, OnChanges {
   private initialTransform: ZoomTransform = zoomIdentity;
   private viewInitialized = false;
   private layoutNodes: SimNode[] = [];
+  private layoutLinks: SimLink[] = [];
   private exportSize = {width: WIDTH * PNG_SCALE, height: HEIGHT * PNG_SCALE};
 
   ngAfterViewInit(): void {
@@ -96,7 +106,7 @@ export class DfmGraphComponent implements AfterViewInit, OnChanges {
 
     // export the whole model independent of the current zoom and pan
     const bounds = this.layoutNodes.length > 0
-      ? graphBounds(this.layoutNodes)
+      ? graphBounds(this.layoutNodes, this.layoutLinks)
       : {left: 0, top: 0, right: WIDTH, bottom: HEIGHT};
     const left = bounds.left - EXPORT_MARGIN;
     const top = bounds.top - EXPORT_MARGIN;
@@ -182,6 +192,7 @@ export class DfmGraphComponent implements AfterViewInit, OnChanges {
     this.zoomBehavior = undefined;
     this.initialTransform = zoomIdentity;
     this.layoutNodes = [];
+    this.layoutLinks = [];
 
     const graph = this.graph;
     if (!graph || graph.nodes.length === 0)
@@ -189,6 +200,7 @@ export class DfmGraphComponent implements AfterViewInit, OnChanges {
 
     const {nodes, links} = toLayout(graph);
     this.layoutNodes = nodes;
+    this.layoutLinks = links;
 
     svg.append('defs')
       .append('marker')
@@ -217,19 +229,27 @@ export class DfmGraphComponent implements AfterViewInit, OnChanges {
       .join('g');
 
     edgeSelection.each(function (link) {
-      const segmentCount = link.connectionType === 'MULTIPLE' || link.connectionType === 'CONVERGENCE' ? 2 : 1;
       const group = select(this);
-      group.selectAll<SVGLineElement, number>('line.dfm-edge')
-        .data(Array.from({length: segmentCount}, (_, index) => index))
-        .join('line')
-        .attr('class', 'dfm-edge')
-        .attr('marker-end', index => link.connectionType === 'CONVERGENCE' && index === 0
-          ? 'url(#dfm-convergence-arrow)'
-          : null);
-      group.selectAll('line.dfm-optional-edge')
-        .data(link.optional ? [0] : [])
-        .join('line')
-        .attr('class', 'dfm-optional-edge');
+      if (isSelfLink(link)) {
+        group.selectAll<SVGPathElement, number>('path.dfm-edge')
+          .data([0])
+          .join('path')
+          .attr('class', 'dfm-edge')
+          .attr('marker-end', link.connectionType === 'CONVERGENCE' ? 'url(#dfm-convergence-arrow)' : null);
+      } else {
+        const segmentCount = link.connectionType === 'MULTIPLE' || link.connectionType === 'CONVERGENCE' ? 2 : 1;
+        group.selectAll<SVGLineElement, number>('line.dfm-edge')
+          .data(Array.from({length: segmentCount}, (_, index) => index))
+          .join('line')
+          .attr('class', 'dfm-edge')
+          .attr('marker-end', index => link.connectionType === 'CONVERGENCE' && index === 0
+            ? 'url(#dfm-convergence-arrow)'
+            : null);
+        group.selectAll('line.dfm-optional-edge')
+          .data(link.optional ? [0] : [])
+          .join('line')
+          .attr('class', 'dfm-optional-edge');
+      }
       group.selectAll<SVGTextElement, string>('text.dfm-edge-label')
         .data(link.label ? [link.label] : [])
         .join('text')
@@ -286,6 +306,12 @@ export class DfmGraphComponent implements AfterViewInit, OnChanges {
 
     const updatePositions = () => {
       edgeSelection.each(function (link) {
+        if (isSelfLink(link)) {
+          const shape = selfLoopShape(link.source as SimNode, links, link.label);
+          select(this).select('path.dfm-edge').attr('d', shape.path);
+          select(this).select('text.dfm-edge-label').attr('x', shape.labelX).attr('y', shape.labelY + 4);
+          return;
+        }
         const source = link.source as SimNode;
         const target = link.target as SimNode;
         const sx = source.x ?? 0, sy = source.y ?? 0, tx = target.x ?? 0, ty = target.y ?? 0;
@@ -341,7 +367,7 @@ export class DfmGraphComponent implements AfterViewInit, OnChanges {
     createGraphLayout(nodes, links);
     updatePositions();
 
-    const bounds = graphBounds(nodes);
+    const bounds = graphBounds(nodes, links);
     const width = bounds.right - bounds.left;
     const height = bounds.bottom - bounds.top;
     const scale = Math.min((WIDTH - FIT_MARGIN * 2) / width, (HEIGHT - FIT_MARGIN * 2) / height, 1);

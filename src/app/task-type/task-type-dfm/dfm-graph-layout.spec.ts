@@ -2,7 +2,7 @@ import { readdirSync, readFileSync } from 'fs';
 import { join } from 'path';
 
 import { DfmGraph } from './dfm-graph.model';
-import { createGraphLayout, graphBounds, LayoutNode, nodeBounds, toLayout } from './dfm-graph-layout';
+import { createGraphLayout, graphBounds, LayoutNode, nodeBounds, selfLoopShape, toLayout } from './dfm-graph-layout';
 
 // The fixtures contain the graphs produced by the real DFM parser for different model constellations.
 const FIXTURE_DIRECTORY = join(__dirname, 'testdata', 'graph-fixtures');
@@ -124,6 +124,41 @@ describe('DFM graph layout', () => {
         expect(second).toEqual(first);
       });
     });
+  });
+
+  it('should keep recursive hierarchies out of the tree layout and make room for their loop', () => {
+    const graph = scenarios['recursive-hierarchy'];
+    const {nodes, links} = toLayout(graph);
+    createGraphLayout(nodes, links);
+
+    const loop = links.find(link => link.label === 'supervisor')!;
+    expect(loop.source).toBe(loop.target);
+    expect(typeof loop.source).toBe('object');
+
+    const level = loop.source as LayoutNode;
+    const shape = selfLoopShape(level, links, loop.label);
+    expect(Object.values(shape.bounds).every(Number.isFinite)).toBe(true);
+    expect(shape.path).not.toContain('NaN');
+    expect(graphBounds(nodes, links).top).toBeLessThanOrEqual(shape.bounds.top);
+    expect(graphBounds(nodes, links).left).toBeLessThanOrEqual(shape.bounds.left);
+    expect(graphBounds(nodes, links).right).toBeGreaterThanOrEqual(shape.bounds.right);
+    expect(graphBounds(nodes, links).bottom).toBeGreaterThanOrEqual(shape.bounds.bottom);
+  });
+
+  it('should point a self-loop away from edges on opposite sides', () => {
+    const node = {id: 'a', label: 'a', type: 'LEVEL', optional: false, details: [], x: 0, y: 0} as LayoutNode;
+    const left = {id: 'l', label: 'l', type: 'LEVEL', optional: false, details: [], x: -100, y: 0} as LayoutNode;
+    const right = {id: 'r', label: 'r', type: 'LEVEL', optional: false, details: [], x: 100, y: 0} as LayoutNode;
+    const links = [
+      {source: left, target: node, connectionType: 'SIMPLE', optional: false},
+      {source: right, target: node, connectionType: 'SIMPLE', optional: false},
+      {source: node, target: node, connectionType: 'CONVERGENCE', optional: false, label: 'supervisor'}
+    ];
+
+    const shape = selfLoopShape(node, links, 'supervisor');
+
+    expect(Math.abs(shape.labelX)).toBeLessThan(5);
+    expect(shape.labelY).toBeLessThan(-40);
   });
 
   it('should keep all facts pinned and apart', () => {
