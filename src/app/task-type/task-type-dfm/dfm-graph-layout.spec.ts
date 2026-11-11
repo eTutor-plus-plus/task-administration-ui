@@ -2,7 +2,20 @@ import { readdirSync, readFileSync } from 'fs';
 import { join } from 'path';
 
 import { DfmGraph } from './dfm-graph.model';
-import { createGraphLayout, graphBounds, LayoutNode, nodeBounds, selfLoopShape, toLayout } from './dfm-graph-layout';
+import {
+  Bounds,
+  createGraphLayout,
+  edgeLabelBounds,
+  edgeLabelCenter,
+  graphBounds,
+  isSelfLink,
+  LayoutLink,
+  LayoutNode,
+  nodeBounds,
+  selfLoopShape,
+  toLayout
+} from './dfm-graph-layout';
+import { randomGraph } from './testdata/random-graphs';
 
 // The fixtures contain the graphs produced by the real DFM parser for different model constellations.
 const FIXTURE_DIRECTORY = join(__dirname, 'testdata', 'graph-fixtures');
@@ -14,11 +27,94 @@ const MINIMUM_READABLE_SCALE = 0.4;
 // the canvas has a fixed size, so very large models are fitted smaller and are meant to be read by zooming in
 const MINIMUM_SCALE_BY_SCENARIO: Record<string, number> = {'large-model': 0.25};
 const VIEWPORT = {width: 900, height: 600, margin: 48};
+// longest edge in the fixtures; guards against the layout getting looser
+const MAXIMUM_EDGE_LENGTH = 360;
+// a cross-dimensional attribute joins branches that lie on opposite sides of the fact, so its edge is longer
+const MAXIMUM_EDGE_LENGTH_BY_SCENARIO: Record<string, number> = {'shared-and-cross-hierarchies': 500};
+
+// Random models find layout problems that hand-written fixtures miss. The seeds are fixed, so a failure can be
+// reproduced. DFM_LAYOUT_SEEDS=61-260 checks other models, DFM_LAYOUT_REPORT=1 prints the findings of every model
+// instead of failing.
+const [FIRST_SEED, LAST_SEED] = (process.env['DFM_LAYOUT_SEEDS'] ?? '1-60').split('-').map(Number);
+const RANDOM_SEEDS = Array.from({length: LAST_SEED - FIRST_SEED + 1}, (_, index) => FIRST_SEED + index);
+const REPORT = Boolean(process.env['DFM_LAYOUT_REPORT']);
 
 function layout(graph: DfmGraph): LayoutNode[] {
+  return layoutWithLinks(graph).nodes;
+}
+
+function layoutWithLinks(graph: DfmGraph): { nodes: LayoutNode[]; links: LayoutLink[] } {
   const {nodes, links} = toLayout(graph);
   createGraphLayout(nodes, links);
-  return nodes;
+  return {nodes, links};
+}
+
+function intersects(first: Bounds, second: Bounds): boolean {
+  return first.left < second.right && first.right > second.left && first.top < second.bottom && first.bottom > second.top;
+}
+
+interface EdgeLabel extends Bounds {
+  text: string;
+  link: LayoutLink;
+}
+
+// descriptions of the edges as they are drawn, including the roles of recursive hierarchies
+function edgeLabels(links: LayoutLink[]): EdgeLabel[] {
+  return links.filter(link => link.label).map(link => {
+    const source = link.source as LayoutNode;
+    const target = link.target as LayoutNode;
+    const center = isSelfLink(link)
+      ? (shape => ({x: shape.labelX, y: shape.labelY}))(selfLoopShape(source, links, link.label))
+      : edgeLabelCenter(link, source, target);
+    return {text: link.label!, link, ...edgeLabelBounds(link.label!, center)};
+  });
+}
+
+/**
+ * Everything that makes a laid out graph hard to read. Edges are measured between the node centers.
+ */
+function layoutFindings(graph: DfmGraph) {
+  const {nodes, links} = layoutWithLinks(graph);
+  const ends = (link: LayoutLink) => [link.source as LayoutNode, link.target as LayoutNode];
+  const labels = edgeLabels(links);
+  const segments = links.filter(link => !isSelfLink(link));
+
+  // a description hidden behind a node (e.g. the box of a fact) cannot be read
+  const labelsCoveredByNodes = labels.flatMap(label => nodes
+    .filter(node => intersects(label, nodeBounds(node)))
+    .map(node => `${label.text} / ${node.label}`));
+  const overlappingLabels = labels.flatMap((first, index) => labels.slice(index + 1)
+    .filter(second => intersects(first, second))
+    .map(second => `${first.text} / ${second.text}`));
+  // a description on the line of another edge is easily read as belonging to that edge
+  const labelsOnForeignEdges = labels.flatMap(label => segments
+    .filter(link => link !== label.link)
+    .filter(link => {
+      const [source, target] = ends(link);
+      return segmentCrossesBox(source.x!, source.y!, target.x!, target.y!, label);
+    })
+    .map(link => `${label.text} on ${ends(link).map(node => node.label).join(' -> ')}`));
+  const loopsCoveringNodes = links.filter(isSelfLink).flatMap(link => {
+    const level = link.source as LayoutNode;
+    const bounds = selfLoopShape(level, links, link.label).bounds;
+    return nodes.filter(node => node !== level && intersects(bounds, nodeBounds(node)))
+      .map(node => `${link.label} / ${node.label}`);
+  });
+  const longestEdge = Math.max(0, ...segments.map(link => {
+    const [source, target] = ends(link);
+    return Math.hypot(target.x! - source.x!, target.y! - source.y!);
+  }));
+
+  return {
+    overlappingNodes: overlappingNodes(nodes),
+    edgesCrossingNodes: edgesCrossingNodes(graph, nodes),
+    crossingEdges: edgesCrossingEachOther(graph, nodes),
+    labelsCoveredByNodes,
+    overlappingLabels,
+    labelsOnForeignEdges,
+    loopsCoveringNodes,
+    longestEdge
+  };
 }
 
 function overlappingNodes(nodes: LayoutNode[]): string[] {
@@ -29,7 +125,7 @@ function overlappingNodes(nodes: LayoutNode[]): string[] {
     .map(second => `${first.label} / ${second.label}`));
 }
 
-function segmentCrossesBox(x1: number, y1: number, x2: number, y2: number, box: ReturnType<typeof nodeBounds>): boolean {
+function segmentCrossesBox(x1: number, y1: number, x2: number, y2: number, box: Bounds): boolean {
   const dx = x2 - x1;
   const dy = y2 - y1;
   let minimum = 0;
@@ -123,6 +219,42 @@ describe('DFM graph layout', () => {
         expect(first.every(([, x, y]) => Number.isFinite(x) && Number.isFinite(y))).toBe(true);
         expect(second).toEqual(first);
       });
+
+      it('should keep edge descriptions and recursive hierarchies readable', () => {
+        const {labelsCoveredByNodes, overlappingLabels, labelsOnForeignEdges, loopsCoveringNodes} = layoutFindings(graph);
+        expect({labelsCoveredByNodes, overlappingLabels, labelsOnForeignEdges, loopsCoveringNodes})
+          .toEqual({labelsCoveredByNodes: [], overlappingLabels: [], labelsOnForeignEdges: [], loopsCoveringNodes: []});
+      });
+
+      it('should not stretch edges so far that hierarchies fall apart', () => {
+        expect(layoutFindings(graph).longestEdge)
+          .toBeLessThanOrEqual(MAXIMUM_EDGE_LENGTH_BY_SCENARIO[name] ?? MAXIMUM_EDGE_LENGTH);
+      });
+    });
+  });
+
+  describe('random models', () => {
+    it.each(RANDOM_SEEDS)('should lay out model %i without overlaps', seed => {
+      const graph = randomGraph(seed);
+      const {longestEdge, ...findings} = layoutFindings(graph);
+      if (REPORT) {
+        console.log(`LAYOUT ${JSON.stringify({
+          seed,
+          nodes: graph.nodes.length,
+          longestEdge: Math.round(longestEdge),
+          ...Object.fromEntries(Object.entries(findings).map(([key, value]) => [key, value.length]))
+        })}`);
+        return;
+      }
+      expect(findings).toEqual({
+        overlappingNodes: [],
+        edgesCrossingNodes: [],
+        crossingEdges: [],
+        labelsCoveredByNodes: [],
+        overlappingLabels: [],
+        labelsOnForeignEdges: [],
+        loopsCoveringNodes: []
+      });
     });
   });
 
@@ -161,15 +293,11 @@ describe('DFM graph layout', () => {
     expect(shape.labelY).toBeLessThan(-40);
   });
 
-  it('should keep all facts pinned and apart', () => {
+  it('should keep all facts apart', () => {
     const nodes = layout(scenarios['three-facts-own-dimensions']);
     const facts = nodes.filter(node => node.type === 'FACT');
 
     expect(facts).toHaveLength(3);
-    facts.forEach(fact => {
-      expect(fact.fx).toBeDefined();
-      expect(fact.fy).toBeDefined();
-    });
     expect(overlappingNodes(facts)).toEqual([]);
   });
 });

@@ -278,5 +278,165 @@
     "name": "fact dimension connection description without closing connector",
     "dfm": "fact A { x; };\ndimension T { t - u; };\nA -[soldat] T;\n",
     "valid": false
+  },
+  {
+    "name": "valid shared hierarchy",
+    "dfm": "fact A { x; };\nhierarchy city { city = region; city - country; };\ndimension city { {shared} city; };\ndimension customer { customer -[cc]- {shared} city; };\nA -[store]- city;\nA - customer;\n",
+    "valid": true
+  },
+  {
+    "name": "valid cross-dimensional attribute",
+    "dfm": "fact A { x; };\nhierarchy VAT { VAT - vatClass; };\nhierarchy city { city - country - {cross} VAT; };\ndimension city { {shared} city; };\ndimension product { product - category - {cross} VAT; };\nA - city;\nA - product;\n",
+    "valid": true
+  },
+  {
+    "name": "reference before the declaration",
+    "dfm": "dimension d { x - {shared} h; };\nhierarchy h { a - b; };\n",
+    "valid": true
+  },
+  {
+    "name": "unreferenced hierarchy declaration",
+    "dfm": "hierarchy h { a - b; };\n",
+    "valid": true
+  },
+  {
+    "name": "hierarchy and dimension with the same name",
+    "dfm": "hierarchy city { city - country; };\ndimension city { {shared} city; };\n",
+    "valid": true
+  },
+  {
+    "name": "hierarchy keyword and markers in upper case",
+    "dfm": "HIERARCHY h { a; };\nHIERARCHY g { b; };\ndimension d { x - {SHARED} h; y - {Cross} g; };\n",
+    "valid": true
+  },
+  {
+    "name": "optional connection to a reference",
+    "dfm": "hierarchy h { a; };\ndimension d { x (-) {shared} h; };\n",
+    "valid": true
+  },
+  {
+    "name": "described connection to a reference",
+    "dfm": "hierarchy h { a; };\ndimension d { x -[role]-> {shared} h; };\n",
+    "valid": true
+  },
+  {
+    "name": "unknown level marker",
+    "dfm": "hierarchy h { a - {foo} b; };\n",
+    "valid": true
+  },
+  {
+    "name": "marker in a fact",
+    "dfm": "fact A { {shared} x; };\n",
+    "valid": true
+  },
+  {
+    "name": "hierarchy referencing another hierarchy",
+    "dfm": "hierarchy h { a - {cross} g; };\nhierarchy g { b - c; };\n",
+    "valid": true
+  },
+  {
+    "name": "hierarchies referencing a common hierarchy",
+    "dfm": "hierarchy t { t; };\nhierarchy a { a - {cross} t; };\nhierarchy b { b - {cross} t; };\nhierarchy r { r - {cross} a; r - {cross} b; };\n",
+    "valid": true
+  },
+  {
+    "name": "chains starting with the same level",
+    "dfm": "hierarchy h { a - b; a - c; a = d; };\n",
+    "valid": true
+  },
+  {
+    "name": "hierarchy chain without closing semicolon",
+    "dfm": "hierarchy h { a - b };\n",
+    "valid": true
+  },
+  {
+    "name": "hierarchy starting with a descriptive level",
+    "dfm": "hierarchy h { {descriptive} a - b; a - c; };\n",
+    "valid": true
+  },
+  {
+    "name": "reference to an undeclared hierarchy",
+    "dfm": "dimension d { x - {shared} h; };\n",
+    "valid": false
+  },
+  {
+    "name": "hierarchy declared twice",
+    "dfm": "hierarchy h { a; };\nhierarchy h { a; };\n",
+    "valid": false
+  },
+  {
+    "name": "shared reference followed by more levels",
+    "dfm": "hierarchy h { a; };\ndimension d { x - {shared} h - y; };\n",
+    "valid": false
+  },
+  {
+    "name": "cross reference followed by more levels",
+    "dfm": "hierarchy h { a; };\nhierarchy g { b - {cross} h - c; };\n",
+    "valid": false
+  },
+  {
+    "name": "hierarchy used as shared and cross in one dimension",
+    "dfm": "hierarchy h { a; };\ndimension d { x - {shared} h; y - {cross} h; };\n",
+    "valid": false
+  },
+  {
+    "name": "hierarchy used as shared and cross in two dimensions",
+    "dfm": "hierarchy h { a; };\ndimension d { x - {shared} h; };\ndimension e { y - {cross} h; };\n",
+    "valid": false
+  },
+  {
+    "name": "hierarchy referring to itself",
+    "dfm": "hierarchy h { a - {cross} h; };\n",
+    "valid": false
+  },
+  {
+    "name": "hierarchies referring to each other",
+    "dfm": "hierarchy h { a - {cross} g; };\nhierarchy g { b - {cross} h; };\n",
+    "valid": false
+  },
+  {
+    "name": "chain starting with another level",
+    "dfm": "hierarchy h { a - b; c - d; };\n",
+    "valid": false
+  },
+  {
+    "name": "chain starting with a level in different case",
+    "dfm": "hierarchy h { a - b; A - c; };\n",
+    "valid": false
+  },
+  {
+    "name": "empty hierarchy declaration",
+    "dfm": "hierarchy h { };\n",
+    "valid": false
+  },
+  {
+    "name": "empty chain in a hierarchy declaration",
+    "dfm": "hierarchy h { ; };\n",
+    "valid": false
+  },
+  {
+    "name": "hierarchy starting with a reference",
+    "dfm": "hierarchy g { b; };\nhierarchy h { {shared} g; };\n",
+    "valid": false
+  },
+  {
+    "name": "optional reference level",
+    "dfm": "hierarchy h { a; };\ndimension d { x - ({shared} h); };\n",
+    "valid": false
+  },
+  {
+    "name": "hierarchy without name",
+    "dfm": "hierarchy { a; };\n",
+    "valid": false
+  },
+  {
+    "name": "hierarchy without closing semicolon",
+    "dfm": "hierarchy h { a; }\n",
+    "valid": false
+  },
+  {
+    "name": "unclosed hierarchy declaration",
+    "dfm": "hierarchy h { a - b;\n",
+    "valid": false
   }
 ]

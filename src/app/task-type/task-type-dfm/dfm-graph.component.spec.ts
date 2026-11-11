@@ -7,6 +7,7 @@ import { TranslationLoaderService } from '../../translation-loader.service';
 
 import purchase from './testdata/graph-fixtures/purchase.json';
 import recursive from './testdata/graph-fixtures/recursive-hierarchy.json';
+import sharedAndCross from './testdata/graph-fixtures/shared-and-cross-hierarchies.json';
 
 describe('DfmGraphComponent', () => {
   let fixture: ComponentFixture<DfmGraphComponent>;
@@ -54,6 +55,22 @@ describe('DfmGraphComponent', () => {
     expect(element.querySelectorAll('.dfm-node.descriptive').length).toBe(1);
     expect(element.querySelectorAll('line.dfm-edge').length).toBe(2);
     expect(element.querySelectorAll('line.dfm-optional-edge').length).toBe(1);
+  });
+
+  it('should render shared hierarchies as double circles and cross-dimensional attributes with an arc', () => {
+    fixture.componentInstance.graph = sharedAndCross as DfmGraph;
+    fixture.detectChanges();
+    fixture.componentInstance.ngOnChanges();
+
+    const element: HTMLElement = fixture.nativeElement;
+    expect(element.querySelectorAll('.dfm-node.shared').length).toBe(1);
+    expect(element.querySelectorAll('.dfm-node.shared circle').length).toBe(2);
+    expect(element.querySelectorAll('.dfm-node.shared .dfm-shared-ring').length).toBe(1);
+    expect(element.querySelectorAll('.dfm-node.cross').length).toBe(1);
+    expect(element.querySelectorAll('.dfm-node.cross circle').length).toBe(1);
+    expect(element.querySelectorAll('.dfm-node.cross .dfm-cross-arc').length).toBe(1);
+    expect(element.querySelectorAll('.dfm-node.level circle').length).toBe(
+      (sharedAndCross as DfmGraph).nodes.filter(node => node.type === 'LEVEL').length);
   });
 
   it('should render connection descriptions only for described edges', () => {

@@ -5,6 +5,13 @@ interface Token {
   value: string;
 }
 
+interface HierarchyReference {
+  name: string;
+  kind: 'shared' | 'cross';
+  // the hierarchy declaration the reference occurs in, or null if it occurs in a dimension
+  owner: string | null;
+}
+
 // Mirrors the tokenizer of the DFM parser: Java's Character.isWhitespace (no non-breaking spaces)
 // and Character.isLetterOrDigit on UTF-16 characters (letters and decimal digits, no supplementary characters).
 const WHITESPACE = '(?:[\\t\\n\\u000B\\f\\r\\u001C-\\u001F]|(?![\\u00A0\\u2007\\u202F])[\\p{Zs}\\p{Zl}\\p{Zp}])+';
@@ -60,6 +67,8 @@ class DfmSyntaxParser {
   private readonly factNames = new Set<string>();
   // number of declarations per name; the parser consumes one declaration per connection
   private readonly dimensionDeclarations = new Map<string, number>();
+  private readonly hierarchyDeclarations = new Set<string>();
+  private readonly hierarchyReferences: HierarchyReference[] = [];
   private readonly connections: Array<{fact: string; dimension: string}> = [];
 
   constructor(private readonly tokens: Token[]) {
@@ -73,6 +82,9 @@ class DfmSyntaxParser {
       } else if (this.acceptWord('dimension')) {
         if (!this.parseDimension())
           return false;
+      } else if (this.acceptWord('hierarchy')) {
+        if (!this.parseHierarchyDeclaration())
+          return false;
       } else if (!this.parseConnection()) {
         return false;
       }
@@ -80,6 +92,9 @@ class DfmSyntaxParser {
       if (!this.expect(';'))
         return false;
     }
+
+    if (!this.resolveHierarchyReferences())
+      return false;
 
     return this.connections.every(connection => {
       const remaining = this.dimensionDeclarations.get(connection.dimension) ?? 0;
@@ -118,7 +133,7 @@ class DfmSyntaxParser {
       return true;
 
     while (true) {
-      if (!this.parseHierarchy())
+      if (this.parseHierarchy(null) === null)
         return false;
       this.accept(';');
       if (this.accept('}'))
@@ -128,26 +143,99 @@ class DfmSyntaxParser {
     }
   }
 
-  private parseHierarchy(): boolean {
+  // hierarchy Name { chain; chain; }: at least one chain, every chain starts with the level of the first chain
+  // and that level is no reference
+  private parseHierarchyDeclaration(): boolean {
+    const name = this.takeWord();
+    if (name === null || !this.expect('{') || this.is('}'))
+      return false;
+
+    let entry: string | null = null;
+    while (!this.accept('}')) {
+      const chain = this.parseHierarchy(name);
+      if (chain === null || chain.head === null || chain.headIsReference)
+        return false;
+      if (entry !== null && entry !== chain.head)
+        return false;
+      entry = chain.head;
+      this.accept(';');
+    }
+
+    if (this.hierarchyDeclarations.has(name))
+      return false;
+    this.hierarchyDeclarations.add(name);
+    return true;
+  }
+
+  // returns null for invalid syntax; a {shared} or {cross} reference must end its chain and cannot be optional
+  private parseHierarchy(owner: string | null): {head: string | null; headIsReference: boolean} | null {
+    let head: string | null = null;
+    let headIsReference = false;
     while (!this.is(';') && !this.is('}')) {
       const optionalLevel = this.accept('(');
-      if (this.accept('{') && (!this.takeWord() || !this.expect('}')))
-        return false;
-      if (!this.takeWord())
-        return false;
+      let marker: string | null = null;
+      if (this.accept('{')) {
+        marker = this.takeWord();
+        if (!marker || !this.expect('}'))
+          return null;
+      }
+      const name = this.takeWord();
+      if (!name)
+        return null;
       if (optionalLevel && !this.expect(')'))
-        return false;
+        return null;
+
+      const kind = marker?.toLowerCase();
+      const reference = kind === 'shared' || kind === 'cross';
+      if (kind === 'shared' || kind === 'cross') {
+        if (optionalLevel || (!this.is(';') && !this.is('}')))
+          return null;
+        this.hierarchyReferences.push({name, kind, owner});
+      }
+      if (head === null) {
+        head = name;
+        headIsReference = reference;
+      }
 
       if (this.is(';') || this.is('}'))
-        return true;
+        break;
 
       const optionalConnection = this.accept('(');
       if (!this.parseConnector())
-        return false;
+        return null;
       if (optionalConnection && !this.expect(')'))
-        return false;
+        return null;
     }
-    return true;
+    return {head, headIsReference};
+  }
+
+  // every reference needs a declaration, a hierarchy is either shared or cross-dimensional, and declarations
+  // must not refer to themselves, neither directly nor through other declarations
+  private resolveHierarchyReferences(): boolean {
+    const usedAs = new Map<string, string>();
+    for (const reference of this.hierarchyReferences) {
+      if (!this.hierarchyDeclarations.has(reference.name))
+        return false;
+      const firstUse = usedAs.get(reference.name);
+      if (firstUse !== undefined && firstUse !== reference.kind)
+        return false;
+      usedAs.set(reference.name, reference.kind);
+    }
+
+    // true while a declaration is being visited, false once it is done
+    const state = new Map<string, boolean>();
+    const hasCycle = (name: string): boolean => {
+      if (state.has(name))
+        return false;
+      state.set(name, true);
+      for (const reference of this.hierarchyReferences.filter(candidate => candidate.owner === name)) {
+        if (state.get(reference.name) === true || hasCycle(reference.name))
+          return true;
+      }
+      state.set(name, false);
+      return false;
+    };
+    return ![...this.hierarchyDeclarations].some(hasCycle);
   }
 
   // a connector is '-', '=' or '->', or a described connection: '-[text]-', '=[text]=' or '-[text]->'

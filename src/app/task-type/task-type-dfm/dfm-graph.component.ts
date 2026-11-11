@@ -12,12 +12,15 @@ import {
 import { DfmGraph } from './dfm-graph.model';
 import {
   createGraphLayout,
+  edgeLabelCenter,
   graphBounds,
+  isCircleNode,
   isSelfLink,
   labelWidth,
   LayoutLink as SimLink,
   LayoutNode as SimNode,
   selfLoopShape,
+  SHARED_RING_GAP,
   toLayout
 } from './dfm-graph-layout';
 
@@ -32,17 +35,6 @@ const EXPORT_STYLE_PROPERTIES = [
   'fill', 'stroke', 'stroke-width', 'font-family', 'font-size', 'font-weight', 'text-anchor', 'dominant-baseline',
   'paint-order'
 ];
-
-// distance from the center of a node to its border in the direction (unitX, unitY)
-function borderDistance(node: SimNode, unitX: number, unitY: number): number {
-  if (node.type === 'LEVEL')
-    return 10;
-  const halfWidth = node.type === 'FACT' ? labelWidth(node) / 2 : 50;
-  const halfHeight = node.type === 'FACT' ? (35 + node.details.length * 20) / 2 : 10;
-  const horizontal = Math.abs(unitX) < 1e-9 ? Infinity : halfWidth / Math.abs(unitX);
-  const vertical = Math.abs(unitY) < 1e-9 ? Infinity : halfHeight / Math.abs(unitY);
-  return Math.min(horizontal, vertical);
-}
 
 /**
  * Visualizes a DFM graph as a static diagram that can be zoomed and panned.
@@ -289,9 +281,15 @@ export class DfmGraphComponent implements AfterViewInit, OnChanges {
             .text(truncate(measure, Math.floor((half * 2 - 35) / 6.5)))
             .append('title').text(measure);
         });
-      } else if (node.type === 'LEVEL') {
+      } else if (isCircleNode(node)) {
+        if (node.type === 'SHARED')
+          group.append('circle').attr('class', 'dfm-shared-ring').attr('r', 10 + SHARED_RING_GAP);
         group.append('circle').attr('r', 10);
-        group.append('text').attr('class', 'dfm-node-label').attr('text-anchor', 'middle').attr('y', 24).text(node.label);
+        if (node.type === 'CROSS') {
+          const arcRadius = 10 + SHARED_RING_GAP;
+          group.append('path').attr('class', 'dfm-cross-arc').attr('d', `M ${-arcRadius} -4 A ${arcRadius} ${arcRadius} 0 0 1 -4 ${-arcRadius}`);
+        }
+        group.append('text').attr('class', 'dfm-node-label').attr('text-anchor', 'middle').attr('y', 20).text(node.label);
         if (node.optional)
           group.append('line').attr('class', 'dfm-level-optional').attr('x1', -15).attr('x2', 15).attr('y1', 0).attr('y2', 0);
       } else {
@@ -331,34 +329,10 @@ export class DfmGraphComponent implements AfterViewInit, OnChanges {
           .attr('x1', mx + px * 5).attr('y1', my + py * 5)
           .attr('x2', mx - px * 5).attr('y2', my - py * 5);
 
-        // the label belongs to the visible part of the edge (between the node borders); only optional and
-        // convergence edges keep their middle free for the marker or arrow, so the label is shifted there towards
-        // the lower node because node names hang below the nodes
-        const unitX = (tx - sx) / length, unitY = (ty - sy) / length;
-        const startClip = borderDistance(source, unitX, unitY);
-        const endClip = borderDistance(target, -unitX, -unitY);
-        const visibleLength = length - startClip - endClip;
-        const visibleMiddleX = mx + unitX * (startClip - endClip) / 2;
-        const visibleMiddleY = my + unitY * (startClip - endClip) / 2;
-        const labelHalfWidth = (link.label?.length ?? 0) * 6.2 / 2;
-        const labelHalfHeight = 6.5;
-        const dirX = ty < sy ? -unitX : unitX, dirY = Math.abs(unitY);
-        const extent = Math.abs(dirX) * labelHalfWidth + Math.abs(dirY) * labelHalfHeight;
-        const reserveMiddle = link.optional || convergence;
-        let labelX = visibleMiddleX, labelY = visibleMiddleY;
-        if (reserveMiddle && 9 + 2 * extent + 2 <= visibleLength / 2) {
-          labelX = visibleMiddleX + dirX * (extent + 9);
-          labelY = visibleMiddleY + dirY * (extent + 9);
-        } else if (reserveMiddle || 2 * extent + 2 > visibleLength) {
-          // the edge is too short, so the label is placed beside the edge instead
-          const side = py > 0 ? -1 : 1;
-          const offset = 9 + Math.abs(px) * labelHalfWidth + Math.abs(py) * labelHalfHeight;
-          labelX = visibleMiddleX + px * side * offset;
-          labelY = visibleMiddleY + py * side * offset;
-        }
+        const labelCenter = edgeLabelCenter(link, source, target);
         select(this).select('text.dfm-edge-label')
-          .attr('x', labelX)
-          .attr('y', labelY + 4);
+          .attr('x', labelCenter.x)
+          .attr('y', labelCenter.y + 4);
       });
       nodeSelection.attr('transform', node => `translate(${node.x ?? 0},${node.y ?? 0})`);
     };
