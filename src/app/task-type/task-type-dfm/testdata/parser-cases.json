@@ -27,7 +27,7 @@
   {
     "name": "dimension connected twice to the same fact",
     "dfm": "fact A { x; };\ndimension T { t - u; };\nA - T;\nA - T;\n",
-    "valid": false
+    "valid": true
   },
   {
     "name": "duplicate dimension declarations used by two facts",
@@ -117,6 +117,26 @@
   {
     "name": "equals as fact connection",
     "dfm": "fact A { x; };\ndimension T { t - u; };\nA = T;\n",
+    "valid": true
+  },
+  {
+    "name": "optional fact connection",
+    "dfm": "fact A { x; }; dimension T { t; }; A (-) T;",
+    "valid": true
+  },
+  {
+    "name": "optional labeled multiple fact connection",
+    "dfm": "fact A { x; }; dimension T { t; }; A (=[role]=) T;",
+    "valid": true
+  },
+  {
+    "name": "two fact connections with distinct roles",
+    "dfm": "fact A { x; }; dimension T { t; }; A -[shipping]- T; A -[billing]- T;",
+    "valid": true
+  },
+  {
+    "name": "optional fact connector missing closing parenthesis",
+    "dfm": "fact A { x; }; dimension T { t; }; A (- T;",
     "valid": false
   },
   {
@@ -262,7 +282,7 @@
   {
     "name": "fact dimension connection with multiple connection description",
     "dfm": "fact A { x; };\ndimension T { t - u; };\nA =[soldat]= T;\n",
-    "valid": false
+    "valid": true
   },
   {
     "name": "empty fact dimension connection description",
@@ -312,6 +332,31 @@
   {
     "name": "optional connection to a reference",
     "dfm": "hierarchy h { a; };\ndimension d { x (-) {shared} h; };\n",
+    "valid": true
+  },
+  {
+    "name": "optional recursive connection",
+    "dfm": "dimension d { x (-[supervisor]->) x; };",
+    "valid": true
+  },
+  {
+    "name": "multiple recursive connection",
+    "dfm": "dimension d { x =[role]= x; };",
+    "valid": false
+  },
+  {
+    "name": "optional multiple recursive connection",
+    "dfm": "hierarchy h { x (=[role]=) x; };",
+    "valid": false
+  },
+  {
+    "name": "multiple connection to differently cased level",
+    "dfm": "dimension d { x =[role]= X; };",
+    "valid": true
+  },
+  {
+    "name": "multiple connection to equally named shared hierarchy",
+    "dfm": "hierarchy x { x; }; dimension d { x =[role]= {shared} x; };",
     "valid": true
   },
   {

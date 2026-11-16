@@ -11,6 +11,7 @@ export interface LayoutLink {
   connectionType: string;
   optional: boolean;
   label?: string | null;
+  parallelOffset?: number;
   // distance by which the layout moved the description along the edge
   labelShift?: number;
 }
@@ -99,6 +100,8 @@ export function isSelfLink(link: { source: LinkEnd; target: LinkEnd }): boolean 
 
 export interface SelfLoopShape {
   path: string;
+  markerStart: {x: number; y: number};
+  markerEnd: {x: number; y: number};
   labelX: number;
   labelY: number;
   bounds: Bounds;
@@ -108,7 +111,8 @@ export interface SelfLoopShape {
  * Geometry of a self-loop at a positioned node. The loop points upwards (the name of a level hangs below the node)
  * and as far away from the connected edges as possible.
  */
-export function selfLoopShape(node: LayoutNode, links: LayoutLink[], label?: string | null): SelfLoopShape {
+export function selfLoopShape(node: LayoutNode, links: LayoutLink[], label?: string | null,
+                              offset = 0): SelfLoopShape {
   const x = node.x ?? 0;
   const y = node.y ?? 0;
 
@@ -139,8 +143,9 @@ export function selfLoopShape(node: LayoutNode, links: LayoutLink[], label?: str
   const perpX = -dirY;
   const perpY = dirX;
 
-  const startAlong = Math.sqrt(LEVEL_RADIUS * LEVEL_RADIUS - SELF_LOOP_HALF_GAP * SELF_LOOP_HALF_GAP);
-  const controlAlong = LEVEL_RADIUS + SELF_LOOP_HEIGHT;
+  const radius = node.type === 'SHARED' ? LEVEL_RADIUS + SHARED_RING_GAP : LEVEL_RADIUS;
+  const startAlong = Math.sqrt(radius * radius - SELF_LOOP_HALF_GAP * SELF_LOOP_HALF_GAP);
+  const controlAlong = radius + SELF_LOOP_HEIGHT + offset;
   const point = (across: number, along: number) => ({x: x + perpX * across + dirX * along, y: y + perpY * across + dirY * along});
   const start = point(-SELF_LOOP_HALF_GAP, startAlong);
   const end = point(SELF_LOOP_HALF_GAP, startAlong);
@@ -151,13 +156,23 @@ export function selfLoopShape(node: LayoutNode, links: LayoutLink[], label?: str
   const tip = 0.75 * controlAlong + 0.25 * startAlong;
   const halfWidth = (label?.length ?? 0) * LABEL_CHAR_WIDTH / 2;
   const extent = Math.abs(dirX) * halfWidth + Math.abs(dirY) * LABEL_HALF_HEIGHT;
-  const labelCenter = point(0, tip + LABEL_MARGIN + extent);
+  let labelCenter = point(0, tip + LABEL_MARGIN + extent);
+  const outermostOffset = Math.max(0, ...links.filter(link => isSelfLink(link) && endId(link.source) === node.id)
+    .map(link => link.parallelOffset ?? 0));
+  if (offset < outermostOffset) {
+    const outerControl = radius + SELF_LOOP_HEIGHT + outermostOffset + 4;
+    const outerLeft = Math.min(start.x, end.x, point(-SELF_LOOP_HALF_WIDTH, outerControl).x,
+      point(SELF_LOOP_HALF_WIDTH, outerControl).x);
+    labelCenter = {x: outerLeft - halfWidth - LABEL_MARGIN, y: point(0, tip).y};
+  }
   const labelHalfHeight = label ? LABEL_HALF_HEIGHT : 0;
   const xs = [start.x, end.x, first.x, second.x, labelCenter.x - halfWidth, labelCenter.x + halfWidth];
   const ys = [start.y, end.y, first.y, second.y, labelCenter.y - labelHalfHeight, labelCenter.y + labelHalfHeight];
 
   return {
     path,
+    markerStart: point(0, tip - 5),
+    markerEnd: point(0, tip + 5),
     labelX: labelCenter.x,
     labelY: labelCenter.y,
     bounds: {left: Math.min(...xs), right: Math.max(...xs), top: Math.min(...ys), bottom: Math.max(...ys)}
@@ -182,31 +197,33 @@ export function borderDistance(node: LayoutNode, unitX: number, unitY: number): 
 /**
  * Center of the description of an edge between two positioned nodes.
  * <p>
- * The description belongs to the visible part of the edge (between the node borders). Only optional and
- * convergence edges keep their middle free for the marker or arrow, so the description is shifted there towards
- * the lower node because node names hang below the nodes. If the edge is too short, the description is placed
- * beside the edge. The layout may have moved the description along its edge by {@code shift} to get it clear of
- * other edges; it always stays within the visible part.
+ * Optional edges keep their middle free for the marker; convergence edges reserve space at the target for the arrow.
+ * The layout may move the description along the edge to keep it clear of other edges.
  */
-export function edgeLabelCenter(link: { label?: string | null; optional: boolean; connectionType: string; labelShift?: number },
+export function edgeLabelCenter(link: { label?: string | null; optional: boolean; connectionType: string; labelShift?: number; parallelOffset?: number },
                                 source: LayoutNode, target: LayoutNode, shift = link.labelShift ?? 0): { x: number; y: number } {
   const sx = source.x ?? 0, sy = source.y ?? 0, tx = target.x ?? 0, ty = target.y ?? 0;
   const length = Math.hypot(tx - sx, ty - sy) || 1;
   const unitX = (tx - sx) / length, unitY = (ty - sy) / length;
   const px = -unitY, py = unitX;
+  const withCurve = (x: number, y: number, fraction: number) => {
+    const offset = (link.parallelOffset ?? 0) * 4 * fraction * (1 - fraction);
+    return {x: x + px * offset, y: y + py * offset};
+  };
   const startClip = borderDistance(source, unitX, unitY);
-  const endClip = borderDistance(target, -unitX, -unitY);
+  const endClip = borderDistance(target, -unitX, -unitY) + (link.connectionType === 'CONVERGENCE' ? 12 : 0);
   const visibleLength = length - startClip - endClip;
   const visibleMiddleX = (sx + tx) / 2 + unitX * (startClip - endClip) / 2;
   const visibleMiddleY = (sy + ty) / 2 + unitY * (startClip - endClip) / 2;
   const labelHalfWidth = (link.label?.length ?? 0) * LABEL_CHAR_WIDTH / 2;
   const dirX = ty < sy ? -unitX : unitX, dirY = Math.abs(unitY);
   const extent = Math.abs(dirX) * labelHalfWidth + Math.abs(dirY) * LABEL_HALF_HEIGHT;
-  const reserveMiddle = link.optional || link.connectionType === 'CONVERGENCE';
+  const reserveMiddle = link.optional;
   if (reserveMiddle ? LABEL_MARGIN + 2 * extent + 2 > visibleLength / 2 : 2 * extent + 2 > visibleLength) {
     const side = py > 0 ? -1 : 1;
     const offset = LABEL_MARGIN + Math.abs(px) * labelHalfWidth + Math.abs(py) * LABEL_HALF_HEIGHT;
-    return {x: visibleMiddleX + px * side * offset, y: visibleMiddleY + py * side * offset};
+    return withCurve(visibleMiddleX + px * side * offset, visibleMiddleY + py * side * offset,
+      (startClip + length - endClip) / (2 * length));
   }
   // position along the edge, measured from the center of the source
   const middle = (startClip + length - endClip) / 2;
@@ -215,7 +232,7 @@ export function edgeLabelCenter(link: { label?: string | null; optional: boolean
   along = Math.min(length - endClip - extent - 1, Math.max(startClip + extent + 1, along));
   if (reserveMiddle && towardsLower * (along - middle) < extent + LABEL_MARGIN)
     along = middle + towardsLower * (extent + LABEL_MARGIN);
-  return {x: sx + unitX * along, y: sy + unitY * along};
+  return withCurve(sx + unitX * along, sy + unitY * along, along / length);
 }
 
 /**
@@ -229,11 +246,22 @@ export function edgeLabelBounds(label: string, center: { x: number; y: number })
 export function graphBounds(nodes: LayoutNode[], links: LayoutLink[] = []): Bounds {
   const boxes = nodes.map(nodeBounds);
   for (const link of links) {
-    if (!isSelfLink(link))
+    if (!isSelfLink(link)) {
+      if (link.parallelOffset !== undefined && typeof link.source !== 'string' && typeof link.target !== 'string') {
+        const sx = link.source.x ?? 0, sy = link.source.y ?? 0;
+        const tx = link.target.x ?? 0, ty = link.target.y ?? 0;
+        const length = Math.hypot(tx - sx, ty - sy) || 1;
+        const cx = (sx + tx) / 2 - (ty - sy) / length * 2 * link.parallelOffset;
+        const cy = (sy + ty) / 2 + (tx - sx) / length * 2 * link.parallelOffset;
+        boxes.push({left: cx, right: cx, top: cy, bottom: cy});
+        if (link.label)
+          boxes.push(edgeLabelBounds(link.label, edgeLabelCenter(link, link.source, link.target)));
+      }
       continue;
+    }
     const node = typeof link.source === 'string' ? nodes.find(candidate => candidate.id === link.source) : link.source;
     if (node)
-      boxes.push(selfLoopShape(node, links, link.label).bounds);
+      boxes.push(selfLoopShape(node, links, link.label, link.parallelOffset).bounds);
   }
   return {
     left: Math.min(...boxes.map(box => box.left)),
@@ -264,6 +292,7 @@ interface TreeEdge {
   connectionType: string;
   optional: boolean;
   label?: string | null;
+  parallelOffset?: number;
   // the link that the layout result (the shift of the description) is written to
   link: LayoutLink;
 }
@@ -298,6 +327,24 @@ function segmentCrossesBox(x1: number, y1: number, x2: number, y2: number, box: 
   };
   return clip(-deltaX, x1 - box.left) && clip(deltaX, box.right - x1) && clip(-deltaY, y1 - box.top) && clip(deltaY, box.bottom - y1)
     && maximum > minimum;
+}
+
+function edgeCrossesBox(source: LayoutNode, target: LayoutNode, offset: number | undefined, box: Bounds): boolean {
+  const sx = source.x ?? 0, sy = source.y ?? 0, tx = target.x ?? 0, ty = target.y ?? 0;
+  if (offset === undefined)
+    return segmentCrossesBox(sx, sy, tx, ty, box);
+  const length = Math.hypot(tx - sx, ty - sy) || 1;
+  const px = -(ty - sy) / length, py = (tx - sx) / length;
+  let x = sx, y = sy;
+  for (let i = 1; i <= 24; i++) {
+    const t = i / 24, bend = 4 * t * (1 - t) * offset;
+    const nextX = sx + (tx - sx) * t + px * bend, nextY = sy + (ty - sy) * t + py * bend;
+    if (segmentCrossesBox(x, y, nextX, nextY, box))
+      return true;
+    x = nextX;
+    y = nextY;
+  }
+  return false;
 }
 
 /**
@@ -624,7 +671,7 @@ export function placeTrees(nodes: LayoutNode[], links: LayoutLink[]): void {
       const crossing = (edge: TreeEdge, box: Bounds) => {
         const source = byId.get(edge.source)!;
         const target = byId.get(edge.target)!;
-        return segmentCrossesBox(source.x ?? 0, source.y ?? 0, target.x ?? 0, target.y ?? 0, box);
+        return edgeCrossesBox(source, target, edge.parallelOffset, box);
       };
       for (const edge of treeEdges) {
         const source = byId.get(edge.source)!;
@@ -645,6 +692,8 @@ export function placeTrees(nodes: LayoutNode[], links: LayoutLink[]): void {
       // The two lines of a double edge leave a level side by side and meet the lines of a neighbouring edge right
       // there. With a small angle between the two edges that crossing would lie outside the level.
       treeEdges.forEach((first, index) => treeEdges.slice(index + 1).forEach(second => {
+        if (first.source === second.source && first.target === second.target)
+          return;
         const shared = [first.source, first.target].find(nodeId => nodeId === second.source || nodeId === second.target);
         const offset = (first.connectionType === 'MULTIPLE' ? 2.5 : 0) + (second.connectionType === 'MULTIPLE' ? 2.5 : 0);
         if (!shared || offset === 0 || !isCircleNode(byId.get(shared)!))
@@ -682,7 +731,7 @@ export function placeTrees(nodes: LayoutNode[], links: LayoutLink[]): void {
       // fan out upwards, the role would lie on their edges, so a gap is left between them for the loop.
       for (const loop of treeLoops) {
         const node = loop.source as LayoutNode;
-        const shape = selfLoopShape(node, links, loop.label);
+        const shape = selfLoopShape(node, links, loop.label, loop.parallelOffset);
         if (loop.label && kidsOf(node.id).length > 0) {
           const role = edgeLabelBounds(loop.label, {x: shape.labelX, y: shape.labelY});
           if (treeEdges.some(edge => (edge.source === node.id || edge.target === node.id) && crossing(edge, role))
@@ -695,7 +744,8 @@ export function placeTrees(nodes: LayoutNode[], links: LayoutLink[]): void {
         const inTheWay = members.some(other => other !== node && intersects(area, nodeBounds(other)))
           || labels.some(label => intersects(area, label.box))
           || treeEdges.some(edge => edge.source !== node.id && edge.target !== node.id && crossing(edge, area))
-          || treeLoops.some(other => other.source !== node && intersects(area, selfLoopShape(other.source as LayoutNode, links, other.label).bounds));
+          || treeLoops.some(other => other.source !== node && intersects(area, selfLoopShape(other.source as LayoutNode,
+            links, other.label, other.parallelOffset).bounds));
         if (!inTheWay)
           continue;
         if ((loopRoom.get(node.id) ?? 0) < MAX_EXTRA_ROOM) {
@@ -718,7 +768,8 @@ export function placeTrees(nodes: LayoutNode[], links: LayoutLink[]): void {
         !treeEdges.some(other => other !== edge && crossing(other, box))
         && !members.some(node => intersects(box, nodeBounds(node, 1)))
         && !labels.some(label => label.edge !== edge && intersects(box, label.box))
-        && !treeLoops.some(loop => intersects(box, selfLoopShape(loop.source as LayoutNode, links, loop.label).bounds));
+        && !treeLoops.some(loop => intersects(box, selfLoopShape(loop.source as LayoutNode, links, loop.label,
+          loop.parallelOffset).bounds));
       const slide = (edge: TreeEdge) => {
         const current = labelBox(edge, shiftOf(edge));
         const source = byId.get(edge.source)!;
@@ -780,7 +831,8 @@ export function placeTrees(nodes: LayoutNode[], links: LayoutLink[]): void {
       if (!repair(total) && pass >= 2)
         break;
     }
-    const loopBounds = treeLoops.map(loop => selfLoopShape(loop.source as LayoutNode, links, loop.label).bounds);
+    const loopBounds = treeLoops.map(loop => selfLoopShape(loop.source as LayoutNode, links, loop.label,
+      loop.parallelOffset).bounds);
     return {members, loopBounds};
   });
   edges.forEach(edge => edge.link.labelShift = shiftOf(edge));
@@ -820,6 +872,18 @@ export function placeTrees(nodes: LayoutNode[], links: LayoutLink[]): void {
  */
 export function createGraphLayout(nodes: LayoutNode[], links: LayoutLink[]): void {
   const byId = new Map(nodes.map(node => [node.id, node]));
+  const groups = new Map<string, LayoutLink[]>();
+  links.forEach(link => {
+    const key = JSON.stringify([endId(link.source), endId(link.target)]);
+    groups.set(key, [...(groups.get(key) ?? []), link]);
+  });
+  groups.forEach(group => {
+    if (group.length < 2)
+      return;
+    const spacing = Math.max(50, Math.max(...group.map(link => link.label?.length ?? 0)) * LABEL_CHAR_WIDTH + 16);
+    group.forEach((link, index) => link.parallelOffset = isSelfLink(link)
+      ? index * 40 : (index - (group.length - 1) / 2) * spacing);
+  });
   for (const link of links) {
     const source = byId.get(endId(link.source));
     const target = byId.get(endId(link.target));

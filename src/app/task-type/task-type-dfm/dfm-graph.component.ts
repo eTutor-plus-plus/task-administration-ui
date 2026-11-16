@@ -11,6 +11,7 @@ import {
 
 import { DfmGraph } from './dfm-graph.model';
 import {
+  borderDistance,
   createGraphLayout,
   edgeLabelCenter,
   graphBounds,
@@ -198,7 +199,7 @@ export class DfmGraphComponent implements AfterViewInit, OnChanges {
       .append('marker')
       .attr('id', 'dfm-convergence-arrow')
       .attr('viewBox', '0 0 10 10')
-      .attr('refX', 8)
+      .attr('refX', 10)
       .attr('refY', 5)
       .attr('markerWidth', 7)
       .attr('markerHeight', 7)
@@ -228,13 +229,29 @@ export class DfmGraphComponent implements AfterViewInit, OnChanges {
           .join('path')
           .attr('class', 'dfm-edge')
           .attr('marker-end', link.connectionType === 'CONVERGENCE' ? 'url(#dfm-convergence-arrow)' : null);
+        group.selectAll('line.dfm-optional-edge')
+          .data(link.optional ? [0] : [])
+          .join('line')
+          .attr('class', 'dfm-optional-edge');
+      } else if (links.filter(other => other.source === link.source && other.target === link.target).length > 1) {
+        const segmentCount = link.connectionType === 'MULTIPLE' || link.connectionType === 'CONVERGENCE' ? 2 : 1;
+        group.selectAll<SVGPathElement, number>('path.dfm-edge')
+          .data(Array.from({length: segmentCount}, (_, index) => index))
+          .join('path')
+          .attr('class', 'dfm-edge')
+          .attr('marker-end', index => link.connectionType === 'CONVERGENCE' && index === 1
+            ? 'url(#dfm-convergence-arrow)' : null);
+        group.selectAll('line.dfm-optional-edge')
+          .data(link.optional ? [0] : [])
+          .join('line')
+          .attr('class', 'dfm-optional-edge');
       } else {
         const segmentCount = link.connectionType === 'MULTIPLE' || link.connectionType === 'CONVERGENCE' ? 2 : 1;
         group.selectAll<SVGLineElement, number>('line.dfm-edge')
           .data(Array.from({length: segmentCount}, (_, index) => index))
           .join('line')
           .attr('class', 'dfm-edge')
-          .attr('marker-end', index => link.connectionType === 'CONVERGENCE' && index === 0
+          .attr('marker-end', index => link.connectionType === 'CONVERGENCE' && index === 1
             ? 'url(#dfm-convergence-arrow)'
             : null);
         group.selectAll('line.dfm-optional-edge')
@@ -305,8 +322,11 @@ export class DfmGraphComponent implements AfterViewInit, OnChanges {
     const updatePositions = () => {
       edgeSelection.each(function (link) {
         if (isSelfLink(link)) {
-          const shape = selfLoopShape(link.source as SimNode, links, link.label);
+          const shape = selfLoopShape(link.source as SimNode, links, link.label, link.parallelOffset);
           select(this).select('path.dfm-edge').attr('d', shape.path);
+          select(this).select('line.dfm-optional-edge')
+            .attr('x1', shape.markerStart.x).attr('y1', shape.markerStart.y)
+            .attr('x2', shape.markerEnd.x).attr('y2', shape.markerEnd.y);
           select(this).select('text.dfm-edge-label').attr('x', shape.labelX).attr('y', shape.labelY + 4);
           return;
         }
@@ -318,16 +338,52 @@ export class DfmGraphComponent implements AfterViewInit, OnChanges {
         const mx = (sx + tx) / 2, my = (sy + ty) / 2;
         const offset = (index: number) => link.connectionType === 'MULTIPLE' ? (index === 0 ? 2.5 : -2.5) : 0;
         const convergence = link.connectionType === 'CONVERGENCE';
+        const targetClip = borderDistance(target, (sx - tx) / length, (sy - ty) / length);
 
+        if (link.parallelOffset !== undefined) {
+          select(this).selectAll<SVGPathElement, number>('path.dfm-edge').attr('d', index => {
+            const curveOffset = link.parallelOffset! + offset(index);
+            const cx = mx + px * curveOffset * 2, cy = my + py * curveOffset * 2;
+            if (!convergence)
+              return `M ${sx} ${sy} Q ${cx} ${cy} ${tx} ${ty}`;
+
+            const point = (t: number) => ({
+              x: (1 - t) ** 2 * sx + 2 * (1 - t) * t * cx + t ** 2 * tx,
+              y: (1 - t) ** 2 * sy + 2 * (1 - t) * t * cy + t ** 2 * ty
+            });
+            // Find the target border and split the truncated quadratic without changing its shape.
+            let outside = 0, inside = 1;
+            for (let i = 0; i < 30; i++) {
+              const t = (outside + inside) / 2;
+              const p = point(t);
+              const dx = p.x - tx, dy = p.y - ty;
+              const distance = Math.hypot(dx, dy);
+              if (distance > 0 && distance > borderDistance(target, dx / distance, dy / distance))
+                outside = t;
+              else
+                inside = t;
+            }
+            const end = point(outside);
+            const split = outside / 2;
+            const mid = point(split);
+            const firstControl = {x: sx + (cx - sx) * split, y: sy + (cy - sy) * split};
+            const secondControl = {
+              x: mid.x + split * ((1 - split) * (cx - sx) + split * (tx - cx)),
+              y: mid.y + split * ((1 - split) * (cy - sy) + split * (ty - cy))
+            };
+            return index === 0 ? `M ${sx} ${sy} Q ${firstControl.x} ${firstControl.y} ${mid.x} ${mid.y}`
+              : `M ${mid.x} ${mid.y} Q ${secondControl.x} ${secondControl.y} ${end.x} ${end.y}`;
+          });
+        }
         select(this).selectAll<SVGLineElement, number>('line.dfm-edge')
           .attr('x1', index => (convergence && index === 1 ? mx : sx) + px * offset(index))
           .attr('y1', index => (convergence && index === 1 ? my : sy) + py * offset(index))
-          .attr('x2', index => (convergence && index === 0 ? mx : tx) + px * offset(index))
-          .attr('y2', index => (convergence && index === 0 ? my : ty) + py * offset(index));
+          .attr('x2', index => (convergence ? (index === 0 ? mx : tx - (tx - sx) / length * targetClip) : tx) + px * offset(index))
+          .attr('y2', index => (convergence ? (index === 0 ? my : ty - (ty - sy) / length * targetClip) : ty) + py * offset(index));
 
         select(this).select('line.dfm-optional-edge')
-          .attr('x1', mx + px * 5).attr('y1', my + py * 5)
-          .attr('x2', mx - px * 5).attr('y2', my - py * 5);
+          .attr('x1', mx + px * ((link.parallelOffset ?? 0) + 5)).attr('y1', my + py * ((link.parallelOffset ?? 0) + 5))
+          .attr('x2', mx + px * ((link.parallelOffset ?? 0) - 5)).attr('y2', my + py * ((link.parallelOffset ?? 0) - 5));
 
         const labelCenter = edgeLabelCenter(link, source, target);
         select(this).select('text.dfm-edge-label')

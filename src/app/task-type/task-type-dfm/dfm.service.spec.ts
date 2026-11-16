@@ -60,6 +60,17 @@ describe('DfmService', () => {
     expect(error.column).toBe(3);
   });
 
+  it('should reject a graph containing a multiple recursive connection', async () => {
+    jest.spyOn(console, 'error').mockImplementation();
+    const graph: DfmGraph = {
+      nodes: [{id: 'worker', label: 'worker', type: 'LEVEL', optional: false, details: []}],
+      edges: [{source: 'worker', target: 'worker', connectionType: 'MULTIPLE', optional: true, label: 'role'}]
+    };
+    const promise = service.parse('dimension D { worker (=[role]=) worker; };');
+    httpTestingController.expectOne('http://localhost/api/forward/dfm/api/dfm/parse').flush(graph);
+    await expect(promise).rejects.toThrow('Backend returned a multiple recursive connection.');
+  });
+
   it('should rethrow other errors', async () => {
     jest.spyOn(console, 'error').mockImplementation();
 

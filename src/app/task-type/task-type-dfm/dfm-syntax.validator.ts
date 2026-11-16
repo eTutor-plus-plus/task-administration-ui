@@ -65,7 +65,7 @@ function tokenize(source: string): Token[] | null {
 class DfmSyntaxParser {
   private position = 0;
   private readonly factNames = new Set<string>();
-  // number of declarations per name; the parser consumes one declaration per connection
+  // number of declarations per name
   private readonly dimensionDeclarations = new Map<string, number>();
   private readonly hierarchyDeclarations = new Set<string>();
   private readonly hierarchyReferences: HierarchyReference[] = [];
@@ -96,12 +96,18 @@ class DfmSyntaxParser {
     if (!this.resolveHierarchyReferences())
       return false;
 
+    const owners = new Map<string, string[]>();
     return this.connections.every(connection => {
-      const remaining = this.dimensionDeclarations.get(connection.dimension) ?? 0;
-      if (!this.factNames.has(connection.fact) || remaining === 0)
+      const count = this.dimensionDeclarations.get(connection.dimension) ?? 0;
+      if (!this.factNames.has(connection.fact) || count === 0)
         return false;
-      this.dimensionDeclarations.set(connection.dimension, remaining - 1);
-      return true;
+      const assigned = owners.get(connection.dimension) ?? [];
+      if (assigned.length < count) {
+        assigned.push(connection.fact);
+        owners.set(connection.dimension, assigned);
+        return true;
+      }
+      return assigned.includes(connection.fact);
     });
   }
 
@@ -171,6 +177,8 @@ class DfmSyntaxParser {
   private parseHierarchy(owner: string | null): {head: string | null; headIsReference: boolean} | null {
     let head: string | null = null;
     let headIsReference = false;
+    let previousName: string | null = null;
+    let previousConnectionMultiple = false;
     while (!this.is(';') && !this.is('}')) {
       const optionalLevel = this.accept('(');
       let marker: string | null = null;
@@ -187,6 +195,8 @@ class DfmSyntaxParser {
 
       const kind = marker?.toLowerCase();
       const reference = kind === 'shared' || kind === 'cross';
+      if (!reference && previousConnectionMultiple && previousName === name)
+        return null;
       if (kind === 'shared' || kind === 'cross') {
         if (optionalLevel || (!this.is(';') && !this.is('}')))
           return null;
@@ -201,6 +211,8 @@ class DfmSyntaxParser {
         break;
 
       const optionalConnection = this.accept('(');
+      previousName = name;
+      previousConnectionMultiple = this.is('=');
       if (!this.parseConnector())
         return null;
       if (optionalConnection && !this.expect(')'))
@@ -255,9 +267,15 @@ class DfmSyntaxParser {
 
   private parseConnection(): boolean {
     const fact = this.takeWord();
-    if (fact === null || !this.expect('-'))
+    if (fact === null)
       return false;
-    if (this.accept('[') && (!this.takeWord() || !this.expect(']') || !this.expect('-')))
+    const optional = this.accept('(');
+    const opening = this.accept('-') ? '-' : this.accept('=') ? '=' : null;
+    if (opening === null)
+      return false;
+    if (this.accept('[') && (!this.takeWord() || !this.expect(']') || !this.expect(opening)))
+      return false;
+    if (optional && !this.expect(')'))
       return false;
     const dimension = this.takeWord();
     if (dimension === null)

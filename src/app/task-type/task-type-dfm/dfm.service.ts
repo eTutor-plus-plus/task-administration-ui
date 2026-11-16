@@ -28,11 +28,14 @@ export class DfmService {
   async parse(source: string): Promise<DfmGraph> {
     console.info('[DfmService] Parsing DFM model');
     try {
-      return await firstValueFrom(this.http.post<DfmGraph>(
+      const graph = await firstValueFrom(this.http.post<DfmGraph>(
         `${this.apiUrl}/api/forward/dfm/api/dfm/parse`,
         source,
         {headers: {'Content-Type': 'text/plain'}}
       ));
+      if (graph.edges.some(edge => edge.source === edge.target && edge.connectionType === 'MULTIPLE'))
+        throw new Error('Backend returned a multiple recursive connection.');
+      return graph;
     } catch (err) {
       console.error('[DfmService] Failed parsing DFM model', err);
       const body = err instanceof HttpErrorResponse ? err.error : null;

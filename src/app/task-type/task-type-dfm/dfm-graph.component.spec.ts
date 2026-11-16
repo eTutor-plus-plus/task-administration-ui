@@ -7,6 +7,7 @@ import { TranslationLoaderService } from '../../translation-loader.service';
 
 import purchase from './testdata/graph-fixtures/purchase.json';
 import recursive from './testdata/graph-fixtures/recursive-hierarchy.json';
+import recursiveShared from './testdata/graph-fixtures/recursive-shared-hierarchy.json';
 import sharedAndCross from './testdata/graph-fixtures/shared-and-cross-hierarchies.json';
 
 describe('DfmGraphComponent', () => {
@@ -88,6 +89,62 @@ describe('DfmGraphComponent', () => {
     expect(labels.map(label => label.textContent)).toEqual(['salesday']);
   });
 
+  it('should render parallel connections as distinct curves with their own roles', () => {
+    fixture.componentInstance.graph = {
+      ...graph,
+      edges: [
+        {source: 'sales', target: 'day', connectionType: 'SIMPLE', optional: true, label: 'shipping'},
+        {source: 'sales', target: 'day', connectionType: 'MULTIPLE', optional: false, label: 'billing'}
+      ]
+    };
+    fixture.detectChanges();
+    fixture.componentInstance.ngOnChanges();
+    const element: HTMLElement = fixture.nativeElement;
+    const paths = Array.from(element.querySelectorAll('path.dfm-edge'));
+    expect(paths.length).toBe(3);
+    expect(new Set(paths.map(path => path.getAttribute('d'))).size).toBe(3);
+    expect(element.querySelectorAll('line.dfm-optional-edge').length).toBe(1);
+    expect(Array.from(element.querySelectorAll('text.dfm-edge-label')).map(label => label.textContent))
+      .toEqual(['shipping', 'billing']);
+  });
+
+  it('should place straight and parallel convergence arrows at the target border', () => {
+    fixture.componentInstance.graph = {
+      nodes: [
+        {id: 'sales', label: 'Sales', type: 'FACT', optional: false, details: []},
+        {id: 'day', label: 'Day', type: 'LEVEL', optional: false, details: []},
+        {id: 'year', label: 'Year', type: 'SHARED', optional: false, details: []}
+      ],
+      edges: [
+        {source: 'sales', target: 'day', connectionType: 'CONVERGENCE', optional: false},
+        {source: 'day', target: 'year', connectionType: 'CONVERGENCE', optional: false},
+        {source: 'day', target: 'year', connectionType: 'CONVERGENCE', optional: true, label: 'alternative'}
+      ]
+    };
+    fixture.detectChanges();
+
+    const element: HTMLElement = fixture.nativeElement;
+    const groups = element.querySelectorAll('svg > g > g:first-child > g');
+    const nodes = element.querySelectorAll('.dfm-node');
+    const number = /-?\d*\.?\d+(?:e[-+]?\d+)?/gi;
+    expect(groups.length).toBe(3);
+    [1, 2, 2].forEach((targetIndex, index) => {
+      const segments = groups[index].querySelectorAll('.dfm-edge');
+      expect(segments.length).toBe(2);
+      expect(segments[0].hasAttribute('marker-end')).toBe(false);
+      const arrow = segments[1];
+      expect(arrow.getAttribute('marker-end')).toBe('url(#dfm-convergence-arrow)');
+      const coordinates = arrow.tagName.toLowerCase() === 'path'
+        ? (arrow.getAttribute('d')!.match(number) ?? []).map(Number).slice(-2)
+        : [Number(arrow.getAttribute('x2')), Number(arrow.getAttribute('y2'))];
+      const center = (nodes[targetIndex].getAttribute('transform')!.match(number) ?? []).map(Number);
+      expect(Math.hypot(coordinates[0] - center[0], coordinates[1] - center[1]))
+        .toBeCloseTo(targetIndex === 2 ? 14 : 10, 4);
+    });
+    expect(groups[2].querySelector('line.dfm-optional-edge')).not.toBeNull();
+    expect(element.querySelector('#dfm-convergence-arrow')?.getAttribute('refX')).toBe('10');
+  });
+
   it('should render a large graph and fit it into the viewport', () => {
     const large = purchase as DfmGraph;
     fixture.componentInstance.graph = large;
@@ -118,6 +175,42 @@ describe('DfmGraphComponent', () => {
     expect(loop?.getAttribute('marker-end')).toBe('url(#dfm-convergence-arrow)');
     expect(element.querySelectorAll('line.dfm-edge').length).toBe(2);
     expect(Array.from(element.querySelectorAll('text.dfm-edge-label')).map(label => label.textContent)).toEqual(['supervisor']);
+  });
+
+  it('should attach recursive shared hierarchy loops to the outer ring', () => {
+    fixture.componentInstance.graph = recursiveShared as DfmGraph;
+    fixture.detectChanges();
+
+    const element: HTMLElement = fixture.nativeElement;
+    const loop = element.querySelector('path.dfm-edge')!;
+    const node = element.querySelector('.dfm-node.shared')!;
+    const number = /-?\d*\.?\d+(?:e[-+]?\d+)?/gi;
+    const coordinates = (loop.getAttribute('d')!.match(number) ?? []).map(Number);
+    const center = (node.getAttribute('transform')!.match(number) ?? []).map(Number);
+    expect(loop.getAttribute('marker-end')).toBe('url(#dfm-convergence-arrow)');
+    for (const point of [coordinates.slice(0, 2), coordinates.slice(-2)]) {
+      expect(Math.hypot(point[0] - center[0], point[1] - center[1])).toBeCloseTo(14, 4);
+    }
+  });
+
+  it('should render distinct optional recursive connections', () => {
+    fixture.componentInstance.graph = {
+      nodes: [{id: 'worker', label: 'worker', type: 'LEVEL', optional: false, details: []}],
+      edges: [
+        {source: 'worker', target: 'worker', connectionType: 'SIMPLE', optional: true, label: 'alternate'},
+        {source: 'worker', target: 'worker', connectionType: 'CONVERGENCE', optional: true, label: 'supervisor'}
+      ]
+    };
+    fixture.detectChanges();
+    fixture.componentInstance.ngOnChanges();
+    const element: HTMLElement = fixture.nativeElement;
+    const paths = Array.from(element.querySelectorAll('path.dfm-edge'));
+    expect(paths.length).toBe(2);
+    expect(new Set(paths.map(path => path.getAttribute('d'))).size).toBe(2);
+    expect(element.querySelectorAll('line.dfm-optional-edge').length).toBe(2);
+    expect(element.querySelectorAll('path.dfm-edge[marker-end]').length).toBe(1);
+    expect(Array.from(element.querySelectorAll('text.dfm-edge-label')).map(label => label.textContent))
+      .toEqual(['alternate', 'supervisor']);
   });
 
   it('should clear the diagram if there is no graph', () => {
