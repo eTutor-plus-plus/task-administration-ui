@@ -59,9 +59,10 @@ export function isCircleNode(node: DfmNode): boolean {
 export function nodeBounds(node: LayoutNode, padding = 0): Bounds {
   const x = node.x ?? 0;
   const y = node.y ?? 0;
-  let halfWidth = Math.max(LEVEL_RADIUS, node.label.length * 3.3 + 3);
-  let top = -LEVEL_RADIUS;
-  let bottom = 26;
+  const radius = node.type === 'CROSS' ? LEVEL_RADIUS + SHARED_RING_GAP : LEVEL_RADIUS;
+  let halfWidth = Math.max(radius, node.label.length * 3.3 + 3);
+  let top = -radius;
+  let bottom = node.type === 'CROSS' ? 36 : 26;
   if (node.type === 'FACT') {
     halfWidth = Math.max(60, labelWidth(node) / 2);
     top = -factHalfHeight(node);
@@ -77,7 +78,7 @@ const SELF_LOOP_HEIGHT = 38;
 const SELF_LOOP_HALF_WIDTH = 26;
 const SELF_LOOP_HALF_GAP = 6;
 const MAX_LOOP_CLEARANCE = 70 * Math.PI / 180;
-const LEVEL_RADIUS = 10;
+export const LEVEL_RADIUS = 10;
 const LABEL_MARGIN = 9;
 const LABEL_HALF_HEIGHT = 7;
 const LABEL_CHAR_WIDTH = 6.6;
@@ -100,6 +101,10 @@ export function isSelfLink(link: { source: LinkEnd; target: LinkEnd }): boolean 
 
 export interface SelfLoopShape {
   path: string;
+  start: {x: number; y: number};
+  first: {x: number; y: number};
+  second: {x: number; y: number};
+  end: {x: number; y: number};
   markerStart: {x: number; y: number};
   markerEnd: {x: number; y: number};
   labelX: number;
@@ -171,6 +176,10 @@ export function selfLoopShape(node: LayoutNode, links: LayoutLink[], label?: str
 
   return {
     path,
+    start,
+    first,
+    second,
+    end,
     markerStart: point(0, tip - 5),
     markerEnd: point(0, tip + 5),
     labelX: labelCenter.x,

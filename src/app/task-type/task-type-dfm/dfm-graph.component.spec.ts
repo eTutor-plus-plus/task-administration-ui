@@ -70,6 +70,8 @@ describe('DfmGraphComponent', () => {
     expect(element.querySelectorAll('.dfm-node.cross').length).toBe(1);
     expect(element.querySelectorAll('.dfm-node.cross circle').length).toBe(1);
     expect(element.querySelectorAll('.dfm-node.cross .dfm-cross-arc').length).toBe(1);
+    expect(element.querySelector('.dfm-node.cross .dfm-cross-arc')?.getAttribute('d')).toMatch(/^M .* A .* A /);
+    expect(element.querySelector('.dfm-node.cross .dfm-node-label')?.getAttribute('y')).toBe('30');
     expect(element.querySelectorAll('.dfm-node.level circle').length).toBe(
       (sharedAndCross as DfmGraph).nodes.filter(node => node.type === 'LEVEL').length);
   });

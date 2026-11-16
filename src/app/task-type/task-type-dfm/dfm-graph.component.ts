@@ -10,6 +10,7 @@ import {
 } from 'd3';
 
 import { DfmGraph } from './dfm-graph.model';
+import { crossArcPath, incomingCrossAngles } from './dfm-cross-arc';
 import {
   borderDistance,
   createGraphLayout,
@@ -303,10 +304,10 @@ export class DfmGraphComponent implements AfterViewInit, OnChanges {
           group.append('circle').attr('class', 'dfm-shared-ring').attr('r', 10 + SHARED_RING_GAP);
         group.append('circle').attr('r', 10);
         if (node.type === 'CROSS') {
-          const arcRadius = 10 + SHARED_RING_GAP;
-          group.append('path').attr('class', 'dfm-cross-arc').attr('d', `M ${-arcRadius} -4 A ${arcRadius} ${arcRadius} 0 0 1 -4 ${-arcRadius}`);
+          group.append('path').attr('class', 'dfm-cross-arc');
         }
-        group.append('text').attr('class', 'dfm-node-label').attr('text-anchor', 'middle').attr('y', 20).text(node.label);
+        group.append('text').attr('class', 'dfm-node-label').attr('text-anchor', 'middle')
+          .attr('y', node.type === 'CROSS' ? 30 : 20).text(node.label);
         if (node.optional)
           group.append('line').attr('class', 'dfm-level-optional').attr('x1', -15).attr('x2', 15).attr('y1', 0).attr('y2', 0);
       } else {
@@ -391,6 +392,8 @@ export class DfmGraphComponent implements AfterViewInit, OnChanges {
           .attr('y', labelCenter.y + 4);
       });
       nodeSelection.attr('transform', node => `translate(${node.x ?? 0},${node.y ?? 0})`);
+      nodeSelection.select<SVGPathElement>('path.dfm-cross-arc')
+        .attr('d', node => crossArcPath(incomingCrossAngles(node, links)));
     };
 
     // the layout is computed once and the diagram is static, only the view can be zoomed and panned
