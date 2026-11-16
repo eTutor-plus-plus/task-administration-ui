@@ -318,7 +318,6 @@
         "checkSolution": "DFM-Modell prüfen und visualisieren",
         "clearSubmodel": "Teilmodell zurücksetzen",
         "copySubmodel": "Teilmodell kopieren",
-        "checkSubmodel": "Teilmodell prüfen und visualisieren",
         "evaluationCriteria": "Bewertungskriterien",
         "addCriterion": "Kriterium hinzufügen",
         "removeCriterion": "Kriterium entfernen",

@@ -25,24 +25,22 @@ export interface DfmPreview {
 
 export type DfmModelKind = 'solution' | 'submodel';
 
-const TRANSLATION_KEYS: Record<DfmModelKind, { field: string; clear: string; copy: string; check: string }> = {
+const TRANSLATION_KEYS: Record<DfmModelKind, { field: string; clear: string; copy: string }> = {
   solution: {
     field: 'taskTypes.dfm.fields.solution',
     clear: 'taskTypes.dfm.fields.clearSolution',
-    copy: 'taskTypes.dfm.fields.copySolution',
-    check: 'taskTypes.dfm.fields.checkSolution'
+    copy: 'taskTypes.dfm.fields.copySolution'
   },
   submodel: {
     field: 'taskTypes.dfm.fields.subtree',
     clear: 'taskTypes.dfm.fields.clearSubmodel',
-    copy: 'taskTypes.dfm.fields.copySubmodel',
-    check: 'taskTypes.dfm.fields.checkSubmodel'
+    copy: 'taskTypes.dfm.fields.copySubmodel'
   }
 };
 
 /**
- * Editor for a DFM model (solution or submodel) with actions to clear, copy and check it
- * and a graph preview of the checked model.
+ * Editor for a DFM model (solution or submodel) with actions to clear and copy it.
+ * Solutions can also be checked and shown as a graph preview.
  */
 @Component({
   selector: 'dke-dfm-model-editor',
@@ -90,7 +88,7 @@ export class DfmModelEditorComponent {
   private readonly messageService = inject(MessageService);
   private readonly dfmService = inject(DfmService);
 
-  get keys(): { field: string; clear: string; copy: string; check: string } {
+  get keys(): { field: string; clear: string; copy: string } {
     return TRANSLATION_KEYS[this.kind];
   }
 
@@ -115,7 +113,7 @@ export class DfmModelEditorComponent {
 
   async check(): Promise<void> {
     const source = this.control.value;
-    if (!source?.trim() || this.preview.loading)
+    if (this.kind !== 'solution' || !source?.trim() || this.preview.loading)
       return;
 
     this.preview.loading = true;

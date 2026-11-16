@@ -312,7 +312,6 @@
         "checkSolution": "Check and visualize DFM model",
         "clearSubmodel": "Clear submodel",
         "copySubmodel": "Copy submodel",
-        "checkSubmodel": "Check and visualize submodel",
         "evaluationCriteria": "Evaluation criteria",
         "addCriterion": "Add criterion",
         "removeCriterion": "Remove criterion",

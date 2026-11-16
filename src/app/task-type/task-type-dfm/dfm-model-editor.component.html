@@ -14,7 +14,7 @@
       }
     }
 
-    @if (preview.error) {
+    @if (kind === 'solution' && preview.error) {
       <small class="block mt-2 p-error" role="alert">
         {{ preview.error.message }}
         @if (preview.error.line) {
@@ -22,7 +22,7 @@
         }
       </small>
     }
-    @if (preview.graph) {
+    @if (kind === 'solution' && preview.graph) {
       @if (preview.source !== control.value) {
         <small class="block mt-2 text-color-secondary" transloco="taskTypes.dfm.graph.outdated"></small>
       }
@@ -78,18 +78,20 @@
       [showDelay]="500"
       [disabled]="loading"
       (onClick)="copy()"/>
-    <p-button
-      icon="pi pi-hammer"
-      severity="success"
-      [text]="true"
-      class="w-auto"
-      styleClass="dfm-editor-action"
-      [ariaLabel]="keys.check | transloco"
-      [pTooltip]="keys.check | transloco"
-      tooltipPosition="left"
-      [showDelay]="500"
-      [loading]="preview.loading"
-      [disabled]="loading || preview.loading || !control.value?.trim()"
-      (onClick)="check()"/>
+    @if (kind === 'solution') {
+      <p-button
+        icon="pi pi-hammer"
+        severity="success"
+        [text]="true"
+        class="w-auto"
+        styleClass="dfm-editor-action"
+        [ariaLabel]="'taskTypes.dfm.fields.checkSolution' | transloco"
+        [pTooltip]="'taskTypes.dfm.fields.checkSolution' | transloco"
+        tooltipPosition="left"
+        [showDelay]="500"
+        [loading]="preview.loading"
+        [disabled]="loading || preview.loading || !control.value?.trim()"
+        (onClick)="check()"/>
+    }
   </div>
 </div>

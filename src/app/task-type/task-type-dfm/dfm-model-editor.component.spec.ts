@@ -73,7 +73,7 @@ describe('DfmModelEditorComponent', () => {
     component.kind = 'submodel';
 
     expect(component.keys.clear).toBe('taskTypes.dfm.fields.clearSubmodel');
-    expect(component.keys.check).toBe('taskTypes.dfm.fields.checkSubmodel');
+    expect(component.keys.copy).toBe('taskTypes.dfm.fields.copySubmodel');
   });
 
   it('should clear the model and mark it as changed', () => {
@@ -175,6 +175,17 @@ describe('DfmModelEditorComponent', () => {
     await component.check();
 
     expect(parse).not.toHaveBeenCalled();
+  });
+
+  it('should not request a preview for submodels', async () => {
+    const parse = jest.spyOn(TestBed.inject(DfmService), 'parse');
+    component.kind = 'submodel';
+    control.setValue('fact Sales { amount };');
+
+    await component.check();
+
+    expect(parse).not.toHaveBeenCalled();
+    expect(component.preview.graph).toBeNull();
   });
 
   it('should hide the preview when dismissed', async () => {
