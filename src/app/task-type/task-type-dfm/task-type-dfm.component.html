@@ -12,15 +12,6 @@
 
     <div class="flex flex-wrap align-items-center gap-4 mt-4">
       <div class="field-checkbox mb-0">
-        @if (isExamTask) {
-          <p-checkbox inputId="allowGrading" [ngModel]="true" [ngModelOptions]="{standalone: true}"
-                      [binary]="true" [disabled]="true"/>
-        } @else {
-          <p-checkbox inputId="allowGrading" formControlName="allowGrading" [binary]="true"/>
-        }
-        <label for="allowGrading" transloco="taskTypes.dfm.fields.allowGrading"></label>
-      </div>
-      <div class="field-checkbox mb-0">
         <p-checkbox inputId="checkNames" formControlName="checkNames" [binary]="true"/>
         <label for="checkNames" transloco="taskTypes.dfm.fields.checkNames"></label>
       </div>

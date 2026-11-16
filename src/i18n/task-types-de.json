@@ -311,7 +311,6 @@
     "dfm": {
       "title": "DFM",
       "fields": {
-        "allowGrading": "Automatische Bewertung",
         "checkNames": "Attributnamen generell prüfen",
         "solution": "Lösung",
         "clearSolution": "Lösung zurücksetzen",

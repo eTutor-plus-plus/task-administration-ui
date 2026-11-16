@@ -47,30 +47,13 @@ describe('TaskTypeDfmComponent', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
-    expect(component.form.controls.allowGrading).toBeDefined();
     expect(component.form.controls.checkNames).toBeDefined();
   });
 
-  it('should force grading for exam tasks and restore the previous choice afterwards', () => {
-    const examTask = component.parentForm!.controls.examTask;
-    component.form.controls.allowGrading.setValue(false);
-
-    examTask.setValue(true);
-    expect(component.isExamTask).toBe(true);
-    expect(component.form.controls.allowGrading.value).toBe(true);
-    expect(component.form.value.allowGrading).toBe(true);
-
-    examTask.setValue(false);
-    expect(component.isExamTask).toBe(false);
-    expect(component.form.controls.allowGrading.value).toBe(false);
-  });
-
-  it('should enable grading when loading data of an exam task', () => {
+  it('should not add grading settings for exam tasks', () => {
     component.parentForm!.controls.examTask.setValue(true);
 
-    component.formData = {allowGrading: false, solution: 'fact Sales { amount };', evaluationCriteria: []};
-
-    expect(component.form.controls.allowGrading.value).toBe(true);
+    expect(component.form.contains('allowGrading')).toBe(false);
   });
 
   it('should add and remove evaluation criteria', () => {
@@ -84,7 +67,6 @@ describe('TaskTypeDfmComponent', () => {
 
   it('should load evaluation criteria when editing a task', () => {
     component.formData = {
-      allowGrading: true,
       checkNames: true,
       solution: 'fact Sales { amount };',
       evaluationCriteria: [{
@@ -111,7 +93,6 @@ describe('TaskTypeDfmComponent', () => {
       partialSolution: true,
       allowIncorrectFactClass: false
     }]);
-    expect(component.form.value.allowGrading).toBe(true);
     expect(component.form.value.checkNames).toBe(true);
   });
 

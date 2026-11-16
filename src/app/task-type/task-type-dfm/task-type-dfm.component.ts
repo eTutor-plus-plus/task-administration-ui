@@ -4,7 +4,6 @@ import {
   FormArray,
   FormControl,
   FormGroup,
-  FormsModule,
   ReactiveFormsModule,
   ValidationErrors,
   ValidatorFn,
@@ -23,7 +22,6 @@ import { isValidDfmSyntax } from './dfm-syntax.validator';
 import { DfmModelEditorComponent } from './dfm-model-editor.component';
 
 interface TaskTypeForm {
-  allowGrading: FormControl<boolean | null>;
   checkNames: FormControl<boolean | null>;
   solution: FormControl<string | null>;
   evaluationCriteria: FormArray<EvaluationCriterionForm>;
@@ -52,7 +50,6 @@ type EvaluationCriterionForm = FormGroup<{
     ButtonModule,
     CheckboxModule,
     DfmModelEditorComponent,
-    FormsModule,
     InputNumberModule,
     InputTextModule,
     ReactiveFormsModule,
@@ -65,8 +62,6 @@ export class TaskTypeDfmComponent extends TaskTypeFormComponent<TaskTypeForm> im
 
   readonly evaluationCriteria = new FormArray<EvaluationCriterionForm>([], [this.pointsTotalValidator()]);
   private parentMaxPointsSubscription?: Subscription;
-  private examTaskSubscription?: Subscription;
-  private gradingBeforeExamTask?: boolean;
 
   constructor() {
     super();
@@ -80,10 +75,6 @@ export class TaskTypeDfmComponent extends TaskTypeFormComponent<TaskTypeForm> im
       this.evaluationCriteria.updateValueAndValidity()
     );
     this.evaluationCriteria.updateValueAndValidity({emitEvent: false});
-
-    this.examTaskSubscription?.unsubscribe();
-    this.examTaskSubscription = value?.controls.examTask.valueChanges.subscribe(() => this.syncGradingWithExamTask());
-    this.syncGradingWithExamTask();
   }
 
   override get parentForm(): FormGroup<TaskForm> | undefined {
@@ -95,38 +86,9 @@ export class TaskTypeDfmComponent extends TaskTypeFormComponent<TaskTypeForm> im
     for (const criterion of this.readCriteria(data))
       this.evaluationCriteria.push(this.createCriterionForm(criterion), {emitEvent: false});
     super.formData = data;
-    this.syncGradingWithExamTask();
-  }
-
-  /**
-   * Whether the task is an exam task. Exam tasks are always graded.
-   */
-  get isExamTask(): boolean {
-    return this.parentForm?.controls.examTask.value === true;
-  }
-
-  /**
-   * Forces grading for exam tasks and restores the previous choice afterwards.
-   * The control stays enabled so that its value is still part of the submitted form value.
-   */
-  private syncGradingWithExamTask(): void {
-    const allowGrading = this.form?.controls.allowGrading;
-    if (!allowGrading)
-      return;
-
-    if (this.isExamTask) {
-      if (allowGrading.value !== true) {
-        this.gradingBeforeExamTask ??= allowGrading.value ?? false;
-        allowGrading.setValue(true);
-      }
-    } else if (this.gradingBeforeExamTask !== undefined) {
-      allowGrading.setValue(this.gradingBeforeExamTask);
-      this.gradingBeforeExamTask = undefined;
-    }
   }
 
   protected override initForm(): void {
-    this.form.addControl('allowGrading', new FormControl<boolean>(false));
     this.form.addControl('checkNames', new FormControl<boolean>(false));
     this.form.addControl('solution', new FormControl<string | null>(null, [
       this.nonBlankValidator,
@@ -148,7 +110,6 @@ export class TaskTypeDfmComponent extends TaskTypeFormComponent<TaskTypeForm> im
 
   ngOnDestroy(): void {
     this.parentMaxPointsSubscription?.unsubscribe();
-    this.examTaskSubscription?.unsubscribe();
   }
 
   private readCriteria(data: unknown): EvaluationCriterionFormValue[] {
