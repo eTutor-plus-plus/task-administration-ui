@@ -229,14 +229,16 @@ export function edgeLabelCenter(link: { label?: string | null; optional: boolean
   const extent = Math.abs(dirX) * labelHalfWidth + Math.abs(dirY) * LABEL_HALF_HEIGHT;
   const reserveMiddle = link.optional;
   if (reserveMiddle ? LABEL_MARGIN + 2 * extent + 2 > visibleLength / 2 : 2 * extent + 2 > visibleLength) {
-    const side = py > 0 ? -1 : 1;
+    const side = Math.abs(py) > 1e-6 ? (py > 0 ? -1 : 1) : unitY > 0 ? 1 : -1;
     const offset = LABEL_MARGIN + Math.abs(px) * labelHalfWidth + Math.abs(py) * LABEL_HALF_HEIGHT;
     return withCurve(visibleMiddleX + px * side * offset, visibleMiddleY + py * side * offset,
       (startClip + length - endClip) / (2 * length));
   }
   // position along the edge, measured from the center of the source
   const middle = (startClip + length - endClip) / 2;
-  const towardsLower = ty < sy ? -1 : 1;
+  // The description of an optional edge lies towards the lower end, on a level edge towards the right end. The
+  // choice must not depend on the direction of the edge or on rounding.
+  const towardsLower = ty - sy < -1e-6 || (Math.abs(ty - sy) <= 1e-6 && tx < sx) ? -1 : 1;
   let along = (reserveMiddle ? middle + towardsLower * (extent + LABEL_MARGIN) : middle) + shift;
   along = Math.min(length - endClip - extent - 1, Math.max(startClip + extent + 1, along));
   if (reserveMiddle && towardsLower * (along - middle) < extent + LABEL_MARGIN)
@@ -294,6 +296,9 @@ const NODE_SPACING = 16;
 const MAX_FAN = 150 * Math.PI / 180;
 const MAX_EXTRA_ROOM = 192;
 const REPAIR_PASSES = 80;
+// length of a lens of parallel edges relative to the bulge of its outermost line
+const PARALLEL_LENGTH_RATIO = 3;
+const MIN_LENS_SPACING = 36;
 
 interface TreeEdge {
   source: string;
@@ -356,6 +361,52 @@ function edgeCrossesBox(source: LayoutNode, target: LayoutNode, offset: number |
   return false;
 }
 
+interface Point {
+  x: number;
+  y: number;
+}
+
+// the line of an edge as points; parallel edges are curved
+function edgePoints(source: LayoutNode, target: LayoutNode, offset: number | undefined): Point[] {
+  const sx = source.x ?? 0, sy = source.y ?? 0, tx = target.x ?? 0, ty = target.y ?? 0;
+  if (!offset)
+    return [{x: sx, y: sy}, {x: tx, y: ty}];
+  const length = Math.hypot(tx - sx, ty - sy) || 1;
+  const px = -(ty - sy) / length, py = (tx - sx) / length;
+  return Array.from({length: 25}, (_, index) => {
+    const t = index / 24, bend = 4 * t * (1 - t) * offset;
+    return {x: sx + (tx - sx) * t + px * bend, y: sy + (ty - sy) * t + py * bend};
+  });
+}
+
+// whether two edges cross where it can be seen; nodes are drawn above the edges that end at them
+function edgesCross(first: Point[], second: Point[], ends: LayoutNode[]): boolean {
+  for (let i = 1; i < first.length; i++) {
+    const ax = first[i - 1].x, ay = first[i - 1].y;
+    const rx = first[i].x - ax, ry = first[i].y - ay;
+    for (let j = 1; j < second.length; j++) {
+      const bx = second[j - 1].x, by = second[j - 1].y;
+      const sx = second[j].x - bx, sy = second[j].y - by;
+      const denominator = rx * sy - ry * sx;
+      if (Math.abs(denominator) < 1e-9)
+        continue;
+      const t = ((bx - ax) * sy - (by - ay) * sx) / denominator;
+      const u = ((bx - ax) * ry - (by - ay) * rx) / denominator;
+      if (t < 0 || t > 1 || u < 0 || u > 1)
+        continue;
+      const x = ax + t * rx, y = ay + t * ry;
+      const hidden = ends.some(node => {
+        const deltaX = x - (node.x ?? 0), deltaY = y - (node.y ?? 0);
+        const distance = Math.hypot(deltaX, deltaY);
+        return distance < 1e-6 || distance <= borderDistance(node, deltaX / distance, deltaY / distance) + 2;
+      });
+      if (!hidden)
+        return true;
+    }
+  }
+  return false;
+}
+
 /**
  * Places every tree around its root (a fact, or the head of a dimension without a fact).
  * <p>
@@ -366,6 +417,9 @@ function edgeCrossesBox(source: LayoutNode, target: LayoutNode, offset: number |
  * or a broad fan needs more room. The layout is then checked and the responsible edges are lengthened until nothing
  * overlaps; there is no simulation, so the same model always yields the same picture. Descriptions that only meet
  * another edge slide along their own edge instead; the result is stored in {@code labelShift} of the link.
+ * <p>
+ * A fact with a single dimension is placed like a level of that dimension, whose head is the center instead.
+ * Parallel connections form a lens whose spread is stored in {@code parallelOffset} of the links.
  *
  * @param nodes The nodes to position.
  * @param links All links with resolved ends, including the self-loops of recursive hierarchies.
@@ -373,10 +427,33 @@ function edgeCrossesBox(source: LayoutNode, target: LayoutNode, offset: number |
 export function placeTrees(nodes: LayoutNode[], links: LayoutLink[]): void {
   const byId = new Map(nodes.map(node => [node.id, node]));
   // self-loops (recursive hierarchies) are not part of the tree structure
-  const edges: TreeEdge[] = links
+  const plainEdges: TreeEdge[] = links
     .filter(link => !isSelfLink(link))
     .map(link => ({...link, source: endId(link.source), target: endId(link.target), link}))
     .filter(edge => byId.has(edge.source) && byId.has(edge.target));
+  // A fact with a single dimension would have the whole dimension on one side. The head of that dimension is the
+  // center of the picture instead and the fact is placed like one of its levels; for the layout the connections of
+  // the fact are turned around.
+  const turned = new Set<TreeEdge>();
+  const centers = new Set<string>();
+  for (const fact of nodes.filter(node => node.type === 'FACT')) {
+    const connections = plainEdges.filter(edge => edge.source === fact.id || edge.target === fact.id);
+    const heads = new Set(connections.map(edge => edge.target));
+    const head = heads.size === 1 ? byId.get([...heads][0])! : undefined;
+    if (!head || head.type === 'FACT' || connections.some(edge => edge.source !== fact.id)
+      || plainEdges.some(edge => edge.target === head.id && edge.source !== fact.id)
+      || !plainEdges.some(edge => edge.source === head.id))
+      continue;
+    centers.add(head.id);
+    for (const edge of connections) {
+      edge.source = head.id;
+      edge.target = fact.id;
+      if (edge.parallelOffset !== undefined)
+        edge.parallelOffset = -edge.parallelOffset;
+      turned.add(edge);
+    }
+  }
+  const edges = plainEdges;
   const loops = links.filter(link => isSelfLink(link) && byId.has(endId(link.source)));
   const loopsAt = new Map<string, LayoutLink[]>();
   loops.forEach(loop => loopsAt.set(endId(loop.source), [...(loopsAt.get(endId(loop.source)) ?? []), loop]));
@@ -389,6 +466,39 @@ export function placeTrees(nodes: LayoutNode[], links: LayoutLink[]): void {
   // descriptions that the layout moved along their edge, see edgeLabelCenter
   const labelShifts = new Map<TreeEdge, number>();
   const shiftOf = (edge: TreeEdge) => labelShifts.get(edge) ?? 0;
+  // parallel edges between the same two nodes are drawn as a lens; how far its outermost line bulges
+  const bulgeOf = (edge: TreeEdge) => edge.parallelOffset === undefined ? 0 : Math.max(0, ...edges
+    .filter(other => other.source === edge.source && other.target === edge.target)
+    .map(other => Math.abs(other.parallelOffset ?? 0)));
+  // The lines of a lens lie as far apart as their descriptions need: side by side the descriptions need their
+  // width, above each other only their height. Returns whether a lens changed.
+  const spreadLenses = (lensEdges: TreeEdge[]) => {
+    let moved = false;
+    const done = new Set<TreeEdge>();
+    for (const edge of lensEdges) {
+      if (edge.parallelOffset === undefined || done.has(edge))
+        continue;
+      const group = lensEdges.filter(other => other.source === edge.source && other.target === edge.target);
+      group.forEach(other => done.add(other));
+      const source = byId.get(edge.source)!;
+      const target = byId.get(edge.target)!;
+      const textWidth = Math.max(0, ...group.map(other => (other.label?.length ?? 0) * LABEL_CHAR_WIDTH));
+      const direction = source.x === undefined || target.x === undefined
+        ? Math.PI / 2
+        : Math.atan2((target.y ?? 0) - (source.y ?? 0), target.x - source.x);
+      const spacing = Math.max(MIN_LENS_SPACING,
+        textWidth * Math.abs(Math.sin(direction)) + 2 * LABEL_HALF_HEIGHT * Math.abs(Math.cos(direction)) + 16);
+      const side = turned.has(edge) ? -1 : 1;
+      group.forEach((other, index) => {
+        const offset = side * (index - (group.length - 1) / 2) * spacing;
+        if (Math.abs(offset - (other.parallelOffset ?? 0)) > 0.5)
+          moved = true;
+        other.parallelOffset = offset;
+        other.link.parallelOffset = side * offset;
+      });
+    }
+    return moved;
+  };
 
   // longest path from a root; a node always lies further out than all of its parents
   const levelOf = new Map<string, number>(nodes.map(node => [node.id, 0]));
@@ -450,6 +560,8 @@ export function placeTrees(nodes: LayoutNode[], links: LayoutLink[]): void {
   // A node with several parents is placed between the branches of its parents: it becomes a child of their lowest
   // common ancestor in the order around the root, while its distance still follows its real parents. The parents are
   // turned towards it, so the additional edges stay short and do not cross their branches.
+  // neighbouring children that belong together because their branches meet in a common level
+  const joined = new Set<string>();
   const attachMerge = (merge: string) => {
     const parents = [...new Set((incoming.get(merge) ?? []).map(edge => edge.source))].filter(parent => reached.has(parent));
     reached.add(merge);
@@ -476,7 +588,22 @@ export function placeTrees(nodes: LayoutNode[], links: LayoutLink[]): void {
     // between the two halves
     const continuesMiddle = !parents.includes(anchor) && branches.length % 2 === 1;
     const split = continuesMiddle ? (branches.length - 1) / 2 : Math.ceil(branches.length / 2);
-    const middleParent = continuesMiddle ? parents[paths.findIndex(path => branchOf(path) === branches[split])] : null;
+    const parentIn = (branch: string) => parents[paths.findIndex(path => branchOf(path) === branch)];
+    if (continuesMiddle) {
+      // The edges from the other branches pass the middle branch on both sides, so the branch that has the least
+      // beside the common level is the one in the middle.
+      const weight = (nodeId: string): number => kidsOf(nodeId).reduce((sum, kid) => sum + 1 + weight(kid), 0);
+      const middle = branches.reduce((best, branch) =>
+        weight(parentIn(branch)) < weight(parentIn(best)) ? branch : best, branches[split]);
+      const others = branches.filter(branch => branch !== middle);
+      branches.splice(0, branches.length, ...others.slice(0, split), middle, ...others.slice(split));
+    }
+    const middleParent = continuesMiddle ? parentIn(branches[split]) : null;
+    const cluster = continuesMiddle ? branches : [...branches.slice(0, split), merge, ...branches.slice(split)];
+    cluster.slice(1).forEach((kid, index) => {
+      joined.add(`${cluster[index]}|${kid}`);
+      joined.add(`${kid}|${cluster[index]}`);
+    });
     if (continuesMiddle) {
       treeChildren.set(anchor, [...before, ...branches, ...after]);
     } else {
@@ -493,12 +620,18 @@ export function placeTrees(nodes: LayoutNode[], links: LayoutLink[]): void {
       for (let node = parent; node !== branch && treeParent.has(node); node = treeParent.get(node)!)
         moveToEdge(node, position < split);
     });
-    if (middleParent)
-      attach(middleParent, merge);
+    if (middleParent) {
+      // the common level lies in the middle of the other children of its branch
+      const siblings = kidsOf(middleParent);
+      const half = Math.ceil(siblings.length / 2);
+      treeParent.set(merge, middleParent);
+      treeChildren.set(middleParent, [...siblings.slice(0, half), merge, ...siblings.slice(half)]);
+    }
     grow(merge);
   };
 
-  nodes.filter(node => node.type === 'FACT').forEach(node => {
+  const placedAsLevel = new Set([...turned].map(edge => edge.target));
+  nodes.filter(node => node.type === 'FACT' && !placedAsLevel.has(node.id)).forEach(node => {
     roots.push(node);
     grow(node.id);
   });
@@ -524,6 +657,13 @@ export function placeTrees(nodes: LayoutNode[], links: LayoutLink[]): void {
     grow(rest.id);
   }
 
+  // a fact that is placed like a level comes first, see the direction of the first child of a root
+  for (const fact of placedAsLevel) {
+    const head = treeParent.get(fact);
+    if (head)
+      treeChildren.set(head, [fact, ...kidsOf(head).filter(kid => kid !== fact)]);
+  }
+
   const trees = roots.map(root => {
     const members: LayoutNode[] = [];
     const collect = (nodeId: string) => {
@@ -546,8 +686,10 @@ export function placeTrees(nodes: LayoutNode[], links: LayoutLink[]): void {
     // room to the sides that the loop of a recursive hierarchy asked for, per level
     const loopRoom = new Map<string, number>();
     // all edges leaving a node share one length, so its children form an arc; single edges may be longer
-    const gapOf = (source: string) => gaps.get(source) ?? (source === root.id ? ROOT_GAP : LEVEL_GAP);
-    const lengthOf = (edge: TreeEdge) => Math.max(gapOf(edge.source), minimumLengths.get(edge) ?? 0);
+    const gapOf = (source: string) => gaps.get(source) ?? (source === root.id && !centers.has(source) ? ROOT_GAP : LEVEL_GAP);
+    // a lens of parallel edges must be long enough that its lines do not leave the node sideways
+    const lengthOf = (edge: TreeEdge) => Math.max(gapOf(edge.source), minimumLengths.get(edge) ?? 0,
+      PARALLEL_LENGTH_RATIO * bulgeOf(edge));
     // gap in the middle of the children of a level with a recursive hierarchy, so that its loop fits between them
     const loopGaps = new Map<string, number>();
     const loopWindowOf = (nodeId: string) => {
@@ -559,7 +701,9 @@ export function placeTrees(nodes: LayoutNode[], links: LayoutLink[]): void {
     };
     const fanOf = (nodeId: string) => kidsOf(nodeId).reduce((sum, kid) => sum + (width.get(kid) ?? 0), 0) + loopWindowOf(nodeId);
 
+    let lensMoved = false;
     const place = () => {
+      lensMoved = spreadLenses(treeEdges);
       for (const node of byLevel) {
         if (node === root) {
           radius.set(node.id, 0);
@@ -568,14 +712,23 @@ export function placeTrees(nodes: LayoutNode[], links: LayoutLink[]): void {
         // the root is a box, so its children start at its border in their direction
         const direction = angle.get(node.id) ?? Math.PI / 4;
         let distance = 0;
-        for (const edge of incoming.get(node.id) ?? []) {
-          if (!inTree.has(edge.source) || level(edge.source) >= level(node.id))
-            continue;
+        const parentEdges = (incoming.get(node.id) ?? [])
+          .filter(edge => inTree.has(edge.source) && level(edge.source) < level(node.id));
+        const nearest = Math.min(...parentEdges.map(edge => radius.get(edge.source) ?? 0));
+        for (const edge of parentEdges) {
           const start = edge.source === root.id
             ? borderDistance(root, Math.cos(direction), Math.sin(direction))
             : radius.get(edge.source) ?? 0;
-          distance = Math.max(distance, start + lengthOf(edge));
+          // A level with parents at different distances sits beside its outer parents instead of beyond them,
+          // which keeps the edge from its inner parents short.
+          const beside = edge.source === treeParent.get(node.id)
+            ? 0
+            : Math.min(LEVEL_GAP, (radius.get(edge.source) ?? 0) - nearest);
+          distance = Math.max(distance, start + lengthOf(edge) - beside);
         }
+        // a fact that is placed like a level is a box as well
+        if (node.type === 'FACT')
+          distance += borderDistance(node, Math.cos(direction), Math.sin(direction));
         radius.set(node.id, distance || (radius.get(treeParent.get(node.id) ?? '') ?? 0) + LEVEL_GAP);
       }
 
@@ -611,6 +764,16 @@ export function placeTrees(nodes: LayoutNode[], links: LayoutLink[]): void {
             }
             own = Math.max(own, 2 * Math.atan((labelExtent + 10 + room) / 2 / (distance || 1)));
           }
+          // the lines of a lens of parallel edges leave the parent to the sides and carry their descriptions there
+          const lens = (incoming.get(nodeId) ?? []).filter(edge => edge.source === parent && edge.parallelOffset);
+          if (parent && lens.length > 0) {
+            const textWidth = Math.max(0, ...lens.map(edge => (edge.label?.length ?? 0) * LABEL_CHAR_WIDTH + 6));
+            const labelExtent = direction === undefined
+              ? textWidth
+              : textWidth * Math.abs(Math.sin(direction)) + 2 * LABEL_BOX_HALF_HEIGHT * Math.abs(Math.cos(direction));
+            const distance = ((radius.get(parent) ?? 0) + (radius.get(nodeId) ?? 0)) / 2;
+            own = Math.max(own, 2 * Math.atan((2 * bulgeOf(lens[0]) + labelExtent + 10 + room) / 2 / (distance || 1)));
+          }
         }
         const result = Math.max(own, kidsOf(nodeId).reduce((sum, kid) => sum + measure(kid), 0) + loopWindowOf(nodeId));
         width.set(nodeId, result);
@@ -630,16 +793,23 @@ export function placeTrees(nodes: LayoutNode[], links: LayoutLink[]): void {
           start += kidWidth;
         });
       };
-      // the room that is left around the root is shared equally between its children
+      // the room that is left around the root is shared equally between its children; branches that meet in a
+      // common level stay next to each other
       const kids = kidsOf(root.id);
       const squeeze = total > 2 * Math.PI ? (2 * Math.PI) / total : 1;
-      const slack = Math.max(0, 2 * Math.PI - total) / Math.max(1, kids.length);
-      let cursor = kids.length > 0 ? -((width.get(kids[0]) ?? 0) * squeeze + slack) / 2 : 0;
-      for (const kid of kids) {
-        const sector = (width.get(kid) ?? 0) * squeeze + slack;
-        assign(kid, cursor + sector / 2);
-        cursor += sector;
-      }
+      const loose = kids.map((kid, index) => !joined.has(`${kid}|${kids[(index + 1) % kids.length]}`));
+      const slack = Math.max(0, 2 * Math.PI - total) / Math.max(1, loose.filter(Boolean).length);
+      const before = (index: number) => loose[(index + kids.length - 1) % kids.length] ? slack / 2 : 0;
+      const after = (index: number) => loose[index] ? slack / 2 : 0;
+      // a fact that is placed like a level lies on the left; the first child lies exactly in that direction
+      const first = centers.has(root.id) ? Math.PI : 0;
+      let end = first;
+      kids.forEach((kid, index) => {
+        const sector = (width.get(kid) ?? 0) * squeeze;
+        const center = index === 0 ? first : end + before(index) + sector / 2;
+        assign(kid, center);
+        end = center + sector / 2 + after(index);
+      });
 
       for (const node of members) {
         const distance = radius.get(node.id) ?? 0;
@@ -682,16 +852,39 @@ export function placeTrees(nodes: LayoutNode[], links: LayoutLink[]): void {
         const target = byId.get(edge.target)!;
         return edgeCrossesBox(source, target, edge.parallelOffset, box);
       };
+      // An edge that joins a level from another branch passes that branch. When something is in its way, both of
+      // its ends move outwards, beyond what lies between the branches. Past the children of its own ends the edge
+      // gets by when the joined level moves aside.
+      const joins = (edge: TreeEdge) => treeParent.get(edge.target) !== edge.source;
+      const detoured = new Set<TreeEdge>();
+      const aside = new Set<TreeEdge>();
+      const avoid = (edge: TreeEdge, obstacle: string) => {
+        const path = pathToRoot(obstacle);
+        if (path.includes(edge.source) || path.includes(edge.target))
+          aside.add(edge);
+        else
+          detoured.add(edge);
+      };
+      const lineOf = (edge: TreeEdge) => edgePoints(byId.get(edge.source)!, byId.get(edge.target)!, edge.parallelOffset);
+      const crossingEdges = (edge: TreeEdge) => {
+        const line = lineOf(edge);
+        return treeEdges.filter(other => (other.source !== edge.source || other.target !== edge.target)
+          && edgesCross(line, lineOf(other), [edge.source, edge.target, other.source, other.target].map(nodeId => byId.get(nodeId)!)));
+      };
       for (const edge of treeEdges) {
         const source = byId.get(edge.source)!;
         const target = byId.get(edge.target)!;
-        if (members.some(node => node !== source && node !== target && crossing(edge, nodeBounds(node, 4))))
+        const inTheWay = members.filter(node => node !== source && node !== target && crossing(edge, nodeBounds(node, 4)));
+        if (joins(edge)) {
+          inTheWay.forEach(node => avoid(edge, node.id));
+          crossingEdges(edge).forEach(other => avoid(edge, other.target));
+        } else if (inTheWay.length > 0)
           crowded.add(edge.source);
         // an edge starts and ends below the names of its own nodes, but most of it must be clear of them
         const middleX = ((source.x ?? 0) + (target.x ?? 0)) / 2;
         const middleY = ((source.y ?? 0) + (target.y ?? 0)) / 2;
-        if (segmentCrossesBox(middleX, middleY, target.x ?? 0, target.y ?? 0, nodeBounds(source))
-          || segmentCrossesBox(source.x ?? 0, source.y ?? 0, middleX, middleY, nodeBounds(target)))
+        if (target.type !== 'FACT' && (segmentCrossesBox(middleX, middleY, target.x ?? 0, target.y ?? 0, nodeBounds(source))
+          || segmentCrossesBox(source.x ?? 0, source.y ?? 0, middleX, middleY, nodeBounds(target))))
           crowded.add(edge.source);
         for (const label of labels) {
           if (label.edge !== edge && crossing(edge, label.box))
@@ -718,6 +911,12 @@ export function placeTrees(nodes: LayoutNode[], links: LayoutLink[]): void {
           blocked.add(second);
         }
       }));
+      // the outer lines of a lens of parallel edges need room to the sides, where they would cross other edges
+      const squeezed = new Set<TreeEdge>();
+      for (const edge of treeEdges) {
+        if (edge.parallelOffset && crossingEdges(edge).length > 0)
+          squeezed.add(edge);
+      }
       labels.forEach((label, index) => {
         for (const node of members) {
           if (!intersects(label.box, nodeBounds(node, 1)))
@@ -805,10 +1004,16 @@ export function placeTrees(nodes: LayoutNode[], links: LayoutLink[]): void {
         const center = edgeLabelCenter(edge, source, target, shiftOf(edge));
         const deltaX = (target.x ?? 0) - (source.x ?? 0);
         const deltaY = (target.y ?? 0) - (source.y ?? 0);
-        const besideEdge = Math.abs((center.x - (source.x ?? 0)) * deltaY - (center.y - (source.y ?? 0)) * deltaX)
-          / (Math.hypot(deltaX, deltaY) || 1) > 1;
+        const length = Math.hypot(deltaX, deltaY) || 1;
+        // the description of a curved edge lies on the curve
+        const fraction = ((center.x - (source.x ?? 0)) * deltaX + (center.y - (source.y ?? 0)) * deltaY) / length ** 2;
+        const curve = (edge.parallelOffset ?? 0) * 4 * fraction * (1 - fraction);
+        const besideEdge = Math.abs(((center.y - (source.y ?? 0)) * deltaX - (center.x - (source.x ?? 0)) * deltaY)
+          / length - curve) > 1;
         if (besideEdge)
           cramped.add(edge);
+        else if (edge.parallelOffset)
+          squeezed.add(edge);
         else if (edge.label && slide(edge))
           changed = true;
         else if ((extraRoom.get(edge) ?? 0) < MAX_EXTRA_ROOM) {
@@ -817,6 +1022,25 @@ export function placeTrees(nodes: LayoutNode[], links: LayoutLink[]): void {
         }
       }
 
+      for (const edge of aside) {
+        if ((extraRoom.get(edge) ?? 0) < MAX_EXTRA_ROOM)
+          squeezed.add(edge);
+        else
+          crowded.add(edge.source);
+      }
+      for (const edge of squeezed) {
+        if ((extraRoom.get(edge) ?? 0) >= MAX_EXTRA_ROOM)
+          continue;
+        extraRoom.set(edge, (extraRoom.get(edge) ?? 0) + 16);
+        changed = true;
+      }
+      for (const edge of detoured) {
+        cramped.add(edge);
+        for (const other of incoming.get(edge.source) ?? []) {
+          if (other.source === treeParent.get(edge.source))
+            cramped.add(other);
+        }
+      }
       for (const source of crowded) {
         const current = gapOf(source);
         if (current >= MAX_GAP)
@@ -837,14 +1061,15 @@ export function placeTrees(nodes: LayoutNode[], links: LayoutLink[]): void {
     // the first passes only settle the directions, which the distances from the root box depend on
     for (let pass = 0; pass < REPAIR_PASSES; pass++) {
       const total = place();
-      if (!repair(total) && pass >= 2)
+      if (!repair(total) && !lensMoved && pass >= 2)
         break;
     }
     const loopBounds = treeLoops.map(loop => selfLoopShape(loop.source as LayoutNode, links, loop.label,
       loop.parallelOffset).bounds);
     return {members, loopBounds};
   });
-  edges.forEach(edge => edge.link.labelShift = shiftOf(edge));
+  // the connections of a fact that were turned around for the layout are measured from their other end
+  edges.forEach(edge => edge.link.labelShift = turned.has(edge) ? -shiftOf(edge) : shiftOf(edge));
 
   // several trees are arranged in a grid that roughly matches the aspect ratio of the canvas
   const boxes = trees.map(({members, loopBounds}) => ({

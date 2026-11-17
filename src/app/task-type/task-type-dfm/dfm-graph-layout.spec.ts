@@ -27,10 +27,10 @@ const MINIMUM_READABLE_SCALE = 0.4;
 // the canvas has a fixed size, so very large models are fitted smaller and are meant to be read by zooming in
 const MINIMUM_SCALE_BY_SCENARIO: Record<string, number> = {'large-model': 0.25};
 const VIEWPORT = {width: 900, height: 600, margin: 48};
-// longest edge in the fixtures; guards against the layout getting looser
+// longest edge in most fixtures is about 310 units; guards against the layout getting looser
 const MAXIMUM_EDGE_LENGTH = 360;
-// a cross-dimensional attribute joins branches that lie on opposite sides of the fact, so its edge is longer
-const MAXIMUM_EDGE_LENGTH_BY_SCENARIO: Record<string, number> = {'shared-and-cross-hierarchies': 500};
+// professorEmployeeNo has ten children; the edges to the outermost of them span half of that wide fan
+const MAXIMUM_EDGE_LENGTH_BY_SCENARIO: Record<string, number> = {'modell-7-thesis': 400};
 
 // Random models find layout problems that hand-written fixtures miss. The seeds are fixed, so a failure can be
 // reproduced. DFM_LAYOUT_SEEDS=61-260 checks other models, DFM_LAYOUT_REPORT=1 prints the findings of every model
@@ -89,10 +89,8 @@ function layoutFindings(graph: DfmGraph) {
   // a description on the line of another edge is easily read as belonging to that edge
   const labelsOnForeignEdges = labels.flatMap(label => segments
     .filter(link => link !== label.link)
-    .filter(link => {
-      const [source, target] = ends(link);
-      return segmentCrossesBox(source.x!, source.y!, target.x!, target.y!, label);
-    })
+    .filter(link => edgeSegments(link).some(segment =>
+      segmentCrossesBox(segment.x1, segment.y1, segment.x2, segment.y2, label)))
     .map(link => `${label.text} on ${ends(link).map(node => node.label).join(' -> ')}`));
   const loopsCoveringNodes = links.filter(isSelfLink).flatMap(link => {
     const level = link.source as LayoutNode;
@@ -107,8 +105,8 @@ function layoutFindings(graph: DfmGraph) {
 
   return {
     overlappingNodes: overlappingNodes(nodes),
-    edgesCrossingNodes: edgesCrossingNodes(graph, nodes),
-    crossingEdges: edgesCrossingEachOther(graph, nodes),
+    edgesCrossingNodes: edgesCrossingNodes(nodes, links),
+    crossingEdges: edgesCrossingEachOther(nodes, links),
     labelsCoveredByNodes,
     overlappingLabels,
     labelsOnForeignEdges,
@@ -149,26 +147,46 @@ function segmentCrossesBox(x1: number, y1: number, x2: number, y2: number, box: 
     && maximum - minimum > 0.02;
 }
 
-function edgesCrossingNodes(graph: DfmGraph, nodes: LayoutNode[]): string[] {
-  const byId = new Map(nodes.map(node => [node.id, node]));
-  return graph.edges.flatMap(edge => {
-    const source = byId.get(edge.source)!;
-    const target = byId.get(edge.target)!;
-    return nodes
-      .filter(node => node !== source && node !== target)
-      .filter(node => segmentCrossesBox(source.x!, source.y!, target.x!, target.y!, nodeBounds(node)))
-      .map(node => `${source.label} -> ${target.label} crosses ${node.label}`);
+interface Segment {
+  x1: number;
+  y1: number;
+  x2: number;
+  y2: number;
+}
+
+// the line of an edge as it is drawn; parallel connections are curved
+function edgeSegments(link: LayoutLink): Segment[] {
+  const source = link.source as LayoutNode;
+  const target = link.target as LayoutNode;
+  if (!link.parallelOffset)
+    return [{x1: source.x!, y1: source.y!, x2: target.x!, y2: target.y!}];
+  const length = Math.hypot(target.x! - source.x!, target.y! - source.y!) || 1;
+  const px = -(target.y! - source.y!) / length, py = (target.x! - source.x!) / length;
+  const point = (t: number) => ({
+    x: source.x! + (target.x! - source.x!) * t + px * 4 * t * (1 - t) * link.parallelOffset!,
+    y: source.y! + (target.y! - source.y!) * t + py * 4 * t * (1 - t) * link.parallelOffset!
+  });
+  return Array.from({length: 24}, (_, index) => {
+    const from = point(index / 24), to = point((index + 1) / 24);
+    return {x1: from.x, y1: from.y, x2: to.x, y2: to.y};
   });
 }
 
-function edgesCrossingEachOther(graph: DfmGraph, nodes: LayoutNode[]): string[] {
-  const byId = new Map(nodes.map(node => [node.id, node]));
-  const segments = graph.edges.map(edge => {
-    const source = byId.get(edge.source)!;
-    const target = byId.get(edge.target)!;
-    return {name: `${source.label} -> ${target.label}`, x1: source.x!, y1: source.y!, x2: target.x!, y2: target.y!};
-  });
-  const crossing = (a: typeof segments[number], b: typeof segments[number]) => {
+function edgeName(link: LayoutLink): string {
+  return `${(link.source as LayoutNode).label} -> ${(link.target as LayoutNode).label}`;
+}
+
+function edgesCrossingNodes(nodes: LayoutNode[], links: LayoutLink[]): string[] {
+  return links.filter(link => !isSelfLink(link)).flatMap(link => nodes
+    .filter(node => node !== link.source && node !== link.target)
+    .filter(node => edgeSegments(link).some(segment =>
+      segmentCrossesBox(segment.x1, segment.y1, segment.x2, segment.y2, nodeBounds(node))))
+    .map(node => `${edgeName(link)} crosses ${node.label}`));
+}
+
+function edgesCrossingEachOther(nodes: LayoutNode[], links: LayoutLink[]): string[] {
+  const edges = links.filter(link => !isSelfLink(link)).map(link => ({link, segments: edgeSegments(link)}));
+  const crossing = (a: Segment, b: Segment, curved: boolean) => {
     const rx = a.x2 - a.x1;
     const ry = a.y2 - a.y1;
     const sx = b.x2 - b.x1;
@@ -180,13 +198,23 @@ function edgesCrossingEachOther(graph: DfmGraph, nodes: LayoutNode[]): string[] 
     const qy = b.y1 - a.y1;
     const t = (qx * sy - qy * sx) / denominator;
     const u = (qx * ry - qy * rx) / denominator;
-    return t > 0.03 && t < 0.97 && u > 0.03 && u < 0.97;
+    if (!curved)
+      return t > 0.03 && t < 0.97 && u > 0.03 && u < 0.97;
+    if (t < 0 || t > 1 || u < 0 || u > 1)
+      return false;
+    // nodes are drawn above the edges, so a crossing below a node is not visible
+    const x = a.x1 + t * rx, y = a.y1 + t * ry;
+    return !nodes.some(node => {
+      const box = nodeBounds(node);
+      return x >= box.left - 2 && x <= box.right + 2 && y >= box.top - 2 && y <= Math.min(box.bottom, node.y! + 12) + 2;
+    });
   };
-  return segments.flatMap((first, index) => segments.slice(index + 1)
-    .filter(second => crossing(first, second))
-    .map(second => `${first.name} x ${second.name}`));
+  return edges.flatMap((first, index) => edges.slice(index + 1)
+    .filter(second => first.link.source !== second.link.source || first.link.target !== second.link.target)
+    .filter(second => first.segments.some(a => second.segments.some(b =>
+      crossing(a, b, first.segments.length > 1 || second.segments.length > 1))))
+    .map(second => `${edgeName(first.link)} x ${edgeName(second.link)}`));
 }
-
 describe('DFM graph layout', () => {
   Object.entries(scenarios).forEach(([name, graph]) => {
     describe(name, () => {
@@ -195,15 +223,18 @@ describe('DFM graph layout', () => {
       });
 
       it('should not route edges through other nodes', () => {
-        expect(edgesCrossingNodes(graph, layout(graph))).toEqual([]);
+        const {nodes, links} = layoutWithLinks(graph);
+        expect(edgesCrossingNodes(nodes, links)).toEqual([]);
       });
 
       it('should not cross edges', () => {
-        expect(edgesCrossingEachOther(graph, layout(graph))).toEqual([]);
+        const {nodes, links} = layoutWithLinks(graph);
+        expect(edgesCrossingEachOther(nodes, links)).toEqual([]);
       });
 
       it('should stay readable when fitted into the viewport', () => {
-        const bounds = graphBounds(layout(graph));
+        const {nodes, links} = layoutWithLinks(graph);
+        const bounds = graphBounds(nodes, links);
         const scale = Math.min(
           (VIEWPORT.width - VIEWPORT.margin * 2) / (bounds.right - bounds.left),
           (VIEWPORT.height - VIEWPORT.margin * 2) / (bounds.bottom - bounds.top),
