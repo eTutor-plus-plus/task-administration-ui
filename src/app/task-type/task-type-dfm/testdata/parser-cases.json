@@ -20,8 +20,18 @@
     "valid": true
   },
   {
-    "name": "dimension connected to two facts",
+    "name": "second fact",
+    "dfm": "fact A { x; };\nfact B { y; };\ndimension T { t - u; };\nA - T;\n",
+    "valid": false
+  },
+  {
+    "name": "second fact connected to a dimension",
     "dfm": "fact A { x; };\nfact B { y; };\ndimension T { t - u; };\nA - T;\nB - T;\n",
+    "valid": false
+  },
+  {
+    "name": "duplicate fact declarations",
+    "dfm": "fact A { x; };\nfact A { y; };\ndimension T { t - u; };\nA - T;\n",
     "valid": false
   },
   {
@@ -30,18 +40,8 @@
     "valid": true
   },
   {
-    "name": "duplicate dimension declarations used by two facts",
-    "dfm": "fact A { x; };\nfact B { y; };\ndimension T { t - u; };\ndimension T { t - u; };\nA - T;\nB - T;\n",
-    "valid": true
-  },
-  {
-    "name": "duplicate dimension declarations used three times",
-    "dfm": "fact A { x; };\nfact B { y; };\nfact C { z; };\ndimension T { t - u; };\ndimension T { t - u; };\nA - T;\nB - T;\nC - T;\n",
-    "valid": false
-  },
-  {
-    "name": "duplicate fact declarations",
-    "dfm": "fact A { x; };\nfact A { y; };\ndimension T { t - u; };\nA - T;\n",
+    "name": "duplicate dimension declarations used by one fact",
+    "dfm": "fact A { x; };\ndimension T { t - u; };\ndimension T { t - u; };\nA - T;\nA - T;\n",
     "valid": true
   },
   {
@@ -527,9 +527,15 @@
     "fragmentValid": true
   },
   {
-    "name": "two facts referencing the same hierarchy",
-    "dfm": "fact A { x; };\nfact B { y; };\nhierarchy h { a; };\ndimension d { {shared} h; };\ndimension e { {shared} h; };\nA - d;\nB - e;\n",
+    "name": "two dimensions of the fact referencing the same hierarchy with different roles",
+    "dfm": "fact A { x; };\nhierarchy h { a; };\ndimension d { {shared} h; };\ndimension e { {shared} h; };\nA -[first]- d;\nA -[second]- e;\n",
     "valid": true
+  },
+  {
+    "name": "two dimensions of the fact referencing the same hierarchy with identical connections",
+    "dfm": "fact A { x; };\nhierarchy h { a; };\ndimension d { {shared} h; };\ndimension e { {shared} h; };\nA - d;\nA - e;\n",
+    "valid": false,
+    "fragmentValid": true
   },
   {
     "name": "identical level connections count once",

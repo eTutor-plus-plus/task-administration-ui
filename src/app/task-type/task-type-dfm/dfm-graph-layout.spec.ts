@@ -292,12 +292,4 @@ describe('DFM graph layout', () => {
     expect(Math.abs(shape.labelX)).toBeLessThan(5);
     expect(shape.labelY).toBeLessThan(-40);
   });
-
-  it('should keep all facts apart', () => {
-    const nodes = layout(scenarios['three-facts-own-dimensions']);
-    const facts = nodes.filter(node => node.type === 'FACT');
-
-    expect(facts).toHaveLength(3);
-    expect(overlappingNodes(facts)).toEqual([]);
-  });
 });

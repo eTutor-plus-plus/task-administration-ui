@@ -79,7 +79,7 @@ interface DimensionDeclaration {
 
 class DfmSyntaxParser {
   private position = 0;
-  private readonly factNames = new Set<string>();
+  private factName: string | null = null;
   private readonly dimensions: DimensionDeclaration[] = [];
   private readonly hierarchyDeclarations = new Set<string>();
   private readonly hierarchyReferences: HierarchyReference[] = [];
@@ -119,7 +119,7 @@ class DfmSyntaxParser {
 
     // a connection belongs to the first dimension of that name without a fact, or to one of the same fact
     const resolved = this.connections.every(connection => {
-      if (!this.factNames.has(connection.fact))
+      if (connection.fact !== this.factName)
         return false;
       const dimension = this.dimensions.find(candidate => candidate.name === connection.dimension && candidate.owner === null)
         ?? this.dimensions.find(candidate => candidate.name === connection.dimension && candidate.owner === connection.fact);
@@ -144,7 +144,10 @@ class DfmSyntaxParser {
     if (name === null || !this.expect('{'))
       return false;
 
-    this.factNames.add(name);
+    // a model has at most one fact
+    if (this.factName !== null)
+      return false;
+    this.factName = name;
     while (!this.accept('}')) {
       if (this.accept('{') && (!this.takeWord() || !this.expect('}')))
         return false;

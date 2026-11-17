@@ -26,6 +26,10 @@ describe('isValidDfmSyntax', () => {
     expect(isValidDfmSyntax('dimension d { x - {shared} h; };', {fragment: true})).toBe(false);
   });
 
+  it('should reject a second fact in a fragment', () => {
+    expect(isValidDfmSyntax('fact A { x; }; fact B { y; };', {fragment: true})).toBe(false);
+  });
+
   it.each([
     ['a missing semicolon after a fact', 'fact A { x; }\n'],
     ['an unclosed fact', 'fact A { x;\n'],
@@ -33,6 +37,8 @@ describe('isValidDfmSyntax', () => {
     ['a connection from an unknown fact', 'dimension B { b - c; };\nA - B;\n'],
     ['a connection without declarations', 'A - B;\n'],
     ['an unexpected character', 'fact A { x; };\ndimension T { t # u; };\nA - T;\n'],
+    ['a second fact', 'fact A { x; };\nfact B { y; };\n'],
+    ['a second fact with the same name', 'fact A { x; };\nfact A { y; };\n'],
     ['empty input', ''],
     ['whitespace only', '  \n '],
   ])('should reject %s', (_, source) => {
