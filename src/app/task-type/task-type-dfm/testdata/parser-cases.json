@@ -306,12 +306,12 @@
   },
   {
     "name": "valid cross-dimensional attribute",
-    "dfm": "fact A { x; };\nhierarchy VAT { VAT - vatClass; };\nhierarchy city { city - country - {cross} VAT; };\ndimension city { {shared} city; };\ndimension product { product - category - {cross} VAT; };\nA - city;\nA - product;\n",
+    "dfm": "fact A { x; };\nhierarchy VAT { VAT - vatClass; };\nhierarchy city { city - country - {cross} VAT; };\ndimension city { {shared} city; };\ndimension customer { customer - {shared} city; };\ndimension product { product - category - {cross} VAT; };\nA - city;\nA - customer;\nA - product;\n",
     "valid": true
   },
   {
     "name": "reference before the declaration",
-    "dfm": "dimension d { x - {shared} h; };\nhierarchy h { a - b; };\n",
+    "dfm": "dimension d { x - {shared} h; y - {shared} h; };\nhierarchy h { a - b; };\n",
     "valid": true
   },
   {
@@ -321,17 +321,17 @@
   },
   {
     "name": "hierarchy and dimension with the same name",
-    "dfm": "hierarchy city { city - country; };\ndimension city { {shared} city; };\n",
+    "dfm": "fact A { x; };\nhierarchy city { city - country; };\ndimension city { {shared} city; };\ndimension customer { customer - {shared} city; };\nA - city;\nA - customer;\n",
     "valid": true
   },
   {
     "name": "hierarchy keyword and markers in upper case",
-    "dfm": "HIERARCHY h { a; };\nHIERARCHY g { b; };\ndimension d { x - {SHARED} h; y - {Cross} g; };\n",
+    "dfm": "HIERARCHY h { a; };\nHIERARCHY g { b; };\ndimension d { x - {SHARED} h; y - {Cross} g; z - {shared} h; w - {cross} g; };\n",
     "valid": true
   },
   {
     "name": "optional connection to a reference",
-    "dfm": "hierarchy h { a; };\ndimension d { x (-) {shared} h; };\n",
+    "dfm": "hierarchy h { a; };\ndimension d { x (-) {shared} h; y - {shared} h; };\n",
     "valid": true
   },
   {
@@ -356,12 +356,12 @@
   },
   {
     "name": "multiple connection to equally named shared hierarchy",
-    "dfm": "hierarchy x { x; }; dimension d { x =[role]= {shared} x; };",
+    "dfm": "hierarchy x { x; }; dimension d { x =[role]= {shared} x; y - {shared} x; };",
     "valid": true
   },
   {
     "name": "described connection to a reference",
-    "dfm": "hierarchy h { a; };\ndimension d { x -[role]-> {shared} h; };\n",
+    "dfm": "hierarchy h { a; };\ndimension d { x -[role]-> {shared} h; y - {shared} h; };\n",
     "valid": true
   },
   {
@@ -376,12 +376,12 @@
   },
   {
     "name": "hierarchy referencing another hierarchy",
-    "dfm": "hierarchy h { a - {cross} g; };\nhierarchy g { b - c; };\n",
+    "dfm": "hierarchy h { a - {cross} g; a - c - {cross} g; };\nhierarchy g { b - c; };\n",
     "valid": true
   },
   {
     "name": "hierarchies referencing a common hierarchy",
-    "dfm": "hierarchy t { t; };\nhierarchy a { a - {cross} t; };\nhierarchy b { b - {cross} t; };\nhierarchy r { r - {cross} a; r - {cross} b; };\n",
+    "dfm": "hierarchy t { t; };\nhierarchy a { a - {cross} t; };\nhierarchy b { b - {cross} t; };\nhierarchy r { r - {cross} a; r - {cross} b; };\nhierarchy s { s - {cross} a; s - {cross} b; };\n",
     "valid": true
   },
   {
@@ -468,6 +468,74 @@
     "name": "optional reference level",
     "dfm": "hierarchy h { a; };\ndimension d { x - ({shared} h); };\n",
     "valid": false
+  },
+  {
+    "name": "shared hierarchy referenced only once",
+    "dfm": "hierarchy h { a; };\ndimension d { x - {shared} h; };\n",
+    "valid": false,
+    "fragmentValid": true
+  },
+  {
+    "name": "cross attribute referenced only once",
+    "dfm": "hierarchy h { a; };\ndimension d { x - {cross} h; };\n",
+    "valid": false,
+    "fragmentValid": true
+  },
+  {
+    "name": "hierarchy referenced only once by another hierarchy",
+    "dfm": "hierarchy h { a; };\nhierarchy g { b - {cross} h; };\n",
+    "valid": false,
+    "fragmentValid": true
+  },
+  {
+    "name": "hierarchy referenced once in a dimension and once in a hierarchy",
+    "dfm": "hierarchy h { a; };\nhierarchy g { b - {cross} h; };\ndimension d { x - {cross} h; };\n",
+    "valid": true
+  },
+  {
+    "name": "hierarchy referenced twice in one dimension",
+    "dfm": "hierarchy h { a; };\ndimension d { x - {shared} h; y - {shared} h; };\n",
+    "valid": true
+  },
+  {
+    "name": "one reference connected twice with different roles from the fact",
+    "dfm": "fact A { x; };\nhierarchy h { a; };\ndimension d { {shared} h; };\nA -[shipping]- d;\nA -[billing]- d;\n",
+    "valid": true
+  },
+  {
+    "name": "one reference connected once from the fact",
+    "dfm": "fact A { x; };\nhierarchy h { a; };\ndimension d { {shared} h; };\nA - d;\n",
+    "valid": false,
+    "fragmentValid": true
+  },
+  {
+    "name": "one reference connected twice with the same connection",
+    "dfm": "fact A { x; };\nhierarchy h { a; };\ndimension d { {shared} h; };\nA - d;\nA - d;\n",
+    "valid": false,
+    "fragmentValid": true
+  },
+  {
+    "name": "reference in a dimension without a fact connection",
+    "dfm": "hierarchy h { a; };\ndimension d { {shared} h; };\n",
+    "valid": false,
+    "fragmentValid": true
+  },
+  {
+    "name": "reference outside the first chain of a connected dimension",
+    "dfm": "fact A { x; };\nhierarchy h { a; };\ndimension d { x; {shared} h; };\nA - d;\n",
+    "valid": false,
+    "fragmentValid": true
+  },
+  {
+    "name": "two facts referencing the same hierarchy",
+    "dfm": "fact A { x; };\nfact B { y; };\nhierarchy h { a; };\ndimension d { {shared} h; };\ndimension e { {shared} h; };\nA - d;\nB - e;\n",
+    "valid": true
+  },
+  {
+    "name": "identical level connections count once",
+    "dfm": "hierarchy h { a; };\ndimension d { x - {shared} h; x - {shared} h; };\n",
+    "valid": false,
+    "fragmentValid": true
   },
   {
     "name": "hierarchy without name",

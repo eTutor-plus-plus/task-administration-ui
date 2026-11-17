@@ -184,7 +184,7 @@ describe('DfmGraphComponent', () => {
     fixture.detectChanges();
 
     const element: HTMLElement = fixture.nativeElement;
-    const loop = element.querySelector('path.dfm-edge')!;
+    const loop = element.querySelector('path.dfm-edge[marker-end]')!;
     const node = element.querySelector('.dfm-node.shared')!;
     const number = /-?\d*\.?\d+(?:e[-+]?\d+)?/gi;
     const coordinates = (loop.getAttribute('d')!.match(number) ?? []).map(Number);

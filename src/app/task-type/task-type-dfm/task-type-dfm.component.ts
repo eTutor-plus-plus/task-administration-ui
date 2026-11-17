@@ -140,7 +140,7 @@ export class TaskTypeDfmComponent extends TaskTypeFormComponent<TaskTypeForm> im
       subtree: new FormControl<string | null>(value?.subtree ?? '', [
         this.nonBlankValidator,
         Validators.maxLength(5000),
-        this.dfmSyntaxValidator
+        this.dfmFragmentSyntaxValidator
       ]),
       partialSolution: new FormControl<boolean | null>(value?.partialSolution ?? false),
       allowIncorrectFactClass: new FormControl<boolean | null>(value?.allowIncorrectFactClass ?? false)
@@ -155,6 +155,14 @@ export class TaskTypeDfmComponent extends TaskTypeFormComponent<TaskTypeForm> im
     if (typeof value !== 'string' || value.trim().length === 0)
       return null;
     return isValidDfmSyntax(value) ? null : {dfmSyntax: true};
+  };
+
+  // an evaluation criterion is a part of a model, so it may reference a hierarchy only once
+  private readonly dfmFragmentSyntaxValidator: ValidatorFn = (control: AbstractControl): ValidationErrors | null => {
+    const value = control.value;
+    if (typeof value !== 'string' || value.trim().length === 0)
+      return null;
+    return isValidDfmSyntax(value, {fragment: true}) ? null : {dfmSyntax: true};
   };
 
   private pointsTotalValidator(): ValidatorFn {

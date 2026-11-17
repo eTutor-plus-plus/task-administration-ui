@@ -150,6 +150,29 @@ describe('TaskTypeDfmComponent', () => {
     expect(component.evaluationCriteria.at(0).controls.subtree.hasError('dfmSyntax')).toBe(true);
   });
 
+  it('should require a hierarchy to be referenced twice in the solution but not in a criterion', () => {
+    const singleReference = 'hierarchy h { a; }; dimension d { x - {shared} h; };';
+    component.form.controls.solution.setValue(singleReference);
+    expect(component.form.controls.solution.hasError('dfmSyntax')).toBe(true);
+
+    component.form.controls.solution.setValue(
+      'hierarchy h { a; }; dimension d { x - {shared} h; y - {shared} h; };'
+    );
+    expect(component.form.controls.solution.valid).toBe(true);
+
+    component.formData = {
+      solution: 'fact Sales { amount };',
+      evaluationCriteria: [{
+        name: 'Hierarchy',
+        points: 10,
+        subtree: singleReference,
+        partialSolution: false,
+        allowIncorrectFactClass: false
+      }]
+    };
+    expect(component.evaluationCriteria.at(0).controls.subtree.hasError('dfmSyntax')).toBe(false);
+  });
+
   it('should reject whitespace-only criterion names and submodels', () => {
     component.formData = {
       solution: 'fact Sales { amount };',

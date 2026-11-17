@@ -23,13 +23,17 @@ const WHITESPACE_PATTERN = new RegExp(`^${WHITESPACE}$`, 'u');
 const COMMENT_PATTERN = new RegExp(`^${COMMENT}$`, 'u');
 const SUPPLEMENTARY_CHARACTER = /[\u{10000}-\u{10FFFF}]/u;
 
-export function isValidDfmSyntax(source: string): boolean {
+/**
+ * Mirrors DfmParser.parse. With `fragment`, it mirrors DfmParser.parseFragment, which is used for parts of a model
+ * (evaluation criteria) and accepts a referenced hierarchy with fewer than two incoming connections.
+ */
+export function isValidDfmSyntax(source: string, options: {fragment?: boolean} = {}): boolean {
   if (!source.trim())
     return false;
 
   const tokens = tokenize(source);
   // comment-only input contains no declarations and is rejected like empty input
-  return tokens !== null && tokens.length > 1 && new DfmSyntaxParser(tokens).parse();
+  return tokens !== null && tokens.length > 1 && new DfmSyntaxParser(tokens, !options.fragment).parse();
 }
 
 function tokenize(source: string): Token[] | null {
@@ -62,16 +66,28 @@ function tokenize(source: string): Token[] | null {
 }
 
 // Keep this grammar aligned with the DfmParser used by the DFM task app.
+// A shared hierarchy or cross-dimensional attribute joins several branches: in a complete model every referenced
+// hierarchy needs at least MIN_CONNECTIONS incoming connections. They are counted like the edges of the graph.
+const MIN_CONNECTIONS = 2;
+
+interface DimensionDeclaration {
+  name: string;
+  // the hierarchy the first chain consists of, if that chain is a single reference; the fact connects to it
+  firstChainReference: string | null;
+  owner: string | null;
+}
+
 class DfmSyntaxParser {
   private position = 0;
   private readonly factNames = new Set<string>();
-  // number of declarations per name
-  private readonly dimensionDeclarations = new Map<string, number>();
+  private readonly dimensions: DimensionDeclaration[] = [];
   private readonly hierarchyDeclarations = new Set<string>();
   private readonly hierarchyReferences: HierarchyReference[] = [];
-  private readonly connections: Array<{fact: string; dimension: string}> = [];
+  // a connection from a level to a reference; identical connections yield one edge
+  private readonly levelConnections: Array<{target: string; key: string}> = [];
+  private readonly connections: Array<{fact: string; dimension: string; descriptor: string}> = [];
 
-  constructor(private readonly tokens: Token[]) {
+  constructor(private readonly tokens: Token[], private readonly complete: boolean) {
   }
 
   parse(): boolean {
@@ -96,19 +112,31 @@ class DfmSyntaxParser {
     if (!this.resolveHierarchyReferences())
       return false;
 
-    const owners = new Map<string, string[]>();
-    return this.connections.every(connection => {
-      const count = this.dimensionDeclarations.get(connection.dimension) ?? 0;
-      if (!this.factNames.has(connection.fact) || count === 0)
+    const incoming = new Map<string, Set<string>>();
+    const addIncoming = (hierarchy: string, key: string) =>
+      incoming.set(hierarchy, (incoming.get(hierarchy) ?? new Set<string>()).add(key));
+    this.levelConnections.forEach(({target, key}) => addIncoming(target, key));
+
+    // a connection belongs to the first dimension of that name without a fact, or to one of the same fact
+    const resolved = this.connections.every(connection => {
+      if (!this.factNames.has(connection.fact))
         return false;
-      const assigned = owners.get(connection.dimension) ?? [];
-      if (assigned.length < count) {
-        assigned.push(connection.fact);
-        owners.set(connection.dimension, assigned);
-        return true;
-      }
-      return assigned.includes(connection.fact);
+      const dimension = this.dimensions.find(candidate => candidate.name === connection.dimension && candidate.owner === null)
+        ?? this.dimensions.find(candidate => candidate.name === connection.dimension && candidate.owner === connection.fact);
+      if (!dimension)
+        return false;
+      dimension.owner = connection.fact;
+      if (dimension.firstChainReference !== null)
+        addIncoming(dimension.firstChainReference, `fact|${connection.fact}|${connection.descriptor}`);
+      return true;
     });
+    return resolved && this.hasEnoughConnections(incoming);
+  }
+
+  private hasEnoughConnections(incoming: Map<string, Set<string>>): boolean {
+    if (!this.complete)
+      return true;
+    return this.hierarchyReferences.every(reference => (incoming.get(reference.name)?.size ?? 0) >= MIN_CONNECTIONS);
   }
 
   private parseFact(): boolean {
@@ -134,13 +162,20 @@ class DfmSyntaxParser {
     if (name === null || !this.expect('{'))
       return false;
 
-    this.dimensionDeclarations.set(name, (this.dimensionDeclarations.get(name) ?? 0) + 1);
+    const dimension: DimensionDeclaration = {name, firstChainReference: null, owner: null};
+    this.dimensions.push(dimension);
+    const container = `dimension:${this.dimensions.length}`;
     if (this.accept('}'))
       return true;
 
+    let first = true;
     while (true) {
-      if (this.parseHierarchy(null) === null)
+      const chain = this.parseHierarchy(null, container);
+      if (chain === null)
         return false;
+      if (first && chain.headIsReference)
+        dimension.firstChainReference = chain.head;
+      first = false;
       this.accept(';');
       if (this.accept('}'))
         return true;
@@ -158,7 +193,7 @@ class DfmSyntaxParser {
 
     let entry: string | null = null;
     while (!this.accept('}')) {
-      const chain = this.parseHierarchy(name);
+      const chain = this.parseHierarchy(name, `hierarchy:${name}`);
       if (chain === null || chain.head === null || chain.headIsReference)
         return false;
       if (entry !== null && entry !== chain.head)
@@ -174,11 +209,12 @@ class DfmSyntaxParser {
   }
 
   // returns null for invalid syntax; a {shared} or {cross} reference must end its chain and cannot be optional
-  private parseHierarchy(owner: string | null): {head: string | null; headIsReference: boolean} | null {
+  private parseHierarchy(owner: string | null, container: string): {head: string | null; headIsReference: boolean} | null {
     let head: string | null = null;
     let headIsReference = false;
     let previousName: string | null = null;
     let previousConnectionMultiple = false;
+    let previousConnection = '';
     while (!this.is(';') && !this.is('}')) {
       const optionalLevel = this.accept('(');
       let marker: string | null = null;
@@ -201,6 +237,8 @@ class DfmSyntaxParser {
         if (optionalLevel || (!this.is(';') && !this.is('}')))
           return null;
         this.hierarchyReferences.push({name, kind, owner});
+        if (previousName !== null)
+          this.levelConnections.push({target: name, key: `${container}|${previousName}|${previousConnection}`});
       }
       if (head === null) {
         head = name;
@@ -213,10 +251,12 @@ class DfmSyntaxParser {
       const optionalConnection = this.accept('(');
       previousName = name;
       previousConnectionMultiple = this.is('=');
-      if (!this.parseConnector())
+      const connector = this.parseConnector();
+      if (connector === null)
         return null;
       if (optionalConnection && !this.expect(')'))
         return null;
+      previousConnection = `${connector}|${optionalConnection}`;
     }
     return {head, headIsReference};
   }
@@ -250,19 +290,25 @@ class DfmSyntaxParser {
     return ![...this.hierarchyDeclarations].some(hasCycle);
   }
 
-  // a connector is '-', '=' or '->', or a described connection: '-[text]-', '=[text]=' or '-[text]->'
-  private parseConnector(): boolean {
+  // a connector is '-', '=' or '->', or a described connection: '-[text]-', '=[text]=' or '-[text]->';
+  // returns its type and description, or null for invalid syntax
+  private parseConnector(): string | null {
     if (this.accept('->'))
-      return true;
+      return 'CONVERGENCE|';
     const opening = this.is('-') ? '-' : this.is('=') ? '=' : null;
     if (opening === null)
-      return false;
+      return null;
     this.position++;
     if (!this.accept('['))
-      return true;
-    if (!this.takeWord() || !this.expect(']'))
-      return false;
-    return opening === '=' ? this.accept('=') : this.accept('-') || this.accept('->');
+      return `${opening === '=' ? 'MULTIPLE' : 'SIMPLE'}|`;
+    const label = this.takeWord();
+    if (!label || !this.expect(']'))
+      return null;
+    if (opening === '=')
+      return this.accept('=') ? `MULTIPLE|${label}` : null;
+    if (this.accept('-'))
+      return `SIMPLE|${label}`;
+    return this.accept('->') ? `CONVERGENCE|${label}` : null;
   }
 
   private parseConnection(): boolean {
@@ -273,14 +319,19 @@ class DfmSyntaxParser {
     const opening = this.accept('-') ? '-' : this.accept('=') ? '=' : null;
     if (opening === null)
       return false;
-    if (this.accept('[') && (!this.takeWord() || !this.expect(']') || !this.expect(opening)))
-      return false;
+    let label = '';
+    if (this.accept('[')) {
+      const text = this.takeWord();
+      if (!text || !this.expect(']') || !this.expect(opening))
+        return false;
+      label = text;
+    }
     if (optional && !this.expect(')'))
       return false;
     const dimension = this.takeWord();
     if (dimension === null)
       return false;
-    this.connections.push({fact, dimension});
+    this.connections.push({fact, dimension, descriptor: `${opening}|${label}|${optional}`});
     return true;
   }
 
