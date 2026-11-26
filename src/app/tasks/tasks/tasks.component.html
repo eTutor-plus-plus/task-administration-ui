@@ -9,6 +9,15 @@
   <ng-template pTemplate="caption">
     <div class="flex align-items-center justify-content-between">
       <p-button [label]="'common.new' | transloco" icon="pi pi-plus" (onClick)="create()"/>
+      <form class="p-inputgroup id-search" (ngSubmit)="searchById()">
+        <input pInputText type="number" min="1" step="1" [(ngModel)]="idSearch" name="idSearch" id="taskIdSearch"
+               [placeholder]="baseTranslationKey + 'searchById' | transloco"/>
+        @if (activeIdSearch !== null) {
+          <p-button type="button" icon="pi pi-times" severity="secondary" (onClick)="clearIdSearch()"
+                    [pTooltip]="baseTranslationKey + 'clearIdSearch' | transloco" tooltipPosition="top" [showDelay]="1000"/>
+        }
+        <p-button type="submit" icon="pi pi-search" [pTooltip]="'common.search' | transloco" tooltipPosition="top" [showDelay]="1000"/>
+      </form>
       <div>
         @if (role == 'ADMIN' || role == 'FULL_ADMIN') {
           <p-button [label]="'common.download' | transloco" icon="pi pi-download" (onClick)="download()" severity="info" class="mr-2"/>
@@ -42,10 +51,12 @@
         {{ baseTranslationKey + 'fields.status' | transloco }}
         <p-sortIcon field="status"/>
       </th>
-      <th pSortableColumn="examTask" class="col-examTask">
-        {{ baseTranslationKey + 'fields.examTask' | transloco }}
-        <p-sortIcon field="examTask"/>
-      </th>
+      @if (showExamTaskColumn) {
+        <th pSortableColumn="examTask" class="col-examTask">
+          {{ baseTranslationKey + 'fields.examTask' | transloco }}
+          <p-sortIcon field="examTask"/>
+        </th>
+      }
       <th class="col-actions"></th>
     </tr>
     <tr>
@@ -86,7 +97,9 @@
           </ng-template>
         </p-columnFilter>
       </th>
-
+      @if (showExamTaskColumn) {
+        <th></th>
+      }
       <th></th>
     </tr>
   </ng-template>
@@ -104,9 +117,11 @@
           {{ ('taskStatus.' + entity.status) | transloco }}
         </p-tag>
       </td>
-      <td>
-        <p-checkbox [binary]="true" [disabled]="false" (onChange)="examChanged()" />
-      </td>
+      @if (showExamTaskColumn) {
+        <td>
+          <p-checkbox [binary]="true" [disabled]="false" (onChange)="examChanged()" />
+        </td>
+      }
       <td>
         <span class="p-buttonset">
           @if (canEdit(entity)) {

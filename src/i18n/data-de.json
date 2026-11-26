@@ -145,6 +145,8 @@
   },
   "tasks": {
     "title": "Aufgaben",
+    "searchById": "Nach ID suchen",
+    "clearIdSearch": "ID-Suche zurücksetzen",
     "fields": {
       "title": "Name",
       "descriptionDe": "Beschreibung Deutsch",
@@ -166,6 +168,7 @@
     "errors": {
       "load": "Die Aufgaben konnten nicht geladen werden.",
       "loadSingle": "Die Aufgaben konnte nicht geladen werden.",
+      "idNotFound": "Es wurde keine Aufgabe mit der ID {{id}} gefunden.",
       "delete": "Die Aufgaben '{{name}}' konnte nicht gelöscht werden.",
       "create": "Die Aufgaben '{{name}}' konnte nicht erstellt werden.",
       "update": "Die Änderungen der Aufgaben '{{name}}' konnten nicht gespeichert werden.",
