@@ -40,6 +40,14 @@
         "submitDmlStatements": "INSERT INTO Statements (Submission)"
       }
     },
+    "trigger": {
+      "title": "SQL Databes Triggers",
+      "fields": {
+        "ddlStatements": "CREATE TABLE Statements",
+        "diagnoseDmlStatements": "INSERT INTO Statements before Diagnose (initiate schema)",
+        "submitDmlStatements": "INSERT INTO Statements before Submission (initiate schema)"
+          }
+    },
     "owl": {
       "title": "OWL",
       "fields": {

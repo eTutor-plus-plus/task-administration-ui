@@ -7,6 +7,7 @@ import { TaskTypeDroolsComponent } from './task-type-drools/task-type-drools.com
 import { TaskTypeSqlDdlComponent } from './task-type-sql-ddl/task-type-sql-ddl.component';
 import { TaskTypeAspComponent } from './task-type-asp/task-type-asp.component';
 import { TaskTypeSqlComponent } from './task-type-sql/task-type-sql.component';
+import { TaskTypeTriggerComponent } from './task-type-trigger/task-type-trigger.component';
 import { TaskTypeRelalgComponent } from './task-type-relalg/task-type-relalg.component';
 import { TaskTypeFanfComponent } from './task-type-fanf/task-type-fanf.component';
 import { TaskTypeUmlComponent } from './task-type-uml/task-type-uml.component';
@@ -89,6 +90,13 @@ return $d`,
       submissionTemplate: '',
       supportsDescriptionGeneration: false,
       submissionInputLanguage: 'sql'
+    }, {
+      name: 'trigger',
+      supportedTaskGroupTypes: ['trigger'],
+      component: TaskTypeTriggerComponent,
+      submissionTemplate: '',
+      supportsDescriptionGeneration: false,
+      submissionInputLanguage: 'trigger'
     }, {
       name: 'relalg',
       supportedTaskGroupTypes: ['sql'],

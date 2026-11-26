@@ -40,6 +40,14 @@
         "submitDmlStatements": "INSERT INTO Statements (Abgabe)"
       }
     },
+    "trigger": {
+      "title": "SQL Datenbank Trigger",
+      "fields": {
+        "ddlStatements": "CREATE TABLE Statements",
+        "diagnoseDmlStatements": "INSERT INTO Statements bevor Diagnose (Schema initialisieren)",
+        "submitDmlStatements": "INSERT INTO Statements bevor Abgabe (Schema initialisieren)"
+         }
+    },
     "owl": {
       "title": "OWL",
       "fields": {
