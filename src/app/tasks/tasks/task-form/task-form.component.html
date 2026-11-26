@@ -164,11 +164,26 @@
 
       <div formArrayName="taskCategoryIds">
         @for (f of form.controls.taskCategoryIds.controls; track $index) {
-          <div class="grid formgrid">
-            <div class="field col-11">
-              <p-treeSelect [formControl]="f" containerStyleClass="w-full" appendTo="body" [options]="taskCategories" [filter]="true"/>
+          <div class="grid formgrid" [formGroup]="f">
+            <div class="field col-12 md:col-5">
+              @if ($index === 0) {
+                <label [transloco]="baseTranslationKey + 'fields.taskCategory'"></label>
+              }
+              <p-treeSelect formControlName="category" containerStyleClass="w-full" appendTo="body" [options]="taskCategories" [filter]="true"/>
             </div>
-            <div class="field col-1">
+            <div class="field col-6 md:col-3">
+              @if ($index === 0) {
+                <label [transloco]="baseTranslationKey + 'fields.submitFeedbackLevel'"></label>
+              }
+              <p-dropdown formControlName="submitFeedbackLevel" [options]="feedbackLevels" optionValue="value" optionLabel="text" appendTo="body"/>
+            </div>
+            <div class="field col-6 md:col-3">
+              @if ($index === 0) {
+                <label [transloco]="baseTranslationKey + 'fields.diagnoseFeedbackLevel'"></label>
+              }
+              <p-dropdown formControlName="diagnoseFeedbackLevel" [options]="feedbackLevels" optionValue="value" optionLabel="text" appendTo="body"/>
+            </div>
+            <div class="field col-12 md:col-1 flex align-items-end">
               @if (role !== 'TUTOR' || !originalEntity || originalEntity.status !== 'APPROVED') {
                 <p-button icon="pi pi-trash" severity="danger" (onClick)="removeTaskCategory($index)"/>
               }

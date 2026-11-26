@@ -158,6 +158,9 @@
       "maxPoints": "Max. Points",
       "taskGroupId": "Task Group",
       "taskCategoryIds": "Task Categories",
+      "taskCategory": "Category",
+      "submitFeedbackLevel": "Feedback Level Submit",
+      "diagnoseFeedbackLevel": "Feedback Level Diagnose",
       "submitTest": "Test Task",
       "examTask": "Exam Task"
     },
