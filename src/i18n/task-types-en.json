@@ -210,6 +210,18 @@
 
       }
     },
+    "python": {
+      "title": "Python",
+      "fields": {
+        "solution": "Solution",
+        "checks": "Checks",
+        "packages": "Python Libraries",
+        "gradingVariables": "Grading Variables",
+        "availableLibraries": "Available Libraries",
+        "checksHint": "Note: In the checks, append the suffix _soll (for the sample solution) or _ist (for the student submission) to the respective grading variable.",
+        "submitData": "Submit Data",
+        "diagnoseData": "Diagnose Data"
+     },
     "clustering": {
       "title": "Clustering",
       "parameters": "Exercise generation parameters",
