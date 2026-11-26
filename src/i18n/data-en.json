@@ -145,6 +145,8 @@
   },
   "tasks": {
     "title": "Tasks",
+    "searchById": "Search by ID",
+    "clearIdSearch": "Clear ID search",
     "fields": {
       "title": "Name",
       "descriptionDe": "Description German",
@@ -167,6 +169,7 @@
     "errors": {
       "load": "The tasks could not be loaded.",
       "loadSingle": "The task could not be loaded.",
+      "idNotFound": "No task with ID {{id}} was found.",
       "delete": "The task '{{name}}' could not be deleted.",
       "create": "The task '{{name}}' could not be created.",
       "update": "The task '{{name}}' could not be updated.",
