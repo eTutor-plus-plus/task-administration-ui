@@ -11,6 +11,7 @@ import { TaskTypeTriggerComponent } from './task-type-trigger/task-type-trigger.
 import { TaskTypeRelalgComponent } from './task-type-relalg/task-type-relalg.component';
 import { TaskTypeFanfComponent } from './task-type-fanf/task-type-fanf.component';
 import { TaskTypeUmlComponent } from './task-type-uml/task-type-uml.component';
+import { TaskTypeMdxComponent } from './task-type-mdx/task-type-mdx.component';
 import { TaskTypePythonComponent } from './task-type-python/task-type-python.component';
 import { TaskTypeClusteringComponent } from './task-type-clustering/task-type-clustering.component';
 import { TaskTypeKnnComponent } from './task-type-knn/task-type-knn.component';
@@ -121,6 +122,14 @@ return $d`,
       supportsDescriptionGeneration: false,
       submissionInputLanguage: 'uml'
 
+    },
+    {
+      name: 'mdx',
+      supportedTaskGroupTypes: ['mdx'],
+      component: TaskTypeMdxComponent,
+      submissionTemplate: '',
+      supportsDescriptionGeneration: false,
+      submissionInputLanguage: 'mdx'
     },
     {
       name: 'python',

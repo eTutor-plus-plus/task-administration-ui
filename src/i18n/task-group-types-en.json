@@ -40,6 +40,15 @@
         "submitDmlStatements": "INSERT INTO Statements (Submission)"
       }
     },
+    "mdx": {
+      "title": "MDX",
+      "fields": {
+        "ddlStatements": "CREATE TABLE Statements",
+        "diagnoseDmlStatements": "INSERT INTO Statements (Diagnose)",
+        "submitDmlStatements": "INSERT INTO Statements (Submission)",
+        "submitOlapSchema": "OLAP Schema Definition XML"
+         }
+    },
     "trigger": {
       "title": "SQL Databes Triggers",
       "fields": {
