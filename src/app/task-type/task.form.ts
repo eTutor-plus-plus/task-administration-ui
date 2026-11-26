@@ -1,6 +1,15 @@
-import { FormArray, FormControl, UntypedFormGroup } from '@angular/forms';
+import { FormArray, FormControl, FormGroup, UntypedFormGroup } from '@angular/forms';
 import { TreeNode } from 'primeng/api';
 import { StatusEnum } from '../api';
+
+/**
+ * Form for a task category assignment of a task.
+ */
+export interface TaskCategoryForm {
+  category: FormControl<TreeNode | null>;
+  submitFeedbackLevel: FormControl<number | null>;
+  diagnoseFeedbackLevel: FormControl<number | null>;
+}
 
 /**
  * Form for tasks.
@@ -15,7 +24,7 @@ export interface TaskForm {
   taskType: FormControl<string | null>;
   status: FormControl<StatusEnum | null>;
   taskGroupId: FormControl<number | null>;
-  taskCategoryIds: FormArray<FormControl<TreeNode | null>>;
+  taskCategoryIds: FormArray<FormGroup<TaskCategoryForm>>;
   examTask: FormControl<boolean | null>;
   additionalData: UntypedFormGroup;
 }
