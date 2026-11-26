@@ -8,6 +8,7 @@ export * from './task-app.dto';
 export * from './task-category.dto';
 export * from './task-group.dto';
 export * from './task.dto';
+export * from './task-category-feedback-level.dto';
 
 export * from './task-group-details.dto';
 export * from './task-details.dto';

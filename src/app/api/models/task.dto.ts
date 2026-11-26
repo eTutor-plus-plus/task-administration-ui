@@ -1,3 +1,4 @@
+import { TaskCategoryFeedbackLevelDto } from './task-category-feedback-level.dto';
 import { Audited } from './audited.model';
 import { StatusEnum } from './task-status.enum';
 
@@ -56,6 +57,11 @@ export interface TaskDto extends Audited {
    * The IDs of the task categories.
    */
   taskCategoryIds?: Array<number>;
+
+  /**
+   * The feedback levels per task category.
+   */
+  taskCategoryFeedbackLevels?: Array<TaskCategoryFeedbackLevelDto>;
 
   /**
    * The user who approved the task.

@@ -30,7 +30,7 @@ import {
   TaskGroupService,
   TaskService
 } from '../../../api';
-import { TaskForm, TaskTypeRegistry } from '../../../task-type';
+import { TaskCategoryForm, TaskForm, TaskTypeRegistry } from '../../../task-type';
 import { TaskSubmissionComponent } from '../task-submission/task-submission.component';
 import { convertStringToSeverity } from '../../helpers';
 import { TaskAppTypeService } from '../../task-app-type.service';
@@ -102,6 +102,11 @@ export class TaskFormComponent extends EditFormComponent<TaskDto, TaskService, T
   taskCategories: TreeNode[];
 
   /**
+   * The available feedback levels.
+   */
+  feedbackLevels: { value: number, text: string }[];
+
+  /**
    * The role of the current user.
    */
   role: Role;
@@ -164,7 +169,7 @@ export class TaskFormComponent extends EditFormComponent<TaskDto, TaskService, T
       taskType: new FormControl<string | null>('none', [Validators.required, Validators.maxLength(100)]),
       status: new FormControl<StatusEnum | null>('DRAFT', [Validators.required]),
       taskGroupId: new FormControl<number | null>(null, []),
-      taskCategoryIds: new FormArray<FormControl<TreeNode | null>>([]),
+      taskCategoryIds: new FormArray<FormGroup<TaskCategoryForm>>([]),
       additionalData: new FormGroup<any>({}),
       examTask: new FormControl<boolean | null>(false, [Validators.required])
     }), 'tasks.');
@@ -180,6 +185,7 @@ export class TaskFormComponent extends EditFormComponent<TaskDto, TaskService, T
     this.types = [];
     this.statuses = [];
     this.difficulties = [];
+    this.feedbackLevels = [];
     this.availableTaskTypes = [];
     this.role = this.authService.user?.maxRole ?? 'TUTOR';
     this.currentLocale = this.translationService.getActiveLang();
@@ -258,11 +264,18 @@ export class TaskFormComponent extends EditFormComponent<TaskDto, TaskService, T
   }
 
   override modifyValueBeforeSend(data: Partial<{ [K in keyof TaskForm]: any }>, type: 'create' | 'update'): any {
+    const categories: { category: TreeNode | null, submitFeedbackLevel: number | null, diagnoseFeedbackLevel: number | null }[] =
+      (data.taskCategoryIds ?? []).filter((x: { category: TreeNode | null }) => !!x?.category);
     return {
       ...data,
       descriptionDe: data.descriptionDe ?? '',
       descriptionEn: data.descriptionEn ?? '',
-      taskCategoryIds: data.taskCategoryIds ? data.taskCategoryIds.map((x: TreeNode) => x.data) : []
+      taskCategoryIds: categories.map(x => x.category!.data),
+      taskCategoryFeedbackLevels: categories.map(x => ({
+        taskCategoryId: x.category!.data,
+        submitFeedbackLevel: x.submitFeedbackLevel ?? 0,
+        diagnoseFeedbackLevel: x.diagnoseFeedbackLevel ?? 0
+      }))
     };
   }
 
@@ -487,7 +500,11 @@ export class TaskFormComponent extends EditFormComponent<TaskDto, TaskService, T
    * Adds a new task category row to the form.
    */
   addTaskCategory(): void {
-    this.form.controls.taskCategoryIds.push(new FormControl<TreeNode | null>(null, []));
+    this.form.controls.taskCategoryIds.push(new FormGroup<TaskCategoryForm>({
+      category: new FormControl<TreeNode | null>(null, []),
+      submitFeedbackLevel: new FormControl<number | null>(0, [Validators.required, Validators.min(0), Validators.max(3)]),
+      diagnoseFeedbackLevel: new FormControl<number | null>(0, [Validators.required, Validators.min(0), Validators.max(3)])
+    }));
   }
 
   /**
@@ -527,6 +544,12 @@ export class TaskFormComponent extends EditFormComponent<TaskDto, TaskService, T
       {value: StatusEnum.DRAFT, text: this.translationService.translate('taskStatus.' + StatusEnum.DRAFT), disabled: false},
       {value: StatusEnum.READY_FOR_APPROVAL, text: this.translationService.translate('taskStatus.' + StatusEnum.READY_FOR_APPROVAL), disabled: false},
       {value: StatusEnum.APPROVED, text: this.translationService.translate('taskStatus.' + StatusEnum.APPROVED), disabled: this.role === 'TUTOR'}
+    ];
+    this.feedbackLevels = [
+      {value: 0, text: this.translationService.translate('feedbackLevel.0')},
+      {value: 1, text: this.translationService.translate('feedbackLevel.1')},
+      {value: 2, text: this.translationService.translate('feedbackLevel.2')},
+      {value: 3, text: this.translationService.translate('feedbackLevel.3')}
     ];
     this.difficulties = [
       {value: 1, text: this.translationService.translate('difficulty.1')},
@@ -673,22 +696,27 @@ export class TaskFormComponent extends EditFormComponent<TaskDto, TaskService, T
 
     // Patch form value (if original entity is set)
     if (this.originalEntity && this.originalEntity.taskCategoryIds) {
-      // Add form control for each task category
-      for (let i = 0; i < (this.originalEntity.taskCategoryIds.length ?? 0); i++) {
-        this.addTaskCategory();
-      }
+      const levels = this.originalEntity.taskCategoryFeedbackLevels ?? [];
 
-      // Patch form with nodes instead of task category ids
-      const nodes: TreeNode[] = (this.originalEntity.taskCategoryIds.flatMap(x => {
-        const result: TreeNode[] = [];
-        for (const node of this.taskCategories) {
-          const tmp = recursiveSearch(node, x);
-          if (tmp)
-            result.push(tmp);
+      // Add a form group for each task category (with the tree node instead of the task category id)
+      for (const id of this.originalEntity.taskCategoryIds) {
+        let node: TreeNode | null = null;
+        for (const root of this.taskCategories) {
+          node = recursiveSearch(root, id);
+          if (node)
+            break;
         }
-        return result;
-      }).filter(x => !!x).map(x => x!)) ?? [];
-      this.form.patchValue({taskCategoryIds: nodes});
+        if (!node)
+          continue;
+
+        const level = levels.find(x => x.taskCategoryId === id);
+        this.addTaskCategory();
+        this.form.controls.taskCategoryIds.at(this.form.controls.taskCategoryIds.length - 1).patchValue({
+          category: node,
+          submitFeedbackLevel: level?.submitFeedbackLevel ?? 0,
+          diagnoseFeedbackLevel: level?.diagnoseFeedbackLevel ?? 0
+        });
+      }
     }
   }
 
