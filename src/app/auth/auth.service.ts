@@ -4,7 +4,7 @@ import { Router } from '@angular/router';
 import { BehaviorSubject, firstValueFrom } from 'rxjs';
 import * as jose from 'jose';
 
-import { API_URL } from '../app.config';
+import { API_URL } from '../api-url.token';
 import { AuthTokenModel, Role, RoleAssignment, ApplicationUser } from './models';
 
 /**

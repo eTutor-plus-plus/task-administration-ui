@@ -1,6 +1,10 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
+import { provideTransloco } from '@ngneat/transloco';
+import { MonacoEditorModule } from 'ngx-monaco-editor-v2';
+
 import { DkeEditorComponent } from './dke-editor.component';
+import { translocoTestConfig } from '../../translation-loader.service.spec';
 
 describe('EditorComponent', () => {
   let component: DkeEditorComponent;
@@ -8,7 +12,8 @@ describe('EditorComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [DkeEditorComponent]
+      imports: [DkeEditorComponent, MonacoEditorModule.forRoot({})],
+      providers: [provideTransloco(translocoTestConfig)]
     })
     .compileComponents();
 

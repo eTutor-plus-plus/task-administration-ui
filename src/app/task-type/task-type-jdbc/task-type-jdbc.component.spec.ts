@@ -83,7 +83,7 @@ describe('TaskTypeJDBCComponent', () => {
     form.get('wrongOutputPenalty')?.setValue(-1);
     form.get('exceptionHandlingPenalty')?.setValue(-1);
     form.get('wrongDbContentPenalty')?.setValue(-1);
-    form.get('autocommitPenalty')?.enable();
+    form.get('checkAutocommit')?.setValue(true); // enables the penalty field and its validators
     form.get('autocommitPenalty')?.setValue(-1);
 
     fixture.detectChanges();
