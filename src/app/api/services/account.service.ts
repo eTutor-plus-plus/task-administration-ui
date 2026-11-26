@@ -1,7 +1,7 @@
 import { Inject, Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 
-import { API_URL } from '../../app.config';
+import { API_URL } from '../../api-url.token';
 
 /**
  * Service for account self-service.

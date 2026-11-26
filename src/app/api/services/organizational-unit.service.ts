@@ -1,7 +1,7 @@
 import { Inject, Injectable } from '@angular/core';
 import { HttpParams } from '@angular/common/http';
 
-import { API_URL } from '../../app.config';
+import { API_URL } from '../../api-url.token';
 import { ModifyOrganizationalUnitDto, OrganizationalUnitDto } from '../models';
 import { ApiService } from './api.service';
 

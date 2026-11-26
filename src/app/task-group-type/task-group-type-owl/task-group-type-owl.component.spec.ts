@@ -1,8 +1,6 @@
-/*
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { UntypedFormGroup } from '@angular/forms';
 import { provideTransloco } from '@ngneat/transloco';
-import { InputTextareaModule } from 'primeng/inputtextarea';
 
 import { TaskGroupTypeOwlComponent } from './task-group-type-owl.component';
 import { translocoTestConfig } from '../../translation-loader.service.spec';
@@ -13,13 +11,8 @@ describe('TaskGroupTypeOwlComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [
-        TaskGroupTypeOwlComponent,
-        InputTextareaModule
-      ],
-      providers: [
-        provideTransloco(translocoTestConfig)
-      ]
+      imports: [TaskGroupTypeOwlComponent],
+      providers: [provideTransloco(translocoTestConfig)]
     }).compileComponents();
 
     fixture = TestBed.createComponent(TaskGroupTypeOwlComponent);
@@ -30,53 +23,7 @@ describe('TaskGroupTypeOwlComponent', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
-    expect(Object.keys(component.form.controls)).toHaveLength(1);
-  });
-
-  it('should show error if ontology is empty', () => {
-    // Arrange
-    component.form.controls.ontology.markAsDirty();
-
-    // Act
-    fixture.detectChanges();
-
-    // Assert
-    expect(component.form.controls.ontology.invalid).toBe(true);
-    const elem: HTMLElement = fixture.nativeElement;
-    const msg: HTMLElement | null = elem.querySelector('#ontology + .p-error');
-    expect(msg).toBeTruthy();
-    expect(msg?.innerText.trim()).not.toHaveLength(0);
-  });
-
-  it('should show error if ontology is too short', () => {
-    // Arrange
-    component.form.patchValue({ontology: ''});
-    component.form.controls.ontology.markAsDirty();
-
-    // Act
-    fixture.detectChanges();
-
-    // Assert
-    expect(component.form.controls.ontology.invalid).toBe(true);
-    const elem: HTMLElement = fixture.nativeElement;
-    const msg: HTMLElement | null = elem.querySelector('#ontology + .p-error');
-    expect(msg).toBeTruthy();
-    expect(msg?.innerText.trim()).not.toHaveLength(0);
-  });
-
-  it('should be valid with valid ontology', () => {
-    // Arrange
-    component.form.patchValue({ontology: 'valid ontology content'});
-    component.form.controls.ontology.markAsDirty();
-
-    // Act
-    fixture.detectChanges();
-
-    // Assert
-    expect(component.form.controls.ontology.valid).toBe(true);
-    const elem: HTMLElement = fixture.nativeElement;
-    const msg: HTMLElement | null = elem.querySelector('#ontology + .p-error');
-    expect(msg).toBeFalsy();
+    // the OWL task group type currently has no additional fields
+    expect(Object.keys(component.form.controls)).toHaveLength(0);
   });
 });
-*/

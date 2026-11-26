@@ -1,6 +1,6 @@
 import { Inject, Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
-import { API_URL } from '../../app.config';
+import { API_URL } from '../../api-url.token';
 import { AppInfo, Environment, FlywayContexts, Health, HttpExchanges, Link, Metric, ScheduledTasks } from '../models';
 
 /**

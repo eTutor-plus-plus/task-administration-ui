@@ -1,6 +1,6 @@
 import { Inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { API_URL } from '../../app.config';
+import { API_URL } from '../../api-url.token';
 
 /**
  * Service for accessing the jdbc specific API.
