@@ -9,6 +9,22 @@
         "solution": "Gesuchte Zahl"
       }
     },
+    "jdbc": {
+      "title": "JDBC",
+      "fields": {
+        "solution": "Lösung",
+        "tables": "Zu prüfende Tabellen",
+        "wrongOutputPenalty": "Punkteabzug fehlerhafte Ausgabe",
+        "exceptionHandlingPenalty": "Punkteabzug Exception Handling",
+        "wrongDbContentPenalty": "Punkteabzug falscher DB-Inhalt",
+        "checkAutocommit": "Autocommit prüfen",
+        "autocommitPenalty": "Punkteabzug Autocommit",
+        "variables": "Variablen (optional)"
+      },
+      "errors": {
+        "tables": "tabelle1, tabelle2, tabelle3"
+      }
+    },
     "xquery": {
       "title": "XQuery",
       "fields": {
@@ -91,10 +107,23 @@
       "fields": {
         "sqlDDL": "SQL DDL",
         "solution": "Lösung",
-        "insertStatements": "Insert Statement",
-        "tablePoints": "Punkte pro Tabelle",
-        "columnPoints": "Punkte pro Spalte",
+        "checkConstraintStatements": "Check Constraint Überprüfung",
+        "checkConstraintStatementsDescription": "Für jeden in der Lösung enthaltenen Check-Constraint müssen entsprechende INSERT-Statements zur Überprüfung angegeben werden. Da jede Eingabegruppe (Name, nicht fehlerauslösende Statements, fehlerauslösende Statements) unabhängig geprüft wird, müssen Datensätze, auf die über Fremdschlüssel verwiesen wird, zunächst im Abschnitt nicht fehlerauslösende Statements erstellt werden. Erst danach können diese Datensätze im Abschnitt fehlerauslösende Statements verwendet bzw. referenziert werden.",
+        "checkConstraintStatementsAdd": "Check Constraint Überprüfung hinzufügen",
+        "assertionStatements": "Assertion Überprüfung",
+        "assertionStatementsDescription": "Für jede in der Lösung enthaltene Assertion müssen entsprechende INSERT-Statements zur Überprüfung angegeben werden. Da jede Eingabegruppe (Name, nicht fehlerauslösende Statements, fehlerauslösende Statements) unabhängig geprüft wird, müssen Datensätze, auf die über Fremdschlüssel verwiesen wird, zunächst im Abschnitt nicht fehlerauslösende Statements erstellt werden. Erst danach können diese Datensätze im Abschnitt fehlerauslösende Statements verwendet bzw. referenziert werden.",
+        "assertionStatementsAdd": "Assertion Überprüfung hinzufügen",
+        "statementName": "Bezeichnung des Constraints (wird im Feedback angezeigt)",
+        "assertionName": "Name der Assertion welche im DDL Skript definiert wurde",
+        "successfulStatements": "Nicht fehlerauslösende Statements",
+        "unsuccessfulStatements": "Fehlerauslösende Statements",
+        "whitelist": "Whitelist",
+        "whitelistInfo": "Wörter durch Semikolons getrennt eingeben. Alle Wörter, die bereits in der Lösung verwendet wurden, werden automatisch zur Whitelist hinzugefügt.",
+        "generatedWhitelist": "Vollständige Whitelist",
+        "generatedWhitelistInfo": "Dieses Feld wird automatisch generiert und kann nicht bearbeitet werden.",
+        "tablePoints": "Punkte pro gesamter Tabelle inklusive Spalten",
         "constraintPoints": "Punkte pro Constraint",
+        "assertionPoints": "Punkte pro Assertion",
         "primaryKeyPoints": "Punkte pro Primary Key",
         "foreignKeyPoints": "Punkte pro Foreign Key"
   }},
@@ -104,6 +133,22 @@
         "solution": "Lösung",
         "wrongOrderPenalty": "Falsche Sortierung: Punkteabzug",
         "superfluousColumnsPenalty": "Überflüssige Spalte: Punkteabzug"
+      },
+      "descriptions": {
+        "penalty": "Ein Punkteabzug von -1 bedeutet, dass die Abgabe mit 0 Punkten bewertet wird."
+      }
+    },
+    "trigger": {
+      "title": "SQL Datenbank Trigger",
+      "fields": {
+        "solution": "Lösung",
+        "triggerOperations": "Operationen welche den Trigger ausführen",
+        "resultTables": "Ergebnistabellen, welche verglichen werden (Strichpunkt getrennt)",
+        "timingIndependent": "Zeitpunktunabhängiger Trigger (Wenn diese Option gewählt ist, wird nicht zwischen BEFORE und AFTER unterschieden)",
+        "buffered": "Gepufferte Ausführung (Lösung einmalig ausführen und Ausführungsergebnis mit Puffertabelle vergleichen)",
+        "comparisonExecution": "Mengenvergleich nach jeder Operation",
+        "wrongHeadPenalty": "Falscher Trigger-Kopf: Punkteabzug",
+        "wrongBodyPenalty": "Falscher Trigger-Körper (eigentliche Ausführungslogik): Punkteabzug"
       },
       "descriptions": {
         "penalty": "Ein Punkteabzug von -1 bedeutet, dass die Abgabe mit 0 Punkten bewertet wird."
@@ -196,8 +241,128 @@
       },
       "descriptions": {
         "mustHaveMaxPointsSolution": "Hinweis: Es muss eine Lösung existieren, die die maximalen Punkte der Aufgabe erreicht."
+        
+      }
+    },
+    "python": {
+      "title": "Python",
+      "fields": {
+        "solution": "Lösung",
+        "checks": "Checks",
+        "packages": "Python-Bibliotheken",
+        "gradingVariables": "Grading-Variablen",
+        "availableLibraries": "Verfügbare Bibliotheken",
+        "checksHint": "Hinweis: An die jeweilige Grading-Variable ist in den Checks das Suffix _soll (für die Musterlösung) bzw. _ist (für die Studierendenabgabe) anzuhängen.",
+        "submitData": "Submit Data",
+        "diagnoseData": "Diagnose Data"
+     }
+    },
+    "clustering": {
+      "title": "Clustering",
+      "parameters": "Parameter für Beispielgenerierung",
+       "confirmDeleteDesc": {
+      "message": "Möchten Sie die Beschreibung wirklich löschen?",
+      "header": "Löschung bestätigen",
+      "accept": "Ja",
+      "reject": "Nein"
+    },
+      "fields": {
+        "numberOfClusters": "k-Wert (Anzahl der Cluster) (2-5)",
+        "numberOfDataPoints": "Anzahl der Datenpunkte (2-20)",
+        "distanceMetric": "Distanzmetrik",
+        "taskLength": "Beispiellänge",
+        "solutionShow": "Lösung anzeigen",
+        "solutionHide": "Lösung verstecken",
+        "deleteDesc": "Beschreibung löschen"
+      },
+      "taskLengthTooltip": "Kurz: 5–8 Datenpunkte, zufällige Zentroide\nMittel: 8–12 Datenpunkte, zentralste Zentroide\nLang: 12–16 Datenpunkte, zentralste Zentroide",
+      "deductions": {
+        "title": "Punkteabzüge",
+        "wrongClusters": "Falsche Anzahl an Clustern/Iterationen",
+        "wrongLabels": "Falsche Zuordnung von Datenpunkten",
+        "wrongCentroids": "Falsche Koordinaten der Zentroide"
+      },
+      "metric": {
+        "euclidean": "Euklidische Distanz",
+        "manhattan": "Manhattan Distanz"
+      },
+      "taskLength": {
+        "short": "Kurz",
+        "medium": "Mittel",
+        "long": "Lang"}},
+    "knn": {
+      "title": "K-Nächste-Nachbarn",
+      "meta": "Allgemeine Angaben",
+      "model": {
+        "knn": "KNN-Klassifikation"
+      },
+      "labels": {
+        "feature": "Merkmal"
+      },
+      "placeholders": {
+        "taskName": "Name der Aufgabe",
+        "descriptionDe": "Markdown / HTML möglich …",
+        "descriptionEn": "Markdown / HTML möglich …"
+      },
+      "fields": {
+        "k": "K-Wert",
+        "trainLabels": "Trainingsklassen",
+        "trainLabelsAdd": "Klasse hinzufügen",
+        "trainLabelsCount": "Klassen",
+        "trainLabelsPlaceholder": "z. B. A, B, C …",
+        "trainLabelsError": "Bitte gib für jede Klasse ein Label an (mind. 2 Klassen).",
+        "trainLabelsErrorMax": "Maximal 7 Klassen erlaubt.",
+        "metric": "Distanzmetrik",
+        "metric.euclidean": "Euklidisch",
+        "metric.manhattan": "Manhattan",
+        "metric.minkowski": "Minkowski",
+        "numTrain": "Trainingspunkte je Klasse",
+        "numTest": "Testpunkte",
+        "featureName": "Merkmalsname",
+        "featureRange": "Merkmalsbereich",
+        "xMin": "X-Achse von",
+        "xMax": "X-Achse bis",
+        "yMin": "Y-Achse von",
+        "yMax": "Y-Achse bis",
+        "xLabel": "X-Achsen-Beschriftung",
+        "yLabel": "Y-Achsen-Beschriftung",
+        "tiebreaker": "Tiebreaker-Strategie",
+        "tiebreaker.sum": "Summe der Distanzen (bei Gleichstand alphabetisch)",
+        "tiebreaker.mean": "Durchschnitt der Distanzen (bei Gleichstand alphabetisch)",
+        "tiebreaker.nearest": "Nächstgelegener Punkt entscheidet (bei Gleichstand alphabetisch)",
+        "editTrainPoints": "Trainingspunkte bearbeiten",
+        "editTestPoints": "Testpunkte bearbeiten",
+        "preview": "Vorschau",
+        "feedbackLevel": "Feedback Level",
+        "feedback.RUN": "Nur Syntax-/Format-Check",
+        "feedback.DIAGNOSE": "Ein bisschen Feedback",
+        "feedback.SUBMIT": "Vollständiges Feedback & Punkte",
+        "taskName": "Aufgabenname",
+        "organization": "Organisationseinheit / LVA",
+        "taskGroup": "Aufgabengruppe",
+        "descriptionDe": "Beschreibung (Deutsch)",
+        "descriptionEn": "Beschreibung (Englisch)",
+        "maxPoints": "Maximale Punkte",
+        "duplicate": "Duplikate in den folgenden Koordinaten erkannt",
+        "previewButtons": {
+          "generateTaskPdf": "Generiere Aufgabenstellung",
+          "generateSolutionPdf": "Generiere Lösung"
+        }
+      },
+      "errors": {
+        "required": "Dieses Feld ist erforderlich",
+        "min": "Der Wert muss größer als 0 sein"
+      }
+    } ,
+    "owl": {
+      "title": "OWL",
+      "fields": {
+        "solution": "Lösungs Ontologie",
+        "pointsPerClass": "Abgezogene Punkte für falsche Klassen & Individuen (Syntax:",
+        "pointsPerRedundantAxiom": "Abgezogene Punkte für redundante Axiome",
+        "pointsPerUndefinedClass": "Abgezogene Punkte für undefinierte Klassen & Individuen",
+        "pointsPerAxiomWithoutEntity": "Abgezogene Punkte für falsche oder fehlende Axiome ohne Klasse oder Individuum"
       }
     }
   }
 }
-

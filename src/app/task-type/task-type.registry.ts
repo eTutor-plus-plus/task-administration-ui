@@ -7,10 +7,18 @@ import { TaskTypeDroolsComponent } from './task-type-drools/task-type-drools.com
 import { TaskTypeSqlDdlComponent } from './task-type-sql-ddl/task-type-sql-ddl.component';
 import { TaskTypeAspComponent } from './task-type-asp/task-type-asp.component';
 import { TaskTypeSqlComponent } from './task-type-sql/task-type-sql.component';
+import { TaskTypeTriggerComponent } from './task-type-trigger/task-type-trigger.component';
 import { TaskTypeRelalgComponent } from './task-type-relalg/task-type-relalg.component';
 import { TaskTypeFanfComponent } from './task-type-fanf/task-type-fanf.component';
 import { TaskTypeUmlComponent } from './task-type-uml/task-type-uml.component';
 import { TaskTypeMdxComponent } from './task-type-mdx/task-type-mdx.component';
+import { TaskTypePythonComponent } from './task-type-python/task-type-python.component';
+import { TaskTypeClusteringComponent } from './task-type-clustering/task-type-clustering.component';
+import { TaskTypeKnnComponent } from './task-type-knn/task-type-knn.component';
+
+import { TaskTypeJDBCComponent } from './task-type-jdbc/task-type-jdbc.component';
+
+import { TaskTypeOwlComponent } from './task-type-owl/task-type-owl.component';
 
 
 
@@ -25,7 +33,7 @@ export class TaskTypeRegistry {
   private static readonly taskTypes: {
     name: string,
     supportedTaskGroupTypes: string[],
-    component?: Type<TaskTypeFormComponent<any>>,
+    component?: Type<any>,
     submissionTemplate?: string,
     supportsDescriptionGeneration?: boolean,
     submissionInputLanguage?: string // set the monaco language if the submission data have following format {"input": "<USER INPUT>"}, otherwise leave this undefined
@@ -84,6 +92,13 @@ return $d`,
       supportsDescriptionGeneration: false,
       submissionInputLanguage: 'sql'
     }, {
+      name: 'trigger',
+      supportedTaskGroupTypes: ['trigger'],
+      component: TaskTypeTriggerComponent,
+      submissionTemplate: '',
+      supportsDescriptionGeneration: false,
+      submissionInputLanguage: 'trigger'
+    }, {
       name: 'relalg',
       supportedTaskGroupTypes: ['sql'],
       component: TaskTypeRelalgComponent,
@@ -115,6 +130,48 @@ return $d`,
       submissionTemplate: '',
       supportsDescriptionGeneration: false,
       submissionInputLanguage: 'mdx'
+    },
+    {
+      name: 'python',
+      supportedTaskGroupTypes: [],
+      component: TaskTypePythonComponent,
+      submissionTemplate: '',
+      supportsDescriptionGeneration: true,
+      submissionInputLanguage: 'python'
+      },
+    { 
+      name: 'clustering',
+      supportedTaskGroupTypes: [],
+      component: TaskTypeClusteringComponent,
+      submissionTemplate: '',
+      supportsDescriptionGeneration: false,
+      submissionInputLanguage: 'clustering'
+    },
+    { 
+      name: 'knn',
+      supportedTaskGroupTypes: [],
+      component: TaskTypeKnnComponent,
+      submissionTemplate: '',
+      supportsDescriptionGeneration: true,
+      submissionInputLanguage: 'plaintext'
+
+    },
+    {
+      name: 'jdbc',
+      supportedTaskGroupTypes: ['jdbc'],
+      component: TaskTypeJDBCComponent,
+      submissionTemplate: '',
+      supportsDescriptionGeneration: false,
+      submissionInputLanguage: 'jdbc'
+
+
+    }, {
+      name: 'owl',
+      supportedTaskGroupTypes: [],
+      component: TaskTypeOwlComponent,
+      submissionTemplate: '',
+      supportsDescriptionGeneration: true,
+      submissionInputLanguage: 'owl'
 
     }
 

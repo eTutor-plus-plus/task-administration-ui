@@ -10,6 +10,14 @@
         "maxNumber": "Maximum Value"
       }
     },
+    "jdbc": {
+      "title": "JDBC",
+      "fields": {
+        "createStatements": "CREATE TABLE-Statements",
+        "insertStatementsDiagnose": "INSERT INTO-Statements (Diagnose)",
+        "insertStatementsSubmission": "INSERT INTO-Statements (Submission)"
+      }
+    },
     "xquery": {
       "title": "XQuery",
       "fields": {
@@ -39,6 +47,20 @@
         "diagnoseDmlStatements": "INSERT INTO Statements (Diagnose)",
         "submitDmlStatements": "INSERT INTO Statements (Submission)",
         "submitOlapSchema": "OLAP Schema Definition XML"
+         }
+    },
+    "trigger": {
+      "title": "SQL Databes Triggers",
+      "fields": {
+        "ddlStatements": "CREATE TABLE Statements",
+        "diagnoseDmlStatements": "INSERT INTO Statements before Diagnose (initiate schema)",
+        "submitDmlStatements": "INSERT INTO Statements before Submission (initiate schema)"
+          }
+    },
+    "owl": {
+      "title": "OWL",
+      "fields": {
+        "ontology": "Ontology"
       }
     }
   }

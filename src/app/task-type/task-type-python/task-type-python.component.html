@@ -1,0 +1,163 @@
+<div [formGroup]="form">
+
+  <div class="surface-card p-4 shadow-2 border-round p-fluid mb-4">
+    <div class="flex justify-content-between align-items-center mb-3">
+      <label class="font-semibold" transloco="taskTypes.python.fields.gradingVariables"></label>
+      <p-button icon="pi pi-plus" severity="success" (click)="addVariable()"></p-button>
+    </div>
+
+    <div formArrayName="gradingVariables">
+      <div
+        *ngFor="let variable of gradingVariables.controls; let i = index"
+        [formGroupName]="i"
+        class="mb-2 flex align-items-center gap-2">
+        <input
+          pInputText
+          formControlName="name"
+          class="flex-1">
+        <p-button icon="pi pi-trash" severity="danger" size="small" (click)="removeVariable(i)"></p-button>
+      </div>
+
+      @if (gradingVariables.length === 0) {
+        <small class="text-500">No grading variables defined. Add variables to enable auto-generating checks.</small>
+      }
+    </div>
+  </div>
+
+  <div class="surface-card p-4 shadow-2 border-round p-fluid mb-4">
+    <div class="grid formgrid p-fluid">
+      <div class="field col-12">
+        <label transloco="taskTypes.python.fields.availableLibraries"></label>
+
+        <div class="flex flex-wrap gap-2 mt-2">
+          <span
+            *ngFor="let lib of allowedLibraries"
+            class="px-3 py-2 border-round-xl text-sm font-medium surface-100 border-1 border-300 shadow-1">
+            {{ lib }}
+          </span>
+        </div>
+      </div>
+      <div class="field col-12">
+        <label>Imports</label>
+        <ngx-monaco-editor
+          formControlName="imports"
+          [options]="editorOptions"
+          style="height: 120px;">
+        </ngx-monaco-editor>
+      </div>
+    </div>
+  </div>
+
+  <div class="surface-card p-4 shadow-2 border-round p-fluid mb-4">
+    <div class="grid formgrid p-fluid">
+      <div class="field mb-4 col-12">
+        <label for="diagnoseData" transloco="taskTypes.python.fields.diagnoseData"></label>
+        <ngx-monaco-editor id="diagnoseData" formControlName="diagnoseData" [options]="editorOptions" style="height: 250px;"/>
+        @if (form.controls.diagnoseData.dirty || form.controls.diagnoseData.touched) {
+          <small class="block mt-1 p-error">
+            {{ getError(form.controls.diagnoseData, 'taskTypes.python.fields.diagnoseData') }}
+          </small>
+        }
+      </div>
+    </div>
+  </div>
+
+  <div class="surface-card p-4 shadow-2 border-round p-fluid mb-4">
+    <div class="grid formgrid p-fluid">
+      <div class="field mb-4 col-12">
+        <label for="submitData" transloco="taskTypes.python.fields.submitData"></label>
+        <ngx-monaco-editor id="submitData" formControlName="submitData" [options]="editorOptions" style="height: 250px;"/>
+        @if (form.controls.submitData.dirty || form.controls.submitData.touched) {
+          <small class="block mt-1 p-error">
+            {{ getError(form.controls.submitData, 'taskTypes.python.fields.submitData') }}
+          </small>
+        }
+      </div>
+    </div>
+  </div>
+
+  <div class="surface-card p-4 shadow-2 border-round p-fluid mb-4">
+    <div class="grid formgrid p-fluid">
+      <div class="field mb-4 col-12">
+        <label for="solution" transloco="taskTypes.python.fields.solution"></label>
+        <ngx-monaco-editor id="solution" formControlName="solution" [options]="editorOptions" style="height: 350px;"/>
+        @if (form.controls.solution.dirty || form.controls.solution.touched) {
+          <small class="block mt-1 p-error">
+             {{ getError(form.controls.solution, 'taskTypes.python.fields.solution') }}
+          </small>
+        }
+        @if (missingFromSolution().length > 0) {
+          <small class="block mt-1 p-warning" style="color: var(--yellow-600)">
+            Warning: the following grading variables are not found in the solution: {{ missingFromSolution().join(', ') }}
+          </small>
+        }
+       </div>
+    </div>
+  </div>
+
+  <div class="surface-card p-4 shadow-2 border-round p-fluid mb-4">
+
+    <div class="flex justify-content-between align-items-center mb-3">
+      <label transloco="taskTypes.python.fields.checks"></label>
+
+      <div class="flex gap-2">
+        <p-button
+          label="Auto-generate"
+          icon="pi pi-sync"
+          severity="secondary"
+          [disabled]="gradingVariables.length === 0"
+          (click)="generateChecksFromVariables()">
+        </p-button>
+        <p-button
+          icon="pi pi-plus"
+          severity="success"
+          (click)="addCheck()">
+        </p-button>
+      </div>
+    </div>
+
+    <small class="block mb-3 text-500" transloco="taskTypes.python.fields.checksHint"></small>
+
+    <div formArrayName="checks">
+      <div *ngFor="let check of checks.controls; let i = index" [formGroupName]="i" class="mb-4 p-3 border-1 border-round surface-border">
+
+        <div class="flex justify-content-between align-items-center mb-2">
+          <span class="font-semibold">Check {{ i + 1 }}</span>
+          <p-button
+            icon="pi pi-trash"
+            severity="danger"
+            size="small"
+            (click)="removeCheck(i)">
+          </p-button>
+        </div>
+
+        <div class="grid formgrid p-fluid">
+
+          <div class="field col-12">
+            <label>Name</label>
+            <input pInputText class="p-inputtext" formControlName="name">
+          </div>
+
+          <div class="field col-12">
+            <label>Points</label>
+            <p-inputNumber formControlName="points"></p-inputNumber>
+          </div>
+
+          <div class="field col-12">
+            <label>Check</label>
+            <ngx-monaco-editor formControlName="check" [options]="editorOptions" style="height: 180px;"></ngx-monaco-editor>
+          </div>
+        </div>
+      </div>
+
+      @if (showPointsMismatch()) {
+        <small class="block mt-2 p-error">
+          Sum of check points must equal max points
+        </small>
+      }
+
+    </div>
+
+  </div>
+
+</div>
