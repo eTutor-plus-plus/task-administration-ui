@@ -18,6 +18,7 @@ import { DropdownModule } from 'primeng/dropdown';
 import { AuthService, Role } from '../../auth';
 import { TableOverviewComponent } from '../../layout';
 import { OrganizationalUnitDto, OrganizationalUnitService, StatusEnum, TaskGroupDto, TaskGroupService } from '../../api';
+import { convertStringToSeverity } from '../helpers';
 
 /**
  * Page: Task Groups Overview
@@ -201,4 +202,6 @@ export class TaskGroupsComponent extends TableOverviewComponent<TaskGroupDto, Ta
       this.finishLoading();
     }
   }
+
+  public readonly convertStringToSeverity = convertStringToSeverity;
 }

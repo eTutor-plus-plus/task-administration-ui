@@ -3,8 +3,9 @@
 <p-confirmPopup />
 
 <p-table [value]="tableData.content" [tableStyle]="{'min-width': '30rem'}" [lazy]="true" (onLazyLoad)="loadTableData($event)" dataKey="id" [loading]="loading"
-         [paginator]="true" [rows]="10" [rowsPerPageOptions]="[10, 25, 50, 100]" [showCurrentPageReport]="true" [totalRecords]="tableData.totalElements"
-         [currentPageReportTemplate]="'common.paginator' | transloco" [sortMode]="'multiple'" [multiSortMeta]="defaultSort">
+         [paginator]="true" [rows]="10" [rowsPerPageOptions]="[10, 25, 50, 100]" [showCurrentPageReport]="true" [totalRecords]="tableData.page.totalElements"
+         [currentPageReportTemplate]="'common.paginator' | transloco" [sortMode]="'multiple'" [multiSortMeta]="defaultSort"
+         stateStorage="session" stateKey="@dke-etutor/table/task-apps">
   <ng-template pTemplate="caption">
     <div class="flex align-items-center justify-content-between">
       <p-button [label]="'common.new' | transloco" icon="pi pi-plus" (onClick)="create()"/>

@@ -9,6 +9,7 @@ import { TaskTypeFormComponent } from '../task-type-form.component';
 import { editor } from 'monaco-editor';
 import { InputTextModule } from 'primeng/inputtext';
 import { NgForOf } from '@angular/common';
+import { CheckboxModule } from 'primeng/checkbox';
 
 @Component({
   selector: 'dke-task-type-drools',
@@ -22,7 +23,8 @@ import { NgForOf } from '@angular/common';
     TranslocoPipe,
     TreeSelectModule,
     InputTextModule,
-    NgForOf
+    NgForOf,
+    CheckboxModule
   ],
   templateUrl: './task-type-drools.component.html',
   styleUrl: './task-type-drools.component.scss'
@@ -40,22 +42,30 @@ export class TaskTypeDroolsComponent extends TaskTypeFormComponent<TaskTypeForm>
     language: 'java'
   };
 
-  droolsClasses = new FormArray<FormGroup<{ classname: FormControl<string | null>, classBody: FormControl<string | null> }>>([]);
+  classes = new FormArray<FormGroup<{ classname: FormControl<string | null>, classBody: FormControl<string | null> }>>([]);
 
   constructor() {
     super();
   }
 
+  override set formData(data: unknown) {
+      super.formData = data;
+      if(data) {
+        this.setDroolsData(data);
+      }
+  }
+
   protected override initForm(): void {
-    this.form.addControl('droolsSolution', new FormControl<string | null>(null));
-    this.form.addControl('droolsObjects', new FormControl<string | null>(null));
-    this.form.addControl('droolsValidationClassname', new FormControl<string | null>(null));
-    this.form.addControl('droolsErrorWeighting', new FormControl<number | null>(null));
-    this.form.addControl('droolsClasses', this.droolsClasses);
+    this.form.addControl('solution', new FormControl<string | null>(null));
+    this.form.addControl('objects', new FormControl<string | null>(null));
+    this.form.addControl('validationClassname', new FormControl<string | null>(null));
+    this.form.addControl('errorWeighting', new FormControl<number | null>(null));
+    this.form.addControl('classes', this.classes);
+    this.form.addControl('isCEP', new FormControl<boolean|null>(null));
   }
 
   get itemsControls() {
-    return this.droolsClasses.controls as FormGroup[];
+    return this.classes.controls as FormGroup[];
   }
 
   addDroolsClass() {
@@ -63,18 +73,36 @@ export class TaskTypeDroolsComponent extends TaskTypeFormComponent<TaskTypeForm>
       classname: new FormControl(''),
       classBody: new FormControl('')
     });
-    this.droolsClasses.push(itemsForm);
+    this.classes.push(itemsForm);
   }
 
   removeDroolsClass(index: number) {
-    this.droolsClasses.removeAt(index);
+    this.classes.removeAt(index);
+  }
+
+  setDroolsData(dto: any) {
+    // Clear the existing form array
+    while (this.classes.length !== 0) {
+      this.classes.removeAt(0);
+    }
+
+    // Add the classes from the DTO to the form array
+    dto.classes.forEach((c: any) => {
+      const classForm = new FormGroup({
+        classname: new FormControl(c.classname),
+        classBody: new FormControl(c.classBody)
+      });
+      this.classes.push(classForm);
+    });
   }
 }
 
+
 interface TaskTypeForm {
-  droolsSolution: FormControl<string | null>;
-  droolsClasses: FormArray<FormGroup<{ classname: FormControl<string | null>, classBody: FormControl<string | null> }>>;
-  droolsObjects: FormControl<string | null>;
-  droolsValidationClassname: FormControl<string | null>;
-  droolsErrorWeighting: FormControl<number | null>;
+  solution: FormControl<string | null>;
+  classes: FormArray<FormGroup<{ classname: FormControl<string | null>, classBody: FormControl<string | null>}>>;
+  objects: FormControl<string | null>;
+  validationClassname: FormControl<string | null>;
+  errorWeighting: FormControl<number | null>;
+  isCEP: FormControl<boolean|null>;
 }

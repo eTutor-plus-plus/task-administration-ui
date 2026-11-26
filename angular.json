@@ -16,11 +16,12 @@
       "prefix": "dke",
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-angular:browser",
+          "builder": "@angular/build:application",
           "options": {
-            "outputPath": "dist/task-administration-ui",
+            "outputPath": {
+              "base": "dist/task-administration-ui"
+            },
             "index": "src/index.html",
-            "main": "src/main.ts",
             "aot": true,
             "polyfills": [
               "zone.js"
@@ -34,16 +35,16 @@
                 "glob": "**/*",
                 "input": "node_modules/monaco-editor/min",
                 "output": "/assets/monaco/min/"
-              }
+              },
+              "src/manifest.webmanifest"
             ],
             "styles": [
               "src/styles.scss"
             ],
             "scripts": [],
-            "allowedCommonJsDependencies": [
-              "quill",
-              "quill-html-edit-button"
-            ]
+            "allowedCommonJsDependencies": [],
+            "serviceWorker": "ngsw-config.json",
+            "browser": "src/main.ts"
           },
           "configurations": {
             "production": {
@@ -77,7 +78,7 @@
           "defaultConfiguration": "production"
         },
         "serve": {
-          "builder": "@angular-devkit/build-angular:dev-server",
+          "builder": "@angular/build:dev-server",
           "configurations": {
             "production": {
               "buildTarget": "task-administration-ui:build:production"
@@ -89,7 +90,7 @@
           "defaultConfiguration": "development"
         },
         "extract-i18n": {
-          "builder": "@angular-devkit/build-angular:extract-i18n",
+          "builder": "@angular/build:extract-i18n",
           "options": {
             "buildTarget": "task-administration-ui:build"
           }

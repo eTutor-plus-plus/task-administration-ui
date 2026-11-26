@@ -1,5 +1,5 @@
-import { Component } from '@angular/core';
-import { RouterLink } from '@angular/router';
+import { Component, OnInit } from '@angular/core';
+import { Router, RouterLink } from '@angular/router';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { HttpErrorResponse } from '@angular/common/http';
 
@@ -11,6 +11,7 @@ import { MessagesModule } from 'primeng/messages';
 
 import { SimpleLayoutComponent } from '../../layout';
 import { AccountService, getValidationErrorMessage } from '../../api';
+import { AuthService } from '../auth.service';
 
 /**
  * Page: Forgot Password
@@ -31,7 +32,7 @@ import { AccountService, getValidationErrorMessage } from '../../api';
   templateUrl: './forgot-password.component.html',
   styleUrl: './forgot-password.component.scss'
 })
-export class ForgotPasswordComponent {
+export class ForgotPasswordComponent implements OnInit {
   /**
    * The login form.
    */
@@ -52,10 +53,20 @@ export class ForgotPasswordComponent {
    */
   constructor(private readonly translationService: TranslocoService,
               private readonly messageService: MessageService,
-              private readonly accountService: AccountService) {
+              private readonly accountService: AccountService,
+              private readonly authService: AuthService,
+              private readonly router: Router) {
     this.loading = false;
     this.success = false;
     this.form = new FormGroup<Form>({username: new FormControl<string | null>(null, [Validators.required])});
+  }
+
+  /**
+   * Redirect if user is authenticated.
+   */
+  ngOnInit(): void {
+    if (this.authService.isAuthenticated())
+      this.router.navigate(['/']);
   }
 
   /**

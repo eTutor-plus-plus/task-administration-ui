@@ -57,7 +57,7 @@ export class SystemHealthService {
     return new Promise((resolve, reject) => this.http.get<Health>(url, {headers: new HttpHeaders().set('Accept', this.contentType)}).subscribe({
         next: value => resolve(value),
         error: err => {
-          console.error('[SystemHealthService] Failed loading health info for' + taskType, err);
+          console.error('[SystemHealthService] Failed loading health info for ' + taskType, err);
           reject(err);
         }
       })

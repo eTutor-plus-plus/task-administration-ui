@@ -1,6 +1,6 @@
 import { TestBed } from '@angular/core/testing';
-import { HttpParams } from '@angular/common/http';
-import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
+import { HttpParams, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
+import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 
 import { OrganizationalUnitService } from './organizational-unit.service';
 import { API_URL } from '../../app.config';
@@ -11,8 +11,8 @@ describe('OrganizationalUnitService', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule],
-      providers: [{provide: API_URL, useValue: 'http://localhost'}]
+      imports: [],
+      providers: [{provide: API_URL, useValue: 'http://localhost'}, provideHttpClient(withInterceptorsFromDi()), provideHttpClientTesting()]
     });
     service = TestBed.inject(OrganizationalUnitService);
     httpTestingController = TestBed.inject(HttpTestingController);
@@ -52,7 +52,7 @@ describe('OrganizationalUnitService', () => {
       const id = 1;
 
       // Act
-      service.syncWithMoodle(id).then(() => {
+      const promise = service.syncWithMoodle(id).then(() => {
         // do nothing
       }).catch(reason => {
         fail(reason);
@@ -63,6 +63,8 @@ describe('OrganizationalUnitService', () => {
       expect(req.request.method).toBe('POST');
       req.flush(null);
       httpTestingController.verify();
+
+      return promise;
     });
 
     it('should reject when sync with moodle fails', () => {
@@ -70,7 +72,7 @@ describe('OrganizationalUnitService', () => {
       const id = 1;
 
       // Act
-      service.syncWithMoodle(id).then(() => {
+      const promise = service.syncWithMoodle(id).then(() => {
         fail('Expected promise to be rejected');
       }).catch(reason => {
         expect(reason).not.toBeNull();
@@ -81,6 +83,8 @@ describe('OrganizationalUnitService', () => {
       expect(req.request.method).toBe('POST');
       req.flush('some error', {status: 400, statusText: 'Bad Request'});
       httpTestingController.verify();
+
+      return promise;
     });
   });
 });

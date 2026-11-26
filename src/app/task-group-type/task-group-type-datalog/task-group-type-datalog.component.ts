@@ -56,7 +56,7 @@ export class TaskGroupTypeDatalogComponent extends TaskGroupTypeFormComponent<Ta
     this.startLoading();
     this.datalogService.loadDiagnoseFacts(taskGroup.id)
       .then(url => this.publicUrl = url)
-      .catch(error => this.publicUrl = undefined)
+      .catch(_ => this.publicUrl = undefined)
       .finally(() => this.finishLoading());
   }
 }

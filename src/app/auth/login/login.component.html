@@ -21,7 +21,7 @@
           <a class="block text-right font-light no-underline text-color-secondary"
              transloco="auth.login.forgot-password" routerLink="/auth/forgotPassword"></a>
         </div>
-        <input id="password" type="password" pInputText formControlName="password" autocomplete="current-password" [autofocus]="form.value.username"
+        <input id="password" type="password" pInputText formControlName="password" autocomplete="current-password" [autofocus]="!!form.value.username"
                tabindex="2">
         @if (form.controls.password.dirty) {
           <small class="block mt-1 p-error">

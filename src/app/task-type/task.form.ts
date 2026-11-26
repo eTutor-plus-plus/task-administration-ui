@@ -16,5 +16,6 @@ export interface TaskForm {
   status: FormControl<StatusEnum | null>;
   taskGroupId: FormControl<number | null>;
   taskCategoryIds: FormArray<FormControl<TreeNode | null>>;
+  examTask: FormControl<boolean | null>;
   additionalData: UntypedFormGroup;
 }

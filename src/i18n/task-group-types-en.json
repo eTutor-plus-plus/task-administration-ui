@@ -10,6 +10,14 @@
         "maxNumber": "Maximum Value"
       }
     },
+    "jdbc": {
+      "title": "JDBC",
+      "fields": {
+        "createStatements": "CREATE TABLE-Statements",
+        "insertStatementsDiagnose": "INSERT INTO-Statements (Diagnose)",
+        "insertStatementsSubmission": "INSERT INTO-Statements (Submission)"
+      }
+    },
     "xquery": {
       "title": "XQuery",
       "fields": {
@@ -38,6 +46,12 @@
         "ddlStatements": "CREATE TABLE Statements",
         "diagnoseDmlStatements": "INSERT INTO Statements before Diagnose (initiate schema)",
         "submitDmlStatements": "INSERT INTO Statements before Submission (initiate schema)"
+          }
+    },
+    "owl": {
+      "title": "OWL",
+      "fields": {
+        "ontology": "Ontology"
       }
     }
   }

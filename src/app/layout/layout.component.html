@@ -4,7 +4,11 @@
        class="bg-gray-900 h-screen hidden lg:block flex-shrink-0 absolute lg:sticky left-0 top-0 z-1 border-right-1 border-gray-800 w-18rem lg:w-9rem select-none">
     <div class="flex flex-column h-full">
       <div class="flex align-items-center justify-content-center flex-shrink-0 bg-primary" style="height:60px">
-        <img src="assets/images/logo-k.svg" alt="Logo" height="30" class="hidden lg:block">
+        @if (devEnvironment) {
+          <span class="font-bold text-xl text-yellow-500">DEV</span>
+        } @else {
+          <img src="assets/images/logo-k.svg" alt="Logo" height="30" class="hidden lg:block">
+        }
 
         <a class="cursor-pointer lg:hidden text-700 hover:text-500" pStyleClass="#app-sidebar" toggleClass="hidden">
           <i class="pi pi-times text-4xl"></i>
@@ -26,7 +30,7 @@
       <div class="layout-main">
         <router-outlet></router-outlet>
       </div>
-      <dke-footer />
+      <dke-footer/>
     </div>
   </div>
 </div>

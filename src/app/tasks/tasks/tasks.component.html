@@ -3,9 +3,9 @@
 <p-confirmPopup/>
 
 <p-table [value]="tableData.content" [tableStyle]="{'min-width': '30rem'}" [lazy]="true" (onLazyLoad)="loadTableData($event)" dataKey="id" [loading]="loading"
-         [paginator]="true" [rows]="10" [rowsPerPageOptions]="[10, 25, 50, 100]" [showCurrentPageReport]="true" [totalRecords]="tableData.totalElements"
+         [paginator]="true" [rows]="10" [rowsPerPageOptions]="[10, 25, 50, 100]" [showCurrentPageReport]="true" [totalRecords]="tableData.page.totalElements"
          [currentPageReportTemplate]="'common.paginator' | transloco" [sortMode]="'multiple'" [multiSortMeta]="defaultSort"
-         [ngClass]="{'with-ou': showOrganizationalUnit}">
+         [ngClass]="{'with-ou': showOrganizationalUnit}" stateStorage="session" stateKey="@dke-etutor/table/tasks">
   <ng-template pTemplate="caption">
     <div class="flex align-items-center justify-content-between">
       <p-button [label]="'common.new' | transloco" icon="pi pi-plus" (onClick)="create()"/>
@@ -28,7 +28,7 @@
       }
       <th pSortableColumn="taskGroup.name" class="col-taskGroupId">
         {{ baseTranslationKey + 'fields.taskGroupId' | transloco }}
-        <p-sortIcon field="taskGroupId"/>
+        <p-sortIcon field="taskGroup.name"/>
       </th>
       <th pSortableColumn="taskType" class="col-taskType">
         {{ baseTranslationKey + 'fields.taskType' | transloco }}
@@ -41,6 +41,10 @@
       <th pSortableColumn="status" class="col-status">
         {{ baseTranslationKey + 'fields.status' | transloco }}
         <p-sortIcon field="status"/>
+      </th>
+      <th pSortableColumn="examTask" class="col-examTask">
+        {{ baseTranslationKey + 'fields.examTask' | transloco }}
+        <p-sortIcon field="examTask"/>
       </th>
       <th class="col-actions"></th>
     </tr>
@@ -64,7 +68,7 @@
         </p-columnFilter>
       </th>
       <th>
-        <p-columnFilter field="taskGroupType" matchMode="equals" [showMenu]="false" [showClearButton]="true">
+        <p-columnFilter field="taskType" matchMode="equals" [showMenu]="false" [showClearButton]="true">
           <ng-template pTemplate="filter" let-value let-filter="filterCallback">
             <p-dropdown [options]="types" optionValue="value" optionLabel="text" [ngModel]="value" appendTo="body" [showClear]="false"
                         (onChange)="filter($event.value)"/>
@@ -82,6 +86,7 @@
           </ng-template>
         </p-columnFilter>
       </th>
+
       <th></th>
     </tr>
   </ng-template>
@@ -95,14 +100,19 @@
       <td>{{ 'taskTypes.' + entity.taskType + '.title' | transloco }}</td>
       <td>{{ entity.title }}</td>
       <td>
-        <p-tag [severity]="('taskStatus.' + entity.status + '_class') | transloco">
+        <p-tag [severity]="convertStringToSeverity(('taskStatus.' + entity.status + '_class') | transloco)">
           {{ ('taskStatus.' + entity.status) | transloco }}
         </p-tag>
       </td>
       <td>
+        <p-checkbox [binary]="true" [disabled]="false" (onChange)="examChanged()" />
+      </td>
+      <td>
         <span class="p-buttonset">
-          <p-button (onClick)="edit(entity)" icon="pi pi-pencil" [pTooltip]="'common.edit' | transloco" tooltipPosition="top" [showDelay]="1000"
-                    severity="warning" size="small"/>
+          @if (canEdit(entity)) {
+            <p-button (onClick)="edit(entity)" icon="pi pi-pencil" [pTooltip]="'common.edit' | transloco" tooltipPosition="top" [showDelay]="1000"
+                      severity="warning" size="small"/>
+          }
           @if (canDelete(entity)) {
             <p-button (onClick)="delete(entity, $event)" icon="pi pi-trash" [pTooltip]="'common.delete' | transloco" tooltipPosition="top" [showDelay]="1000"
                       severity="danger" size="small"/>

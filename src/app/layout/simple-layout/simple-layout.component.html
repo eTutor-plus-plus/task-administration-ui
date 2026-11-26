@@ -5,6 +5,10 @@
         <img [src]="'logo.hoch' | transloco" alt="Logo" class="w-full hidden lg:block mb-6">
         <img [src]="'logo.quer' | transloco" alt="Logo" class="w-full block lg:hidden max-h-3rem mb-6">
         <h1 class="mb-4 text-center text-2xl overflow-hidden" transloco="appName"></h1>
+        @if(devEnvironment)
+        {
+          <h2 class="text-center text-xl overflow-hidden text-yellow-500">DEVELOPMENT</h2>
+        }
 
         <div class="flex justify-content-between mt-3 lg:mt-7">
           <a [href]="impressUrl + '?lang=' + currentLanguage" class="no-underline text-white cursor-pointer font-bold" [transloco]="'impress'"

@@ -67,11 +67,14 @@ export class TaskTypeBinarySearchComponent extends TaskTypeFormComponent<TaskTyp
     this.form.controls.solution.addValidators(Validators.required);
     try {
       const tg = await this.taskGroupService.get(taskGroupId);
-      if (!tg.additionalData)
+      if (!tg.additionalData || tg.dto.taskGroupType !== 'binary-search')
         return;
 
-      this.form.controls.solution.addValidators(Validators.min(tg.additionalData['minNumber'] as number));
-      this.form.controls.solution.addValidators(Validators.max(tg.additionalData['maxNumber'] as number));
+      const min = tg.additionalData['minNumber'] as number;
+      const max = tg.additionalData['maxNumber'] as number;
+      this.form.controls.solution.addValidators(Validators.min(min));
+      this.form.controls.solution.addValidators(Validators.max(max));
+      this.form.controls.solution.updateValueAndValidity();
     } catch (err) {
       // ignore
     }

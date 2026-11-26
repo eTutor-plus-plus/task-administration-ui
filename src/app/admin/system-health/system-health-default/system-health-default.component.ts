@@ -53,7 +53,16 @@ export class SystemHealthDefaultComponent implements OnInit, OnDestroy {
       this.healthService.loadHealth(app)
         .then(content => this.health = content)
         .catch(err => {
-          this.messageService.add({severity: 'error', summary: this.translationService.translate('health.load-error'), detail: err.message, key: 'global'});
+          if (err.status === 503) {
+            this.health = {status: 'DOWN', components: {}};
+          } else {
+            this.health = {status: 'UNKNOWN', components: {}};
+            let msg = err.message;
+            if (err.error?.title)
+              msg = err.error.title;
+            this.messageService.add({severity: 'error', summary: this.translationService.translate('health.load-error'), detail: msg, key: 'global'});
+          }
+          console.log(this.health)
         });
     });
   }

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, isDevMode } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 
 import { StyleClassModule } from 'primeng/styleclass';
@@ -23,9 +23,16 @@ import { TopbarComponent } from './topbar/topbar.component';
   styleUrl: './layout.component.scss'
 })
 export class LayoutComponent {
+
+  /**
+   * Whether app is in dev-mode.
+   */
+  devEnvironment: boolean;
+
   /**
    * Creates a new instance of class LayoutComponent.
    */
   constructor() {
+    this.devEnvironment = isDevMode();
   }
 }

@@ -4,10 +4,22 @@ import { TaskTypeXqueryComponent } from './task-type-xquery/task-type-xquery.com
 import { TaskTypeFormComponent } from './task-type-form.component';
 import { TaskTypeDatalogComponent } from './task-type-datalog/task-type-datalog.component';
 import { TaskTypeDroolsComponent } from './task-type-drools/task-type-drools.component';
+import { TaskTypeSqlDdlComponent } from './task-type-sql-ddl/task-type-sql-ddl.component';
 import { TaskTypeAspComponent } from './task-type-asp/task-type-asp.component';
 import { TaskTypeSqlComponent } from './task-type-sql/task-type-sql.component';
 import { TaskTypeTriggerComponent } from './task-type-trigger/task-type-trigger.component';
 import { TaskTypeRelalgComponent } from './task-type-relalg/task-type-relalg.component';
+import { TaskTypeFanfComponent } from './task-type-fanf/task-type-fanf.component';
+import { TaskTypeUmlComponent } from './task-type-uml/task-type-uml.component';
+import { TaskTypePythonComponent } from './task-type-python/task-type-python.component';
+import { TaskTypeClusteringComponent } from './task-type-clustering/task-type-clustering.component';
+import { TaskTypeKnnComponent } from './task-type-knn/task-type-knn.component';
+
+import { TaskTypeJDBCComponent } from './task-type-jdbc/task-type-jdbc.component';
+
+import { TaskTypeOwlComponent } from './task-type-owl/task-type-owl.component';
+
+
 
 /**
  * Registry for task types.
@@ -20,7 +32,7 @@ export class TaskTypeRegistry {
   private static readonly taskTypes: {
     name: string,
     supportedTaskGroupTypes: string[],
-    component?: Type<TaskTypeFormComponent<any>>,
+    component?: Type<any>,
     submissionTemplate?: string,
     supportsDescriptionGeneration?: boolean,
     submissionInputLanguage?: string // set the monaco language if the submission data have following format {"input": "<USER INPUT>"}, otherwise leave this undefined
@@ -61,6 +73,16 @@ return $d`,
       submissionTemplate: '',
       supportsDescriptionGeneration: false,
       submissionInputLanguage: 'drools'
+
+    },
+    {
+      name: 'sql-ddl',
+      supportedTaskGroupTypes: [],
+      component: TaskTypeSqlDdlComponent,
+      submissionTemplate: '',
+      supportsDescriptionGeneration: false,
+      submissionInputLanguage: 'sql'
+
     }, {
       name: 'sql',
       supportedTaskGroupTypes: ['sql'],
@@ -82,7 +104,68 @@ return $d`,
       submissionTemplate: '',
       supportsDescriptionGeneration: false,
       submissionInputLanguage: 'relalg'
+
+    }, {
+      name: 'fanf',
+      supportedTaskGroupTypes: [],
+      component: TaskTypeFanfComponent,
+      submissionTemplate: '',
+      supportsDescriptionGeneration: true,
+      submissionInputLanguage: 'fanf'
+    },
+    {
+      name: 'uml',
+      supportedTaskGroupTypes: [],
+      component: TaskTypeUmlComponent,
+      submissionTemplate: '',
+      supportsDescriptionGeneration: false,
+      submissionInputLanguage: 'uml'
+
+    },
+    {
+      name: 'python',
+      supportedTaskGroupTypes: [],
+      component: TaskTypePythonComponent,
+      submissionTemplate: '',
+      supportsDescriptionGeneration: true,
+      submissionInputLanguage: 'python'
+      },
+    { 
+      name: 'clustering',
+      supportedTaskGroupTypes: [],
+      component: TaskTypeClusteringComponent,
+      submissionTemplate: '',
+      supportsDescriptionGeneration: false,
+      submissionInputLanguage: 'clustering'
+    },
+    { 
+      name: 'knn',
+      supportedTaskGroupTypes: [],
+      component: TaskTypeKnnComponent,
+      submissionTemplate: '',
+      supportsDescriptionGeneration: true,
+      submissionInputLanguage: 'plaintext'
+
+    },
+    {
+      name: 'jdbc',
+      supportedTaskGroupTypes: ['jdbc'],
+      component: TaskTypeJDBCComponent,
+      submissionTemplate: '',
+      supportsDescriptionGeneration: false,
+      submissionInputLanguage: 'jdbc'
+
+
+    }, {
+      name: 'owl',
+      supportedTaskGroupTypes: [],
+      component: TaskTypeOwlComponent,
+      submissionTemplate: '',
+      supportsDescriptionGeneration: true,
+      submissionInputLanguage: 'owl'
+
     }
+
   ];
 
   /**

@@ -11,6 +11,7 @@ import { MessagesModule } from 'primeng/messages';
 
 import { SimpleLayoutComponent } from '../../layout';
 import { AccountService, getValidationErrorMessage } from '../../api';
+import { AuthService } from '../auth.service';
 
 /**
  * Page: Activate Account
@@ -58,6 +59,7 @@ export class ActivateComponent implements OnInit {
   constructor(private readonly translationService: TranslocoService,
               private readonly messageService: MessageService,
               private readonly accountService: AccountService,
+              private readonly authService: AuthService,
               private readonly route: ActivatedRoute,
               private readonly router: Router) {
     this.loading = false;
@@ -87,6 +89,8 @@ export class ActivateComponent implements OnInit {
     this.token = this.route.snapshot.queryParamMap.get('token');
     if (!this.token)
       this.router.navigate(['auth', 'login']);
+    if (this.authService.isAuthenticated())
+      this.router.navigate(['/']);
   }
 
   /**

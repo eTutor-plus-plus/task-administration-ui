@@ -134,7 +134,6 @@
     "created": "Erstellt",
     "modified": "Zuletzt bearbeitet"
   },
-  "quill-html-edit-hint": "Bearbeiten Sie hier den HTML-Code. Wenn Sie auf \"OK\" klicken, wird der Inhalt des Editors ersetzt. Fügen Sie nach dem Klick auf \"OK\" mindestens ein Leerzeichen ein, ansonsten wird Ihre Änderung nicht korrekt erkannt.",
   "404": {
     "go-back": "Zurück",
     "title": "Seite nicht gefunden",
@@ -507,5 +506,28 @@
       "rotateRight": "Nach rechts drehen",
       "rotateLeft": "Nach links drehen"
     }
+  },
+  "editor": {
+    "link": "Link",
+    "image": "Bild",
+    "heading1": "Überschrift 1",
+    "heading2": "Überschrift 2",
+    "paragraph": "Absatz",
+    "codeBlock": "Code-Block",
+    "bold": "Fett",
+    "italic": "Kursiv",
+    "underline": "Unterstrichen",
+    "code": "Code",
+    "ul": "Aufzählung",
+    "ol": "Nummerierung",
+    "alignLeft": "Linksbündig",
+    "alignRight": "Rechtsbündig",
+    "alignCenter": "Zentriert",
+    "alignJustify": "Blocksatz",
+    "addTable": "Tabelle erzeugen",
+    "addColumn": "Spalte rechts hinzufügen",
+    "addRow": "Zeile unten hinzufügen",
+    "deleteRow": "Zeile löschen",
+    "html": "HTML-Code umschalten"
   }
 }

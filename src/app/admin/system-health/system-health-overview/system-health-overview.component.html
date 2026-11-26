@@ -32,7 +32,7 @@
           </div>
         </div>
         @if (isAdmin) {
-          @if (health.get(app)?.status) {
+          @if (health.get(app)?.status !== 'DOWN') {
             <a class="text-gray-500 no-underline" [routerLink]="['health']" [queryParams]="{type: app}">{{ 'health.health.details.button' | transloco }}</a>
           } @else {
             <span>&nbsp;</span>

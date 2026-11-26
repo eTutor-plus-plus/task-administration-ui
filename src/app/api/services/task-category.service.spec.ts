@@ -1,6 +1,6 @@
 import { TestBed } from '@angular/core/testing';
-import { HttpParams } from '@angular/common/http';
-import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
+import { HttpParams, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
+import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 
 import { TaskCategoryService } from './task-category.service';
 import { API_URL } from '../../app.config';
@@ -11,9 +11,9 @@ describe('TaskCategoryService', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule],
-      providers: [{provide: API_URL, useValue: 'http://localhost'}]
-    });
+    imports: [],
+    providers: [{ provide: API_URL, useValue: 'http://localhost' }, provideHttpClient(withInterceptorsFromDi()), provideHttpClientTesting()]
+});
     service = TestBed.inject(TaskCategoryService);
     httpTestingController = TestBed.inject(HttpTestingController);
   });
@@ -102,7 +102,7 @@ describe('TaskCategoryService', () => {
       const id = 1;
 
       // Act
-      service.syncWithMoodle(id).then(() => {
+      const promise = service.syncWithMoodle(id).then(() => {
         // do nothing
       }).catch(reason => {
         fail(reason);
@@ -113,6 +113,8 @@ describe('TaskCategoryService', () => {
       expect(req.request.method).toBe('POST');
       req.flush(null);
       httpTestingController.verify();
+
+      return promise;
     });
 
     it('should reject when sync with moodle fails', () => {
@@ -120,7 +122,7 @@ describe('TaskCategoryService', () => {
       const id = 1;
 
       // Act
-      service.syncWithMoodle(id).then(() => {
+      const promise = service.syncWithMoodle(id).then(() => {
         fail('Expected promise to be rejected');
       }).catch(reason => {
         expect(reason).not.toBeNull();
@@ -131,6 +133,8 @@ describe('TaskCategoryService', () => {
       expect(req.request.method).toBe('POST');
       req.flush(null, {status: 500, statusText: 'Internal Server Error'});
       httpTestingController.verify();
+
+      return promise;
     });
   });
 });

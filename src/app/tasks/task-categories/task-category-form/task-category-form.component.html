@@ -3,36 +3,38 @@
 <form [formGroup]="form" (ngSubmit)="submit()">
   <div class="grid formgrid p-fluid">
     <div class="field mb-4 col-12">
-      <label for="organizationalUnitId" [transloco]="this.baseTranslationKey + 'fields.organizationalUnitId'"></label>
+      <label for="organizationalUnitId" [transloco]="baseTranslationKey + 'fields.organizationalUnitId'"></label>
       <p-dropdown inputId="organizationalUnitId" formControlName="organizationalUnitId" [options]="organizationalUnitDropdowns" optionValue="id"
                   optionLabel="name" [readonly]="readonly" [filter]="true" filterBy="name" />
       @if (form.controls.organizationalUnitId.dirty || form.controls.organizationalUnitId.touched) {
         <small class="block mt-1 p-error">
-          {{ getError(form.controls.organizationalUnitId, this.baseTranslationKey + 'fields.organizationalUnitId') }}
+          {{ getError(form.controls.organizationalUnitId, baseTranslationKey + 'fields.organizationalUnitId') }}
         </small>
       }
     </div>
 
     <div class="field mb-4 col-12">
-      <label for="parentId" [transloco]="this.baseTranslationKey + 'fields.parentId'"></label>
+      <label for="parentId" [transloco]="baseTranslationKey + 'fields.parentId'"></label>
       <p-dropdown inputId="parentId" formControlName="parentId" [options]="parentDropdowns" optionValue="id"
                   optionLabel="name" [readonly]="readonly" [showClear]="!readonly" [filter]="true" filterBy="name" />
       @if (form.controls.parentId.dirty || form.controls.parentId.touched) {
         <small class="block mt-1 p-error">
-          {{ getError(form.controls.parentId, this.baseTranslationKey + 'fields.parentId') }}
+          {{ getError(form.controls.parentId, baseTranslationKey + 'fields.parentId') }}
         </small>
       }
     </div>
 
     <div class="field mb-4 col-12">
-      <label for="name" [transloco]="this.baseTranslationKey + 'fields.name'"></label>
+      <label for="name" [transloco]="baseTranslationKey + 'fields.name'"></label>
       <input id="name" type="text" pInputText formControlName="name" autocomplete="off" [readonly]="readonly">
       @if (form.controls.name.dirty || form.controls.name.touched) {
         <small class="block mt-1 p-error">
-          {{ getError(form.controls.name, this.baseTranslationKey + 'fields.name') }}
+          {{ getError(form.controls.name, baseTranslationKey + 'fields.name') }}
         </small>
       }
     </div>
+
+    <div class="col-12 mb-4 text-sm text-color-secondary" [transloco]="baseTranslationKey + 'moodleHint'"></div>
   </div>
 
   <dke-audit-information [data]="originalEntity"/>

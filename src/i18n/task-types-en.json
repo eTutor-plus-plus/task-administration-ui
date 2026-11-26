@@ -9,6 +9,22 @@
         "solution": "Solution"
       }
     },
+    "jdbc": {
+      "title": "JDBC",
+      "fields": {
+        "solution": "Solution",
+        "tables": "Tables to be checked",
+        "wrongOutputPenalty": "Penalty wrong output",
+        "exceptionHandlingPenalty": "Penalty exception handling",
+        "wrongDbContentPenalty": "Penalty wrong DB content",
+        "checkAutocommit": "Check Autocommit",
+        "autocommitPenalty": "Penalty Autocommit",
+        "variables": "Variables (optional)"
+      },
+      "errors": {
+        "tables": "table1, table2, table3"
+      }
+    },
     "xquery": {
       "title": "XQuery",
       "fields": {
@@ -80,9 +96,36 @@
         "droolsClasses": "Classes",
         "droolsValidationClassname": "Validation Classname",
         "droolsErrorWeighting": "Error Weighting",
-        "droolsAddClass": "Add Class"
+        "droolsAddClass": "Add Class",
+        "droolsIsCEP": "Is this a CEP Task?"
       }
     },
+      "sql-ddl": {
+        "title": "SQL DDL",
+        "fields": {
+          "sqlDDL": "SQL DDL",
+          "solution": "Solution",
+          "checkConstraintStatements": "Check Constraint Verification",
+          "checkConstraintStatementsDescription": "For each check constraint included in the solution, corresponding INSERT statements must be provided for verification. Since each input group (Name, Non-Error-Triggering Statements, Error-Triggering Statements) is validated independently, any records referenced via foreign keys must first be created in the Non-Error-Triggering Statements section. Only after that can these records be used or referenced in the Error-Triggering Statements section.",
+          "checkConstraintStatementsAdd": "Add Check Constraint Verification",
+          "assertionStatements": "Assertion Verification",
+          "assertionStatementsDescription": "For each assertion included in the solution, corresponding INSERT statements must be provided for verification. Since each input group (Name, Non-Error-Triggering Statements, Error-Triggering Statements) is validated independently, any records referenced via foreign keys must first be created in the Non-Error-Triggering Statements section. Only after that can these records be used or referenced in the Error-Triggering Statements section.",
+          "assertionStatementsAdd": "Add Assertion Verification",
+          "statementName": "Name of the constraint (is displayed in the feedback)",
+          "assertionName": "Name of the assertion defined in the DDL script",
+          "successfulStatements": "Non-Error-Triggering Statements",
+          "unsuccessfulStatements": "Error-Triggering Statements",
+          "whitelist": "Whitelist",
+          "whitelistInfo": "Enter the words separated by semicolons. All words that have already been used in the solution are automatically added to the whitelist.",
+          "generatedWhitelist": "Complete Whitelist",
+          "generatedWhitelistInfo": "This field is filled automatically and cannot be edited.",
+          "tablePoints": "Points per entire table including columns",
+          "constraintPoints": "Points per constraint",
+          "assertionPoints": "Points per assertion",
+          "primaryKeyPoints": "Points per primary key",
+          "foreignKeyPoints": "Points per foreign key"
+        }
+      },
     "sql": {
       "title": "SQL",
       "fields": {
@@ -120,6 +163,184 @@
       },
       "descriptions": {
         "penalty": "A point deduction of -1 means that the submission is awarded 0 points."
+      }
+    },
+      "fanf": {
+        "title": "Functional Dependencies",
+        "fields": {
+          "baseRelationName": "Name of the Base Relation",
+          "baseRelationAttributes": "Attributes of the Base Relation",
+          "baseRelationDependencies": "Dependencies of the Base Relation",
+          "subtype": "Subtask",
+          "keysDeterminationPenaltyPerMissingKey": "Penalty per Missing Key",
+          "keysDeterminationPenaltyPerIncorrectKey": "Penalty per Incorrect Key",
+          "attributeClosureBaseAttributes": "Base Attributes",
+          "attributeClosurePenaltyPerMissingAttribute": "Penalty per Missing Attribute",
+          "attributeClosurePenaltyPerIncorrectAttribute": "Penalty per Incorrect Attribute",
+          "minimalCoverPenaltyPerNonCanonicalDependency": "Penalty per Non-Canonical Dependency",
+          "minimalCoverPenaltyPerTrivialDependency": "Penalty per Trivial Dependency",
+          "minimalCoverPenaltyPerExtraneousAttribute": "Penalty per Extraneous Attribute",
+          "minimalCoverPenaltyPerRedundantDependency": "Penalty per Redundant Dependency",
+          "minimalCoverPenaltyPerMissingDependencyVsSolution": "Penalty per Missing Dependency vs. Solution",
+          "minimalCoverPenaltyPerIncorrectDependencyVsSolution": "Penalty per Incorrect Dependency vs. Solution",
+          "normalFormDeterminationPenaltyForIncorrectOverallNormalform": "Penalty for Incorrect Overall Normal Form",
+          "normalFormDeterminationPenaltyPerIncorrectDependencyNormalform": "Penalty per Incorrect Dependency Normal Form",
+          "normalizationTargetLevel": "Target Normal Form",
+          "normalizationMaxLostDependencies": "Max Lost Dependencies",
+          "normalizationPenaltyPerLostAttribute": "Penalty per Lost Attribute",
+          "normalizationPenaltyForLossyDecomposition": "Penalty for Lossy Decomposition",
+          "normalizationPenaltyPerNonCanonicalDependency": "Penalty per Non-Canonical Dependency",
+          "normalizationPenaltyPerTrivialDependency": "Penalty per Trivial Dependency",
+          "normalizationPenaltyPerExtraneousAttributeInDependencies": "Penalty per Extraneous Attribute in Dependency",
+          "normalizationPenaltyPerRedundantDependency": "Penalty per Redundant Dependency",
+          "normalizationPenaltyPerExcessiveLostDependency": "Penalty per Excessive Lost Dependency",
+          "normalizationPenaltyPerMissingNewDependency": "Penalty per Missing New Dependency",
+          "normalizationPenaltyPerIncorrectNewDependency": "Penalty per Incorrect New Dependency",
+          "normalizationPenaltyPerMissingKey": "Penalty per Missing Key",
+          "normalizationPenaltyPerIncorrectKey": "Penalty per Incorrect Key",
+          "normalizationPenaltyPerIncorrectNFRelation": "Penalty per Incorrect NF Relation"
+    },
+      "descriptions": {
+        "penalty": "Ein Punkteabzug von -1 bedeutet, dass die Abgabe mit 0 Punkten bewertet wird."
+      },
+        "subtype": {
+          "keysDetermination": "Key Determination",
+          "attributeClosure": "Attribute Closure",
+          "minimalCover": "Minimal Cover",
+          "normalFormDetermination": "Normal Form Determination",
+          "normalization": "Normalization"
+        }
+      },
+    "uml": {
+      "title": "UML",
+      "fields": {
+        "umlBlock": "Block {{id}}",
+        "umlSolution": "Solution",
+        "umlAddBlock": "Add Block",
+        "umlAddAlternative": "Add Alternative",
+        "fullComparison": "Fully Compare?",
+        "classPoints": "Points per correct Class",
+        "relationshipPoints": "Points per correct Association",
+        "associationPoints": "Points per correct assignment to Association Class",
+        "constraintPoints": "Points per correct Constraint"
+
+      }
+    },
+    "python": {
+      "title": "Python",
+      "fields": {
+        "solution": "Solution",
+        "checks": "Checks",
+        "packages": "Python Libraries",
+        "gradingVariables": "Grading Variables",
+        "availableLibraries": "Available Libraries",
+        "checksHint": "Note: In the checks, append the suffix _soll (for the sample solution) or _ist (for the student submission) to the respective grading variable.",
+        "submitData": "Submit Data",
+        "diagnoseData": "Diagnose Data"
+     },
+    "clustering": {
+      "title": "Clustering",
+      "parameters": "Exercise generation parameters",
+      "confirmDeleteDesc": {
+      "message": "Do you really want to delete the description?",
+      "header": "Confirm Deletion",
+      "accept": "Yes",
+      "reject": "No"
+    },
+      "fields": {
+        "numberOfClusters": "K-Value (Number of Clusters) (2-5)",
+        "numberOfDataPoints": "Number of data points (2-20)",
+        "distanceMetric": "Distance metric",
+        "taskLength": "Task Length",
+        "solutionShow": "Show Solution",
+        "solutionHide": "Hide Solution",
+        "deleteDesc": "Delete Description"
+      },
+      "taskLengthTooltip": "Short: 5-8 data points, random centroids\nMedium: 8-12 data points, most central centroids\nLong: 12-16 data points, most central centroids",
+      "deductions": {
+        "title": "Point Deductions",
+        "wrongClusters": "Wrong Number of Clusters/Iterations",
+        "wrongLabels": "Wrong Data Point Assignment",
+        "wrongCentroids": "Wrong Centroid Coordinates"
+      },
+      "metric": {
+        "euclidean": "Euclidean distance",
+        "manhattan": "Manhattan distance"
+      },
+      "taskLength": {
+        "short": "Short",
+        "medium": "Medium",
+        "long": "Long"}},
+    "knn": {
+      "title": "K-Nearest-Neighbors",
+      "meta": "General Information",
+      "model": {
+        "knn": "KNN Classifier"
+      },
+      "labels": {
+        "feature": "Feature"
+      },
+      "placeholders": {
+        "taskName": "Enter task name",
+        "descriptionDe": "Markdown / HTML allowed …",
+        "descriptionEn": "Markdown / HTML allowed …"
+      },
+      "fields": {
+        "k": "K-Value",
+        "trainLabels": "Training classes",
+        "trainLabelsAdd": "Add class",
+        "trainLabelsCount": "Classes",
+        "trainLabelsPlaceholder": "e.g. A, B, C …",
+        "trainLabelsError": "Please provide a label for each class (at least 2 classes required).",
+        "trainLabelsErrorMax": "Maximum 7 classes allowed.",
+        "metric": "Distance Metric",
+        "metric.euclidean": "Euclidean",
+        "metric.manhattan": "Manhattan",
+        "metric.minkowski": "Minkowski",
+        "numTrain": "Training Points per Class",
+        "numTest": "Test Points",
+        "featureName": "Feature Name",
+        "featureRange": "Feature Range",
+        "xMin": "X-Axis Min",
+        "xMax": "X-Axis Max",
+        "yMin": "Y-Axis Min",
+        "yMax": "Y-Axis Max",
+        "xLabel": "X-Axis Label",
+        "yLabel": "Y-Axis Label",
+        "tiebreaker": "Tiebreaker Strategy",
+        "tiebreaker.sum": "Sum of distances (alphabetical if still tied)",
+        "tiebreaker.mean": "Mean of distances (alphabetical if still tied)",
+        "tiebreaker.nearest": "Nearest point decides (alphabetical if still tied)",
+        "editTrainPoints": "Edit Training Points",
+        "editTestPoints": "Edit Test Points",
+        "preview": "Preview",
+        "feedbackLevel": "Feedback Level",
+        "feedback.RUN": "Syntax/Format Check Only",
+        "feedback.DIAGNOSE": "Some Feedback",
+        "feedback.SUBMIT": "Full Feedback & Points",
+        "taskName": "Task Name",
+        "organization": "Organisation / Course",
+        "taskGroup": "Task Group",
+        "descriptionDe": "Description (German)",
+        "descriptionEn": "Description (English)",
+        "maxPoints": "Maximum Points",
+        "duplicate": "Duplicate coordinates detected",
+        "previewButtons": {
+          "generateTaskPdf": "Generate Task PDF",
+          "generateSolutionPdf": "Generate Solution PDF"
+        }
+      },
+      "errors": {
+        "required": "This field is required",
+        "min": "Value must be greater than 0"}},
+    "owl": {
+      "title": "OWL",
+      "fields": {
+        "solution": "Solution Ontology",
+        "pointsPerClass": "Points deducted per wrong class or individual",
+        "pointsPerRedundantAxiom": "Points deducted per redundant axiom",
+        "pointsPerUndefinedClass": "Points deducted per undefined class or individual",
+        "pointsPerAxiomWithoutEntity": "Points deducted per wrong or missing axiom without class or individual"
       }
     }
   }

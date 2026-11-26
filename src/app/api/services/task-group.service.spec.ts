@@ -1,6 +1,6 @@
 import { TestBed } from '@angular/core/testing';
-import { HttpParams } from '@angular/common/http';
-import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
+import { HttpParams, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
+import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 
 import { TaskGroupService } from './task-group.service';
 import { API_URL } from '../../app.config';
@@ -12,9 +12,9 @@ describe('TaskGroupService', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule],
-      providers: [{provide: API_URL, useValue: 'http://localhost'}]
-    });
+    imports: [],
+    providers: [{ provide: API_URL, useValue: 'http://localhost' }, provideHttpClient(withInterceptorsFromDi()), provideHttpClientTesting()]
+});
     service = TestBed.inject(TaskGroupService);
     httpTestingController = TestBed.inject(HttpTestingController);
   });
@@ -91,7 +91,7 @@ describe('TaskGroupService', () => {
       const expected = ['type1', 'type2'];
 
       // Act
-      service.getTypes()
+      const promise = service.getTypes()
         .then(value => expect(value).toEqual(expected))
         .catch(error => fail(error));
 
@@ -99,13 +99,14 @@ describe('TaskGroupService', () => {
       const req = httpTestingController.expectOne('http://localhost/api/taskGroup/types');
       expect(req.request.method).toBe('GET');
       req.flush(expected);
-
       httpTestingController.verify();
+
+      return promise;
     });
 
     it('should reject when loading task group types fails', () => {
       // Act
-      service.getTypes()
+      const promise = service.getTypes()
         .then(() => fail('Expected promise to be rejected'))
         .catch(reason => expect(reason).not.toBeNull());
 
@@ -114,6 +115,8 @@ describe('TaskGroupService', () => {
       expect(req.request.method).toBe('GET');
       req.flush('some error', {status: 400, statusText: 'Bad Request'});
       httpTestingController.verify();
+
+      return promise;
     });
   });
 
@@ -123,7 +126,7 @@ describe('TaskGroupService', () => {
       const expected = 'exported data';
 
       // Act
-      service.export()
+      const promise = service.export()
         .then(value => expect(value).toBe(expected))
         .catch(error => fail(error));
 
@@ -131,13 +134,14 @@ describe('TaskGroupService', () => {
       const req = httpTestingController.expectOne('http://localhost/api/taskGroup/export');
       expect(req.request.method).toBe('GET');
       req.flush(expected);
-
       httpTestingController.verify();
+
+      return promise;
     });
 
     it('should reject when exporting task groups fails', () => {
       // Act
-      service.export()
+      const promise = service.export()
         .then(() => fail('Expected promise to be rejected'))
         .catch(reason => expect(reason).not.toBeNull());
 
@@ -146,6 +150,8 @@ describe('TaskGroupService', () => {
       expect(req.request.method).toBe('GET');
       req.flush('some error', {status: 400, statusText: 'Bad Request'});
       httpTestingController.verify();
+
+      return promise;
     });
   });
 });

@@ -19,7 +19,6 @@ export function registerXQueryLanguage(): void {
       {open: '[', close: ']'},
       {open: '(', close: ')'},
       {open: '\'', close: '\'', notIn: ['string', 'comment']},
-      {open: '"', close: '"', notIn: ['string', 'comment']},
       {open: '(:', close: ':)', notIn: ['string']},
     ],
     surroundingPairs: [
@@ -27,7 +26,6 @@ export function registerXQueryLanguage(): void {
       {open: '[', close: ']'},
       {open: '(', close: ')'},
       {open: '\'', close: '\''},
-      {open: '"', close: '"'},
       { open: '(:', close: ':)' },
     ],
     indentationRules: {
@@ -88,8 +86,8 @@ export function registerXQueryLanguage(): void {
         [/[{}()[\]]/, '@brackets'],
 
         // Strings
-        [/'([^'\\]|\\.)*$/, 'string.invalid'],  // single quote string
-        [/"/, 'string', '@string.double'],
+        [/'([^'\\]|\\.)*$/, 'string.invalid'],
+        [/'/, 'string', '@string.single'],
 
         // Comments
         [/\(:/, 'comment', '@comment']
@@ -102,7 +100,7 @@ export function registerXQueryLanguage(): void {
 
       string: [
         [/'/, 'string', '@pop'],
-        [/[^']+/, 'string'],
+        [/[^']+/, 'string']
       ],
 
       comment: [

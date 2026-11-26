@@ -8,8 +8,7 @@ import { distinctUntilChanged, Subject, takeUntil } from 'rxjs';
 
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
-import { DropdownModule } from 'primeng/dropdown';
-import { EditorModule } from 'primeng/editor';
+import { DropdownChangeEvent, DropdownModule } from 'primeng/dropdown';
 import { TreeSelectModule } from 'primeng/treeselect';
 import { TreeNode } from 'primeng/api';
 import { InputNumberModule } from 'primeng/inputnumber';
@@ -17,8 +16,9 @@ import { DialogService } from 'primeng/dynamicdialog';
 import { TagModule } from 'primeng/tag';
 import { BlockUIModule } from 'primeng/blockui';
 import { DialogModule } from 'primeng/dialog';
+import { CheckboxModule } from 'primeng/checkbox';
 
-import { AuditInformationComponent, EditFormComponent } from '../../../layout';
+import { AuditInformationComponent, DkeEditorComponent, EditFormComponent } from '../../../layout';
 import { ApplicationUser, AuthService, Role } from '../../../auth';
 import {
   OrganizationalUnitDto,
@@ -32,6 +32,8 @@ import {
 } from '../../../api';
 import { TaskForm, TaskTypeRegistry } from '../../../task-type';
 import { TaskSubmissionComponent } from '../task-submission/task-submission.component';
+import { convertStringToSeverity } from '../../helpers';
+import { TaskAppTypeService } from '../../task-app-type.service';
 
 /**
  * Task Form
@@ -47,7 +49,6 @@ import { TaskSubmissionComponent } from '../task-submission/task-submission.comp
     ReactiveFormsModule,
     InputTextModule,
     DropdownModule,
-    EditorModule,
     AuditInformationComponent,
     NgComponentOutlet,
     DatePipe,
@@ -55,23 +56,15 @@ import { TaskSubmissionComponent } from '../task-submission/task-submission.comp
     TreeSelectModule,
     TagModule,
     BlockUIModule,
-    DialogModule
+    DialogModule,
+    CheckboxModule,
+    DkeEditorComponent
   ],
   providers: [DialogService],
   templateUrl: './task-form.component.html',
   styleUrl: './task-form.component.scss'
 })
 export class TaskFormComponent extends EditFormComponent<TaskDto, TaskService, TaskForm> implements OnInit, OnDestroy {
-  /**
-   * The quill module configuration.
-   */
-  readonly quillModules = {
-    htmlEditButton: {
-      okText: this.translationService.translate('common.ok'),
-      cancelText: this.translationService.translate('common.cancel'),
-      msg: this.translationService.translate('quill-html-edit-hint')
-    }
-  };
 
   /**
    * Whether the form should be readonly.
@@ -145,6 +138,7 @@ export class TaskFormComponent extends EditFormComponent<TaskDto, TaskService, T
 
   private allTaskCategories: TaskCategoryDto[];
   private allTaskGroups: TaskGroupDto[];
+  private availableTaskTypes: string[];
   private readonly destroy$ = new Subject<void>();
 
   /**
@@ -154,6 +148,7 @@ export class TaskFormComponent extends EditFormComponent<TaskDto, TaskService, T
               private readonly organizationalUnitService: OrganizationalUnitService,
               private readonly taskGroupService: TaskGroupService,
               private readonly taskCategoriesService: TaskCategoryService,
+              private readonly taskAppTypeService: TaskAppTypeService,
               private readonly authService: AuthService,
               private readonly route: ActivatedRoute,
               private readonly router: Router,
@@ -170,7 +165,8 @@ export class TaskFormComponent extends EditFormComponent<TaskDto, TaskService, T
       status: new FormControl<StatusEnum | null>('DRAFT', [Validators.required]),
       taskGroupId: new FormControl<number | null>(null, []),
       taskCategoryIds: new FormArray<FormControl<TreeNode | null>>([]),
-      additionalData: new FormGroup<any>({})
+      additionalData: new FormGroup<any>({}),
+      examTask: new FormControl<boolean | null>(false, [Validators.required])
     }), 'tasks.');
     this.readonly = false;
     this.supportsDescriptionGeneration = false;
@@ -184,6 +180,7 @@ export class TaskFormComponent extends EditFormComponent<TaskDto, TaskService, T
     this.types = [];
     this.statuses = [];
     this.difficulties = [];
+    this.availableTaskTypes = [];
     this.role = this.authService.user?.maxRole ?? 'TUTOR';
     this.currentLocale = this.translationService.getActiveLang();
   }
@@ -209,6 +206,7 @@ export class TaskFormComponent extends EditFormComponent<TaskDto, TaskService, T
     this.loadOrganizationalUnits();
     this.loadTaskGroups();
     this.loadTaskCategories();
+    this.loadTaskTypes();
     this.updateDropdownTranslations();
 
     // Load data from route
@@ -289,7 +287,9 @@ export class TaskFormComponent extends EditFormComponent<TaskDto, TaskService, T
       },
       data: {
         taskId: this.originalEntity.id,
-        taskType: this.originalEntity.taskType
+        taskType: this.originalEntity.taskType,
+        descriptionDe: this.originalEntity.descriptionDe,
+        descriptionEn: this.originalEntity.descriptionEn
       }
     });
   }
@@ -301,6 +301,7 @@ export class TaskFormComponent extends EditFormComponent<TaskDto, TaskService, T
     try {
       const value = this.form.value;
       value.title = value.title + ' (Clone)';
+      value.status = 'DRAFT';
       const result = await this.entityService.create(this.modifyValueBeforeSend(value as any, 'create'));
       this.messageService.add({
         severity: 'success',
@@ -355,7 +356,12 @@ export class TaskFormComponent extends EditFormComponent<TaskDto, TaskService, T
       this.additionalData = data.additionalData;
       this.form.patchValue({...this.originalEntity, taskCategoryIds: []});
       this.form.markAsPristine();
-      this.role = this.authService.user?.roles.find(x => x.organizationalUnit == data.dto.organizationalUnitId)?.role ?? 'TUTOR';
+      this.role = this.authService.user?.isFullAdmin ?
+        'FULL_ADMIN' :
+        this.authService.user?.roles.find(x => x.organizationalUnit == data.dto.organizationalUnitId)?.role ?? 'TUTOR';
+      if (this.role === 'TUTOR' && data.dto.examTask)
+        await this.router.navigate(['tasks']);
+
       this.setFormEnabledDisabled();
       this.changeDetectorRef.detectChanges(); // required to prevent error
       this.onOrganizationalUnitChanged(this.originalEntity?.organizationalUnitId);
@@ -453,6 +459,21 @@ export class TaskFormComponent extends EditFormComponent<TaskDto, TaskService, T
     }
   }
 
+  /**
+   * Loads the available task types.
+   */
+  private async loadTaskTypes(): Promise<void> {
+    try {
+      const types = await this.taskAppTypeService.getAvailableTaskTypes();
+      this.availableTaskTypes = TaskTypeRegistry.getTaskTypes().filter(x => types.includes(x));
+      if (this.availableTaskTypes.length === 0)
+        this.availableTaskTypes = TaskTypeRegistry.getTaskTypes();
+    } catch (err) {
+      this.availableTaskTypes = TaskTypeRegistry.getTaskTypes();
+    }
+    this.updateDropdownTranslations();
+  }
+
   //#endregion
 
   /**
@@ -478,11 +499,28 @@ export class TaskFormComponent extends EditFormComponent<TaskDto, TaskService, T
   }
 
   /**
+   * Called when the selected task group changed.
+   * @param evt The change event.
+   */
+  onTaskGroupChanged(evt: DropdownChangeEvent) {
+    const tg = this.taskGroups.find(x => x.id === evt.value);
+    this.statuses = [
+      {value: StatusEnum.DRAFT, text: this.translationService.translate('taskStatus.' + StatusEnum.DRAFT), disabled: false},
+      {value: StatusEnum.READY_FOR_APPROVAL, text: this.translationService.translate('taskStatus.' + StatusEnum.READY_FOR_APPROVAL), disabled: false},
+      {
+        value: StatusEnum.APPROVED,
+        text: this.translationService.translate('taskStatus.' + StatusEnum.APPROVED),
+        disabled: this.role === 'TUTOR' || (tg !== undefined && tg !== null && tg.status !== 'APPROVED')
+      }
+    ];
+  }
+
+  /**
    * Sets the dropdown values based on the current language.
    */
   private updateDropdownTranslations(): void {
     this.currentLocale = this.translationService.getActiveLang();
-    this.types = TaskTypeRegistry.getTaskTypes().map(x => {
+    this.types = this.availableTaskTypes.map(x => {
       return {value: x, text: this.translationService.translate('taskTypes.' + x + '.title')};
     }).sort((a, b) => a.text.localeCompare(b.text));
     this.statuses = [
@@ -653,4 +691,6 @@ export class TaskFormComponent extends EditFormComponent<TaskDto, TaskService, T
       this.form.patchValue({taskCategoryIds: nodes});
     }
   }
+
+  public readonly convertStringToSeverity = convertStringToSeverity;
 }

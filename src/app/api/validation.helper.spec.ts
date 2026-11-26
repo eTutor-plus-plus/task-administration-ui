@@ -29,4 +29,23 @@ describe('validation.helper', () => {
     // Assert
     expect(result).toEqual(expected);
   });
+
+  it('should return the concatenated validation messages for the specified form control', () => {
+    // Arrange
+    const fieldTranslationKey = 'fieldTranslationKey';
+    const expected = 'en.validation.required en.validation.minLength ';
+    const translationService = TestBed.inject(TranslocoService);
+    const control: FormControl = <any>{
+      errors: {
+        required: true,
+        minLength: true
+      }
+    };
+
+    // Act
+    const result = getValidationErrorMessage(translationService, control, fieldTranslationKey);
+
+    // Assert
+    expect(result).toEqual(expected);
+  });
 });
