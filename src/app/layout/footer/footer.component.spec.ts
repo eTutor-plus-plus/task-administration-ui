@@ -1,3 +1,4 @@
+import { DateTime } from 'luxon';
 import { ComponentFixture, TestBed, tick } from '@angular/core/testing';
 import { TranslocoTestingModule } from '@ngneat/transloco';
 
@@ -79,6 +80,7 @@ describe('FooterComponent', () => {
   });
 
   it('should have server version date', () => {
-    expect(component.serverVersionDate).toBe('01.01.2021 01:00:00');
+    // formatted in the local time zone of the machine running the tests
+    expect(component.serverVersionDate).toBe(DateTime.fromISO('2021-01-01T00:00:00Z').toFormat('dd.MM.yyyy HH:mm:ss'));
   });
 });

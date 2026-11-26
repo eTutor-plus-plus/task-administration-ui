@@ -1,4 +1,4 @@
-import { ApplicationConfig, importProvidersFrom, InjectionToken, isDevMode, LOCALE_ID } from '@angular/core';
+import { ApplicationConfig, importProvidersFrom, isDevMode, LOCALE_ID } from '@angular/core';
 import { provideAnimations } from '@angular/platform-browser/animations';
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { provideRouter } from '@angular/router';
@@ -14,10 +14,9 @@ import { TranslationLoaderService } from './translation-loader.service';
 import { authInterceptor, langInterceptor, unauthorizedInterceptor } from './auth';
 import { customizeMonaco } from './monaco';
 
-/**
- * The injection token for the base API URL.
- */
-export const API_URL = new InjectionToken<string>('API_URL');
+import { API_URL } from './api-url.token';
+
+export { API_URL };
 
 /**
  * The application configuration.

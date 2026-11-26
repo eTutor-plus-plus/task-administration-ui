@@ -7,9 +7,12 @@ import { TaskTypeDroolsComponent } from './task-type-drools/task-type-drools.com
 import { TaskTypeSqlDdlComponent } from './task-type-sql-ddl/task-type-sql-ddl.component';
 import { TaskTypeAspComponent } from './task-type-asp/task-type-asp.component';
 import { TaskTypeSqlComponent } from './task-type-sql/task-type-sql.component';
+import { TaskTypeTriggerComponent } from './task-type-trigger/task-type-trigger.component';
 import { TaskTypeRelalgComponent } from './task-type-relalg/task-type-relalg.component';
 import { TaskTypeFanfComponent } from './task-type-fanf/task-type-fanf.component';
 import { TaskTypeUmlComponent } from './task-type-uml/task-type-uml.component';
+import { TaskTypeMdxComponent } from './task-type-mdx/task-type-mdx.component';
+import { TaskTypePythonComponent } from './task-type-python/task-type-python.component';
 import { TaskTypeClusteringComponent } from './task-type-clustering/task-type-clustering.component';
 import { TaskTypeKnnComponent } from './task-type-knn/task-type-knn.component';
 
@@ -89,6 +92,13 @@ return $d`,
       supportsDescriptionGeneration: false,
       submissionInputLanguage: 'sql'
     }, {
+      name: 'trigger',
+      supportedTaskGroupTypes: ['trigger'],
+      component: TaskTypeTriggerComponent,
+      submissionTemplate: '',
+      supportsDescriptionGeneration: false,
+      submissionInputLanguage: 'trigger'
+    }, {
       name: 'relalg',
       supportedTaskGroupTypes: ['sql'],
       component: TaskTypeRelalgComponent,
@@ -114,6 +124,22 @@ return $d`,
 
     },
     {
+      name: 'mdx',
+      supportedTaskGroupTypes: ['mdx'],
+      component: TaskTypeMdxComponent,
+      submissionTemplate: '',
+      supportsDescriptionGeneration: false,
+      submissionInputLanguage: 'mdx'
+    },
+    {
+      name: 'python',
+      supportedTaskGroupTypes: [],
+      component: TaskTypePythonComponent,
+      submissionTemplate: '',
+      supportsDescriptionGeneration: true,
+      submissionInputLanguage: 'python'
+      },
+    { 
       name: 'clustering',
       supportedTaskGroupTypes: [],
       component: TaskTypeClusteringComponent,

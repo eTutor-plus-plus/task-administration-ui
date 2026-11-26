@@ -4,11 +4,10 @@ import { TaskGroupTypeBinarySearchComponent } from './task-group-type-binary-sea
 import { TaskGroupTypeXqueryComponent } from './task-group-type-xquery/task-group-type-xquery.component';
 import { TaskGroupTypeDatalogComponent } from './task-group-type-datalog/task-group-type-datalog.component';
 import { TaskGroupTypeSqlComponent } from './task-group-type-sql/task-group-type-sql.component';
-
+import { TaskGroupTypeMdxComponent } from './task-group-type-mdx/task-group-type-mdx.component';
+import { TaskGroupTypeTriggerComponent } from './task-group-type-trigger/task-group-type-trigger.component';
 import { TaskGroupTypeJDBCComponent } from './task-group-type-jdbc/task-group-type-jdbc.component'; 
-
 import { TaskGroupTypeOwlComponent } from './task-group-type-owl/task-group-type-owl.component';
-
 
 /**
  * Registry for task group types.
@@ -24,6 +23,8 @@ export class TaskGroupTypeRegistry {
     {name: 'xquery', component: TaskGroupTypeXqueryComponent, supportsDescriptionGeneration: true},
     {name: 'datalog', component: TaskGroupTypeDatalogComponent, supportsDescriptionGeneration: true},
     {name: 'sql', component: TaskGroupTypeSqlComponent, supportsDescriptionGeneration: true},
+    {name: 'mdx', component: TaskGroupTypeMdxComponent, supportsDescriptionGeneration: false},
+    {name: 'trigger', component: TaskGroupTypeTriggerComponent, supportsDescriptionGeneration: true},
     {name: 'owl', component: TaskGroupTypeOwlComponent, supportsDescriptionGeneration: false},
 
   ];

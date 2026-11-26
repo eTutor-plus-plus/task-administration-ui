@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 
 import { TranslocoService } from '@ngneat/transloco';
 
-import { API_URL } from '../app.config';
+import { API_URL } from '../api-url.token';
 
 /**
  Intercepts HTTP requests and adds the Accept-Language value to the header.

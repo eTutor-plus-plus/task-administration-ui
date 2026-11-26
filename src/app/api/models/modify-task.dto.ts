@@ -1,3 +1,4 @@
+import { TaskCategoryFeedbackLevelDto } from './task-category-feedback-level.dto';
 import { StatusEnum } from './task-status.enum';
 
 export interface ModifyTaskDto {
@@ -55,6 +56,11 @@ export interface ModifyTaskDto {
    * The IDs of the task categories.
    */
   taskCategoryIds?: Array<number>;
+
+  /**
+   * The feedback levels per task category.
+   */
+  taskCategoryFeedbackLevels?: Array<TaskCategoryFeedbackLevelDto>;
 
   /**
    * The additional data of the task.

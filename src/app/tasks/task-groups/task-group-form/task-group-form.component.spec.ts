@@ -3,6 +3,7 @@ import { provideHttpClient } from '@angular/common/http';
 import { provideRouter } from '@angular/router';
 import { provideTransloco } from '@ngneat/transloco';
 import { MessageService } from 'primeng/api';
+import { MonacoEditorModule } from 'ngx-monaco-editor-v2';
 
 import { TaskGroupFormComponent } from './task-group-form.component';
 import { translocoTestConfig } from '../../../translation-loader.service.spec';
@@ -14,7 +15,7 @@ describe('TaskGroupFormComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [TaskGroupFormComponent],
+      imports: [TaskGroupFormComponent, MonacoEditorModule.forRoot({})],
       providers: [
         provideHttpClient(),
         provideRouter([]),

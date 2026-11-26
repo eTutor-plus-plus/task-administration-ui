@@ -3,7 +3,7 @@ import { inject } from '@angular/core';
 import { Observable } from 'rxjs';
 
 import { AuthService } from './auth.service';
-import { API_URL } from '../app.config';
+import { API_URL } from '../api-url.token';
 
 /**
  * Intercepts HTTP requests and adds the authorization token to the header.

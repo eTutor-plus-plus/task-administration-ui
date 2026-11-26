@@ -105,12 +105,25 @@
         "fields": {
           "sqlDDL": "SQL DDL",
           "solution": "Solution",
-          "insertStatements": "Insert Statement",
-          "tablePoints": "Points for Table",
-          "columnPoints": "Points for Column",
-          "constraintPoints": "Points for Constraint",
-          "primaryKeyPoints": "Points for Primary Key",
-          "foreignKeyPoints": "Points for Foreign Key"
+          "checkConstraintStatements": "Check Constraint Verification",
+          "checkConstraintStatementsDescription": "For each check constraint included in the solution, corresponding INSERT statements must be provided for verification. Since each input group (Name, Non-Error-Triggering Statements, Error-Triggering Statements) is validated independently, any records referenced via foreign keys must first be created in the Non-Error-Triggering Statements section. Only after that can these records be used or referenced in the Error-Triggering Statements section.",
+          "checkConstraintStatementsAdd": "Add Check Constraint Verification",
+          "assertionStatements": "Assertion Verification",
+          "assertionStatementsDescription": "For each assertion included in the solution, corresponding INSERT statements must be provided for verification. Since each input group (Name, Non-Error-Triggering Statements, Error-Triggering Statements) is validated independently, any records referenced via foreign keys must first be created in the Non-Error-Triggering Statements section. Only after that can these records be used or referenced in the Error-Triggering Statements section.",
+          "assertionStatementsAdd": "Add Assertion Verification",
+          "statementName": "Name of the constraint (is displayed in the feedback)",
+          "assertionName": "Name of the assertion defined in the DDL script",
+          "successfulStatements": "Non-Error-Triggering Statements",
+          "unsuccessfulStatements": "Error-Triggering Statements",
+          "whitelist": "Whitelist",
+          "whitelistInfo": "Enter the words separated by semicolons. All words that have already been used in the solution are automatically added to the whitelist.",
+          "generatedWhitelist": "Complete Whitelist",
+          "generatedWhitelistInfo": "This field is filled automatically and cannot be edited.",
+          "tablePoints": "Points per entire table including columns",
+          "constraintPoints": "Points per constraint",
+          "assertionPoints": "Points per assertion",
+          "primaryKeyPoints": "Points per primary key",
+          "foreignKeyPoints": "Points per foreign key"
         }
       },
     "sql": {
@@ -119,6 +132,22 @@
         "solution": "Solution",
         "wrongOrderPenalty": "Wrong Sorting: Penalty",
         "superfluousColumnsPenalty": "Superfluous Column: Penalty"
+      },
+      "descriptions": {
+        "penalty": "A point deduction of -1 means that the submission is awarded 0 points."
+      }
+    },
+    "trigger": {
+      "title": "SQL Databes Triggers",
+      "fields": {
+        "solution": "Solution",
+        "triggerOperations": "Operations which execute the trigger",
+        "resultTables": "Results tables which will be compared (semicolon separated)",
+        "timingIndependent": "Time-independent trigger (When this option is selected, no distinction is made between BEFORE and AFTER)",
+        "buffered": "Buffered execution (buffer solution once and execution result with buffered table)",
+        "comparisonExecution": "Result comparison after each operation",
+        "wrongHeadPenalty": "Wrong Head: Penalty",
+        "wrongBodyPenalty": "Wrong Body (actual execution logic): Penalty"
       },
       "descriptions": {
         "penalty": "A point deduction of -1 means that the submission is awarded 0 points."
@@ -195,6 +224,34 @@
         "associationPoints": "Points per correct assignment to Association Class",
         "constraintPoints": "Points per correct Constraint"
 
+      }
+    },
+    "mdx": {
+      "title": "MDX",
+      "fields": {
+        "solutionName": "Name of solution",
+        "points": "Points",
+        "mdx": "Solution",
+        "wrongOrderPenalty": "Wrong Sorting: Penalty",
+        "wrongFormatPenalty": "Wrong Format: Penalty"
+      },
+      "descriptions": {
+        "mustHaveMaxPointsSolution": "Note: One solution must exist that achieves the maximum points of the task."
+        
+      }
+    },
+    "python": {
+      "title": "Python",
+      "fields": {
+        "solution": "Solution",
+        "checks": "Checks",
+        "packages": "Python Libraries",
+        "gradingVariables": "Grading Variables",
+        "availableLibraries": "Available Libraries",
+        "checksHint": "Note: In the checks, append the suffix _soll (for the sample solution) or _ist (for the student submission) to the respective grading variable.",
+        "submitData": "Submit Data",
+        "diagnoseData": "Diagnose Data"
+   
       }
     },
     "clustering": {
@@ -304,5 +361,3 @@
     }
   }
 }
-
-
