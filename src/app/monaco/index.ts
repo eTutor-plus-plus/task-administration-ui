@@ -5,6 +5,7 @@ import { registerCsvLanguage } from './csv';
 import { registerDroolsLanguage } from './drools';
 import { registerRelationalAlgebraLanguage } from './relalg';
 import { registerPlantUmlLanguage } from './puml';
+import { registerClusteringLanguage } from './clustering';
 
 /**
  * Called on monaco editor initialization.
@@ -18,4 +19,5 @@ export function customizeMonaco(): void {
   registerDroolsLanguage();
   registerRelationalAlgebraLanguage();
   registerPlantUmlLanguage();
+  registerClusteringLanguage();
 }

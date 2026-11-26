@@ -11,6 +11,13 @@ import { TaskTypeRelalgComponent } from './task-type-relalg/task-type-relalg.com
 import { TaskTypeFanfComponent } from './task-type-fanf/task-type-fanf.component';
 import { TaskTypeUmlComponent } from './task-type-uml/task-type-uml.component';
 import { TaskTypePythonComponent } from './task-type-python/task-type-python.component';
+import { TaskTypeClusteringComponent } from './task-type-clustering/task-type-clustering.component';
+import { TaskTypeKnnComponent } from './task-type-knn/task-type-knn.component';
+
+import { TaskTypeJDBCComponent } from './task-type-jdbc/task-type-jdbc.component';
+
+import { TaskTypeOwlComponent } from './task-type-owl/task-type-owl.component';
+
 
 
 /**
@@ -24,7 +31,7 @@ export class TaskTypeRegistry {
   private static readonly taskTypes: {
     name: string,
     supportedTaskGroupTypes: string[],
-    component?: Type<TaskTypeFormComponent<any>>,
+    component?: Type<any>,
     submissionTemplate?: string,
     supportsDescriptionGeneration?: boolean,
     submissionInputLanguage?: string // set the monaco language if the submission data have following format {"input": "<USER INPUT>"}, otherwise leave this undefined
@@ -114,6 +121,41 @@ return $d`,
       submissionTemplate: '',
       supportsDescriptionGeneration: true,
       submissionInputLanguage: 'python'
+      },
+    { 
+      name: 'clustering',
+      supportedTaskGroupTypes: [],
+      component: TaskTypeClusteringComponent,
+      submissionTemplate: '',
+      supportsDescriptionGeneration: false,
+      submissionInputLanguage: 'clustering'
+    },
+    { 
+      name: 'knn',
+      supportedTaskGroupTypes: [],
+      component: TaskTypeKnnComponent,
+      submissionTemplate: '',
+      supportsDescriptionGeneration: true,
+      submissionInputLanguage: 'plaintext'
+
+    },
+    {
+      name: 'jdbc',
+      supportedTaskGroupTypes: ['jdbc'],
+      component: TaskTypeJDBCComponent,
+      submissionTemplate: '',
+      supportsDescriptionGeneration: false,
+      submissionInputLanguage: 'jdbc'
+
+
+    }, {
+      name: 'owl',
+      supportedTaskGroupTypes: [],
+      component: TaskTypeOwlComponent,
+      submissionTemplate: '',
+      supportsDescriptionGeneration: true,
+      submissionInputLanguage: 'owl'
+
     }
 
   ];
